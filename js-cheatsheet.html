@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>JS</h1>
+          <p class="subtitle">Quick reference with live previews</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Start</a>
+        <a href="#conditionals">Conditionals</a>
+        <a href="#functions">Functions</a>
+        <a href="#scope">Scope</a>
+        <a href="#arrays">Arrays</a>
+        <a href="#set">Set</a>
+        <a href="#loops">Loops</a>
+        <a href="#iterators">Iterators</a>
+        <a href="#objects">Objects</a>
+        <a href="#classes">Classes</a>
+        <a href="#modules">Modules</a>
+        <a href="#promises">Promises</a>
+        <a href="#async-await">Async/Await</a>
+        <a href="#requests">Requests</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('JS')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+      <p style="color:#666;margin-bottom:1rem;">JavaScript is a lightweight, interpreted programming language.</p>
+
+      <div class="block-desc">
+        <span>Output messages to the browser console using <code>console.log()</code>, <code>console.warn()</code>, and <code>console.error()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_output.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Console</div>
+          <pre>console.log('Hello world!');
+console.warn('hello %s', 'JS');
+console.error(new Error('Oops!'));</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <div style="color:#9ece6a;">&gt; Hello world!</div>
+              <div style="color:#e0af68;">&gt; hello JS</div>
+              <div style="color:#f7768e;">&gt; Error: Oops!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Declare variables with <code>let</code>, <code>const</code>, and <code>var</code> to store data in memory.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_variables.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Variables</div>
+          <pre>let name = 'Tammy';
+const found = false;
+var x = null;
+
+console.log(name, found, x);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <div style="color:#9ece6a;">&gt; Tammy false null</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Combine strings and expressions using the <code>+</code> operator or template literals with <code>${}</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_string_templates.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Strings &amp; Interpolation</div>
+          <pre>let name = 'Tommy';
+let age = 7;
+
+'Tommy is ' + age + ' years old.';
+`Tommy is ${age} years old.`;
+
+"string".length; <span class="c">// 6</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><code>Tommy is 7 years old.</code></p>
+            <p><code>"string".length</code> &rarr; 6</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Perform arithmetic with <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and <code>%</code> operators.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_operators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Numbers &amp; Operators</div>
+          <pre>5 + 5  <span class="c">// 10  Addition</span>
+10 - 5 <span class="c">// 5   Subtraction</span>
+5 * 10 <span class="c">// 50  Multiplication</span>
+10 / 5 <span class="c">// 2   Division</span>
+10 % 5 <span class="c">// 0   Modulo</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="font-family:monospace;">
+              5 + 5 = <b>10</b> &nbsp; 10 - 5 = <b>5</b> &nbsp; 5 &times; 10 = <b>50</b> &nbsp; 10 / 5 = <b>2</b> &nbsp; 10 % 5 = <b>0</b>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Add single-line <code>//</code> or multi-line <code>/* */</code> comments to document code.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_comments.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Comments</div>
+          <pre><span class="c">// This is a single-line comment</span>
+
+<span class="c">/*</span>
+ Multi-line comment
+<span class="c">*/</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <div style="color:#565f89;">// This line is ignored</div>
+              <div style="color:#565f89;">/* This block is ignored too */</div>
+              <div style="color:#9ece6a;">&gt; Code after comments runs normally</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use shorthand <code>+=</code>, <code>-=</code>, etc. to assign and modify values in one step.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_operators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Assignment Operators</div>
+          <pre>let n = 100;
+n = n + 10;
+n += 10;   <span class="c">// shorthand</span>
+console.log(n); <span class="c">// 120</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; 120</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conditionals -->
+    <section id="conditionals">
+      <h2>Conditionals</h2>
+
+      <div class="block-desc">
+        <span>Execute different code blocks based on boolean conditions using <code>if</code>, <code>else if</code>, and <code>else</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_if_else.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">if / else if / else</div>
+          <pre>const size = 10;
+
+if (size &gt; 100) {
+  console.log('Big');
+} else if (size &gt; 20) {
+  console.log('Medium');
+} else if (size &gt; 4) {
+  console.log('Small');
+} else {
+  console.log('Tiny');
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; Small</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Write a compact conditional expression with <code>condition ? exprIfTrue : exprIfFalse</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_if_else.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Ternary Operator</div>
+          <pre>let x = 1;
+let result = x == 1 ? true : false;
+<span class="c">// condition ? exprIfTrue : exprIfFalse</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; true</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Match a value against multiple <code>case</code> clauses for clean multi-way branching.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_switch.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">switch Statement</div>
+          <pre>const food = 'salad';
+
+switch (food) {
+  case 'pizza':
+    console.log('A delicious pie');
+    break;
+  default:
+    console.log('Enjoy your meal');
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; Enjoy your meal</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Operators Reference</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Operator</th><th>Meaning</th></tr>
+          <tr><td>==</td><td>Equality (value only)</td></tr>
+          <tr><td>===</td><td>Strict equality (value + type)</td></tr>
+          <tr><td>!=</td><td>Inequality</td></tr>
+          <tr><td>!==</td><td>Strict inequality</td></tr>
+          <tr><td>&gt;</td><td>Greater than</td></tr>
+          <tr><td>&lt;</td><td>Less than</td></tr>
+          <tr><td>&gt;=</td><td>Greater than or equal</td></tr>
+          <tr><td>&lt;=</td><td>Less than or equal</td></tr>
+          <tr><td>&amp;&amp;</td><td>Logical AND</td></tr>
+          <tr><td>||</td><td>Logical OR</td></tr>
+          <tr><td>!</td><td>Logical NOT</td></tr>
+          <tr><td>??</td><td>Nullish coalescing</td></tr>
+          <tr><td>?.</td><td>Optional chaining</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Functions -->
+    <section id="functions">
+      <h2>Functions</h2>
+
+      <div class="block-desc">
+        <span>Define reusable functions using declarations or store them as expressions in variables.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Declaration &amp; Expression</div>
+          <pre><span class="c">// Function declaration</span>
+function sum(a, b) { return a + b; }
+
+<span class="c">// Function expression</span>
+const sum = function(a, b) {
+  return a + b;
+};</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; sum(3, 6) = 9</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Write concise functions with <code>=&gt;</code> syntax, omitting <code>function</code> and <code>return</code> for single expressions.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_arrow_function.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Arrow Functions (ES6)</div>
+          <pre><span class="c">// Two params</span>
+const sum = (a, b) =&gt; a + b;
+
+<span class="c">// Single param</span>
+const double = x =&gt; x * 2;
+
+<span class="c">// No params</span>
+const hello = () =&gt; 'Hello!';</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; sum(2, 30) = 60<br />
+              &gt; double(5) = 10
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Pass values into functions as parameters and send values back with <code>return</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Parameters &amp; Return</div>
+          <pre>function sayHello(name) {
+  return `Hello, ${name}!`;
+}
+sayHello('World'); <span class="c">// "Hello, World!"</span>
+
+<span class="c">// Without return = undefined</span>
+function noReturn() { }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; "Hello, World!"</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scope -->
+    <section id="scope">
+      <h2>Scope</h2>
+
+      <div class="block-desc">
+        <span><code>let</code> is block-scoped and safer than <code>var</code>, which is function-scoped and can cause bugs.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_scope.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">let vs var</div>
+          <pre><span class="c">// let: block-scoped</span>
+for (let i = 0; i &lt; 3; i++) { }
+<span class="c">// i not accessible here ❌</span>
+
+<span class="c">// var: function-scoped</span>
+for (var j = 0; j &lt; 3; j++) { }
+<span class="c">// j accessible here ✔️</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><code>let</code> is scoped to the nearest block; <code>var</code> to the nearest function.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Variables declared outside any block are global; those inside <code>{}</code> are block-scoped with <code>let</code>/<code>const</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_scope.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Global &amp; Block Scope</div>
+          <pre>const color = 'blue'; <span class="c">// global</span>
+
+if (true) {
+  const msg = 'Logged in'; <span class="c">// block</span>
+}
+<span class="c">// msg not accessible here ❌</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; blue (global accessible everywhere)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Arrays -->
+    <section id="arrays">
+      <h2>Arrays</h2>
+
+      <div class="block-desc">
+        <span>Create ordered lists with <code>[ ]</code> and access elements by their zero-based index.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Creating &amp; Accessing</div>
+          <pre>const fruits = ['apple', 'orange', 'banana'];
+const mixed = [1, 'chicken', false];
+
+fruits[0];   <span class="c">// 'apple'</span>
+fruits.length; <span class="c">// 3</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; fruits[0] = "apple"<br />
+              &gt; fruits.length = 3
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Modify arrays in-place using <code>push()</code>, <code>pop()</code>, <code>unshift()</code>, and <code>shift()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Mutating Methods</div>
+          <pre>const arr = [1, 2];
+arr.push(3, 4);      <span class="c">// [1,2,3,4]  (end)</span>
+arr.pop();           <span class="c">// [1,2,3]    (remove end)</span>
+arr.unshift(0);      <span class="c">// [0,1,2,3]  (start)</span>
+arr.shift();         <span class="c">// [1,2,3]    (remove start)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              push &rarr; add to end &nbsp; pop &rarr; remove end<br />
+              unshift &rarr; add to start &nbsp; shift &rarr; remove start
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Merge arrays without mutation using <code>concat()</code>, or unpack values with destructuring <code>[a, b] = arr</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_destructuring.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">concat &amp; Destructuring</div>
+          <pre><span class="c">// Non-mutating merge</span>
+[1, 2].concat([3, 4]); <span class="c">// [1,2,3,4]</span>
+
+<span class="c">// Destructuring</span>
+const [name, age] = ['John', 8];
+<span class="c">// name='John', age=8</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; [1,2,3,4] &nbsp; name="John" &nbsp; age=8
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Set -->
+    <section id="set">
+      <h2>Set</h2>
+
+      <div class="block-desc">
+        <span>Store unique values of any type with <code>Set</code> and use <code>add()</code>, <code>has()</code>, <code>delete()</code>, and <code>clear()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_sets.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Set Methods</div>
+          <pre>const s = new Set([1, true, 'a']);
+
+s.add('b');        <span class="c">// add value</span>
+s.has('a');        <span class="c">// true</span>
+s.delete('a');     <span class="c">// remove</span>
+s.size;            <span class="c">// 3</span>
+s.clear();         <span class="c">// remove all</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; s.has('a') = true &nbsp; s.size = 3
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loops -->
+    <section id="loops">
+      <h2>Loops</h2>
+
+      <div class="block-desc">
+        <span>Repeat code with <code>for</code>, <code>while</code>, or <code>do...while</code> loops, controlling flow with <code>break</code> and <code>continue</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_loop_for.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">for / while / do...while</div>
+          <pre><span class="c">// for</span>
+for (let i = 0; i &lt; 3; i++) { }
+
+<span class="c">// while</span>
+while (condition) { }
+
+<span class="c">// do...while</span>
+do { } while (condition);
+
+<span class="c">// break / continue</span>
+for (let i = 0; i &lt; 10; i++) {
+  if (i === 3) continue;
+  if (i &gt; 5) break;
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; 0 1 2 4 5 (continue skips 3, break stops at 5)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Iterate over object keys with <code>for...in</code> or over iterable values with <code>for...of</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_loop_for.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">for...in / for...of</div>
+          <pre>const fruits = ['apple', 'orange'];
+
+<span class="c">// for...in → indexes</span>
+for (let i in fruits) { }
+
+<span class="c">// for...of → values</span>
+for (let f of fruits) { }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              for...in &rarr; "0", "1" &nbsp; for...of &rarr; "apple", "orange"
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Iterators -->
+    <section id="iterators">
+      <h2>Iterators</h2>
+
+      <div class="block-desc">
+        <span>Pass a function as an argument to another function to be called later.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_array_iteration.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Callback Functions</div>
+          <pre>const isEven = (n) =&gt; n % 2 == 0;
+
+const printMsg = (fn, num) =&gt; {
+  console.log(fn(num));
+};
+
+printMsg(isEven, 4); <span class="c">// true</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; true</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Transform arrays with <code>map()</code>, filter with <code>filter()</code>, and accumulate with <code>reduce()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_array_iteration.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">map / filter / reduce</div>
+          <pre><span class="c">// map - transform each</span>
+[1,2,3].map(x =&gt; x * 2); <span class="c">// [2,4,6]</span>
+
+<span class="c">// filter - keep matches</span>
+[4,11,42].filter(n =&gt; n &gt; 5); <span class="c">// [11,42]</span>
+
+<span class="c">// reduce - accumulate</span>
+[1,2,3,4].reduce((a, c) =&gt; a + c); <span class="c">// 10</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              map &rarr; [2,4,6] &nbsp; filter &rarr; [11,42] &nbsp; reduce &rarr; 10
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Execute a function once for each array element with <code>forEach()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_array_iteration.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">forEach</div>
+          <pre>[28, 77, 45].forEach(n =&gt; {
+  console.log(n);
+});</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; 28<br />&gt; 77<br />&gt; 45</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Objects -->
+    <section id="objects">
+      <h2>Objects</h2>
+
+      <div class="block-desc">
+        <span>Store key-value pairs in objects and access properties with dot or bracket notation.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_objects.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Create &amp; Access</div>
+          <pre>const apple = {
+  color: 'Green',
+  price: { bulk: '$3/kg' }
+};
+
+apple.color;        <span class="c">// 'Green'</span>
+apple.price.bulk;   <span class="c">// '$3/kg'</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; apple.color = "Green"<br />
+              &gt; apple.price.bulk = "$3/kg"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define functions as object methods and refer to the object itself with <code>this</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_objects.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Methods &amp; this</div>
+          <pre>const cat = {
+  name: 'Pipey',
+  whatName() { return this.name; }
+};
+cat.whatName(); <span class="c">// 'Pipey'</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; "Pipey"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Unpack object properties into variables or use shorthand property names.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_destructuring.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Destructuring &amp; Shorthand</div>
+          <pre><span class="c">// Destructuring</span>
+const { name, age } = { name:'John', age:8 };
+
+<span class="c">// Shorthand property</span>
+const activity = 'Surfing';
+const beach = { activity };
+<span class="c">// { activity: 'Surfing' }</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; name="John" age=8 &nbsp; beach = {activity: "Surfing"}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Control property access and assignment with <code>get</code> and <code>set</code> inside an object.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_objects.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Getters &amp; Setters</div>
+          <pre>const myCat = {
+  _name: 'Dottie',
+  get name() { return this._name; },
+  set name(n) { this._name = n; }
+};
+myCat.name = 'Yankee';</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; myCat.name = "Yankee"
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Classes -->
+    <section id="classes">
+      <h2>Classes</h2>
+
+      <div class="block-desc">
+        <span>Create object blueprints with <code>class</code> and initialize instances with <code>constructor</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Class &amp; Constructor</div>
+          <pre>class Song {
+  constructor(title, artist) {
+    this.title = title;
+    this.artist = artist;
+  }
+  play() { console.log('Playing!'); }
+}
+
+const mySong = new Song('Bohemian Rhapsody', 'Queen');</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; mySong.title = "Bohemian Rhapsody"<br />
+              &gt; mySong.play() = "Playing!"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Inherit properties and methods from a parent class using <code>extends</code> and <code>super</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">extends (Inheritance)</div>
+          <pre>class Media {
+  constructor(info) {
+    this.publishDate = info.publishDate;
+  }
+}
+
+class Song extends Media {
+  constructor(songData) {
+    super(songData);
+    this.artist = songData.artist;
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><code>extends</code> creates a child class that inherits from a parent.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define methods on the class itself (not instances) using the <code>static</code> keyword.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Static Methods</div>
+          <pre>class Dog {
+  static bark() { console.log('Woof!'); }
+}
+
+Dog.bark(); <span class="c">// static call</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">&gt; Woof!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modules -->
+    <section id="modules">
+      <h2>Modules</h2>
+
+      <div class="block-desc">
+        <span>Share code between files using <code>export</code> and <code>import</code> with ES6 module syntax.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_modules.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Export / Import (ES6)</div>
+          <pre><span class="c">// myMath.js</span>
+export default function add(a, b) {
+  return a + b;
+}
+export function subtract(a, b) {
+  return a - b;
+}
+
+<span class="c">// main.js</span>
+import add, { subtract } from './myMath.js';</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; add(6, 2) = 8 &nbsp; subtract(6, 2) = 4
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Export and import modules in Node.js using <code>module.exports</code> and <code>require()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_modules.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">module.exports / require</div>
+          <pre><span class="c">// myMath.js (Node.js)</span>
+module.exports = { add, subtract, multiply };
+
+<span class="c">// main.js</span>
+const myMath = require('./myMath.js');
+myMath.add(6, 2); <span class="c">// 8</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Node.js CommonJS</span><br />
+              <span style="color:#9ece6a;">&gt; myMath.add(6, 2) = 8</span><br />
+              <span style="color:#9ece6a;">&gt; myMath.subtract(6, 2) = 4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Promises -->
+    <section id="promises">
+      <h2>Promises</h2>
+
+      <div class="block-desc">
+        <span>Handle asynchronous operations with <code>new Promise()</code> and <code>.then()</code> / <code>.catch()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_promise.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Creating &amp; Using Promises</div>
+          <pre>const promise = new Promise((resolve, reject) =&gt; {
+  const res = true;
+  res ? resolve('Resolved!')
+      : reject(Error('Error'));
+});
+
+promise.then(res =&gt; console.log(res))
+       .catch(err =&gt; console.error(err));</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; Resolved!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Run multiple promises in parallel with <code>Promise.all()</code> or wait for all to settle with <code>Promise.allSettled()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_promise.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Promise.all &amp; Promise.allSettled</div>
+          <pre>const p1 = Promise.resolve(3);
+const p2 = new Promise((res) =&gt;
+  setTimeout(() =&gt; res(2), 100));
+
+Promise.all([p1, p2]).then(([r1, r2]) =&gt; {
+  console.log(r1, r2); <span class="c">// 3 2</span>
+});
+
+<span class="c">// allSettled returns status for each</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; Promise.all = [3, 2]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Transform resolved values by chaining multiple <code>.then()</code> calls sequentially.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_promise.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Chaining .then()</div>
+          <pre>Promise.resolve('*')
+  .then(s =&gt; s + s)
+  .then(s =&gt; s + '.')
+  .then(console.log); <span class="c">// "**."</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; "**."
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Async/Await -->
+    <section id="async-await">
+      <h2>Async / Await</h2>
+
+      <div class="block-desc">
+        <span>Write asynchronous code that reads like synchronous code using <code>async</code> and <code>await</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_async.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Async Function &amp; Await</div>
+          <pre>function helloWorld() {
+  return new Promise(res =&gt;
+    setTimeout(() =&gt; res('Hello World!'), 200)
+  );
+}
+
+async function msg() {
+  const msg = await helloWorld();
+  console.log('Message:', msg);
+}
+msg(); <span class="c">// after 200ms</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; Message: Hello World!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Catch and handle runtime errors gracefully with <code>try</code>, <code>catch</code>, and optionally <code>finally</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_errors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Error Handling (try/catch)</div>
+          <pre>let json = '{ "age": 30 }';
+
+try {
+  let user = JSON.parse(json);
+  console.log(user.name); <span class="c">// no name!</span>
+} catch (e) {
+  console.error('Invalid JSON');
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#9ece6a;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              &gt; undefined (no "name" property, no error)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Requests -->
+    <section id="requests">
+      <h2>Requests</h2>
+
+      <div class="block-desc">
+        <span>Make HTTP requests using the modern <code>fetch()</code> API with <code>.then()</code> chaining.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_api_fetch.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Fetch API — Live Example</div>
+          <pre>fetch('https://jsonplaceholder.typicode.com/todos/1')
+  .then(res =&gt; res.json())
+  .then(data =&gt; {
+    console.log('Title:', data.title);
+    console.log('Completed:', data.completed);
+  })
+  .catch(err =&gt; console.error(err));
+
+<span class="c">// Response:</span>
+<span class="c">// Title: delectus aut autem</span>
+<span class="c">// Completed: false</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div id="fetch-result" style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <div style="color:#8892b0;">Fetching from JSONPlaceholder...</div>
+            </div>
+            <button onclick="runFetch()" style="margin-top:0.4rem;padding:0.25rem 0.75rem;background:#7aa2f7;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:0.75rem;">&#9654; Run Fetch</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>fetch()</code> with <code>async</code>/<code>await</code> and <code>try</code>/<code>catch</code> for cleaner async HTTP code.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_api_fetch.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Fetch with async/await</div>
+          <pre>async function getUser(id) {
+  try {
+    const res = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${id}`
+    );
+    if (!res.ok) throw new Error('Failed');
+    const user = await res.json();
+    console.log(user.name, user.email);
+  } catch (e) {
+    console.error(e.message);
+  }
+}
+getUser(1);
+<span class="c">// Leanne Graham, Sincere@april.biz</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div id="fetch-result2" style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <div style="color:#8892b0;">Click to fetch user data...</div>
+            </div>
+            <button onclick="runAsyncFetch()" style="margin-top:0.4rem;padding:0.25rem 0.75rem;background:#7aa2f7;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:0.75rem;">&#9654; Get User</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Work with JSON data using <code>JSON.parse()</code> / <code>JSON.stringify()</code>, or use <code>XMLHttpRequest</code> for legacy AJAX.</span>
+        <a class="w3-link" href="https://www.w3schools.com/js/js_json.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">JSON &amp; XMLHttpRequest</div>
+          <pre><span class="c">// JSON object</span>
+const json = { name: 'Rick', id: '11A' };
+
+<span class="c">// XHR GET (old API)</span>
+const xhr = new XMLHttpRequest();
+xhr.open('GET', '/getdata?id=65');
+xhr.responseType = 'json';
+xhr.onload = () =&gt; console.log(xhr.response);
+xhr.send();
+
+<span class="c">// Modern equivalent with fetch:</span>
+const data = await fetch('/getdata?id=65')
+  .then(r =&gt; r.json());</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// JSON.stringify</span><br />
+              <span style="color:#9ece6a;">&gt; {"name":"Rick","id":"11A"}</span><br />
+              <span style="color:#565f89;">// XHR → fetch is the modern replacement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>JS Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .c-kw { color:#bb9af7; }
+    .c-fn { color:#7aa2f7; }
+    .c-str { color:#9ece6a; }
+    .c-cm { color:#565f89; }
+    .c-num { color:#ff9e64; }
+    .c-pre { color:#e0af68; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>Python</h1>
+          <p class="subtitle">Quick reference with live previews</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Start</a>
+        <a href="#strings">Strings</a>
+        <a href="#lists">Lists</a>
+        <a href="#flow-control">Conditionals</a>
+        <a href="#loops">Loops</a>
+        <a href="#functions">Functions</a>
+        <a href="#modules">Modules</a>
+        <a href="#file-handling">File Handling</a>
+        <a href="#classes">Classes</a>
+        <a href="#type-hints">Type Hints</a>
+        <a href="#misc">Misc</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('Python')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+
+      <div class="block-desc">
+        <span>Use <code>print()</code> to output text to the console.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_getstarted.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Hello World</div>
+          <pre><span class="c-cm"># Hello World</span>
+<span class="c-fn">print</span>(<span class="c-str">"Hello, world!"</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello, world!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Variables store data and are assigned using the <code>=</code> operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_variables.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Variables</div>
+          <pre>age = <span class="c-num">18</span>
+name = <span class="c-str">"John"</span>
+website = <span class="c-str">"cheatsheets.zip"</span>
+
+<span class="c-fn">print</span>(age, name, website)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">18 John cheatsheets.zip</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Python has dynamic typing; a variable's type is inferred from its value.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Data Types</div>
+          <pre>x = <span class="c-str">"Hello"</span>          <span class="c-cm"># str</span>
+x = <span class="c-num">20</span>                <span class="c-cm"># int</span>
+x = <span class="c-num">20.5</span>              <span class="c-cm"># float</span>
+x = [<span class="c-str">"apple"</span>, <span class="c-str">"banana"</span>]  <span class="c-cm"># list</span>
+x = (<span class="c-str">"apple"</span>, <span class="c-str">"banana"</span>)  <span class="c-cm"># tuple</span>
+x = {<span class="c-str">"name"</span>: <span class="c-str">"John"</span>}  <span class="c-cm"># dict</span>
+x = {<span class="c-str">"apple"</span>, <span class="c-str">"banana"</span>}  <span class="c-cm"># set</span>
+x = <span class="c-kw">True</span>               <span class="c-cm"># bool</span>
+x = <span class="c-kw">None</span>                <span class="c-cm"># NoneType</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;color:#a9b1d6;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Type</th><th>Example</th><th>Mutable</th></tr>
+                <tr><td>str</td><td>"Hello"</td><td>N</td></tr>
+                <tr><td>int</td><td>20</td><td>N</td></tr>
+                <tr><td>float</td><td>20.5</td><td>N</td></tr>
+                <tr><td>list</td><td>["apple","banana"]</td><td>Y</td></tr>
+                <tr><td>tuple</td><td>("apple","banana")</td><td>N</td></tr>
+                <tr><td>dict</td><td>{"name":"John"}</td><td>Y</td></tr>
+                <tr><td>set</td><td>{"apple","banana"}</td><td>Y</td></tr>
+                <tr><td>bool</td><td>True</td><td>N</td></tr>
+                <tr><td>NoneType</td><td>None</td><td>N</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Extract a substring using <code>string[start:end]</code> indexing.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings_slicing.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Slicing String</div>
+          <pre>msg = <span class="c-str">"Hello, World!"</span>
+<span class="c-fn">print</span>(msg[<span class="c-num">2</span>:<span class="c-num">5</span>])   <span class="c-cm"># llo</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">msg = "Hello, World!"</span><br />
+              <span style="color:#9ece6a;">msg[2:5] → "llo"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Control flow with <code>if</code>/<code>else</code> conditional statements.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_conditions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">If Else</div>
+          <pre>age = <span class="c-num">18</span>
+<span class="c-kw">if</span> age &gt;= <span class="c-num">18</span>:
+    <span class="c-fn">print</span>(<span class="c-str">"Adult"</span>)
+<span class="c-kw">else</span>:
+    <span class="c-fn">print</span>(<span class="c-str">"Minor"</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Adult</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Iterate over a sequence using a <code>for</code> loop.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Loops</div>
+          <pre><span class="c-kw">for</span> item <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">6</span>):
+    <span class="c-fn">print</span>(item, end=<span class="c-str">" "</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 3 4 5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define reusable blocks of code with <code>def</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Functions</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">add</span>(a, b):
+    <span class="c-kw">return</span> a + b
+
+<span class="c-fn">print</span>(<span class="c-fn">add</span>(<span class="c-num">3</span>, <span class="c-num">4</span>))</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>with open()</code> to safely read/write files with automatic cleanup.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_handling.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">File Handling</div>
+          <pre><span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"file.txt"</span>, <span class="c-str">"r"</span>) <span class="c-kw">as</span> f:
+    data = f.<span class="c-fn">read</span>()
+    <span class="c-fn">print</span>(data)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Opens "file.txt" and reads content</span><br />
+              <span style="color:#565f89;">Auto-closes after block</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Perform math operations with <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code>, <code>%</code>, <code>**</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_operators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Arithmetic Operators</div>
+          <pre>a = <span class="c-num">10</span>
+b = <span class="c-num">3</span>
+<span class="c-fn">print</span>(a + b)   <span class="c-cm"># 13  addition</span>
+<span class="c-fn">print</span>(a - b)   <span class="c-cm"># 7   subtraction</span>
+<span class="c-fn">print</span>(a * b)   <span class="c-cm"># 30  multiplication</span>
+<span class="c-fn">print</span>(a / b)   <span class="c-cm"># 3.3 division</span>
+<span class="c-fn">print</span>(a // b)  <span class="c-cm"># 3   floor division</span>
+<span class="c-fn">print</span>(a % b)   <span class="c-cm"># 1   modulus</span>
+<span class="c-fn">print</span>(a ** b)  <span class="c-cm"># 1000 exponent</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">13</span><br />
+              <span style="color:#9ece6a;">7</span><br />
+              <span style="color:#9ece6a;">30</span><br />
+              <span style="color:#9ece6a;">3.3333333333333335</span><br />
+              <span style="color:#9ece6a;">3</span><br />
+              <span style="color:#9ece6a;">1</span><br />
+              <span style="color:#9ece6a;">1000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>+=</code> operator adds (or concatenates) and assigns in one step.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_operators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Plus-Equals</div>
+          <pre>n = <span class="c-num">10</span>
+n += <span class="c-num">3</span>
+<span class="c-fn">print</span>(n)  <span class="c-cm"># 13</span>
+
+s = <span class="c-str">"Hello"</span>
+s += <span class="c-str">" World"</span>
+<span class="c-fn">print</span>(s)  <span class="c-cm"># Hello World</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">13</span><br />
+              <span style="color:#9ece6a;">Hello World</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Embed expressions in strings using <code>f"{variable}"</code> syntax.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">f-Strings</div>
+          <pre>website = <span class="c-str">"cheatsheets.zip"</span>
+<span class="c-fn">print</span>(<span class="c-str">f"Hello, {website}"</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello, cheatsheets.zip</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strings -->
+    <section id="strings">
+      <h2>Strings</h2>
+
+      <div class="block-desc">
+        <span>Access individual characters using index <code>string[i]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Array-like Access</div>
+          <pre>hello = <span class="c-str">"Hello"</span>
+<span class="c-fn">print</span>(hello[<span class="c-num">1</span>])    <span class="c-cm"># e</span>
+<span class="c-fn">print</span>(hello[-<span class="c-num">1</span>])   <span class="c-cm"># o</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">e</span><br />
+              <span style="color:#9ece6a;">o</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Iterate over each character in a string with a <code>for</code> loop.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Looping Through</div>
+          <pre><span class="c-kw">for</span> ch <span class="c-kw">in</span> <span class="c-str">"Hello"</span>:
+    <span class="c-fn">print</span>(ch, end=<span class="c-str">" "</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">H e l l o</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Extract parts of a string with <code>string[start:stop:step]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings_slicing.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Slicing</div>
+          <pre>s = <span class="c-str">"abcdefghij"</span>
+
+<span class="c-fn">print</span>(s[<span class="c-num">2</span>:<span class="c-num">5</span>])     <span class="c-cm"># cde</span>
+<span class="c-fn">print</span>(s[:<span class="c-num">2</span>])      <span class="c-cm"># ab</span>
+<span class="c-fn">print</span>(s[::<span class="c-num">5</span>])     <span class="c-cm"># af</span>
+<span class="c-fn">print</span>(s[::-<span class="c-num">1</span>])    <span class="c-cm"># jihgfedcba</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">s[2:5]   → cde</span><br />
+              <span style="color:#9ece6a;">s[:2]    → ab</span><br />
+              <span style="color:#9ece6a;">s[::5]   → af</span><br />
+              <span style="color:#9ece6a;">s[::-1]  → jihgfedcba</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Get the number of characters with <code>len()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Length</div>
+          <pre>s = <span class="c-str">"Hello"</span>
+<span class="c-fn">print</span>(<span class="c-fn">len</span>(s))  <span class="c-cm"># 5</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Repeat a string using the <code>*</code> operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Multiple Copies</div>
+          <pre>s = <span class="c-str">"Ha"</span>
+<span class="c-fn">print</span>(s * <span class="c-num">3</span>)  <span class="c-cm"># HaHaHa</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">HaHaHa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Check if a substring exists with <code>in</code> or <code>not in</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Check String</div>
+          <pre>s = <span class="c-str">"Hello, World!"</span>
+<span class="c-fn">print</span>(<span class="c-str">"World"</span> <span class="c-kw">in</span> s)      <span class="c-cm"># True</span>
+<span class="c-fn">print</span>(<span class="c-str">"xyz"</span> <span class="c-kw">not</span> <span class="c-kw">in</span> s)   <span class="c-cm"># True</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">True</span><br />
+              <span style="color:#9ece6a;">True</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Join strings together using the <code>+</code> operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings_concatenate.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Concatenation</div>
+          <pre>s1 = <span class="c-str">"Hello"</span>
+s2 = <span class="c-str">"World"</span>
+<span class="c-fn">print</span>(s1 + <span class="c-str">" "</span> + s2)  <span class="c-cm"># Hello World</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello World</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Old-style string formatting using <code>%</code> placeholders.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_string_formatting.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Formatting</div>
+          <pre><span class="c-fn">print</span>(<span class="c-str">"I have %s dollars"</span> % <span class="c-num">500</span>)
+<span class="c-fn">print</span>(<span class="c-str">"I have %d dollars"</span> % <span class="c-num">500</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">I have 500 dollars</span><br />
+              <span style="color:#9ece6a;">I have 500 dollars</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Format strings using <code>{}</code> placeholders and the <code>.format()</code> method.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_string_format.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">format() Method</div>
+          <pre>txt1 = <span class="c-str">"My name is {fname}, I'm {age}"</span>.<span class="c-fn">format</span>(
+    fname=<span class="c-str">"John"</span>, age=<span class="c-num">36</span>)
+txt2 = <span class="c-str">"My name is {0}, I'm {1}"</span>.<span class="c-fn">format</span>(
+    <span class="c-str">"John"</span>, <span class="c-num">36</span>)
+<span class="c-fn">print</span>(txt1)
+<span class="c-fn">print</span>(txt2)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">My name is John, I'm 36</span><br />
+              <span style="color:#9ece6a;">My name is John, I'm 36</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Read user input from the console with <code>input()</code>, which always returns a string.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_user_input.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Input</div>
+          <pre>name = <span class="c-fn">input</span>(<span class="c-str">"Enter name: "</span>)
+<span class="c-fn">print</span>(<span class="c-str">"Hello"</span>, name)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Waits for user input from stdin</span><br />
+              <span style="color:#e0af68;">input()</span> <span style="color:#565f89;">always returns a string</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Join list items with <code>separator.join()</code> and check suffixes with <code>.endswith()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Join &amp; Endswith</div>
+          <pre>arr = [<span class="c-str">"H"</span>, <span class="c-str">"e"</span>, <span class="c-str">"l"</span>, <span class="c-str">"l"</span>, <span class="c-str">"o"</span>]
+<span class="c-fn">print</span>(<span class="c-str">"#"</span>.<span class="c-fn">join</span>(arr))          <span class="c-cm"># H#e#l#l#o</span>
+
+s = <span class="c-str">"hello.py"</span>
+<span class="c-fn">print</span>(s.<span class="c-fn">endswith</span>(<span class="c-str">".py"</span>))       <span class="c-cm"># True</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">H#e#l#l#o</span><br />
+              <span style="color:#9ece6a;">True</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- F-Strings -->
+    <section id="fstrings">
+      <h2>F-Strings <span style="font-size:0.8rem;color:#565f89;font-weight:400;">(since Python 3.6+)</span></h2>
+
+      <div class="block-desc">
+        <span>Embed variables and expressions directly in strings with <code>f"{expr}"</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">f-Strings Usage</div>
+          <pre>name = <span class="c-str">"Eric"</span>
+age = <span class="c-num">74</span>
+<span class="c-fn">print</span>(<span class="c-str">f"Hello, {name}. You are {age}."</span>)
+<span class="c-cm"># Hello, Eric. You are 74.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello, Eric. You are 74.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Pad and align text within a fixed width using <code>f"{value:fill align width}"</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_string_formatting.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Fill &amp; Align</div>
+          <pre><span class="c-fn">print</span>(<span class="c-str">f'{"text":*^10}'</span>)
+<span class="c-fn">print</span>(<span class="c-str">f'{"text":*&lt;10}'</span>)
+<span class="c-fn">print</span>(<span class="c-str">f'{"text":*&gt;10}'</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">***text***</span><br />
+              <span style="color:#9ece6a;">text******</span><br />
+              <span style="color:#9ece6a;">******text</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Format numbers as binary, octal, hex, or scientific notation in f-strings.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_string_formatting.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Type Formatting</div>
+          <pre>num = <span class="c-num">42</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:b}"</span>)   <span class="c-cm"># 101010        binary</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:o}"</span>)   <span class="c-cm"># 52            octal</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:x}"</span>)   <span class="c-cm"># 2a            hex</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:e}"</span>)   <span class="c-cm"># 4.200000e+01  scientific</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:c}"</span>)   <span class="c-cm"># *             char</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:#b}"</span>)  <span class="c-cm"># 0b101010      with prefix</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:#o}"</span>)  <span class="c-cm"># 0o52          with prefix</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{num:#x}"</span>)  <span class="c-cm"># 0x2a          with prefix</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">101010</span><br />
+              <span style="color:#9ece6a;">52</span><br />
+              <span style="color:#9ece6a;">2a</span><br />
+              <span style="color:#9ece6a;">4.200000e+01</span><br />
+              <span style="color:#9ece6a;">*</span><br />
+              <span style="color:#9ece6a;">0b101010</span><br />
+              <span style="color:#9ece6a;">0o52</span><br />
+              <span style="color:#9ece6a;">0x2a</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Control sign display, decimal precision, comma grouping, and percentage in f-strings.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_string_formatting.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Sign &amp; Precision</div>
+          <pre><span class="c-cm"># Negative numbers</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{-5:+d}"</span>)        <span class="c-cm"># -5  (always sign)</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{5:+d}"</span>)         <span class="c-cm"># +5</span>
+
+<span class="c-cm"># Precision</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{1/3:.2f}"</span>)      <span class="c-cm"># 0.33</span>
+
+<span class="c-cm"># Grouping</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{1000000:,d}"</span>)    <span class="c-cm"># 1,000,000</span>
+
+<span class="c-cm"># Percentage</span>
+<span class="c-fn">print</span>(<span class="c-str">f"{0.25:.2%}"</span>)     <span class="c-cm"># 25.00%</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">-5</span><br />
+              <span style="color:#9ece6a;">+5</span><br />
+              <span style="color:#9ece6a;">0.33</span><br />
+              <span style="color:#9ece6a;">1,000,000</span><br />
+              <span style="color:#9ece6a;">25.00%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lists -->
+    <section id="lists">
+      <h2>Lists</h2>
+
+      <div class="block-desc">
+        <span>Create lists with <code>[]</code> and generate values using <code>list()</code> or comprehensions.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Define &amp; Generate</div>
+          <pre>li1 = []
+li2 = [<span class="c-num">4</span>, <span class="c-num">5</span>, <span class="c-num">6</span>]
+
+<span class="c-cm"># filter with lambda</span>
+li3 = <span class="c-fn">list</span>(<span class="c-fn">filter</span>(<span class="c-kw">lambda</span> x: x &gt; <span class="c-num">2</span>, [<span class="c-num">1</span>,<span class="c-num">2</span>,<span class="c-num">3</span>,<span class="c-num">4</span>]))
+
+<span class="c-cm"># list comprehension</span>
+li4 = [x**<span class="c-num">2</span> <span class="c-kw">for</span> x <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>)]
+
+<span class="c-fn">print</span>(li3)
+<span class="c-fn">print</span>(li4)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[3, 4]</span><br />
+              <span style="color:#9ece6a;">[0, 1, 4, 9, 16]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Add items with <code>.append()</code> and access elements by index <code>list[i]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Append &amp; Access</div>
+          <pre>li = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>]
+li.<span class="c-fn">append</span>(<span class="c-num">4</span>)
+
+<span class="c-fn">print</span>(li[<span class="c-num">0</span>])     <span class="c-cm"># 1</span>
+<span class="c-fn">print</span>(li[-<span class="c-num">1</span>])    <span class="c-cm"># 4</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">1</span><br />
+              <span style="color:#9ece6a;">4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Extract list sub-sections with <code>list[start:stop:step]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Slicing with Stride</div>
+          <pre>li = [<span class="c-num">0</span>, <span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, <span class="c-num">4</span>, <span class="c-num">5</span>]
+<span class="c-fn">print</span>(li[<span class="c-num">1</span>:<span class="c-num">4</span>])      <span class="c-cm"># [1, 2, 3]</span>
+<span class="c-fn">print</span>(li[::<span class="c-num">2</span>])       <span class="c-cm"># [0, 2, 4]</span>
+<span class="c-fn">print</span>(li[::-<span class="c-num">1</span>])      <span class="c-cm"># [5, 4, 3, 2, 1, 0]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[1, 2, 3]</span><br />
+              <span style="color:#9ece6a;">[0, 2, 4]</span><br />
+              <span style="color:#9ece6a;">[5, 4, 3, 2, 1, 0]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Remove items from a list using <code>.pop()</code> or <code>del</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Remove</div>
+          <pre>li = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, <span class="c-num">4</span>, <span class="c-num">5</span>]
+
+li.<span class="c-fn">pop</span>()            <span class="c-cm"># removes last (5)</span>
+<span class="c-kw">del</span> li[<span class="c-num">0</span>]             <span class="c-cm"># removes index 0</span>
+
+<span class="c-fn">print</span>(li)  <span class="c-cm"># [2, 3, 4]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[2, 3, 4]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Combine lists with <code>+</code> or <code>.extend()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Concatenating</div>
+          <pre>a = [<span class="c-num">1</span>, <span class="c-num">2</span>]
+b = [<span class="c-num">3</span>, <span class="c-num">4</span>]
+
+a.<span class="c-fn">extend</span>(b)
+<span class="c-fn">print</span>(a)  <span class="c-cm"># [1, 2, 3, 4]</span>
+
+c = [<span class="c-num">1</span>, <span class="c-num">2</span>] + [<span class="c-num">3</span>, <span class="c-num">4</span>]
+<span class="c-fn">print</span>(c)  <span class="c-cm"># [1, 2, 3, 4]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[1, 2, 3, 4]</span><br />
+              <span style="color:#9ece6a;">[1, 2, 3, 4]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Sort items with <code>.sort()</code> and reverse order with <code>.reverse()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Sort &amp; Reverse</div>
+          <pre>li = [<span class="c-num">3</span>, <span class="c-num">1</span>, <span class="c-num">2</span>]
+li.<span class="c-fn">sort</span>()
+<span class="c-fn">print</span>(li)  <span class="c-cm"># [1, 2, 3]</span>
+
+li.<span class="c-fn">reverse</span>()
+<span class="c-fn">print</span>(li)  <span class="c-cm"># [3, 2, 1]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[1, 2, 3]</span><br />
+              <span style="color:#9ece6a;">[3, 2, 1]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Count occurrences with <code>.count()</code> and repeat lists with <code>*</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Count &amp; Repeat</div>
+          <pre>li = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">2</span>, <span class="c-num">3</span>]
+<span class="c-fn">print</span>(li.<span class="c-fn">count</span>(<span class="c-num">2</span>))  <span class="c-cm"># 2</span>
+
+li2 = li * <span class="c-num">2</span>
+<span class="c-fn">print</span>(li2)  <span class="c-cm"># [1, 2, 2, 3, 1, 2, 2, 3]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">2</span><br />
+              <span style="color:#9ece6a;">[1, 2, 2, 3, 1, 2, 2, 3]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flow Control -->
+    <section id="flow-control">
+      <h2>Flow Control</h2>
+
+      <div class="block-desc">
+        <span>Chain multiple conditions with <code>if</code>, <code>elif</code>, and <code>else</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_conditions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">If / Elif / Else</div>
+          <pre>k = <span class="c-num">15</span>
+<span class="c-kw">if</span> k &gt; <span class="c-num">20</span>:
+    <span class="c-fn">print</span>(<span class="c-num">1</span>)
+<span class="c-kw">elif</span> k &gt; <span class="c-num">10</span>:
+    <span class="c-fn">print</span>(<span class="c-num">2</span>)
+<span class="c-kw">else</span>:
+    <span class="c-fn">print</span>(<span class="c-num">3</span>)
+<span class="c-cm"># 2</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">2</span><br />
+              <span style="color:#565f89;">k=15 is &gt;10 but ≤20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Write an <code>if</code>/<code>else</code> in a single expression (ternary operator).</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_conditions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Ternary (One-Line)</div>
+          <pre>a = <span class="c-num">10</span>
+b = <span class="c-num">20</span>
+max_val = a <span class="c-kw">if</span> a &gt; b <span class="c-kw">else</span> b
+<span class="c-fn">print</span>(max_val)
+<span class="c-cm"># 20</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Check for falsy values and <code>None</code> using <code>if not</code> and <code>is None</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_conditions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Else If &amp; None check</div>
+          <pre>x = <span class="c-kw">None</span>
+<span class="c-kw">if</span> <span class="c-kw">not</span> x:
+    <span class="c-fn">print</span>(<span class="c-str">"falsy"</span>)
+<span class="c-kw">elif</span> x <span class="c-kw">is</span> <span class="c-kw">None</span>:
+    <span class="c-fn">print</span>(<span class="c-str">"None"</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">falsy</span><br />
+              <span style="color:#565f89;">`if not x` catches None, 0, "", []</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Pattern matching with <code>match</code>/<code>case</code>, similar to switch statements.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_match_case.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Match Case (3.10+)</div>
+          <pre>status = <span class="c-num">404</span>
+<span class="c-kw">match</span> status:
+    <span class="c-kw">case</span> <span class="c-num">200</span>:
+        <span class="c-fn">print</span>(<span class="c-str">"OK"</span>)
+    <span class="c-kw">case</span> <span class="c-num">404</span>:
+        <span class="c-fn">print</span>(<span class="c-str">"Not Found"</span>)
+    <span class="c-kw">case</span> _:
+        <span class="c-fn">print</span>(<span class="c-str">"Unknown"</span>)
+<span class="c-cm"># Not Found</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Not Found</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loops -->
+    <section id="loops">
+      <h2>Loops</h2>
+
+      <div class="block-desc">
+        <span>Iterate a fixed number of times using <code>for i in range()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Basic For</div>
+          <pre><span class="c-kw">for</span> i <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>):
+    <span class="c-fn">print</span>(i, end=<span class="c-str">" "</span>)
+<span class="c-cm"># 0 1 2 3 4</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 3 4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Get both index and value with <code>enumerate()</code> in a <code>for</code> loop.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">With Index (enumerate)</div>
+          <pre>fruits = [<span class="c-str">"apple"</span>, <span class="c-str">"banana"</span>, <span class="c-str">"cherry"</span>]
+<span class="c-kw">for</span> i, fruit <span class="c-kw">in</span> <span class="c-fn">enumerate</span>(fruits):
+    <span class="c-fn">print</span>(i, fruit)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 apple</span><br />
+              <span style="color:#9ece6a;">1 banana</span><br />
+              <span style="color:#9ece6a;">2 cherry</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Repeat a block while a condition is <code>True</code> with a <code>while</code> loop.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_while_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">While</div>
+          <pre>count = <span class="c-num">0</span>
+<span class="c-kw">while</span> count &lt; <span class="c-num">5</span>:
+    <span class="c-fn">print</span>(count, end=<span class="c-str">" "</span>)
+    count += <span class="c-num">1</span>
+<span class="c-cm"># 0 1 2 3 4</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 3 4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>break</code> to exit a loop early and <code>continue</code> to skip an iteration.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Break &amp; Continue</div>
+          <pre><span class="c-cm"># Continue skips iteration</span>
+<span class="c-kw">for</span> i <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>):
+    <span class="c-kw">if</span> i == <span class="c-num">3</span>: <span class="c-kw">continue</span>
+    <span class="c-fn">print</span>(i, end=<span class="c-str">" "</span>)
+<span class="c-cm"># 0 1 2 4</span>
+
+<span class="c-cm"># Break exits loop</span>
+<span class="c-kw">for</span> i <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>):
+    <span class="c-kw">if</span> i == <span class="c-num">3</span>: <span class="c-kw">break</span>
+    <span class="c-fn">print</span>(i, end=<span class="c-str">" "</span>)
+<span class="c-cm"># 0 1 2</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 4</span><br />
+              <span style="color:#e0af68;">0 1 2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Generate sequences of numbers with <code>range(start, stop, step)</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Range</div>
+          <pre><span class="c-fn">print</span>(<span class="c-fn">list</span>(<span class="c-fn">range</span>(<span class="c-num">5</span>)))         <span class="c-cm"># [0, 1, 2, 3, 4]</span>
+<span class="c-fn">print</span>(<span class="c-fn">list</span>(<span class="c-fn">range</span>(<span class="c-num">2</span>, <span class="c-num">5</span>)))      <span class="c-cm"># [2, 3, 4]</span>
+<span class="c-fn">print</span>(<span class="c-fn">list</span>(<span class="c-fn">range</span>(<span class="c-num">0</span>, <span class="c-num">10</span>, <span class="c-num">2</span>)))  <span class="c-cm"># [0, 2, 4, 6, 8]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[0, 1, 2, 3, 4]</span><br />
+              <span style="color:#9ece6a;">[2, 3, 4]</span><br />
+              <span style="color:#9ece6a;">[0, 2, 4, 6, 8]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Iterate over multiple sequences in parallel with <code>zip()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">zip()</div>
+          <pre>names = [<span class="c-str">"Alice"</span>, <span class="c-str">"Bob"</span>, <span class="c-str">"Charlie"</span>]
+ages = [<span class="c-num">25</span>, <span class="c-num">30</span>, <span class="c-num">35</span>]
+<span class="c-kw">for</span> name, age <span class="c-kw">in</span> <span class="c-fn">zip</span>(names, ages):
+    <span class="c-fn">print</span>(name, age)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Alice 25</span><br />
+              <span style="color:#9ece6a;">Bob 30</span><br />
+              <span style="color:#9ece6a;">Charlie 35</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>else</code> block runs after a <code>for</code> loop completes without <code>break</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">For/Else</div>
+          <pre><span class="c-kw">for</span> n <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>):
+    <span class="c-fn">print</span>(n, end=<span class="c-str">" "</span>)
+<span class="c-kw">else</span>:
+    <span class="c-fn">print</span>(<span class="c-str">"completed"</span>)
+<span class="c-cm"># 0 1 2 3 4 completed</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 3 4 completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Iterate over dictionary keys and values with <code>.items()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_dictionaries.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Over Dictionary</div>
+          <pre>d = {<span class="c-str">"a"</span>: <span class="c-num">1</span>, <span class="c-str">"b"</span>: <span class="c-num">2</span>}
+<span class="c-kw">for</span> key, val <span class="c-kw">in</span> d.<span class="c-fn">items</span>():
+    <span class="c-fn">print</span>(key, val)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">a 1</span><br />
+              <span style="color:#9ece6a;">b 2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensions -->
+    <section id="comprehensions">
+      <h2>Comprehensions</h2>
+
+      <div class="block-desc">
+        <span>Create lists concisely with <code>[expr for item in iterable if condition]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lists_comprehension.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Comprehension</div>
+          <pre>squares = [x**<span class="c-num">2</span> <span class="c-kw">for</span> x <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>)]
+<span class="c-fn">print</span>(squares)
+<span class="c-cm"># [0, 1, 4, 9, 16]</span>
+
+evens = [x <span class="c-kw">for</span> x <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">10</span>) <span class="c-kw">if</span> x % <span class="c-num">2</span> == <span class="c-num">0</span>]
+<span class="c-fn">print</span>(evens)
+<span class="c-cm"># [0, 2, 4, 6, 8]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[0, 1, 4, 9, 16]</span><br />
+              <span style="color:#9ece6a;">[0, 2, 4, 6, 8]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Build dictionaries with <code>{key: value for item in iterable}</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_dictionaries.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Dictionary Comprehension</div>
+          <pre>squares_dict = {x: x**<span class="c-num">2</span> <span class="c-kw">for</span> x <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">5</span>)}
+<span class="c-fn">print</span>(squares_dict)
+<span class="c-cm"># {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">{0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Functions -->
+    <section id="functions">
+      <h2>Functions</h2>
+
+      <div class="block-desc">
+        <span>Define a function with <code>def</code> and return a value with <code>return</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Basic &amp; Return</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">add</span>(a, b):
+    <span class="c-kw">return</span> a + b
+
+<span class="c-fn">print</span>(<span class="c-fn">add</span>(<span class="c-num">3</span>, <span class="c-num">4</span>))  <span class="c-cm"># 7</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Accept variable positional args with <code>*args</code> and keyword args with <code>**kwargs</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">*args &amp; **kwargs</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">my_func</span>(*args, **kwargs):
+    <span class="c-fn">print</span>(args)    <span class="c-cm"># tuple</span>
+    <span class="c-fn">print</span>(kwargs)  <span class="c-cm"># dict</span>
+
+<span class="c-fn">my_func</span>(<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, a=<span class="c-num">4</span>, b=<span class="c-num">5</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">(1, 2, 3)</span><br />
+              <span style="color:#9ece6a;">{'a': 4, 'b': 5}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Return multiple values from a function as a tuple, unpacked at the call site.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Returning Multiple</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">get_stats</span>(nums):
+    <span class="c-kw">return</span> <span class="c-fn">min</span>(nums), <span class="c-fn">max</span>(nums)
+
+low, high = <span class="c-fn">get_stats</span>([<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>])
+<span class="c-fn">print</span>(low, high)  <span class="c-cm"># 1 3</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">1 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Set default parameter values in function definitions.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Default Value</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">greet</span>(name=<span class="c-str">"World"</span>):
+    <span class="c-fn">print</span>(<span class="c-str">f"Hello, {name}!"</span>)
+
+<span class="c-fn">greet</span>()              <span class="c-cm"># Hello, World!</span>
+<span class="c-fn">greet</span>(<span class="c-str">"Python"</span>)      <span class="c-cm"># Hello, Python!</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello, World!</span><br />
+              <span style="color:#9ece6a;">Hello, Python!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create small anonymous functions using <code>lambda</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_lambda.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Anonymous (Lambda)</div>
+          <pre>square = <span class="c-kw">lambda</span> x: x ** <span class="c-num">2</span>
+<span class="c-fn">print</span>(<span class="c-fn">square</span>(<span class="c-num">5</span>))  <span class="c-cm"># 25</span>
+
+nums = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, <span class="c-num">4</span>]
+squared = <span class="c-fn">list</span>(<span class="c-fn">map</span>(<span class="c-kw">lambda</span> x: x**<span class="c-num">2</span>, nums))
+<span class="c-fn">print</span>(squared)  <span class="c-cm"># [1, 4, 9, 16]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">25</span><br />
+              <span style="color:#9ece6a;">[1, 4, 9, 16]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>@decorator</code> syntax to modify or extend function behavior.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_decorators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Decorators</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">decorator</span>(func):
+    <span class="c-kw">def</span> <span class="c-fn">wrapper</span>():
+        <span class="c-fn">print</span>(<span class="c-str">"Before"</span>)
+        <span class="c-fn">func</span>()
+        <span class="c-fn">print</span>(<span class="c-str">"After"</span>)
+    <span class="c-kw">return</span> wrapper
+
+@<span class="c-fn">decorator</span>
+<span class="c-kw">def</span> <span class="c-fn">say_hello</span>():
+    <span class="c-fn">print</span>(<span class="c-str">"Hello"</span>)
+
+<span class="c-fn">say_hello</span>()</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Before</span><br />
+              <span style="color:#9ece6a;">Hello</span><br />
+              <span style="color:#9ece6a;">After</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modules -->
+    <section id="modules">
+      <h2>Modules</h2>
+
+      <div class="block-desc">
+        <span>Import modules with <code>import</code>, <code>from ... import</code>, or <code>import ... as</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_modules.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Import Styles</div>
+          <pre><span class="c-kw">import</span> math
+<span class="c-cm"># Usage: math.sqrt(16)</span>
+
+<span class="c-kw">from</span> math <span class="c-kw">import</span> ceil, floor
+<span class="c-cm"># Usage: ceil(4.2)</span>
+
+<span class="c-kw">from</span> math <span class="c-kw">import</span> *
+<span class="c-cm"># Imports all names (not recommended)</span>
+
+<span class="c-kw">import</span> math <span class="c-kw">as</span> m
+<span class="c-cm"># Usage: m.sqrt(16)</span>
+
+<span class="c-fn">print</span>(<span class="c-fn">dir</span>(math))  <span class="c-cm"># list all names</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">math.sqrt(16) = 4.0</span><br />
+              <span style="color:#9ece6a;">ceil(4.2) = 5, floor(4.2) = 4</span><br />
+              <span style="color:#565f89;">dir(math) lists all module names</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- File Handling -->
+    <section id="file-handling">
+      <h2>File Handling</h2>
+
+      <div class="block-desc">
+        <span>Read a file line by line with <code>with open("file", "r") as f:</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_open.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Read File</div>
+          <pre><span class="c-cm"># Read line by line</span>
+<span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"file.txt"</span>, <span class="c-str">"r"</span>) <span class="c-kw">as</span> f:
+    <span class="c-kw">for</span> line <span class="c-kw">in</span> f:
+        <span class="c-fn">print</span>(line, end=<span class="c-str">""</span>)
+
+<span class="c-cm"># With line number</span>
+<span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"file.txt"</span>) <span class="c-kw">as</span> f:
+    <span class="c-kw">for</span> i, line <span class="c-kw">in</span> <span class="c-fn">enumerate</span>(f, start=<span class="c-num">1</span>):
+        <span class="c-fn">print</span>(i, line)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">with open("file.txt") as f:</span><br />
+              <span style="color:#565f89;">  for line in f:</span><br />
+              <span style="color:#565f89;">    ...</span><br />
+              <span style="color:#565f89;">File auto-closes after block</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Write strings with <code>f.write()</code> and read full content with <code>f.read()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_open.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Write / Read String</div>
+          <pre><span class="c-cm"># Write string</span>
+<span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"file.txt"</span>, <span class="c-str">"w"</span>) <span class="c-kw">as</span> f:
+    f.<span class="c-fn">write</span>(<span class="c-str">"Hello, World!"</span>)
+
+<span class="c-cm"># Read string</span>
+<span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"file.txt"</span>, <span class="c-str">"r"</span>) <span class="c-kw">as</span> f:
+    content = f.<span class="c-fn">read</span>()
+    <span class="c-fn">print</span>(content)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello, World!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Serialize objects to JSON with <code>json.dumps()</code> and deserialize with <code>json.loads()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_handling.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Write / Read Object (JSON)</div>
+          <pre><span class="c-kw">import</span> json
+
+data = {<span class="c-str">"name"</span>: <span class="c-str">"John"</span>, <span class="c-str">"age"</span>: <span class="c-num">30</span>}
+
+<span class="c-cm"># Write object</span>
+<span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"data.json"</span>, <span class="c-str">"w"</span>) <span class="c-kw">as</span> f:
+    f.<span class="c-fn">write</span>(json.<span class="c-fn">dumps</span>(data))
+
+<span class="c-cm"># Read object</span>
+<span class="c-kw">with</span> <span class="c-fn">open</span>(<span class="c-str">"data.json"</span>, <span class="c-str">"r"</span>) <span class="c-kw">as</span> f:
+    loaded = json.<span class="c-fn">loads</span>(f.<span class="c-fn">read</span>())
+    <span class="c-fn">print</span>(loaded)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">{'name': 'John', 'age': 30}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Delete files with <code>os.remove()</code> and empty directories with <code>os.rmdir()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_remove.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Delete File / Folder</div>
+          <pre><span class="c-kw">import</span> os
+
+<span class="c-cm"># Delete file</span>
+os.<span class="c-fn">remove</span>(<span class="c-str">"file.txt"</span>)
+
+<span class="c-cm"># Check and Delete</span>
+<span class="c-kw">if</span> os.<span class="c-fn">path</span>.<span class="c-fn">exists</span>(<span class="c-str">"file.txt"</span>):
+    os.<span class="c-fn">remove</span>(<span class="c-str">"file.txt"</span>)
+
+<span class="c-cm"># Delete folder</span>
+os.<span class="c-fn">rmdir</span>(<span class="c-str">"folder"</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">os.remove("file.txt")</span><br />
+              <span style="color:#565f89;">os.path.exists("file.txt") → bool</span><br />
+              <span style="color:#565f89;">os.rmdir("folder")  # empty only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Classes & Inheritance -->
+    <section id="classes">
+      <h2>Classes &amp; Inheritance</h2>
+
+      <div class="block-desc">
+        <span>Define a class with <code>class</code> and initialize attributes with <code>__init__</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Define &amp; Constructor</div>
+          <pre><span class="c-kw">class</span> <span class="c-fn">Person</span>:
+    <span class="c-kw">def</span> <span class="c-fn">__init__</span>(<span class="c-kw">self</span>, name, age):
+        <span class="c-kw">self</span>.name = name
+        <span class="c-kw">self</span>.age = age
+
+    <span class="c-kw">def</span> <span class="c-fn">greet</span>(<span class="c-kw">self</span>):
+        <span class="c-fn">print</span>(<span class="c-str">f"Hi, I'm {self.name}"</span>)
+
+p = <span class="c-fn">Person</span>(<span class="c-str">"Alice"</span>, <span class="c-num">30</span>)
+p.<span class="c-fn">greet</span>()</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hi, I'm Alice</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define class-level variables shared by all instances and a readable <code>__repr__</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Class Variables &amp; repr()</div>
+          <pre><span class="c-kw">class</span> <span class="c-fn">Person</span>:
+    species = <span class="c-str">"Homo sapiens"</span>  <span class="c-cm"># class variable</span>
+
+    <span class="c-kw">def</span> <span class="c-fn">__init__</span>(<span class="c-kw">self</span>, name):
+        <span class="c-kw">self</span>.name = name
+
+    <span class="c-kw">def</span> <span class="c-fn">__repr__</span>(<span class="c-kw">self</span>):
+        <span class="c-kw">return</span> <span class="c-str">f"Person('{self.name}')"</span>
+
+p = <span class="c-fn">Person</span>(<span class="c-str">"Bob"</span>)
+<span class="c-fn">print</span>(p)             <span class="c-cm"># Person('Bob')</span>
+<span class="c-fn">print</span>(Person.species)  <span class="c-cm"># Homo sapiens</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Person('Bob')</span><br />
+              <span style="color:#9ece6a;">Homo sapiens</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create subclasses and call the parent class with <code>super()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_inheritance.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Inheritance &amp; super()</div>
+          <pre><span class="c-kw">class</span> <span class="c-fn">Animal</span>:
+    <span class="c-kw">def</span> <span class="c-fn">__init__</span>(<span class="c-kw">self</span>, name):
+        <span class="c-kw">self</span>.name = name
+    <span class="c-kw">def</span> <span class="c-fn">speak</span>(<span class="c-kw">self</span>):
+        <span class="c-kw">pass</span>
+
+<span class="c-kw">class</span> <span class="c-fn">Dog</span>(<span class="c-fn">Animal</span>):
+    <span class="c-kw">def</span> <span class="c-fn">speak</span>(<span class="c-kw">self</span>):          <span class="c-cm"># override</span>
+        <span class="c-kw">return</span> <span class="c-str">"Woof!"</span>
+
+<span class="c-kw">class</span> <span class="c-fn">Cat</span>(<span class="c-fn">Animal</span>):
+    <span class="c-kw">def</span> <span class="c-fn">speak</span>(<span class="c-kw">self</span>):
+        <span class="c-kw">return</span> <span class="c-fn">super</span>().<span class="c-fn">speak</span>()  <span class="c-cm"># calls parent</span>
+
+<span class="c-cm"># Polymorphism</span>
+animals = [<span class="c-fn">Dog</span>(<span class="c-str">"Rex"</span>), <span class="c-fn">Cat</span>(<span class="c-str">"Whiskers"</span>)]
+<span class="c-kw">for</span> a <span class="c-kw">in</span> animals:
+    <span class="c-fn">print</span>(a.<span class="c-fn">speak</span>())</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Woof!</span><br />
+              <span style="color:#e0af68;">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create custom exception classes by extending <code>Exception</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">User Exceptions</div>
+          <pre><span class="c-kw">class</span> <span class="c-fn">MyError</span>(Exception):
+    <span class="c-kw">pass</span>
+
+<span class="c-kw">try</span>:
+    <span class="c-kw">raise</span> <span class="c-fn">MyError</span>(<span class="c-str">"Something went wrong"</span>)
+<span class="c-kw">except</span> MyError <span class="c-kw">as</span> e:
+    <span class="c-fn">print</span>(e)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Something went wrong</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define methods that don't access instance data using <code>@staticmethod</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">@staticmethod</div>
+          <pre><span class="c-kw">class</span> <span class="c-fn">MathUtils</span>:
+    @<span class="c-fn">staticmethod</span>
+    <span class="c-kw">def</span> <span class="c-fn">add</span>(a, b):
+        <span class="c-kw">return</span> a + b
+
+<span class="c-fn">print</span>(MathUtils.<span class="c-fn">add</span>(<span class="c-num">2</span>, <span class="c-num">3</span>))  <span class="c-cm"># 5</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Type Hints -->
+    <section id="type-hints">
+      <h2>Type Hints <span style="font-size:0.8rem;color:#565f89;font-weight:400;">(since Python 3.5)</span></h2>
+
+      <div class="block-desc">
+        <span>Annotate variables and function parameters with type hints.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Variable &amp; Parameter</div>
+          <pre><span class="c-kw">from</span> typing <span class="c-kw">import</span> Dict, Tuple, List
+
+name: <span class="c-kw">str</span> = <span class="c-str">"John"</span>
+age: <span class="c-kw">int</span> = <span class="c-num">30</span>
+
+<span class="c-kw">def</span> <span class="c-fn">greet</span>(name: <span class="c-kw">str</span>) -&gt; <span class="c-kw">str</span>:
+    <span class="c-kw">return</span> <span class="c-str">f"Hello, {name}"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Type hints are not enforced at runtime</span><br />
+              <span style="color:#565f89;">Used by mypy / IDEs for static analysis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use generic type hints like <code>Dict[str, int]</code> or <code>dict[str, int]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Built-in Types</div>
+          <pre><span class="c-cm"># 3.5+ style (from typing)</span>
+<span class="c-kw">from</span> typing <span class="c-kw">import</span> Dict, Tuple, List
+
+d: Dict[<span class="c-kw">str</span>, <span class="c-kw">int</span>] = {<span class="c-str">"a"</span>: <span class="c-num">1</span>}
+t: Tuple[<span class="c-kw">int</span>, <span class="c-kw">str</span>] = (<span class="c-num">1</span>, <span class="c-str">"hello"</span>)
+l: List[<span class="c-kw">int</span>] = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>]
+
+<span class="c-cm"># 3.10+ style (built-in)</span>
+d: <span class="c-kw">dict</span>[<span class="c-kw">str</span>, <span class="c-kw">int</span>] = {<span class="c-str">"a"</span>: <span class="c-num">1</span>}
+t: <span class="c-kw">tuple</span>[<span class="c-kw">int</span>, <span class="c-kw">str</span>] = (<span class="c-num">1</span>, <span class="c-str">"hello"</span>)
+l: <span class="c-kw">list</span>[<span class="c-kw">int</span>] = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>]</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Dict[str, int], Tuple[int, str], List[int]</span><br />
+              <span style="color:#565f89;">3.10+: dict[str, int], tuple[int, str], list[int]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Annotate function return types using <code>Union</code>, <code>|</code>, or <code>Callable</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Functions &amp; Returns</div>
+          <pre><span class="c-kw">from</span> typing <span class="c-kw">import</span> Union, Callable
+
+<span class="c-cm"># *args as int</span>
+<span class="c-kw">def</span> <span class="c-fn">sum_all</span>(*args: <span class="c-kw">int</span>) -&gt; <span class="c-kw">int</span>:
+    <span class="c-kw">return</span> <span class="c-fn">sum</span>(args)
+
+<span class="c-cm"># Union return</span>
+<span class="c-kw">def</span> <span class="c-fn">get_value</span>(flag: <span class="c-kw">bool</span>) -&gt; Union[<span class="c-kw">int</span>, <span class="c-kw">str</span>]:
+    <span class="c-kw">if</span> flag:
+        <span class="c-kw">return</span> <span class="c-num">42</span>
+    <span class="c-kw">return</span> <span class="c-str">"hello"</span>
+
+<span class="c-cm"># 3.10+ Union syntax</span>
+<span class="c-kw">def</span> <span class="c-fn">get_val</span>(flag: <span class="c-kw">bool</span>) -&gt; <span class="c-kw">int</span> | <span class="c-kw">str</span>:
+    ...
+
+<span class="c-cm"># **kwargs as int</span>
+<span class="c-kw">def</span> <span class="c-fn">log</span>(**kwargs: <span class="c-kw">int</span>) -&gt; <span class="c-kw">None</span>:
+    <span class="c-kw">pass</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">-> int, -> Union[int, str], -> int | str</span><br />
+              <span style="color:#565f89;">*args: int, **kwargs: int</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Annotate class properties and use <code>Self</code> and <code>TypeVar</code> for generics.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Property &amp; Self</div>
+          <pre><span class="c-kw">from</span> typing <span class="c-kw">import</span> TypeVar, Type
+
+<span class="c-cm"># Property type</span>
+<span class="c-kw">class</span> <span class="c-fn">Person</span>:
+    name: <span class="c-kw">str</span>
+
+    <span class="c-kw">def</span> <span class="c-fn">__init__</span>(<span class="c-kw">self</span>, name: <span class="c-kw">str</span>) -&gt; <span class="c-kw">None</span>:
+        <span class="c-kw">self</span>.name = name
+
+<span class="c-cm"># 3.11+ Self type</span>
+<span class="c-kw">from</span> typing <span class="c-kw">import</span> Self
+
+<span class="c-kw">class</span> <span class="c-fn">MyClass</span>:
+    <span class="c-kw">def</span> <span class="c-fn">copy</span>(<span class="c-kw">self</span>) -&gt; Self:
+        ...
+
+<span class="c-cm"># TypeVar &amp; Generic</span>
+T = <span class="c-fn">TypeVar</span>(<span class="c-str">"T"</span>)
+
+<span class="c-kw">def</span> <span class="c-fn">first</span>(items: List[T]) -&gt; T:
+    <span class="c-kw">return</span> items[<span class="c-num">0</span>]</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Self → return type of self</span><br />
+              <span style="color:#565f89;">TypeVar("T") → generic type</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Type-hint a function parameter with <code>Callable[[ArgTypes], ReturnType]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Callable</div>
+          <pre><span class="c-kw">from</span> typing <span class="c-kw">import</span> Callable
+
+<span class="c-cm"># Function type</span>
+<span class="c-kw">def</span> <span class="c-fn">apply</span>(
+    func: Callable[[<span class="c-kw">int</span>], <span class="c-kw">str</span>],
+    value: <span class="c-kw">int</span>
+) -&gt; <span class="c-kw">str</span>:
+    <span class="c-kw">return</span> <span class="c-fn">func</span>(value)
+
+<span class="c-fn">print</span>(<span class="c-fn">apply</span>(<span class="c-kw">lambda</span> x: <span class="c-str">f"num={x}"</span>, <span class="c-num">5</span>))</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">num=5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Operators -->
+    <section id="operators">
+      <h2>Operators</h2>
+
+      <div class="block-desc">
+        <span>Assign a variable within an expression using the <code>:=</code> walrus operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_operators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Walrus Operator (:=)</div>
+          <pre><span class="c-cm"># Assign &amp; use in expression</span>
+<span class="c-kw">if</span> (n := <span class="c-fn">len</span>(<span class="c-str">"hello"</span>)) &gt; <span class="c-num">3</span>:
+    <span class="c-fn">print</span>(n)  <span class="c-cm"># 5</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Work with dates and times using the <code>datetime</code> module.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_datetime.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Date &amp; Time</div>
+          <pre><span class="c-kw">from</span> datetime <span class="c-kw">import</span> datetime, date, time, timedelta
+
+<span class="c-cm"># Now</span>
+now = datetime.<span class="c-fn">now</span>()
+<span class="c-fn">print</span>(now)
+
+<span class="c-cm"># Date &amp; Time</span>
+d = date.<span class="c-fn">today</span>()
+t = time(<span class="c-num">14</span>, <span class="c-num">30</span>)
+
+<span class="c-cm"># Parse / Format</span>
+dt = datetime.<span class="c-fn">strptime</span>(<span class="c-str">"2024-01-01"</span>, <span class="c-str">"%Y-%m-%d"</span>)
+<span class="c-fn">print</span>(dt.<span class="c-fn">strftime</span>(<span class="c-str">"%A"</span>))  <span class="c-cm"># Monday</span>
+
+<span class="c-cm"># Timestamp &amp; Delta</span>
+ts = datetime.<span class="c-fn">timestamp</span>(dt)
+delta = timedelta(days=<span class="c-num">7</span>)
+<span class="c-fn">print</span>(dt + delta)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">2026-07-05 12:00:00.000000</span><br />
+              <span style="color:#9ece6a;">Monday</span><br />
+              <span style="color:#9ece6a;">2024-01-08 00:00:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Miscellaneous -->
+    <section id="misc">
+      <h2>Miscellaneous</h2>
+
+      <div class="block-desc">
+        <span>Add single-line comments with <code>#</code> and multi-line docstrings with <code>"""</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_comments.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Comments</div>
+          <pre><span class="c-cm"># Single line comment</span>
+
+<span class="c-cm">""" Multi-line
+comment docstring """</span>
+
+<span class="c-cm">''' Also valid
+multi-line string '''</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"># → single line comment</span><br />
+              <span style="color:#565f89;">""" """ → docstring / multi-line</span><br />
+              <span style="color:#565f89;">''' ''' → also multi-line string</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create iterators using <code>yield</code> in a generator function.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_generators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Generators</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">count_up</span>(n):
+    i = <span class="c-num">0</span>
+    <span class="c-kw">while</span> i &lt; n:
+        <span class="c-kw">yield</span> i
+        i += <span class="c-num">1</span>
+
+<span class="c-cm"># Generator to list</span>
+gen = <span class="c-fn">count_up</span>(<span class="c-num">5</span>)
+<span class="c-fn">print</span>(<span class="c-fn">list</span>(gen))
+<span class="c-cm"># [0, 1, 2, 3, 4]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[0, 1, 2, 3, 4]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Catch and handle errors with <code>try</code>/<code>except</code>/<code>else</code>/<code>finally</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_try_except.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Exception Handling</div>
+          <pre><span class="c-kw">try</span>:
+    x = <span class="c-num">1</span> / <span class="c-num">0</span>
+<span class="c-kw">except</span> ZeroDivisionError <span class="c-kw">as</span> e:
+    <span class="c-fn">print</span>(<span class="c-str">"Cannot divide by zero"</span>)
+<span class="c-kw">else</span>:
+    <span class="c-fn">print</span>(<span class="c-str">"No error"</span>)
+<span class="c-kw">finally</span>:
+    <span class="c-fn">print</span>(<span class="c-str">"Always runs"</span>)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Cannot divide by zero</span><br />
+              <span style="color:#9ece6a;">Always runs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use a dictionary to dispatch operations instead of long <code>if</code>/<code>elif</code> chains.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_functions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Dispatcher Pattern</div>
+          <pre><span class="c-kw">def</span> <span class="c-fn">dispatch</span>(op, a, b):
+    operations = {
+        <span class="c-str">"add"</span>: <span class="c-kw">lambda</span> x, y: x + y,
+        <span class="c-str">"sub"</span>: <span class="c-kw">lambda</span> x, y: x - y,
+        <span class="c-str">"mul"</span>: <span class="c-kw">lambda</span> x, y: x * y,
+    }
+    <span class="c-kw">return</span> operations.<span class="c-fn">get</span>(op, <span class="c-kw">lambda</span> x, y: <span class="c-kw">None</span>)(a, b)
+
+<span class="c-fn">print</span>(<span class="c-fn">dispatch</span>(<span class="c-str">"add"</span>, <span class="c-num">10</span>, <span class="c-num">5</span>))  <span class="c-cm"># 15</span>
+<span class="c-fn">print</span>(<span class="c-fn">dispatch</span>(<span class="c-str">"mul"</span>, <span class="c-num">3</span>, <span class="c-num">4</span>))   <span class="c-cm"># 12</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">15</span><br />
+              <span style="color:#9ece6a;">12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Python Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

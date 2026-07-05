@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PostgreSQL &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .pg-kw { color:#bb9af7; }
+    .pg-fn { color:#7aa2f7; }
+    .pg-str { color:#9ece6a; }
+    .pg-cm { color:#565f89; }
+    .pg-op { color:#e0af68; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>SQL</h1>
+          <p class="subtitle">Quick reference with psql commands</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Start</a>
+        <a href="#connect">Connect</a>
+        <a href="#databases">Databases</a>
+        <a href="#tables">Tables</a>
+        <a href="#columns">Columns</a>
+        <a href="#data">Data</a>
+        <a href="#users">Users</a>
+        <a href="#schema">Schema</a>
+        <a href="#dates">Dates</a>
+        <a href="#backup">Backup</a>
+        <a href="#remote">Remote</a>
+        <a href="#csv">CSV</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('SQL')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+
+      <div class="block-desc">
+        <span>Check the installed PostgreSQL server version with <code>psql --version</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Version</div>
+          <pre><span class="pg-cm">-- Check PostgreSQL version</span>
+psql <span class="pg-op">--</span>version</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">psql (PostgreSQL) 16.2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Connect to the PostgreSQL interactive terminal as the superuser <code>postgres</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Connect as postgres</div>
+          <pre>sudo <span class="pg-op">-</span>u postgres psql</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">psql (16.2)</span><br />
+              <span style="color:#565f89;">Type "help" for help.</span><br />
+              <span style="color:#7dcfff;">postgres=#</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>List all databases on the PostgreSQL server using the <code>\l</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Databases</div>
+          <pre><span class="pg-op">\</span>l</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#a9b1d6;">List of databases</span><br />
+              <span style="color:#565f89;">   Name    | Owner | Encoding</span><br />
+              <span style="color:#565f89;">-----------+-------+----------</span><br />
+              <span style="color:#9ece6a;"> postgres  | postgres | UTF8</span><br />
+              <span style="color:#9ece6a;"> template0 | postgres | UTF8</span><br />
+              <span style="color:#9ece6a;"> template1 | postgres | UTF8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Switch to a specific database with <code>\c</code> followed by the database name.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Connect to Database</div>
+          <pre><span class="pg-op">\</span>c postgres</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">You are now connected to database "postgres".</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Exit psql with <code>\q</code> or run a shell command without leaving psql using <code>\!</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Quit &amp; Shell Escape</div>
+          <pre><span class="pg-op">\</span>q    <span class="pg-cm">-- quit psql</span>
+<span class="pg-op">\!</span>    <span class="pg-cm">-- shell escape</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">\q → exits psql</span><br />
+              <span style="color:#565f89;">\! ls → runs shell command</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Common command-line options for the <code>psql</code> client tool.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">psql Command Options</div>
+          <pre><span class="pg-op">-</span>d mydb    <span class="pg-cm">-- database name</span>
+<span class="pg-op">-</span>U user    <span class="pg-cm">-- user name</span>
+<span class="pg-op">-</span>h host    <span class="pg-cm">-- host</span>
+<span class="pg-op">-</span>p port    <span class="pg-cm">-- port</span>
+<span class="pg-op">-</span>W          <span class="pg-cm">-- force password</span>
+<span class="pg-op">-</span>c <span class="pg-str">"SQL"</span>  <span class="pg-cm">-- run single command</span>
+<span class="pg-op">-</span>H          <span class="pg-cm">-- HTML output</span>
+<span class="pg-op">-</span>l          <span class="pg-cm">-- list databases</span>
+<span class="pg-op">-</span>f file    <span class="pg-cm">-- execute file</span>
+<span class="pg-op">-</span>V          <span class="pg-cm">-- version</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;color:#a9b1d6;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Option</th><th>Example</th></tr>
+                <tr><td><span style="color:#e0af68;">-d</span></td><td>psql <span style="color:#e0af68;">-d</span> mydb</td></tr>
+                <tr><td><span style="color:#e0af68;">-U</span></td><td>psql <span style="color:#e0af68;">-U</span> user <span style="color:#e0af68;">-h</span> host <span style="color:#e0af68;">-p</span> port</td></tr>
+                <tr><td><span style="color:#e0af68;">-U -h -p -d</span></td><td>psql <span style="color:#e0af68;">-U</span> user <span style="color:#e0af68;">-h</span> host <span style="color:#e0af68;">-p</span> port <span style="color:#e0af68;">-d</span> db</td></tr>
+                <tr><td><span style="color:#e0af68;">-W</span></td><td>psql <span style="color:#e0af68;">-W</span> <span style="color:#e0af68;">-U</span> user <span style="color:#e0af68;">-d</span> db</td></tr>
+                <tr><td><span style="color:#e0af68;">-c</span></td><td>psql <span style="color:#e0af68;">-c</span> <span style="color:#9ece6a;">"SELECT 1"</span></td></tr>
+                <tr><td><span style="color:#e0af68;">-H</span></td><td>psql <span style="color:#e0af68;">-H</span> <span style="color:#e0af68;">-c</span> <span style="color:#9ece6a;">"SELECT 1"</span></td></tr>
+                <tr><td><span style="color:#e0af68;">-l</span></td><td>psql <span style="color:#e0af68;">-l</span></td></tr>
+                <tr><td><span style="color:#e0af68;">-f</span></td><td>psql <span style="color:#e0af68;">-f</span> file.sql</td></tr>
+                <tr><td><span style="color:#e0af68;">-V</span></td><td>psql <span style="color:#e0af68;">-V</span></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Access inline help for SQL commands with <code>\h</code> or list psql meta-commands with <code>\?</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Getting Help</div>
+          <pre><span class="pg-op">\</span>h          <span class="pg-cm">-- help on SQL commands</span>
+<span class="pg-op">\</span>h <span class="pg-kw">DELETE</span>  <span class="pg-cm">-- help on DELETE</span>
+<span class="pg-op">\</span>?          <span class="pg-cm">-- psql meta-commands</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">\h DELETE</span><br />
+              <span style="color:#565f89;">Command: DELETE</span><br />
+              <span style="color:#565f89;">DELETE FROM table WHERE condition;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connection -->
+    <section id="connect">
+      <h2>Connection</h2>
+
+      <div class="block-desc">
+        <span>Display details about the current database connection using <code>\conninfo</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Connection Info</div>
+          <pre><span class="pg-op">\</span>conninfo</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">You are connected to database "postgres"</span><br />
+              <span style="color:#9ece6a;">as user "postgres" via socket</span><br />
+              <span style="color:#9ece6a;">in directory "/var/lib/postgresql".</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Connect to a different database using <code>\c</code> followed by the target database name.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Switch Database</div>
+          <pre><span class="pg-op">\</span>c dbname</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">You are now connected to database "dbname".</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Change the current user's password interactively with <code>\password</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Change Password</div>
+          <pre><span class="pg-op">\</span>password</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Prompts for new password</span><br />
+              <span style="color:#565f89;">(no visible output)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>View or set the client character encoding with <code>\encoding</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Encoding</div>
+          <pre><span class="pg-op">\</span>encoding      <span class="pg-cm">-- show encoding</span>
+<span class="pg-op">\</span>encoding UTF8 <span class="pg-cm">-- set encoding</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">UTF8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Databases -->
+    <section id="databases">
+      <h2>Databases</h2>
+
+      <div class="block-desc">
+        <span>Show all databases on the server using <code>\l</code> or <code>\l+</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_db.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Databases</div>
+          <pre><span class="pg-op">\</span>l</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">                  List of databases</span><br />
+              <span style="color:#565f89;">   Name    | Owner  | Encoding | Collate</span><br />
+              <span style="color:#565f89;">-----------+--------+----------+---------</span><br />
+              <span style="color:#9ece6a;"> mydb      | myuser | UTF8     | en_US</span><br />
+              <span style="color:#9ece6a;"> postgres  | postgres | UTF8   | en_US</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Connect to a database by name using the <code>\c</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_db.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Connect to Database</div>
+          <pre><span class="pg-op">\</span>c dbname</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">You are now connected to database "dbname".</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Retrieve the name of the currently connected database with <code>SELECT current_database()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_db.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Current Database</div>
+          <pre><span class="pg-kw">SELECT</span> current_database<span class="pg-op">();</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> current_database</span><br />
+              <span style="color:#565f89;">------------------</span><br />
+              <span style="color:#9ece6a;"> postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create a new database and optionally assign an owner with <code>CREATE DATABASE</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_db.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Create Database</div>
+          <pre><span class="pg-kw">CREATE DATABASE</span> db
+  <span class="pg-kw">WITH OWNER</span> user;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">CREATE DATABASE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Remove a database permanently using <code>DROP DATABASE</code> with an optional <code>IF EXISTS</code> check.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_db.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Drop Database</div>
+          <pre><span class="pg-kw">DROP DATABASE IF EXISTS</span> db;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">DROP DATABASE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Rename an existing database using <code>ALTER DATABASE ... RENAME TO</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_db.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Rename Database</div>
+          <pre><span class="pg-kw">ALTER DATABASE</span> old <span class="pg-kw">RENAME TO</span> <span class="pg-str">new</span>;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">ALTER DATABASE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tables -->
+    <section id="tables">
+      <h2>Tables</h2>
+
+      <div class="block-desc">
+        <span>List all tables in the current database using the <code>\dt</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_table.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Tables</div>
+          <pre><span class="pg-op">\</span>dt</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">         List of relations</span><br />
+              <span style="color:#565f89;"> Schema | Name  | Type  | Owner</span><br />
+              <span style="color:#565f89;">--------+-------+-------+--------</span><br />
+              <span style="color:#9ece6a;"> public | users | table | postgres</span><br />
+              <span style="color:#9ece6a;"> public | posts | table | postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>View the column structure and details of a specific table using <code>\d</code> or <code>\d+</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_table.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Describe Table</div>
+          <pre><span class="pg-op">\</span>d  table
+<span class="pg-op">\</span>d<span class="pg-op">+</span> table</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">                       Table "public.users"</span><br />
+              <span style="color:#565f89;"> Column |  Type   | Collation | Nullable | Default</span><br />
+              <span style="color:#565f89;">--------+---------+-----------+----------+---------</span><br />
+              <span style="color:#9ece6a;"> id     | integer |           | not null |</span><br />
+              <span style="color:#9ece6a;"> name   | text    |           |          |</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Query the <code>information_schema.tables</code> view to list tables programmatically.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_table.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Tables from information_schema</div>
+          <pre><span class="pg-kw">SELECT</span> table_name <span class="pg-kw">FROM</span> information_schema<span class="pg-op">.</span>tables
+<span class="pg-kw">WHERE</span> table_schema <span class="pg-op">=</span> <span class="pg-str">'public'</span>;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> table_name</span><br />
+              <span style="color:#565f89;">------------</span><br />
+              <span style="color:#9ece6a;"> users</span><br />
+              <span style="color:#9ece6a;"> posts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define a new table and its columns using <code>CREATE TABLE</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_table.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Create Table</div>
+          <pre><span class="pg-kw">CREATE TABLE</span> users <span class="pg-op">(</span>
+  id <span class="pg-kw">INTEGER PRIMARY KEY</span><span class="pg-op">,</span>
+  name <span class="pg-kw">TEXT NOT NULL</span><span class="pg-op">,</span>
+  email <span class="pg-kw">TEXT UNIQUE</span>
+<span class="pg-op">);</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">CREATE TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create a table with an auto-incrementing primary key using <code>SERIAL</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_table.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Create Table with Serial PK</div>
+          <pre><span class="pg-kw">CREATE TABLE</span> posts <span class="pg-op">(</span>
+  id <span class="pg-kw">SERIAL PRIMARY KEY</span><span class="pg-op">,</span>
+  title <span class="pg-kw">TEXT NOT NULL</span><span class="pg-op">,</span>
+  body <span class="pg-kw">TEXT</span>
+<span class="pg-op">);</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">CREATE TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Delete a table and its data using <code>DROP TABLE</code>; use <code>CASCADE</code> to drop dependent objects.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_create_table.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Drop Table</div>
+          <pre><span class="pg-kw">DROP TABLE IF EXISTS</span> table <span class="pg-kw">CASCADE</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">DROP TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Columns -->
+    <section id="columns">
+      <h2>Columns</h2>
+
+      <div class="block-desc">
+        <span>Add a new column to an existing table using <code>ALTER TABLE ... ADD COLUMN</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_alter.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Add Column</div>
+          <pre><span class="pg-kw">ALTER TABLE</span> users
+  <span class="pg-kw">ADD COLUMN</span> age <span class="pg-kw">INTEGER</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">ALTER TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Change the data type of an existing column using <code>ALTER TABLE ... ALTER COLUMN ... TYPE</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_alter.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Alter Column Type</div>
+          <pre><span class="pg-kw">ALTER TABLE</span> users
+  <span class="pg-kw">ALTER COLUMN</span> age <span class="pg-kw">TYPE</span> <span class="pg-kw">SMALLINT</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">ALTER TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Remove a column from a table using <code>ALTER TABLE ... DROP COLUMN</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_alter.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Drop Column</div>
+          <pre><span class="pg-kw">ALTER TABLE</span> users
+  <span class="pg-kw">DROP COLUMN</span> age<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">ALTER TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Add an auto-incrementing primary key column to an existing table.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_alter.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Add Serial PK</div>
+          <pre><span class="pg-kw">ALTER TABLE</span> users
+  <span class="pg-kw">ADD COLUMN</span> id <span class="pg-kw">SERIAL PRIMARY KEY</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">ALTER TABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Insert a row while letting the <code>SERIAL</code> primary key auto-generate its value.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_alter.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Insert with Default</div>
+          <pre><span class="pg-kw">INSERT INTO</span> users
+  <span class="pg-op">(</span>name<span class="pg-op">,</span> email<span class="pg-op">)</span>
+  <span class="pg-kw">VALUES</span>
+  <span class="pg-op">(</span><span class="pg-str">'Alice'</span><span class="pg-op">,</span> <span class="pg-str">'alice@example.com'</span><span class="pg-op">);</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">INSERT 0 1</span><br />
+              <span style="color:#565f89;">id auto-generated by SERIAL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data (CRUD) -->
+    <section id="data">
+      <h2>Data (CRUD)</h2>
+
+      <div class="block-desc">
+        <span>Retrieve all rows and columns from a table using the <code>SELECT</code> statement.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">SELECT</div>
+          <pre><span class="pg-kw">SELECT</span> <span class="pg-op">*</span> <span class="pg-kw">FROM</span> users<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> id | name  | email</span><br />
+              <span style="color:#565f89;">----+-------+----------------------</span><br />
+              <span style="color:#9ece6a;">  1 | Alice | alice@example.com</span><br />
+              <span style="color:#9ece6a;">  2 | Bob   | bob@example.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Restrict the number of rows returned by a query using <code>LIMIT</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">SELECT with LIMIT</div>
+          <pre><span class="pg-kw">SELECT</span> <span class="pg-op">*</span> <span class="pg-kw">FROM</span> users
+  <span class="pg-kw">LIMIT</span> <span class="pg-op">1;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> id | name  | email</span><br />
+              <span style="color:#565f89;">----+-------+----------------------</span><br />
+              <span style="color:#9ece6a;">  1 | Alice | alice@example.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Filter query results based on a condition using the <code>WHERE</code> clause.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">SELECT with WHERE</div>
+          <pre><span class="pg-kw">SELECT</span> <span class="pg-op">*</span> <span class="pg-kw">FROM</span> users
+  <span class="pg-kw">WHERE</span> name <span class="pg-op">=</span> <span class="pg-str">'Alice'</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> id | name  | email</span><br />
+              <span style="color:#565f89;">----+-------+----------------------</span><br />
+              <span style="color:#9ece6a;">  1 | Alice | alice@example.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Add a new row to a table using the <code>INSERT INTO</code> statement.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">INSERT</div>
+          <pre><span class="pg-kw">INSERT INTO</span> users
+  <span class="pg-op">(</span>name<span class="pg-op">,</span> email<span class="pg-op">)</span>
+  <span class="pg-kw">VALUES</span>
+  <span class="pg-op">(</span><span class="pg-str">'Charlie'</span><span class="pg-op">,</span> <span class="pg-str">'charlie@example.com'</span><span class="pg-op">);</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">INSERT 0 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Modify existing data in a table using <code>UPDATE</code> with a <code>WHERE</code> condition.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">UPDATE</div>
+          <pre><span class="pg-kw">UPDATE</span> users
+  <span class="pg-kw">SET</span> email <span class="pg-op">=</span> <span class="pg-str">'alice@new.com'</span>
+  <span class="pg-kw">WHERE</span> name <span class="pg-op">=</span> <span class="pg-str">'Alice'</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">UPDATE 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Remove all rows from a table using <code>DELETE FROM</code> without a <code>WHERE</code> clause.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">DELETE All</div>
+          <pre><span class="pg-kw">DELETE FROM</span> users<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">DELETE 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Delete specific rows from a table using <code>DELETE FROM</code> with a <code>WHERE</code> condition.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_select.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">DELETE with WHERE</div>
+          <pre><span class="pg-kw">DELETE FROM</span> users
+  <span class="pg-kw">WHERE</span> name <span class="pg-op">=</span> <span class="pg-str">'Bob'</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">DELETE 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Users & Permissions -->
+    <section id="users">
+      <h2>Users &amp; Permissions</h2>
+
+      <div class="block-desc">
+        <span>Query the <code>pg_roles</code> system catalog to list all database roles.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Roles</div>
+          <pre><span class="pg-kw">SELECT</span> rolname <span class="pg-kw">FROM</span> pg_roles<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> rolname</span><br />
+              <span style="color:#565f89;">----------</span><br />
+              <span style="color:#9ece6a;"> postgres</span><br />
+              <span style="color:#9ece6a;"> myuser</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create a new database user with a password using <code>CREATE USER</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Create User</div>
+          <pre><span class="pg-kw">CREATE USER</span> user
+  <span class="pg-kw">WITH PASSWORD</span> <span class="pg-str">'pass'</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">CREATE ROLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Remove a database user using <code>DROP USER</code> with <code>IF EXISTS</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Drop User</div>
+          <pre><span class="pg-kw">DROP USER IF EXISTS</span> user<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">DROP ROLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Change a user's password using <code>ALTER ROLE ... WITH PASSWORD</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Alter Role Password</div>
+          <pre><span class="pg-kw">ALTER ROLE</span> user
+  <span class="pg-kw">WITH PASSWORD</span> <span class="pg-str">'newpass'</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">ALTER ROLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>List all database roles with their attributes using the <code>\du</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Users (psql)</div>
+          <pre><span class="pg-op">\</span>du</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">                           List of roles</span><br />
+              <span style="color:#565f89;"> Role name | Attributes | Member of</span><br />
+              <span style="color:#565f89;">-----------+------------+-----------</span><br />
+              <span style="color:#9ece6a;"> postgres  | Superuser  | {}</span><br />
+              <span style="color:#9ece6a;"> myuser    |            | {}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Grant all privileges on a database to a user using <code>GRANT ALL PRIVILEGES</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Grant Database Privileges</div>
+          <pre><span class="pg-kw">GRANT ALL PRIVILEGES ON DATABASE</span> db <span class="pg-kw">TO</span> user<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">GRANT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Grant specific privileges on a database, schema, and tables using targeted <code>GRANT</code> statements.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Fine-Grained Grants</div>
+          <pre><span class="pg-kw">GRANT CONNECT ON DATABASE</span> db <span class="pg-kw">TO</span> user<span class="pg-op">;</span>
+<span class="pg-kw">GRANT USAGE ON SCHEMA</span> public <span class="pg-kw">TO</span> user<span class="pg-op">;</span>
+<span class="pg-kw">GRANT SELECT, UPDATE, INSERT
+  ON ALL TABLES IN SCHEMA</span> public <span class="pg-kw">TO</span> user<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">GRANT</span><br />
+              <span style="color:#9ece6a;">GRANT</span><br />
+              <span style="color:#9ece6a;">GRANT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Display access privileges on all tables using the <code>\dp</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_grant.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Table Privileges</div>
+          <pre><span class="pg-op">\</span>dp</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">                           Access privileges</span><br />
+              <span style="color:#565f89;"> Schema | Name  | Type | Access privileges</span><br />
+              <span style="color:#565f89;">--------+-------+------+-------------------</span><br />
+              <span style="color:#9ece6a;"> public | users | table | postgres=arwdDxt</span><br />
+              <span style="color:#9ece6a;">        |       |       | myuser=arw/postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schema -->
+    <section id="schema">
+      <h2>Schema</h2>
+
+      <div class="block-desc">
+        <span>List all schemas in the current database using the <code>\dn</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_schema.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">List Schemas</div>
+          <pre><span class="pg-op">\</span>dn</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">      List of schemas</span><br />
+              <span style="color:#565f89;">  Name  |   Owner</span><br />
+              <span style="color:#565f89;">--------+-----------</span><br />
+              <span style="color:#9ece6a;"> public | postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create a new schema to organize database objects using <code>CREATE SCHEMA</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_schema.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Create Schema</div>
+          <pre><span class="pg-kw">CREATE SCHEMA IF NOT EXISTS</span> schema_name<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">CREATE SCHEMA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Remove a schema and all its objects using <code>DROP SCHEMA ... CASCADE</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_schema.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Drop Schema</div>
+          <pre><span class="pg-kw">DROP SCHEMA IF EXISTS</span> schema_name <span class="pg-kw">CASCADE</span><span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">DROP SCHEMA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dates -->
+    <section id="dates">
+      <h2>Dates</h2>
+
+      <div class="block-desc">
+        <span>Get the current date using <code>SELECT current_date</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_dates.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Current Date</div>
+          <pre><span class="pg-kw">SELECT</span> current_date<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> current_date</span><br />
+              <span style="color:#565f89;">--------------</span><br />
+              <span style="color:#9ece6a;"> 2026-07-05</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Calculate the interval between two dates using the <code>age()</code> function.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_dates.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Age Between Dates</div>
+          <pre><span class="pg-kw">SELECT</span> age<span class="pg-op">(</span><span class="pg-str">'2025-01-01'</span><span class="pg-op">::</span><span class="pg-kw">DATE</span><span class="pg-op">,</span>
+           <span class="pg-str">'2024-06-15'</span><span class="pg-op">::</span><span class="pg-kw">DATE</span><span class="pg-op">);</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">     age</span><br />
+              <span style="color:#565f89;">------------</span><br />
+              <span style="color:#9ece6a;"> 6 mons 17 days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Get the current time with time zone using <code>SELECT current_time</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_dates.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Current Time</div>
+          <pre><span class="pg-kw">SELECT</span> current_time<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">    current_time</span><br />
+              <span style="color:#565f89;">--------------------</span><br />
+              <span style="color:#9ece6a;"> 14:30:00.123456+00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Construct a date from year, month, and day values using <code>make_date()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_dates.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Make Date</div>
+          <pre><span class="pg-kw">SELECT</span> make_date<span class="pg-op">(</span><span class="pg-kw">2021</span><span class="pg-op">,</span> <span class="pg-op">03,</span> <span class="pg-op">25);</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">  make_date</span><br />
+              <span style="color:#565f89;">------------</span><br />
+              <span style="color:#9ece6a;"> 2021-03-25</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Backup & Restore -->
+    <section id="backup">
+      <h2>Backup &amp; Restore</h2>
+
+      <div class="block-desc">
+        <span>Back up all PostgreSQL databases to a single SQL file using <code>pg_dumpall</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_backup.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Dump All Databases</div>
+          <pre>pg_dumpall <span class="pg-op">-</span>U postgres <span class="pg-op">&gt;</span> all.sql</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Dumps all databases to all.sql</span><br />
+              <span style="color:#9ece6a;">(no output on success)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Back up a specific database to a SQL file using <code>pg_dump</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_backup.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Dump Single Database</div>
+          <pre>pg_dump <span class="pg-op">-</span>d mydb <span class="pg-op">-</span>f mydb_backup.sql</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">(no output on success)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Common flags for <code>pg_dump</code> to control what gets included in the backup.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_backup.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">pg_dump Options</div>
+          <pre>pg_dump <span class="pg-op">-</span>a     <span class="pg-cm">-- data only</span>
+pg_dump <span class="pg-op">-</span>s     <span class="pg-cm">-- schema only</span>
+pg_dump <span class="pg-op">-</span>c     <span class="pg-cm">-- include DROP</span>
+pg_dump <span class="pg-op">-</span>C     <span class="pg-cm">-- include CREATE</span>
+pg_dump <span class="pg-op">-</span>t tbl <span class="pg-cm">-- specific table</span>
+pg_dump <span class="pg-op">-</span>F c   <span class="pg-cm">-- custom format</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;color:#a9b1d6;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Option</th><th>Description</th></tr>
+                <tr><td><span style="color:#e0af68;">-a</span></td><td>data only (no schema)</td></tr>
+                <tr><td><span style="color:#e0af68;">-s</span></td><td>schema only (no data)</td></tr>
+                <tr><td><span style="color:#e0af68;">-c</span></td><td>include DROP statements</td></tr>
+                <tr><td><span style="color:#e0af68;">-C</span></td><td>include CREATE DATABASE</td></tr>
+                <tr><td><span style="color:#e0af68;">-t</span></td><td>dump specific table</td></tr>
+                <tr><td><span style="color:#e0af68;">-F</span></td><td>output format (c/d/t/p)</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Restore a database from a plain SQL dump file using <code>psql</code> with input redirection.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_backup.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Restore SQL Dump</div>
+          <pre>psql <span class="pg-op">-</span>U user mydb <span class="pg-op">&lt;</span> mydb_backup.sql</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">SET</span><br />
+              <span style="color:#9ece6a;">CREATE TABLE</span><br />
+              <span style="color:#9ece6a;">INSERT 0 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Restore a custom-format dump using <code>pg_restore</code> with the <code>-c</code> clean option.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_backup.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Restore with pg_restore</div>
+          <pre>pg_restore <span class="pg-op">-</span>d mydb mydb_backup.sql <span class="pg-op">-</span>c</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">(no output on success)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Common flags for <code>pg_restore</code> to control restore behavior.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_backup.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">pg_restore Options</div>
+          <pre>pg_restore <span class="pg-op">-</span>U user   <span class="pg-cm">-- user</span>
+pg_restore <span class="pg-op">-</span>c        <span class="pg-cm">-- clean (DROP before restore)</span>
+pg_restore <span class="pg-op">-</span>C        <span class="pg-cm">-- create database</span>
+pg_restore <span class="pg-op">-</span>e        <span class="pg-cm">-- exit on error</span>
+pg_restore <span class="pg-op">-</span>F c      <span class="pg-cm">-- custom format</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;color:#a9b1d6;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Option</th><th>Description</th></tr>
+                <tr><td><span style="color:#e0af68;">-U</span></td><td>database user</td></tr>
+                <tr><td><span style="color:#e0af68;">-c</span></td><td>clean (drop before restore)</td></tr>
+                <tr><td><span style="color:#e0af68;">-C</span></td><td>create database</td></tr>
+                <tr><td><span style="color:#e0af68;">-e</span></td><td>exit on error</td></tr>
+                <tr><td><span style="color:#e0af68;">-F</span></td><td>format (c/d/t)</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Remote Access -->
+    <section id="remote">
+      <h2>Remote Access</h2>
+
+      <div class="block-desc">
+        <span>Find the path to the main PostgreSQL configuration file using <code>SHOW config_file</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Find Config File</div>
+          <pre><span class="pg-kw">SHOW</span> config_file<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">               config_file</span><br />
+              <span style="color:#565f89;">--------------------------------------</span><br />
+              <span style="color:#9ece6a;"> /etc/postgresql/16/main/postgresql.conf</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Set the <code>listen_addresses</code> option in <code>postgresql.conf</code> to accept remote connections.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Listen Addresses</div>
+          <pre><span class="pg-cm"># postgresql.conf</span>
+listen_addresses <span class="pg-op">=</span> <span class="pg-str">'*'</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Allows connections from any IP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Add host-based authentication rules in <code>pg_hba.conf</code> to allow remote client access.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">pg_hba.conf Entries</div>
+          <pre><span class="pg-cm"># pg_hba.conf — add before existing rules</span>
+host    all    all    <span class="pg-op">192.168.1.0/24</span>    md5
+host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Host-based authentication entries</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Restart the PostgreSQL service to apply configuration changes.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_connect.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Restart PostgreSQL</div>
+          <pre>sudo systemctl restart postgresql</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">(no output on success)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Import/Export CSV -->
+    <section id="csv">
+      <h2>Import/Export CSV</h2>
+
+      <div class="block-desc">
+        <span>Export a table to a CSV file using the <code>\copy</code> meta-command.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_import_csv.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Export to CSV</div>
+          <pre><span class="pg-op">\</span>copy users <span class="pg-kw">TO</span> <span class="pg-str">'/tmp/users.csv'</span> <span class="pg-kw">CSV</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">COPY 3</span><br />
+              <span style="color:#565f89;">Exports table to CSV file</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Export a table to CSV with a header row using <code>\copy ... CSV HEADER</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_import_csv.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Export with Header</div>
+          <pre><span class="pg-op">\</span>copy users <span class="pg-kw">TO</span> <span class="pg-str">'/tmp/users.csv'</span>
+  <span class="pg-kw">CSV HEADER</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">COPY 3</span><br />
+              <span style="color:#565f89;">CSV includes header row</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Import data from a CSV file into a table using <code>\copy ... FROM ... CSV HEADER</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/postgresql/postgresql_import_csv.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Import from CSV</div>
+          <pre><span class="pg-op">\</span>copy users <span class="pg-kw">FROM</span> <span class="pg-str">'/tmp/users.csv'</span>
+  <span class="pg-kw">CSV HEADER</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">COPY 3</span><br />
+              <span style="color:#565f89;">Imports CSV into table</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- psql Meta-Commands Reference -->
+    <section id="psql-ref">
+      <h2>psql Meta-Commands Reference</h2>
+      <div class="block-desc" style="border-bottom:1px solid #e5e7eb;">
+        <span>Complete reference of all psql meta-commands organized by category.</span>
+        <a class="w3-link" href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank">PostgreSQL Docs →</a>
+      </div>
+      <div class="attr-table" style="margin-left:1rem;margin-right:1rem;">
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Command</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td rowspan="5">Tables</td><td><code>\d</code></td><td>list tables/views/sequences</td></tr>
+            <tr><td><code>\d+</code></td><td>describe with details</td></tr>
+            <tr><td><code>\dt</code></td><td>list tables</td></tr>
+            <tr><td><code>\dt *.*</code></td><td>tables in all schemas</td></tr>
+            <tr><td><code>\dt schema.*</code></td><td>tables in specific schema</td></tr>
+            <tr><td><code>\dp</code></td><td>table access privileges</td></tr>
+            <tr><td><code>\det</code></td><td>list foreign tables</td></tr>
+            <tr><td rowspan="5">Query buffer</td><td><code>\e</code></td><td>edit query in editor</td></tr>
+            <tr><td><code>\ef</code></td><td>edit function</td></tr>
+            <tr><td><code>\p</code></td><td>print current query</td></tr>
+            <tr><td><code>\r</code></td><td>reset (clear) query buffer</td></tr>
+            <tr><td><code>\s</code></td><td>command history</td></tr>
+            <tr><td><code>\w</code></td><td>write query to file</td></tr>
+            <tr><td rowspan="17">Informational</td><td><code>\l</code></td><td>list databases</td></tr>
+            <tr><td><code>\dn</code></td><td>list schemas</td></tr>
+            <tr><td><code>\di</code></td><td>list indexes</td></tr>
+            <tr><td><code>\du</code></td><td>list users/roles</td></tr>
+            <tr><td><code>\ds</code></td><td>list sequences</td></tr>
+            <tr><td><code>\df</code></td><td>list functions</td></tr>
+            <tr><td><code>\deu</code></td><td>list user mappings</td></tr>
+            <tr><td><code>\dv</code></td><td>list views</td></tr>
+            <tr><td><code>\dl</code></td><td>list large objects</td></tr>
+            <tr><td><code>\dT</code></td><td>list data types</td></tr>
+            <tr><td><code>\da</code></td><td>list aggregates</td></tr>
+            <tr><td><code>\db</code></td><td>list tablespaces</td></tr>
+            <tr><td><code>\dc</code></td><td>list conversions</td></tr>
+            <tr><td><code>\dC</code></td><td>list casts</td></tr>
+            <tr><td><code>\ddp</code></td><td>list default privileges</td></tr>
+            <tr><td><code>\dd</code></td><td>show object descriptions</td></tr>
+            <tr><td><code>\dD</code></td><td>list domains</td></tr>
+            <tr><td><code>\des</code></td><td>list foreign servers</td></tr>
+            <tr><td><code>\dew</code></td><td>list foreign-data wrappers</td></tr>
+            <tr><td><code>\dF</code></td><td>list text search configs</td></tr>
+            <tr><td><code>\dFd</code></td><td>list text search dictionaries</td></tr>
+            <tr><td><code>\dFp</code></td><td>list text search parsers</td></tr>
+            <tr><td><code>\dFt</code></td><td>list text search templates</td></tr>
+            <tr><td><code>\dL</code></td><td>list languages</td></tr>
+            <tr><td><code>\do</code></td><td>list operators</td></tr>
+            <tr><td><code>\dO</code></td><td>list collations</td></tr>
+            <tr><td><code>\drds</code></td><td>list per-db role settings</td></tr>
+            <tr><td><code>\dx</code></td><td>list extensions</td></tr>
+            <tr><td rowspan="4">Connection</td><td><code>\c</code></td><td>connect to database</td></tr>
+            <tr><td><code>\encoding</code></td><td>show/set encoding</td></tr>
+            <tr><td><code>\password</code></td><td>change password</td></tr>
+            <tr><td><code>\conninfo</code></td><td>display connection info</td></tr>
+            <tr><td rowspan="5">Formatting</td><td><code>\a</code></td><td>toggle aligned mode</td></tr>
+            <tr><td><code>\C</code></td><td>set table title</td></tr>
+            <tr><td><code>\f</code></td><td>set field separator</td></tr>
+            <tr><td><code>\H</code></td><td>toggle HTML output</td></tr>
+            <tr><td><code>\t</code></td><td>toggle tuples-only</td></tr>
+            <tr><td><code>\T</code></td><td>set HTML table attributes</td></tr>
+            <tr><td><code>\x</code></td><td>toggle expanded output</td></tr>
+            <tr><td rowspan="4">Input/Output</td><td><code>\copy</code></td><td>import/export to file</td></tr>
+            <tr><td><code>\echo</code></td><td>print text</td></tr>
+            <tr><td><code>\i</code></td><td>execute file</td></tr>
+            <tr><td><code>\o</code></td><td>redirect output to file</td></tr>
+            <tr><td><code>\qecho</code></td><td>print to output file</td></tr>
+            <tr><td rowspan="3">Variables</td><td><code>\prompt</code></td><td>prompt for variable</td></tr>
+            <tr><td><code>\set</code></td><td>set variable</td></tr>
+            <tr><td><code>\unset</code></td><td>unset variable</td></tr>
+            <tr><td rowspan="3">Misc</td><td><code>\cd</code></td><td>change directory</td></tr>
+            <tr><td><code>\timing</code></td><td>toggle timing</td></tr>
+            <tr><td><code>\!</code></td><td>shell escape</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>PostgreSQL Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

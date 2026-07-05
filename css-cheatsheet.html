@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .live-output .swatch-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .live-output .swatch { width: 60px; height: 60px; border-radius: 6px; border: 1px solid #ddd; display: grid; place-items: center; font-size: 0.6rem; color: #fff; text-align: center; }
+    .live-output .flex-demo { display: flex; gap: 4px; background: #eef0f5; padding: 6px; border-radius: 4px; }
+    .live-output .flex-demo div { background: #7aa2f7; color: #fff; padding: 4px 8px; border-radius: 3px; font-size: 0.7rem; }
+    .live-output .grid-demo { display: grid; grid: repeat(2, 40px) / auto-flow 60px; gap: 4px; background: #eef0f5; padding: 6px; border-radius: 4px; }
+    .live-output .grid-demo div { background: #8ca0ff; color: #fff; padding: 4px; border-radius: 3px; font-size: 0.7rem; display: grid; place-items: center; }
+    .live-output .box-demo { background: #eef0f5; padding: 4px; border-radius: 4px; }
+    .box-demo .inner { background: #7aa2f7; color: #fff; padding: 8px; border-radius: 3px; font-size: 0.75rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+          <div>
+            <h1>CSS</h1>
+            <p class="subtitle">Quick reference with live previews</p>
+          </div>
+          <div class="header-actions">
+            <div class="search-wrap">
+              <input type="search" id="search" placeholder="Search..." />
+              <kbd class="shortcut-hint">/</kbd>
+            </div>
+            <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+          </div>
+        </div>
+        <nav class="tab-bar" id="tab-bar"></nav>
+        <nav class="toc">
+          <a href="#getting-started">Start</a>
+          <a href="#selectors">Selectors</a>
+          <a href="#fonts">Fonts</a>
+          <a href="#colors">Colors</a>
+          <a href="#backgrounds">Backgrounds</a>
+          <a href="#box-model">Box Model</a>
+          <a href="#animation">Animation</a>
+          <a href="#flexbox">Flexbox</a>
+          <a href="#grid">Grid</a>
+          <a href="#dynamic">Dynamic</a>
+          <a href="#modern">Modern CSS</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('CSS')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+      <p style="color:#666;margin-bottom:1rem;">CSS is rich in capabilities and is more than simply laying out pages.</p>
+
+      <div class="block-desc">
+        <span>Link an external CSS file from HTML using <code>&lt;link&gt;</code> in the <code>&lt;head&gt;</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_howto.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">External stylesheet</div>
+          <pre><span class="c">&lt;head&gt;</span>
+  <span class="c">&lt;link</span> href="./style.css" rel="stylesheet" <span class="c">/&gt;</span>
+<span class="c">&lt;/head&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1a2e;color:#64ffda;padding:0.5rem;border-radius:4px;font-size:0.75rem;text-align:center;">Linked CSS loads from external file</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Embed CSS directly inside an HTML page using a <code>&lt;style&gt;</code> tag.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_howto.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Internal stylesheet</div>
+          <pre><span class="c">&lt;style&gt;</span>
+  .demo-card { background: linen; padding: 0.5rem; }
+<span class="c">&lt;/style&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div class="demo-card" style="background:linen;padding:0.5rem;border-radius:4px;font-size:0.8rem;">Styled via internal &lt;style&gt; tag</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Apply CSS directly to an HTML element using the <code>style</code> attribute.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_howto.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Inline styles</div>
+          <pre><span class="c">&lt;h2 style="text-align:center;"&gt;</span>Centered text<span class="c">&lt;/h2&gt;</span>
+<span class="c">&lt;p style="color:blue;font-size:18px;"&gt;</span>Blue 18px text<span class="c">&lt;/p&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <h2 style="text-align:center;font-size:1.1rem;margin:0;">Centered text</h2>
+            <p style="color:blue;font-size:18px;margin:0;">Blue, 18-point text</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Assign CSS classes to elements and use <code>!important</code> to override other styles.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Classes &amp; !important</div>
+          <pre><span class="c">&lt;div class="classname"&gt;&lt;/div&gt;</span>
+<span class="c">&lt;div class="class1 class2"&gt;&lt;/div&gt;</span>
+
+<span class="c">.post-title { color: blue !important; }</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="color:blue !important;">!important overrides all previous styling.</p>
+            <p><small>Support multiple classes on one element.</small></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Target HTML elements using tag names, IDs, classes, and child combinators (<code>&gt;</code>).</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Selector syntax</div>
+          <pre>h1 { }
+<span class="c">#job-title { }</span>
+<span class="c">div.hero { }</span>
+<span class="c">div &gt; p { }</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="font-size:0.85rem;"><code>h1</code> element &middot; <code>#id</code> &middot; <code>div.class</code> &middot; <code>div &gt; p</code> child</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Selectors -->
+    <section id="selectors">
+      <h2>CSS Selectors</h2>
+
+      <div class="block-desc">
+        <span>Group multiple selectors with a comma or chain them to target elements more specifically.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Group &amp; Chain</div>
+          <pre>h1, h2 { color: red; }
+h3.section-heading { color: blue; }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><span style="color:red;">h1, h2</span> &middot; <span style="color:blue;">h3.section-heading</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Select elements based on the presence or value of their attributes.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Attribute selector</div>
+          <pre>div[attribute="SomeValue"] {
+  background: red;
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:red;color:#fff;padding:0.25rem 0.5rem;border-radius:3px;font-size:0.8rem;">div[attribute="SomeValue"]</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Style elements based on user interaction or document position using pseudo-classes like <code>:hover</code>, <code>:focus</code>, and <code>:first-child</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_pseudo_classes.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Pseudo-classes</div>
+          <pre>p:first-child { font-weight: bold; }
+.box:empty { background: lime; }
+a:hover { color: red; }
+input:focus { border-color: blue; }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="font-weight:bold;">:first-child</p>
+            <p><a href="#" style="color:red;">a:hover</a> &middot; <input value=":focus" style="border-color:blue;outline:none;font-size:0.8rem;" /></p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Selector Reference</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Selector</th><th>Meaning</th></tr>
+          <tr><td>*</td><td>All elements</td></tr>
+          <tr><td>div</td><td>All div tags</td></tr>
+          <tr><td>.classname</td><td>All elements with class</td></tr>
+          <tr><td>#idname</td><td>Element with ID</td></tr>
+          <tr><td>div,p</td><td>All divs and paragraphs</td></tr>
+          <tr><td>div p</td><td>Paragraphs inside divs</td></tr>
+          <tr><td>div &gt; p</td><td>Direct child p of div</td></tr>
+          <tr><td>div + p</td><td>p immediately after div</td></tr>
+          <tr><td>div ~ p</td><td>p preceded by div</td></tr>
+          <tr><td>a[target]</td><td>With target attribute</td></tr>
+          <tr><td>a[href^="/"]</td><td>Starts with /</td></tr>
+          <tr><td>a[href$=".doc"]</td><td>Ends with .doc</td></tr>
+          <tr><td>a[href*="page"]</td><td>Contains "page"</td></tr>
+          <tr><td>:first-child</td><td>First child of parent</td></tr>
+          <tr><td>:last-child</td><td>Last child of parent</td></tr>
+          <tr><td>:nth-child(n)</td><td>Nth child</td></tr>
+          <tr><td>:hover</td><td>Mouse over</td></tr>
+          <tr><td>:focus</td><td>Input focused</td></tr>
+          <tr><td>:checked</td><td>Checked input</td></tr>
+          <tr><td>:disabled</td><td>Disabled input</td></tr>
+          <tr><td>:not(span)</td><td>Not a span</td></tr>
+          <tr><td>::before</td><td>Insert before element</td></tr>
+          <tr><td>::after</td><td>Insert after element</td></tr>
+          <tr><td>::placeholder</td><td>Placeholder text</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Fonts -->
+    <section id="fonts">
+      <h2>CSS Fonts</h2>
+
+      <div class="block-desc">
+        <span>Control font appearance using <code>font-weight</code>, <code>font-size</code>, and <code>font-family</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_font.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">.page-title {</span>
+  font-weight: bold;
+  font-size: 30px;
+  font-family: 'Courier New', monospace;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="font-weight:bold;font-size:20px;font-family:'Courier New',monospace;margin:0;">Page Title</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Font Properties</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Values</th></tr>
+          <tr><td>font-family</td><td>&lt;font&gt; name, generic family</td></tr>
+          <tr><td>font-size</td><td>px, em, rem, %</td></tr>
+          <tr><td>font-weight</td><td>bold, normal, 100-900</td></tr>
+          <tr><td>font-style</td><td>italic, normal</td></tr>
+          <tr><td>line-height</td><td>number, unit</td></tr>
+          <tr><td>letter-spacing</td><td>px, em</td></tr>
+          <tr><td>text-align</td><td>left, right, center, justify</td></tr>
+          <tr><td>text-decoration</td><td>underline, none, line-through</td></tr>
+          <tr><td>text-transform</td><td>capitalize, uppercase, lowercase</td></tr>
+        </table>
+      </div>
+
+      <div class="block-desc">
+        <span>Use the <code>font</code> shorthand to set style, weight, size, line-height, and family in one declaration.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_font.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Shorthand</div>
+          <pre>font: italic 400 14px / 1.5 sans-serif;
+<span class="c">/* style weight size/height family */</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="font:italic 400 14px/1.5 sans-serif;">Italic 14px sans-serif</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define custom fonts with <code>@font-face</code> by specifying a <code>font-family</code> name and source URL.</span>
+        <a class="w3-link" href="https://www.w3schools.com/cssref/css3_pr_font-face_rule.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">@font-face</div>
+          <pre><span class="c">@font-face {</span>
+  font-family: 'Glegoo';
+  src: url('../Glegoo.woff');
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="font-family:'Georgia',serif;font-size:1.1rem;">Custom font via @font-face</p>
+            <p><small style="color:#888;">Uses Georgia as a stand-in for a custom web font.</small></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colors -->
+    <section id="colors">
+      <h2>CSS Colors</h2>
+
+      <div class="block-desc">
+        <span>Define colors using named values, hex, <code>rgb()</code>, <code>rgba()</code>, <code>hsl()</code>, and <code>hsla()</code> formats.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_colors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Color formats</div>
+          <pre><span class="c">/* Named */</span>
+color: red;
+color: rebeccapurple;
+
+<span class="c">/* Hex */</span>
+color: #090;
+color: #009900;
+color: #090a;
+color: #009900aa;
+
+<span class="c">/* rgb / rgba */</span>
+color: rgb(34, 12, 64, 0.6);
+color: rgba(34, 12, 64, 0.6);
+color: rgb(34 12 64 / 0.6);
+
+<span class="c">/* hsl / hsla */</span>
+color: hsl(30, 100%, 50%, 0.6);
+color: hsl(30 100% 50% / 0.6);
+
+<span class="c">/* Other */</span>
+color: inherit;
+color: transparent;
+color: currentcolor;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div class="swatch-group">
+              <div class="swatch" style="background:red;">red</div>
+              <div class="swatch" style="background:rebeccapurple;">rebecca</div>
+              <div class="swatch" style="background:#009900;">#090</div>
+              <div class="swatch" style="background:#009900aa;">#009900aa</div>
+              <div class="swatch" style="background:rgb(34,12,64,0.6);">rgb</div>
+              <div class="swatch" style="background:hsl(30,100%,50%,0.6);">hsl</div>
+              <div class="swatch" style="background:transparent;border:2px solid #333;color:#333;">transparent</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Backgrounds -->
+    <section id="backgrounds">
+      <h2>CSS Backgrounds</h2>
+
+      <div class="block-desc">
+        <span>Apply solid colors or gradients as element backgrounds using the <code>background</code> shorthand property.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_background.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">.box {</span>
+  background: #ff0 url(a.jpg) left top / 100px auto no-repeat fixed;
+  background: linear-gradient(90deg, #022436, #0de8e6, #00d4ff);
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background: linear-gradient(90deg, #022436, #0de8e6, #00d4ff); padding: 1rem; border-radius: 4px; color: #fff; text-align: center;">
+              Gradient Background
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Background Properties</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Description</th></tr>
+          <tr><td>background-color</td><td>Set background color</td></tr>
+          <tr><td>background-image</td><td>url(...) or gradient</td></tr>
+          <tr><td>background-position</td><td>left/center/right top/center/bottom</td></tr>
+          <tr><td>background-size</td><td>cover, contain, X Y</td></tr>
+          <tr><td>background-repeat</td><td>no-repeat, repeat-x, repeat-y</td></tr>
+          <tr><td>background-clip</td><td>border-box, padding-box, content-box</td></tr>
+          <tr><td>background-attachment</td><td>scroll, fixed, local</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Box Model -->
+    <section id="box-model">
+      <h2>The Box Model</h2>
+
+      <div class="block-desc">
+        <span>Control element spacing using <code>margin</code>, <code>padding</code>, and <code>border</code> properties.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_boxmodel.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Margin / Padding</div>
+          <pre><span class="c">.block-one {</span>
+  margin: 20px;
+  padding: 10px;
+  border: 2px solid #333;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div class="box-demo">
+              <div class="inner" style="margin:12px;padding:8px;border:2px solid #1a1a2e;">margin 12px · padding 8px · border 2px</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>box-sizing: border-box</code> to include padding and border in element dimensions, and <code>overflow</code> to handle content overflow.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_boxmodel.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Box-sizing / Overflow</div>
+          <pre><span class="c">.container {</span>
+  box-sizing: border-box;
+<span class="c">}</span>
+<span class="c">.small-block {</span>
+  overflow: scroll;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="width:100px;height:50px;overflow:scroll;background:#eef0f5;border-radius:4px;font-size:0.7rem;padding:4px;">
+              <div style="width:150px;">Scrolling content inside</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Center block elements with <code>margin: auto</code> and hide elements with <code>visibility: hidden</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_boxmodel.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Auto / Visibility</div>
+          <pre><span class="c">div { margin: auto; }</span>
+<span class="c">.hidden { visibility: hidden; }</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><code>margin: auto</code> centers block elements.</p>
+            <p style="visibility:hidden;">This is hidden</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Animation -->
+    <section id="animation">
+      <h2>CSS Animation</h2>
+
+      <div class="block-desc">
+        <span>Create reusable animations with <code>@keyframes</code> and apply them using the <code>animation</code> property.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_animations.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">@keyframes bounce {</span>
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+<span class="c">}</span>
+
+<span class="c">.box {</span>
+  animation: bounce 500ms ease infinite;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <style>
+              @keyframes demo-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+            </style>
+            <div style="animation:demo-bounce 500ms ease infinite;width:40px;height:40px;background:#7aa2f7;border-radius:6px;display:grid;place-items:center;color:#fff;font-size:1.2rem;">&uarr;</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Animation Properties</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Description</th></tr>
+          <tr><td>animation-name</td><td>@keyframes name</td></tr>
+          <tr><td>animation-duration</td><td>Time in ms or s</td></tr>
+          <tr><td>animation-timing-function</td><td>ease, linear, ease-in, ease-out, ease-in-out</td></tr>
+          <tr><td>animation-delay</td><td>Delay before start</td></tr>
+          <tr><td>animation-iteration-count</td><td>number or infinite</td></tr>
+          <tr><td>animation-direction</td><td>normal, reverse, alternate</td></tr>
+          <tr><td>animation-fill-mode</td><td>none, forwards, backwards, both</td></tr>
+          <tr><td>animation-play-state</td><td>running, paused</td></tr>
+        </table>
+      </div>
+
+      <div class="block-desc">
+        <span>Combine name, duration, timing, delay, iteration count, and direction into a single <code>animation</code> shorthand.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_animations.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Shorthand</div>
+          <pre><span class="c">/* name duration timing delay count direction */</span>
+animation: bounce 300ms linear 0s infinite alternate;
+animation: 3s ease-in 1s 2 reverse both paused slidein;
+animation: 3s slidein;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><small>Animation shorthand: <code>name | duration | timing | delay | count | direction</code></small></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flexbox -->
+    <section id="flexbox">
+      <h2>CSS Flexbox</h2>
+
+      <div class="block-desc">
+        <span>Create a flex container with <code>display: flex</code> and distribute child items using the <code>flex</code> property.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Simple flex</div>
+          <pre><span class="c">.container {</span>
+  display: flex;
+<span class="c">}</span>
+<span class="c">.container &gt; div {</span>
+  flex: 1 1 auto;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div class="flex-demo">
+              <div style="flex:1;">1</div>
+              <div style="flex:1;">2</div>
+              <div style="flex:1;">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Center items both horizontally and vertically with <code>align-items: center</code> and <code>justify-content: center</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Center content</div>
+          <pre><span class="c">.container {</span>
+  display: flex;
+  align-items: center;
+  justify-content: center;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="display:flex;align-items:center;justify-content:center;background:#eef0f5;height:50px;border-radius:4px;">
+              <div style="background:#7aa2f7;color:#fff;padding:4px 12px;border-radius:3px;font-size:0.75rem;">Centered</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Flex Container</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Values</th></tr>
+          <tr><td>display</td><td>flex, inline-flex</td></tr>
+          <tr><td>flex-direction</td><td>row, row-reverse, column, column-reverse</td></tr>
+          <tr><td>flex-wrap</td><td>nowrap, wrap, wrap-reverse</td></tr>
+          <tr><td>justify-content</td><td>flex-start, center, flex-end, space-between, space-around, space-evenly</td></tr>
+          <tr><td>align-items</td><td>flex-start, center, flex-end, stretch, baseline</td></tr>
+          <tr><td>align-content</td><td>flex-start, center, flex-end, space-between, space-around, stretch</td></tr>
+        </table>
+      </div>
+
+      <h3>Flex Child</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Description</th></tr>
+          <tr><td>flex</td><td>grow shrink basis shorthand</td></tr>
+          <tr><td>flex-grow</td><td>Ability to grow</td></tr>
+          <tr><td>flex-shrink</td><td>Ability to shrink</td></tr>
+          <tr><td>flex-basis</td><td>Initial size</td></tr>
+          <tr><td>order</td><td>Order in flex container</td></tr>
+          <tr><td>align-self</td><td>Override align-items for this item</td></tr>
+          <tr><td>margin-left: auto</td><td>Push item to the right</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section id="grid">
+      <h2>CSS Grid Layout</h2>
+
+      <div class="block-desc">
+        <span>Create a grid container with <code>display: grid</code> and define rows and columns using the <code>grid</code> shorthand.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_grid.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">#container {</span>
+  display: grid;
+  grid: repeat(2, 40px) / auto-flow 60px;
+<span class="c">}</span>
+<span class="c">#container &gt; div {</span>
+  background: #8ca0ff;
+  width: 50px;
+  height: 50px;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div class="grid-demo">
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Define column sizes with <code>grid-template-columns</code> using fixed, flexible (<code>fr</code>), and mixed units.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_grid.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Template columns</div>
+          <pre><span class="c">.grid {</span>
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 8px;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:4px;background:#eef0f5;padding:4px;border-radius:4px;">
+              <div style="background:#7aa2f7;color:#fff;padding:6px;border-radius:3px;font-size:0.7rem;text-align:center;">1fr</div>
+              <div style="background:#8ca0ff;color:#fff;padding:6px;border-radius:3px;font-size:0.7rem;text-align:center;">60px</div>
+              <div style="background:#7aa2f7;color:#fff;padding:6px;border-radius:3px;font-size:0.7rem;text-align:center;">1fr</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Grid Properties</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Description</th></tr>
+          <tr><td>grid-template-columns</td><td>Define column sizes</td></tr>
+          <tr><td>grid-template-rows</td><td>Define row sizes</td></tr>
+          <tr><td>grid-template-areas</td><td>Named grid areas</td></tr>
+          <tr><td>gap / grid-gap</td><td>Gap between rows/columns</td></tr>
+          <tr><td>grid-column</td><td>start / end or span</td></tr>
+          <tr><td>grid-row</td><td>start / end or span</td></tr>
+          <tr><td>grid-area</td><td>Assign to named area</td></tr>
+          <tr><td>justify-items</td><td>Align items horizontally</td></tr>
+          <tr><td>align-items</td><td>Align items vertically</td></tr>
+          <tr><td>justify-self</td><td>Override horizontal for item</td></tr>
+          <tr><td>align-self</td><td>Override vertical for item</td></tr>
+          <tr><td>minmax()</td><td>Size range for tracks</td></tr>
+          <tr><td>repeat()</td><td>Repeat track pattern</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Dynamic Content -->
+    <section id="dynamic">
+      <h2>Dynamic Content</h2>
+
+      <div class="block-desc">
+        <span>Define custom properties on <code>:root</code> and reuse them throughout stylesheets with the <code>var()</code> function.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_variables.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">CSS Variables</div>
+          <pre><span class="c">:root {</span>
+  --bg-color: brown;
+  --text-color: #fff;
+<span class="c">}</span>
+<span class="c">element {</span>
+  background: var(--bg-color);
+  color: var(--text-color);
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="--bg:brown;--txt:#fff;background:var(--bg);color:var(--txt);padding:0.5rem;border-radius:4px;font-size:0.8rem;text-align:center;">var(--bg-color)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Auto-number elements using CSS counters with <code>counter-reset</code>, <code>counter-increment</code>, and <code>counter()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_counters.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Counters</div>
+          <pre><span class="c">body { counter-reset: section; }</span>
+h3::before {
+  counter-increment: section;
+  content: "Section " counter(section) ": ";
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <style scoped>
+              .counter-demo { counter-reset: sec; }
+              .counter-demo h4::before { counter-increment: sec; content: "Section " counter(sec) ": "; color: #7aa2f7; }
+            </style>
+            <div class="counter-demo">
+              <h4 style="font-size:0.85rem;margin:0;">Topic A</h4>
+              <h4 style="font-size:0.85rem;margin:0;">Topic B</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modern CSS -->
+    <section id="modern">
+      <h2>Modern CSS</h2>
+
+      <div class="block-desc">
+        <span>Use the <code>:has()</code> pseudo-class to style a parent element based on its children.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">:has() selector</div>
+          <pre>figure:has(figcaption) {
+  border: 1px solid black;
+  padding: 0.5rem;
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <figure style="border:1px solid #333;padding:0.5rem;border-radius:4px;margin:0;">
+              <img src="https://placehold.co/100x50/ddf/333?text=Img" alt="" style="max-width:100%;" />
+              <figcaption style="font-size:0.7rem;">Has figcaption → styled</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Nest selectors inside one another using the native CSS nesting syntax and the <code>&amp;</code> parent reference.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Nesting</div>
+          <pre><span class="c">.cards {</span>
+  <span class="c">.card {</span>
+    &amp; .title { color: red; }
+    &amp; .desc { color: blue; }
+  <span class="c">}</span>
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><span style="color:red;">.card .title</span> &middot; <span style="color:blue;">.card .desc</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Apply styles based on a container's size using <code>container</code> and <code>@container</code> queries.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_container_queries.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Container Queries</div>
+          <pre><span class="c">.element-wrap {</span>
+  container: element / inline-size;
+<span class="c">}</span>
+<span class="c">@container element (min-inline-size: 300px) {</span>
+  .element { display: flex; gap: 1rem; }
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="container:inline-size;border:1px dashed #7aa2f7;padding:0.5rem;border-radius:4px;">
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <span style="background:#7aa2f7;color:#fff;padding:0.15rem 0.5rem;border-radius:3px;font-size:0.7rem;">Item</span>
+                <span style="background:#7aa2f7;color:#fff;padding:0.15rem 0.5rem;border-radius:3px;font-size:0.7rem;">Item</span>
+              </div>
+            </div>
+            <p><small style="color:#888;">Container query demo: flex layout when container &ge; 300px</small></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Control the cascade order explicitly with <code>@layer</code> to manage style precedence.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_cascade.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Cascade Layers</div>
+          <pre><span class="c">@layer legacy, new;</span>
+
+<span class="c">@layer new {</span>
+  .card { background: #7aa2f7; }
+<span class="c">}</span>
+<span class="c">@layer legacy {</span>
+  .card { background: #8ca0ff; }
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#7aa2f7;color:#fff;padding:0.5rem;border-radius:4px;text-align:center;font-size:0.8rem;">@layer new wins over legacy</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use modern color spaces like <code>oklch()</code>, <code>color(display-p3)</code>, and <code>color-mix()</code> for richer palettes.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_colors.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Color Mixing &amp; P3</div>
+          <pre>color: color(display-p3 1 0.5 0);
+color: oklch(61.88% 0.286 342.4);
+background: color-mix(in oklch, red, blue 50%);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div class="swatch-group">
+              <div class="swatch" style="background:color-mix(in oklch, red, blue 50%);">mix</div>
+              <div class="swatch" style="background:oklch(61.88% 0.286 342.4);">oklch</div>
+              <div class="swatch" style="background:color(display-p3 1 0.5 0);">p3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Smooth page scrolling with <code>scroll-behavior: smooth</code> and balance text lines with <code>text-wrap: balance</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css3_scroll_snap.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Text Wrap &amp; Scroll</div>
+          <pre>html { scroll-behavior: smooth; }
+.balance { text-wrap: balance; }
+.pretty { text-wrap: pretty; }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p style="text-wrap:balance;max-width:300px;background:#eef0f5;padding:0.5rem;border-radius:4px;font-size:0.8rem;">This text uses text-wrap: balance for even line distribution.</p>
+            <p><small><code>scroll-behavior: smooth</code> &middot; <code>text-wrap: pretty</code></small></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use logical properties like <code>margin-inline-end</code> and <code>padding-block</code> to respect the writing direction.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_logical_properties.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Logical Properties</div>
+          <pre><span class="c">.btn {</span>
+  margin-inline-end: 0.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  border-inline-start: 3px solid #7aa2f7;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="display:inline-block;margin-inline-end:0.5rem;padding-block:0.5rem;padding-inline:1rem;border-inline-start:3px solid #7aa2f7;background:#eef0f5;border-radius:4px;font-size:0.8rem;">Logical props</div>
+            <div style="display:inline-block;margin-inline-end:0.5rem;padding-block:0.5rem;padding-inline:1rem;border-inline-start:3px solid #8ca0ff;background:#eef0f5;border-radius:4px;font-size:0.8rem;">Adapt to writing mode</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Inherit a parent grid's column tracks into a child grid using <code>grid-template-columns: subgrid</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/css/css_grid_subgrid.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Subgrid</div>
+          <pre><span class="c">.grid {</span>
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+<span class="c">}</span>
+<span class="c">.item {</span>
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+<span class="c">}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#eef0f5;padding:4px;border-radius:4px;">
+              <div style="background:#7aa2f7;color:#fff;padding:0.3rem;border-radius:3px;font-size:0.7rem;text-align:center;">1</div>
+              <div style="background:#8ca0ff;color:#fff;padding:0.3rem;border-radius:3px;font-size:0.7rem;text-align:center;">2</div>
+              <div style="background:#7aa2f7;color:#fff;padding:0.3rem;border-radius:3px;font-size:0.7rem;text-align:center;">3</div>
+              <div style="grid-column:1/-1;display:grid;grid-template-columns:subgrid;gap:4px;padding:0;">
+                <div style="background:#1a1a2e;color:#fff;padding:0.3rem;border-radius:3px;font-size:0.7rem;text-align:center;">sub</div>
+                <div style="background:#1a1a2e;color:#fff;padding:0.3rem;border-radius:3px;font-size:0.7rem;text-align:center;">grid</div>
+                <div style="background:#1a1a2e;color:#fff;padding:0.3rem;border-radius:3px;font-size:0.7rem;text-align:center;">row</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>CSS Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

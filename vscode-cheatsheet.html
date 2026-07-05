@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VS Code &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .vs-kw { color:#bb9af7; }
+    .vs-fn { color:#7aa2f7; }
+    .vs-str { color:#9ece6a; }
+    .vs-cm { color:#565f89; }
+    .vs-op { color:#e0af68; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>VS Code</h1>
+          <p class="subtitle">Quick reference with shortcuts &amp; features</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Basics</a>
+        <a href="#editing">Editing</a>
+        <a href="#multi-cursor">Multi-Cursor</a>
+        <a href="#search">Search</a>
+        <a href="#terminal">Terminal</a>
+        <a href="#tabs">Tabs</a>
+        <a href="#sidebar">Sidebar</a>
+        <a href="#debug">Debug</a>
+        <a href="#git">Git</a>
+        <a href="#settings">Settings</a>
+        <a href="#extensions">Extensions</a>
+        <a href="#snippets">Snippets</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('VS Code')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+
+      <div class="block-desc">
+        <span>Essential commands to navigate, configure, and control VS Code's interface.</span>
+        <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_vscode.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Core Commands</div>
+          <pre><span class="vs-kw">Cmd+Shift+P</span>
+<span class="vs-kw">Ctrl+Shift+P</span>
+<span class="vs-fn">Cmd+P</span>
+<span class="vs-fn">Ctrl+P</span>
+<span class="vs-str">Cmd+,</span>
+<span class="vs-str">Ctrl+,</span>
+<span class="vs-op">Cmd+B</span>
+<span class="vs-op">Ctrl+B</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Command Palette — access all commands</span><br />
+              <span style="color:#7dcfff;">Quick Open — jump to any file</span><br />
+              <span style="color:#e0af68;">Settings</span><br />
+              <span style="color:#bb9af7;">Toggle Sidebar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editing -->
+    <section id="editing">
+      <h2>Editing</h2>
+
+      <div class="block-desc">
+        <span>Basic clipboard operations and undo/redo for everyday editing.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Clipboard &amp; Undo</div>
+          <pre><span class="vs-str">Cmd+C</span>
+<span class="vs-str">Ctrl+C</span>
+<span class="vs-str">Cmd+V</span>
+<span class="vs-str">Ctrl+V</span>
+<span class="vs-str">Cmd+X</span>
+<span class="vs-str">Ctrl+X</span>
+<span class="vs-op">Cmd+Z</span>
+<span class="vs-op">Ctrl+Z</span>
+<span class="vs-op">Cmd+Shift+Z</span>
+<span class="vs-op">Ctrl+Shift+Z</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Copy</span><br />
+              <span style="color:#9ece6a;">Paste</span><br />
+              <span style="color:#9ece6a;">Cut</span><br />
+              <span style="color:#e0af68;">Undo</span><br />
+              <span style="color:#e0af68;">Redo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Select, delete, and move lines with powerful single-key shortcuts.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Selection &amp; Lines</div>
+          <pre><span class="vs-fn">Cmd+D</span>
+<span class="vs-fn">Ctrl+D</span>
+<span class="vs-kw">Cmd+Shift+K</span>
+<span class="vs-kw">Ctrl+Shift+K</span>
+<span class="vs-op">Option+Up</span>
+<span class="vs-op">Alt+Up</span>
+<span class="vs-op">Option+Down</span>
+<span class="vs-op">Alt+Down</span>
+<span class="vs-str">Option+Shift+Up</span>
+<span class="vs-str">Alt+Shift+Up</span>
+<span class="vs-str">Option+Shift+Down</span>
+<span class="vs-str">Alt+Shift+Down</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Select word; repeat for next occurrence</span><br />
+              <span style="color:#e0af68;">Delete line</span><br />
+              <span style="color:#7dcfff;">Move line up</span><br />
+              <span style="color:#7dcfff;">Move line down</span><br />
+              <span style="color:#bb9af7;">Copy line up</span><br />
+              <span style="color:#bb9af7;">Copy line down</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Navigate code structure and adjust indentation quickly.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Brackets &amp; Indent</div>
+          <pre><span class="vs-kw">Cmd+Shift+\</span>
+<span class="vs-kw">Ctrl+Shift+\</span>
+<span class="vs-fn">Cmd+]</span>
+<span class="vs-fn">Ctrl+]</span>
+<span class="vs-fn">Cmd+[</span>
+<span class="vs-fn">Ctrl+[</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Jump to matching bracket</span><br />
+              <span style="color:#7dcfff;">Indent line</span><br />
+              <span style="color:#7dcfff;">Outdent line</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Insert cursors and new lines without leaving the keyboard.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Cursor &amp; Insert</div>
+          <pre><span class="vs-op">Option+Click</span>
+<span class="vs-op">Alt+Click</span>
+<span class="vs-str">Cmd+Enter</span>
+<span class="vs-str">Ctrl+Enter</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Insert cursor at click position</span><br />
+              <span style="color:#e0af68;">Insert line below</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Multi-Cursor -->
+    <section id="multi-cursor">
+      <h2>Multi-Cursor</h2>
+
+      <div class="block-desc">
+        <span>Edit multiple locations simultaneously with multi-cursor shortcuts.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Multi-Cursor</div>
+          <pre><span class="vs-op">Option+Click</span>
+<span class="vs-op">Alt+Click</span>
+<span class="vs-fn">Cmd+Option+Up</span>
+<span class="vs-fn">Ctrl+Alt+Up</span>
+<span class="vs-fn">Cmd+Option+Down</span>
+<span class="vs-fn">Ctrl+Alt+Down</span>
+<span class="vs-str">Cmd+D</span>
+<span class="vs-str">Ctrl+D</span>
+<span class="vs-kw">Cmd+Shift+L</span>
+<span class="vs-kw">Ctrl+Shift+L</span>
+<span class="vs-op">Option+Shift+I</span>
+<span class="vs-op">Alt+Shift+I</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Add cursor at click</span><br />
+              <span style="color:#7dcfff;">Add cursor above</span><br />
+              <span style="color:#7dcfff;">Add cursor below</span><br />
+              <span style="color:#e0af68;">Add selection to next find match</span><br />
+              <span style="color:#bb9af7;">Select all occurrences of selection</span><br />
+              <span style="color:#9ece6a;">Insert cursor at end of each selected line</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Replace -->
+    <section id="search">
+      <h2>Search &amp; Replace</h2>
+
+      <div class="block-desc">
+        <span>Find and replace text in a single file or across the entire project.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Find &amp; Replace</div>
+          <pre><span class="vs-kw">Cmd+F</span>
+<span class="vs-kw">Ctrl+F</span>
+<span class="vs-fn">Cmd+H</span>
+<span class="vs-fn">Ctrl+H</span>
+<span class="vs-str">Cmd+Shift+F</span>
+<span class="vs-str">Ctrl+Shift+F</span>
+<span class="vs-op">Cmd+Shift+H</span>
+<span class="vs-op">Ctrl+Shift+H</span>
+<span class="vs-cm">Enter</span>
+<span class="vs-cm">Shift+Enter</span>
+<span class="vs-cm">Option+Enter</span>
+<span class="vs-cm">Alt+Enter</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Find in file</span><br />
+              <span style="color:#e0af68;">Find and replace in file</span><br />
+              <span style="color:#7dcfff;">Find in files (sidebar)</span><br />
+              <span style="color:#bb9af7;">Find and replace in files</span><br />
+              <span style="color:#9ece6a;">Next / previous match</span><br />
+              <span style="color:#e0af68;">Select all matches</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terminal -->
+    <section id="terminal">
+      <h2>Terminal</h2>
+
+      <div class="block-desc">
+        <span>Manage integrated terminal instances with keyboard shortcuts.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Terminal</div>
+          <pre><span class="vs-kw">Cmd+`</span>
+<span class="vs-kw">Ctrl+`</span>
+<span class="vs-fn">Cmd+Shift+`</span>
+<span class="vs-fn">Ctrl+Shift+`</span>
+<span class="vs-str">Ctrl+`</span>
+<span class="vs-op">Cmd+K</span> <span class="vs-cm">then</span> <span class="vs-op">Cmd+`</span>
+<span class="vs-op">Ctrl+K</span> <span class="vs-cm">then</span> <span class="vs-op">Ctrl+`</span>
+<span class="vs-kw">Cmd+Shift+5</span>
+<span class="vs-kw">Ctrl+Shift+5</span>
+<span class="vs-fn">Ctrl+Shift+`</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Toggle terminal panel</span><br />
+              <span style="color:#7dcfff;">Create new terminal</span><br />
+              <span style="color:#e0af68;">Focus terminal</span><br />
+              <span style="color:#bb9af7;">Clear terminal</span><br />
+              <span style="color:#9ece6a;">Split terminal</span><br />
+              <span style="color:#7dcfff;">Navigate between terminal groups</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs & Windows -->
+    <section id="tabs">
+      <h2>Tabs &amp; Windows</h2>
+
+      <div class="block-desc">
+        <span>Navigate and manage editor tabs and windows efficiently.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Tabs &amp; Windows</div>
+          <pre><span class="vs-kw">Cmd+W</span>
+<span class="vs-kw">Ctrl+W</span>
+<span class="vs-fn">Cmd+Shift+W</span>
+<span class="vs-fn">Ctrl+Shift+W</span>
+<span class="vs-str">Cmd+T</span>
+<span class="vs-str">Ctrl+T</span>
+<span class="vs-op">Cmd+1</span> <span class="vs-cm">through</span> <span class="vs-op">Cmd+9</span>
+<span class="vs-op">Ctrl+1</span> <span class="vs-cm">through</span> <span class="vs-op">Ctrl+9</span>
+<span class="vs-kw">Cmd+Option+Left</span>
+<span class="vs-kw">Ctrl+Alt+Left</span>
+<span class="vs-kw">Cmd+Option+Right</span>
+<span class="vs-kw">Ctrl+Alt+Right</span>
+<span class="vs-fn">Cmd+Shift+T</span>
+<span class="vs-fn">Ctrl+Shift+T</span>
+<span class="vs-str">Ctrl+Tab</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Close tab</span><br />
+              <span style="color:#e0af68;">Close window</span><br />
+              <span style="color:#7dcfff;">Reopen closed tab</span><br />
+              <span style="color:#bb9af7;">Go to tab by index (1–9)</span><br />
+              <span style="color:#9ece6a;">Go to previous tab</span><br />
+              <span style="color:#9ece6a;">Go to next tab</span><br />
+              <span style="color:#e0af68;">Reopen last closed tab</span><br />
+              <span style="color:#7dcfff;">Cycle through tabs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar & Panels -->
+    <section id="sidebar">
+      <h2>Sidebar &amp; Panels</h2>
+
+      <div class="block-desc">
+        <span>Toggle sidebar views and panels to navigate your project.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Sidebar &amp; Panels</div>
+          <pre><span class="vs-op">Cmd+B</span>
+<span class="vs-op">Ctrl+B</span>
+<span class="vs-kw">Cmd+Shift+E</span>
+<span class="vs-kw">Ctrl+Shift+E</span>
+<span class="vs-fn">Cmd+Shift+F</span>
+<span class="vs-fn">Ctrl+Shift+F</span>
+<span class="vs-str">Cmd+Shift+G</span>
+<span class="vs-str">Ctrl+Shift+G</span>
+<span class="vs-op">Cmd+Shift+D</span>
+<span class="vs-op">Ctrl+Shift+D</span>
+<span class="vs-kw">Cmd+Shift+X</span>
+<span class="vs-kw">Ctrl+Shift+X</span>
+<span class="vs-fn">Cmd+J</span>
+<span class="vs-fn">Ctrl+J</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#bb9af7;">Toggle sidebar</span><br />
+              <span style="color:#9ece6a;">Explorer</span><br />
+              <span style="color:#7dcfff;">Search</span><br />
+              <span style="color:#e0af68;">Source control (Git)</span><br />
+              <span style="color:#9ece6a;">Debug</span><br />
+              <span style="color:#bb9af7;">Extensions</span><br />
+              <span style="color:#7dcfff;">Toggle panel (terminal / output)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Debug -->
+    <section id="debug">
+      <h2>Debug</h2>
+
+      <div class="block-desc">
+        <span>Control the debugger with keyboard shortcuts for stepping and breakpoints.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Debug Controls</div>
+          <pre><span class="vs-fn">F5</span>
+<span class="vs-op">Shift+F5</span>
+<span class="vs-kw">F9</span>
+<span class="vs-str">F10</span>
+<span class="vs-fn">F11</span>
+<span class="vs-op">Shift+F11</span>
+<span class="vs-kw">Cmd+Shift+Y</span>
+<span class="vs-kw">Ctrl+Shift+Y</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Start / continue debugging</span><br />
+              <span style="color:#e0af68;">Stop debugging</span><br />
+              <span style="color:#bb9af7;">Toggle breakpoint</span><br />
+              <span style="color:#7dcfff;">Step over</span><br />
+              <span style="color:#9ece6a;">Step into</span><br />
+              <span style="color:#e0af68;">Step out</span><br />
+              <span style="color:#bb9af7;">Debug console</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Git -->
+    <section id="git">
+      <h2>Git</h2>
+
+      <div class="block-desc">
+        <span>Integrated Git commands for source control workflows.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Git</div>
+          <pre><span class="vs-kw">Cmd+Shift+G</span>
+<span class="vs-kw">Ctrl+Shift+G</span>
+<span class="vs-str">Cmd+Enter</span> <span class="vs-cm">(staged files)</span>
+<span class="vs-str">Ctrl+Enter</span> <span class="vs-cm">(staged files)</span>
+<span class="vs-cm">Cmd+Shift+P  →  "Git: Push"</span>
+<span class="vs-cm">Cmd+Shift+P  →  "Git: Pull"</span>
+<span class="vs-op">Click gutter</span>  <span class="vs-cm">// stage/unstage lines</span>
+<span class="vs-fn">Cmd+K</span> <span class="vs-fn">Cmd+Shift+X</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Source control panel</span><br />
+              <span style="color:#e0af68;">Commit staged files</span><br />
+              <span style="color:#7dcfff;">Push changes</span><br />
+              <span style="color:#7dcfff;">Pull changes</span><br />
+              <span style="color:#bb9af7;">Stage / unstage lines</span><br />
+              <span style="color:#9ece6a;">Show all changes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings & Config -->
+    <section id="settings">
+      <h2>Settings &amp; Config</h2>
+
+      <div class="block-desc">
+        <span>Access and modify VS Code settings, themes, and keybindings.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Settings &amp; Config</div>
+          <pre><span class="vs-op">Cmd+,</span>
+<span class="vs-op">Ctrl+,</span>
+<span class="vs-cm">Cmd+Shift+P  →  "Preferences: Open Settings (JSON)"</span>
+<span class="vs-cm">Cmd+Shift+P  →  "Developer: Toggle Developer Tools"</span>
+<span class="vs-cm">Cmd+Shift+P  →  "Preferences: Color Theme"</span>
+<span class="vs-cm">Cmd+Shift+P  →  "Preferences: Keyboard Shortcuts"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Open settings UI</span><br />
+              <span style="color:#7dcfff;">Edit raw settings.json</span><br />
+              <span style="color:#e0af68;">Open developer tools</span><br />
+              <span style="color:#bb9af7;">Change color theme</span><br />
+              <span style="color:#9ece6a;">View / edit keyboard shortcuts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Extensions -->
+    <section id="extensions">
+      <h2>Extensions</h2>
+
+      <div class="block-desc">
+        <span>Browse, install, and manage extensions to customize VS Code.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Extensions</div>
+          <pre><span class="vs-kw">Cmd+Shift+X</span>
+<span class="vs-kw">Ctrl+Shift+X</span>
+<span class="vs-cm">Search by name</span>
+<span class="vs-cm">Click Install</span>
+<span class="vs-str">@recommended</span>
+<span class="vs-fn">@installed</span>
+<span class="vs-op">@disabled</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Open extensions panel</span><br />
+              <span style="color:#7dcfff;">Search extensions by name</span><br />
+              <span style="color:#9ece6a;">Install any extension</span><br />
+              <span style="color:#bb9af7;">Show recommended extensions</span><br />
+              <span style="color:#e0af68;">Show installed extensions</span><br />
+              <span style="color:#565f89;">Show disabled extensions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Snippets -->
+    <section id="snippets">
+      <h2>Snippets</h2>
+
+      <div class="block-desc">
+        <span>Create and use code snippets with tab-stop positions and prefix triggers.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Snippets</div>
+          <pre><span class="vs-cm">Cmd+Shift+P  →  "Preferences: Configure User Snippets"</span>
+<span class="vs-str">prefix</span> + <span class="vs-fn">body</span> + <span class="vs-cm">description</span>
+<span class="vs-op">Tab</span> <span class="vs-cm">triggers completion</span>
+<span class="vs-kw">$1</span>  <span class="vs-op">$2</span>  <span class="vs-fn">$0</span>  <span class="vs-cm">// tab stop positions</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Create or edit user snippets</span><br />
+              <span style="color:#7dcfff;">Snippet format: prefix + body + description</span><br />
+              <span style="color:#e0af68;">Tab triggers snippet completion</span><br />
+              <span style="color:#bb9af7;">$1, $2, $0 — tab stop positions</span><br />
+              <span style="color:#565f89;">Built-in language snippets available</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>VS Code Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

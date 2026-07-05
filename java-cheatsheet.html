@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>Java</h1>
+          <p class="subtitle">Quick reference with live previews</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Start</a>
+        <a href="#strings">Strings</a>
+        <a href="#arrays">Arrays</a>
+        <a href="#conditionals">Conditionals</a>
+        <a href="#loops">Loops</a>
+        <a href="#collections">Collections</a>
+        <a href="#misc">Misc</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('Java')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+
+      <div class="block-desc">
+        <span>The <code>main()</code> method is the entry point of every Java application.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_getstarted.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Hello World</div>
+          <pre><span class="k">public class</span> Hello {
+  <span class="k">public static void</span> main(String[] args) {
+    System.out.println(<span class="s">"Hello, world!"</span>);
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">$ javac Hello.java && java Hello</span><br />
+              <span style="color:#9ece6a;">Hello, world!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Declare variables with types like <code>int</code>, <code>float</code>, <code>char</code>, and <code>boolean</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_variables.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Variables &amp; Primitives</div>
+          <pre><span class="kt">int</span> num = <span class="mi">5</span>;
+<span class="kt">float</span> floatNum = <span class="mf">5.99f</span>;
+<span class="kt">char</span> letter = <span class="s">'D'</span>;
+<span class="kt">boolean</span> bool = <span class="kc">true</span>;
+String site = <span class="s">"cheatsheets.zip"</span>;
+
+System.out.println(num + <span class="s">" "</span> + site);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">5 cheatsheets.zip</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Java has eight primitive types with fixed sizes and default values.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_data_types.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Primitive Data Types</div>
+          <pre><span class="kt">byte</span>   b = <span class="mi">127</span>;
+<span class="kt">short</span>  s = <span class="mi">32767</span>;
+<span class="kt">int</span>    i = <span class="mi">2147483647</span>;
+<span class="kt">long</span>   l = <span class="mi">9223372036854775807L</span>;
+<span class="kt">float</span>  f = <span class="mf">3.14f</span>;
+<span class="kt">double</span> d = <span class="mf">3.14159</span>;
+<span class="kt">char</span>   c = <span class="s">'A'</span>;
+<span class="kt">boolean</span> bool = <span class="kc">false</span>;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;color:#a9b1d6;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Type</th><th>Size</th><th>Default</th><th>Range</th></tr>
+                <tr><td>byte</td><td>1 B</td><td>0</td><td>-128 to 127</td></tr>
+                <tr><td>short</td><td>2 B</td><td>0</td><td>-2<sup>15</sup> to 2<sup>15</sup>-1</td></tr>
+                <tr><td>int</td><td>4 B</td><td>0</td><td>-2<sup>31</sup> to 2<sup>31</sup>-1</td></tr>
+                <tr><td>long</td><td>8 B</td><td>0</td><td>-2<sup>63</sup> to 2<sup>63</sup>-1</td></tr>
+                <tr><td>float</td><td>4 B</td><td>0.0f</td><td>N/A</td></tr>
+                <tr><td>double</td><td>8 B</td><td>0.0d</td><td>N/A</td></tr>
+                <tr><td>char</td><td>2 B</td><td>\u0000</td><td>0 to 65535</td></tr>
+                <tr><td>boolean</td><td>N/A</td><td>false</td><td>true/false</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Widen automatically or narrow explicitly with a cast operator <code>(type)</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_type_casting.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Type Casting</div>
+          <pre><span class="c">// Widening (auto)</span>
+<span class="c">// byte &lt; short &lt; int &lt; long &lt; float &lt; double</span>
+<span class="kt">int</span> i = <span class="mi">10</span>;
+<span class="kt">long</span> l = i;
+
+<span class="c">// Narrowing (explicit cast)</span>
+<span class="kt">double</span> d = <span class="mf">10.02</span>;
+<span class="kt">long</span> l2 = (<span class="kt">long</span>) d;
+
+<span class="c">// Parsing</span>
+String.valueOf(<span class="mi">10</span>);
+Integer.parseInt(<span class="s">"10"</span>);
+Double.parseDouble(<span class="s">"10"</span>);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Widening: int 10 → long 10</span><br />
+              <span style="color:#9ece6a;">Narrowing: double 10.02 → long 10</span><br />
+              <span style="color:#e0af68;">String.valueOf(10) = "10"</span><br />
+              <span style="color:#e0af68;">Integer.parseInt("10") = 10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>Scanner</code> reads console input using methods like <code>nextLine()</code> and <code>nextInt()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_user_input.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">User Input</div>
+          <pre><span class="kn">import</span> java.util.Scanner;
+
+Scanner in = <span class="k">new</span> Scanner(System.in);
+String str = in.nextLine();
+<span class="kt">int</span> num = in.nextInt();
+System.out.println(str + <span class="s">" "</span> + num);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Scanner reads from System.in</span><br />
+              <span style="color:#7dcfff;">nextLine()</span> — String<br />
+              <span style="color:#7dcfff;">nextInt()</span> — int<br />
+              <span style="color:#7dcfff;">nextDouble()</span> — double
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use a temporary variable to exchange the values of two variables.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_operators.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Swap</div>
+          <pre><span class="kt">int</span> a = <span class="mi">1</span>;
+<span class="kt">int</span> b = <span class="mi">2</span>;
+System.out.println(a + <span class="s">" "</span> + b);
+
+<span class="kt">int</span> temp = a;
+a = b;
+b = temp;
+System.out.println(a + <span class="s">" "</span> + b);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Before swap</span><br />
+              <span style="color:#9ece6a;">1 2</span><br />
+              <span style="color:#565f89;">// After swap</span><br />
+              <span style="color:#9ece6a;">2 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strings -->
+    <section id="strings">
+      <h2>Strings</h2>
+
+      <div class="block-desc">
+        <span>Strings are immutable sequences; <code>+</code> concatenates them.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Basic &amp; Concatenation</div>
+          <pre>String str1 = <span class="s">"value"</span>;
+String str2 = <span class="k">new</span> String(<span class="s">"value"</span>);
+String str3 = String.valueOf(<span class="mi">123</span>);
+
+String s = <span class="mi">3</span> + <span class="s">"str"</span> + <span class="mi">3</span>;   <span class="c">// 3str3</span>
+String t = <span class="mi">3</span> + <span class="mi">3</span> + <span class="s">"str"</span>;   <span class="c">// 6str</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">3 + "str" + 3 → "3str3"</span><br />
+              <span style="color:#9ece6a;">3 + 3 + "str" → "6str"</span><br />
+              <span style="color:#9ece6a;">"3" + 3 + "str" → "33str"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>StringBuilder</code> builds strings efficiently without creating intermediate objects.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">StringBuilder</div>
+          <pre>StringBuilder sb = <span class="k">new</span> StringBuilder(<span class="mi">10</span>);
+sb.append(<span class="s">"QuickRef"</span>);
+sb.delete(<span class="mi">5</span>, <span class="mi">9</span>);
+sb.insert(<span class="mi">0</span>, <span class="s">"My "</span>);
+sb.append(<span class="s">"!"</span>);
+System.out.println(sb.toString());</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// StringBuilder is mutable</span><br />
+              <span style="color:#9ece6a;">My Quick!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>.equals()</code> for value equality and <code>==</code> for reference equality.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Comparison</div>
+          <pre>String s1 = <span class="k">new</span> String(<span class="s">"cheatsheets.zip"</span>);
+String s2 = <span class="k">new</span> String(<span class="s">"cheatsheets.zip"</span>);
+
+s1 == s2                     <span class="c">// false</span>
+s1.equals(s2)                <span class="c">// true</span>
+<span class="s">"AB"</span>.equalsIgnoreCase(<span class="s">"ab"</span>); <span class="c">// true</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#e0af68;">==</span> <span style="color:#565f89;">compares references</span><br />
+              <span style="color:#7dcfff;">.equals()</span> <span style="color:#565f89;">compares values</span><br />
+              <span style="color:#9ece6a;">"AB".equalsIgnoreCase("ab") → true</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Methods like <code>toUpperCase()</code>, <code>replace()</code>, and <code>trim()</code> transform strings.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Manipulation</div>
+          <pre>String str = <span class="s">"Abcd"</span>;
+
+str.toUpperCase();             <span class="c">// ABCD</span>
+str.toLowerCase();             <span class="c">// abcd</span>
+str.concat(<span class="s">"#"</span>);              <span class="c">// Abcd#</span>
+str.replace(<span class="s">"b"</span>, <span class="s">"-"</span>);         <span class="c">// A-cd</span>
+<span class="s">"  abc "</span>.trim();              <span class="c">// abc</span>
+<span class="s">"ab"</span>.toCharArray();           <span class="c">// {'a','b'}</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">"Abcd".toUpperCase() → "ABCD"</span><br />
+              <span style="color:#9ece6a;">"Abcd".replace("b","-") → "A-cd"</span><br />
+              <span style="color:#9ece6a;">"  abc ".trim() → "abc"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Methods such as <code>charAt()</code>, <code>length()</code>, and <code>substring()</code> inspect string contents.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Information Methods</div>
+          <pre>String str = <span class="s">"abcd"</span>;
+
+str.charAt(<span class="mi">2</span>);         <span class="c">// 'c'</span>
+str.indexOf(<span class="s">"a"</span>);       <span class="c">// 0</span>
+str.length();            <span class="c">// 4</span>
+str.substring(<span class="mi">2</span>);       <span class="c">// "cd"</span>
+str.contains(<span class="s">"c"</span>);      <span class="c">// true</span>
+str.endsWith(<span class="s">"d"</span>);      <span class="c">// true</span>
+str.isEmpty();           <span class="c">// false</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">charAt(2) = 'c'</span><br />
+              <span style="color:#9ece6a;">length() = 4</span><br />
+              <span style="color:#9ece6a;">substring(2) = "cd"</span><br />
+              <span style="color:#9ece6a;">contains("c") = true</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Strings cannot change; methods return new strings instead of modifying the original.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_strings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Immutable</div>
+          <pre>String str = <span class="s">"hello"</span>;
+str.concat(<span class="s">"world"</span>);
+System.out.println(str);
+<span class="c">// hello  ← original unchanged</span>
+
+String concat = str.concat(<span class="s">"world"</span>);
+System.out.println(concat);
+<span class="c">// helloworld  ← new string</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Strings are immutable</span><br />
+              <span style="color:#9ece6a;">str.concat("world") → original: "hello"</span><br />
+              <span style="color:#9ece6a;">new string → "helloworld"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Arrays -->
+    <section id="arrays">
+      <h2>Arrays</h2>
+
+      <div class="block-desc">
+        <span>Arrays hold a fixed number of elements accessed by zero-based index <code>[]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Declare &amp; Modify</div>
+          <pre><span class="kt">int</span>[] a1;
+<span class="kt">int</span>[] a2 = {<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>};
+<span class="kt">int</span>[] a3 = <span class="k">new</span> <span class="kt">int</span>[]{<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>};
+<span class="kt">int</span>[] a4 = <span class="k">new</span> <span class="kt">int</span>[<span class="mi">3</span>];
+a4[<span class="mi">0</span>] = <span class="mi">1</span>;
+a4[<span class="mi">1</span>] = <span class="mi">2</span>;
+a4[<span class="mi">2</span>] = <span class="mi">3</span>;
+
+System.out.println(a4[<span class="mi">0</span>]); <span class="c">// 1</span>
+System.out.println(a4.length); <span class="c">// 3</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ecee6;">int[] a2 = {1, 2, 3}</span><br />
+              <span style="color:#9ece6a;">a4[0] = 1, length = 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>A standard <code>for</code> loop with index reads and modifies array elements.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Loop (Read &amp; Modify)</div>
+          <pre><span class="kt">int</span>[] arr = {<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>};
+<span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>; i &lt; arr.length; i++) {
+  arr[i] = arr[i] * <span class="mi">2</span>;
+  System.out.print(arr[i] + <span class="s">" "</span>);
+}
+<span class="c">// 2 4 6</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">2 4 6</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The enhanced <code>for</code>-each loop iterates over arrays and collections without an index.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Enhanced For Loop</div>
+          <pre>String[] arr = {<span class="s">"a"</span>, <span class="s">"b"</span>, <span class="s">"c"</span>};
+<span class="k">for</span> (String a : arr) {
+  System.out.print(a + <span class="s">" "</span>);
+}
+<span class="c">// a b c</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">a b c</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Multidimensional arrays are arrays of arrays indexed like <code>matrix[row][col]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Multidimensional</div>
+          <pre><span class="kt">int</span>[][] matrix = { {<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>}, {<span class="mi">4</span>, <span class="mi">5</span>} };
+<span class="kt">int</span> x = matrix[<span class="mi">1</span>][<span class="mi">0</span>]; <span class="c">// 4</span>
+
+<span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>; i &lt; matrix.length; i++) {
+  <span class="k">for</span> (<span class="kt">int</span> j = <span class="mi">0</span>; j &lt; matrix[i].length; j++) {
+    System.out.print(matrix[i][j] + <span class="s">" "</span>);
+  }
+}
+<span class="c">// 1 2 3 4 5</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">1 2 3 4 5</span><br />
+              <span style="color:#565f89;">matrix[1][0] = 4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>Arrays.sort()</code> sorts arrays in ascending order.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Sort</div>
+          <pre><span class="kt">char</span>[] chars = {<span class="s">'b'</span>, <span class="s">'a'</span>, <span class="s">'c'</span>};
+Arrays.sort(chars);
+System.out.println(Arrays.toString(chars));
+<span class="c">// [a, b, c]</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[a, b, c]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conditionals -->
+    <section id="conditionals">
+      <h2>Conditionals</h2>
+
+      <div class="block-desc">
+        <span>Conditional branching with <code>if</code>, <code>else if</code>, and <code>else</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_conditions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">If / Else If / Else</div>
+          <pre><span class="kt">int</span> k = <span class="mi">15</span>;
+<span class="k">if</span> (k &gt; <span class="mi">20</span>) {
+  System.out.println(<span class="mi">1</span>);
+} <span class="k">else if</span> (k &gt; <span class="mi">10</span>) {
+  System.out.println(<span class="mi">2</span>);
+} <span class="k">else</span> {
+  System.out.println(<span class="mi">3</span>);
+}
+<span class="c">// 2</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">2</span><br />
+              <span style="color:#565f89;">k=15 is &gt;10 but ≤20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>switch</code> selects one of many code blocks based on an expression's value.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_switch.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Switch</div>
+          <pre><span class="kt">int</span> month = <span class="mi">3</span>;
+String str;
+<span class="k">switch</span> (month) {
+  <span class="k">case</span> <span class="mi">1</span>: str = <span class="s">"January"</span>; <span class="k">break</span>;
+  <span class="k">case</span> <span class="mi">2</span>: str = <span class="s">"February"</span>; <span class="k">break</span>;
+  <span class="k">case</span> <span class="mi">3</span>: str = <span class="s">"March"</span>; <span class="k">break</span>;
+  <span class="k">default</span>: str = <span class="s">"Other"</span>;
+}
+System.out.println(<span class="s">"Result "</span> + str);
+<span class="c">// Result March</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Result March</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The ternary <code>? :</code> returns one of two values based on a boolean condition.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_conditions.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Ternary Operator</div>
+          <pre><span class="kt">int</span> a = <span class="mi">10</span>;
+<span class="kt">int</span> b = <span class="mi">20</span>;
+<span class="kt">int</span> max = (a &gt; b) ? a : b;
+System.out.println(max);
+<span class="c">// 20</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">max = (a &gt; b) ? a : b → 20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loops -->
+    <section id="loops">
+      <h2>Loops</h2>
+
+      <div class="block-desc">
+        <span>The <code>for</code> loop repeats code with an init, condition, and increment.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_for_loop.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">For Loop</div>
+          <pre><span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>; i &lt; <span class="mi">10</span>; i++) {
+  System.out.print(i);
+}
+<span class="c">// 0123456789</span>
+
+<span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>, j = <span class="mi">0</span>; i &lt; <span class="mi">3</span>; i++, j--) {
+  System.out.print(j + <span class="s">"|"</span> + i + <span class="s">" "</span>);
+}
+<span class="c">// 0|0 -1|1 -2|2</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0123456789</span><br />
+              <span style="color:#e0af68;">0|0 -1|1 -2|2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>while</code> checks before executing; <code>do-while</code> executes at least once.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_while_loop.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">While &amp; Do-While</div>
+          <pre><span class="kt">int</span> count = <span class="mi">0</span>;
+<span class="k">while</span> (count &lt; <span class="mi">5</span>) {
+  System.out.print(count);
+  count++;
+}
+<span class="c">// 01234</span>
+
+count = <span class="mi">0</span>;
+<span class="k">do</span> {
+  System.out.print(count);
+  count++;
+} <span class="k">while</span> (count &lt; <span class="mi">5</span>);
+<span class="c">// 01234</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">while → 01234</span><br />
+              <span style="color:#9ece6a;">do-while → 01234</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>continue</code> skips to the next iteration; <code>break</code> exits the loop.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_while_loop.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Continue &amp; Break</div>
+          <pre><span class="c">// Continue skips iteration</span>
+<span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>; i &lt; <span class="mi">5</span>; i++) {
+  <span class="k">if</span> (i == <span class="mi">3</span>) <span class="k">continue</span>;
+  System.out.print(i);
+}
+<span class="c">// 0124</span>
+
+<span class="c">// Break exits loop</span>
+<span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>; i &lt; <span class="mi">5</span>; i++) {
+  System.out.print(i);
+  <span class="k">if</span> (i == <span class="mi">3</span>) <span class="k">break</span>;
+}
+<span class="c">// 0123</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">continue → 0124</span><br />
+              <span style="color:#e0af68;">break → 0123</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The enhanced <code>for</code>-each loop iterates over arrays and collections concisely.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Enhanced For (for-each)</div>
+          <pre><span class="kt">int</span>[] numbers = {<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">4</span>, <span class="mi">5</span>};
+<span class="k">for</span> (<span class="kt">int</span> number : numbers) {
+  System.out.print(number);
+}
+<span class="c">// 12345</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">12345</span><br />
+              <span style="color:#565f89;">Used to loop through arrays &amp; Collections</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collections -->
+    <section id="collections">
+      <h2>Collections</h2>
+
+      <div class="block-desc">
+        <span><code>ArrayList</code> is a resizable array implementation of the <code>List</code> interface.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_arraylist.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ArrayList</div>
+          <pre>List&lt;Integer&gt; nums = <span class="k">new</span> ArrayList&lt;&gt;();
+
+nums.add(<span class="mi">2</span>);
+nums.add(<span class="mi">5</span>);
+nums.add(<span class="mi">8</span>);
+System.out.println(nums.get(<span class="mi">0</span>)); <span class="c">// 2</span>
+
+<span class="k">for</span> (<span class="kt">int</span> i = <span class="mi">0</span>; i &lt; nums.size(); i++) {
+  System.out.print(nums.get(i) + <span class="s">" "</span>);
+}
+<span class="c">// 2 5 8</span>
+
+nums.remove(nums.size() - <span class="mi">1</span>); <span class="c">// remove last</span>
+
+<span class="k">for</span> (Integer v : nums) {
+  System.out.print(v + <span class="s">" "</span>);
+}
+<span class="c">// 2 5</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">get(0) = 2</span><br />
+              <span style="color:#9ece6a;">2 5 8 → after remove last: 2 5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>HashMap</code> stores key-value pairs allowing fast lookups by key.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_hashmap.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">HashMap</div>
+          <pre>Map&lt;Integer, String&gt; m = <span class="k">new</span> HashMap&lt;&gt;();
+m.put(<span class="mi">5</span>, <span class="s">"Five"</span>);
+m.put(<span class="mi">8</span>, <span class="s">"Eight"</span>);
+m.put(<span class="mi">6</span>, <span class="s">"Six"</span>);
+
+System.out.println(m.get(<span class="mi">6</span>)); <span class="c">// Six</span>
+
+m.forEach((key, value) -&gt; {
+  System.out.println(key + <span class="s">": "</span> + value);
+});</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">m.get(6) = "Six"</span><br />
+              <span style="color:#e0af68;">5: Five</span><br />
+              <span style="color:#e0af68;">6: Six</span><br />
+              <span style="color:#e0af68;">8: Eight</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>HashSet</code> stores unique elements with no guaranteed iteration order.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_hashset.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">HashSet</div>
+          <pre>Set&lt;String&gt; set = <span class="k">new</span> HashSet&lt;&gt;();
+set.add(<span class="s">"dog"</span>);
+set.add(<span class="s">"cat"</span>);
+set.add(<span class="s">"mouse"</span>);
+set.add(<span class="s">"snake"</span>);
+
+<span class="k">if</span> (set.contains(<span class="s">"cat"</span>)) {
+  System.out.println(<span class="s">"Contains cat"</span>);
+}
+set.remove(<span class="s">"cat"</span>);
+
+<span class="k">for</span> (String e : set) {
+  System.out.print(e + <span class="s">" "</span>);
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Contains cat</span><br />
+              <span style="color:#e0af68;">dog mouse snake</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>ArrayDeque</code> is a resizable deque supporting element insertion/removal at both ends.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_linkedlist.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ArrayDeque</div>
+          <pre>Deque&lt;String&gt; a = <span class="k">new</span> ArrayDeque&lt;&gt;();
+a.add(<span class="s">"Dog"</span>);
+a.addFirst(<span class="s">"Cat"</span>);
+a.addLast(<span class="s">"Horse"</span>);
+System.out.println(a);
+<span class="c">// [Cat, Dog, Horse]</span>
+
+System.out.println(a.peek());
+<span class="c">// Cat (head)</span>
+
+System.out.println(a.pop());
+<span class="c">// Cat (remove &amp; return head)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">[Cat, Dog, Horse]</span><br />
+              <span style="color:#9ece6a;">peek() = Cat</span><br />
+              <span style="color:#e0af68;">pop() = Cat</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="attr-table" style="margin-left:1rem;margin-right:1rem;">
+        <table>
+          <thead>
+            <tr><th>Collection</th><th>Interface</th><th>Ordered</th><th>Sorted</th><th>Thread Safe</th><th>Duplicate</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ArrayList</td><td>List</td><td>Y</td><td>N</td><td>N</td><td>Y</td></tr>
+            <tr><td>LinkedList</td><td>List, Deque</td><td>Y</td><td>N</td><td>N</td><td>Y</td></tr>
+            <tr><td>HashSet</td><td>Set</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+            <tr><td>LinkedHashSet</td><td>Set</td><td>Y</td><td>N</td><td>N</td><td>N</td></tr>
+            <tr><td>TreeSet</td><td>Set</td><td>Y</td><td>Y</td><td>N</td><td>N</td></tr>
+            <tr><td>HashMap</td><td>Map</td><td>N</td><td>N</td><td>N</td><td>N (key)</td></tr>
+            <tr><td>LinkedHashMap</td><td>Map</td><td>Y</td><td>N</td><td>N</td><td>N (key)</td></tr>
+            <tr><td>TreeMap</td><td>Map</td><td>Y</td><td>Y</td><td>N</td><td>N (key)</td></tr>
+            <tr><td>ConcurrentHashMap</td><td>Map</td><td>N</td><td>N</td><td>Y</td><td>N (key)</td></tr>
+            <tr><td>ArrayDeque</td><td>Deque</td><td>Y</td><td>N</td><td>N</td><td>Y</td></tr>
+            <tr><td>PriorityQueue</td><td>Queue</td><td>Y</td><td>N</td><td>N</td><td>Y</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Misc -->
+    <section id="misc">
+      <h2>Misc</h2>
+
+      <div class="block-desc">
+        <span>Control visibility with <code>public</code>, <code>protected</code>, default (package-private), and <code>private</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_modifiers.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Access Modifiers</div>
+          <pre><span class="k">public</span>    <span class="c">// visible everywhere</span>
+<span class="k">protected</span> <span class="c">// same package + subclasses</span>
+           <span class="c">// (default) same package only</span>
+<span class="k">private</span>   <span class="c">// same class only</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;color:#a9b1d6;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Modifier</th><th>Class</th><th>Package</th><th>Subclass</th><th>World</th></tr>
+                <tr><td>public</td><td>Y</td><td>Y</td><td>Y</td><td>Y</td></tr>
+                <tr><td>protected</td><td>Y</td><td>Y</td><td>Y</td><td>N</td></tr>
+                <tr><td><i>default</i></td><td>Y</td><td>Y</td><td>N</td><td>N</td></tr>
+                <tr><td>private</td><td>Y</td><td>N</td><td>N</td><td>N</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>replaceAll()</code> and <code>split()</code> with regex patterns to process text.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_regex.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Regular Expressions</div>
+          <pre>String text = <span class="s">"I am learning Java"</span>;
+
+<span class="c">// Remove whitespace</span>
+text.replaceAll(<span class="s">"\\s+"</span>, <span class="s">""</span>);
+
+<span class="c">// Split on pipe</span>
+text.split(<span class="s">"\\|"</span>);
+text.split(Pattern.quote(<span class="s">"|"</span>));</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">replaceAll("\\s+", "") → "IamlearningJava"</span><br />
+              <span style="color:#565f89;">Pattern.quote() escapes literal text</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Document code with <code>//</code> (single-line), <code>/* */</code> (multi-line), or <code>/** */</code> (javadoc).</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_comments.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Comments</div>
+          <pre><span class="c">// Single line comment</span>
+
+<span class="c">/* Multi-line
+   comment */</span>
+
+<span class="c">/** Documentation
+ *  comment (javadoc)
+ */</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// → single line</span><br />
+              <span style="color:#565f89;">/* */ → multi-line</span><br />
+              <span style="color:#565f89;">/** */ → javadoc (generates API docs)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>Math</code> provides static methods like <code>max()</code>, <code>sqrt()</code>, and <code>pow()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_math.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Math Methods</div>
+          <pre>Math.max(<span class="mi">10</span>, <span class="mi">20</span>);    <span class="c">// 20</span>
+Math.min(<span class="mi">10</span>, <span class="mi">20</span>);    <span class="c">// 10</span>
+Math.abs(-<span class="mi">5</span>);        <span class="c">// 5</span>
+Math.sqrt(<span class="mi">25</span>);       <span class="c">// 5.0</span>
+Math.pow(<span class="mi">2</span>, <span class="mi">3</span>);       <span class="c">// 8.0</span>
+Math.round(<span class="mf">3.6</span>);      <span class="c">// 4</span>
+Math.log(<span class="mi">10</span>);        <span class="c">// 2.302...</span>
+Math.toRadians(<span class="mi">180</span>); <span class="c">// 3.141...</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">max(10,20)=20  min(10,20)=10</span><br />
+              <span style="color:#9ece6a;">abs(-5)=5  sqrt(25)=5.0</span><br />
+              <span style="color:#e0af68;">pow(2,3)=8.0  round(3.6)=4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Reserved words such as <code>class</code>, <code>if</code>, and <code>for</code> define the language syntax.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_ref_keywords.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Java Keywords</div>
+          <pre>abstract  assert  boolean  break  byte
+case  catch  char  class  const
+continue  default  do  double  else
+enum  extends  final  finally  float
+for  goto  if  implements  import
+instanceof  int  interface  long  native
+new  package  private  protected  public
+return  short  static  strictfp  super
+switch  synchronized  this  throw  throws
+transient  try  void  volatile  while</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#7dcfff;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.7rem;line-height:1.6;">
+              <span style="color:#bb9af7;">abstract</span> assert <span style="color:#bb9af7;">boolean</span> <span style="color:#bb9af7;">break</span> <span style="color:#bb9af7;">byte</span><br />
+              <span style="color:#bb9af7;">case</span> <span style="color:#bb9af7;">catch</span> <span style="color:#bb9af7;">char</span> <span style="color:#bb9af7;">class</span> const<br />
+              <span style="color:#bb9af7;">continue</span> <span style="color:#bb9af7;">default</span> <span style="color:#bb9af7;">do</span> <span style="color:#bb9af7;">double</span> <span style="color:#bb9af7;">else</span><br />
+              <span style="color:#bb9af7;">enum</span> <span style="color:#bb9af7;">extends</span> <span style="color:#bb9af7;">final</span> <span style="color:#bb9af7;">finally</span> <span style="color:#bb9af7;">float</span><br />
+              <span style="color:#bb9af7;">for</span> goto <span style="color:#bb9af7;">if</span> <span style="color:#bb9af7;">implements</span> <span style="color:#bb9af7;">import</span><br />
+              <span style="color:#bb9af7;">instanceof</span> <span style="color:#bb9af7;">int</span> <span style="color:#bb9af7;">interface</span> <span style="color:#bb9af7;">long</span> <span style="color:#bb9af7;">native</span><br />
+              <span style="color:#bb9af7;">new</span> <span style="color:#bb9af7;">package</span> <span style="color:#bb9af7;">private</span> <span style="color:#bb9af7;">protected</span> <span style="color:#bb9af7;">public</span><br />
+              <span style="color:#bb9af7;">return</span> <span style="color:#bb9af7;">short</span> <span style="color:#bb9af7;">static</span> strictfp <span style="color:#bb9af7;">super</span><br />
+              <span style="color:#bb9af7;">switch</span> <span style="color:#bb9af7;">synchronized</span> <span style="color:#bb9af7;">this</span> <span style="color:#bb9af7;">throw</span> <span style="color:#bb9af7;">throws</span><br />
+              transient <span style="color:#bb9af7;">try</span> <span style="color:#bb9af7;">void</span> <span style="color:#bb9af7;">volatile</span> <span style="color:#bb9af7;">while</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Java Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

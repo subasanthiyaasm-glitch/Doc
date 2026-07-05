@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .c-kw { color:#bb9af7; }
+    .c-fn { color:#7aa2f7; }
+    .c-str { color:#9ece6a; }
+    .c-cm { color:#565f89; }
+    .c-num { color:#ff9e64; }
+    .c-pre { color:#e0af68; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>C</h1>
+          <p class="subtitle">Quick reference with live previews</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Start</a>
+        <a href="#variables">Variables</a>
+        <a href="#strings">Strings</a>
+        <a href="#conditionals">Conditionals</a>
+        <a href="#loops">Loops</a>
+        <a href="#arrays">Arrays</a>
+        <a href="#enum">Enum</a>
+        <a href="#input">Input</a>
+        <a href="#pointers">Pointers</a>
+        <a href="#operators">Operators</a>
+        <a href="#data-types">Data Types</a>
+        <a href="#preprocessor">Preprocessor</a>
+        <a href="#functions">Functions</a>
+        <a href="#structures">Structures</a>
+        <a href="#file-io">File I/O</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('C')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+
+      <div class="block-desc">
+        <span>Write your first C program with <code>printf()</code> to output text.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Hello World</div>
+          <pre><span class="c-pre">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>(<span class="c-kw">void</span>) {
+  <span class="c-fn">printf</span>(<span class="c-str">"Hello World!\n"</span>);
+  <span class="c-kw">return</span> <span class="c-num">0</span>;
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">$ gcc -Wall -g hello.c -o hello && ./hello</span><br />
+              <span style="color:#9ece6a;">Hello World!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The basic skeleton of a C program: <code>main()</code> function with <code>#include</code> directives.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_syntax.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Basic Structure</div>
+          <pre><span class="c-cm">// Preprocessor directive</span>
+<span class="c-pre">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>
+
+<span class="c-cm">// Function declaration</span>
+<span class="c-kw">int</span> <span class="c-fn">main</span>(<span class="c-kw">void</span>) {
+  <span class="c-cm">// Your code here</span>
+  <span class="c-fn">printf</span>(<span class="c-str">"Hello C!\n"</span>);
+  <span class="c-kw">return</span> <span class="c-num">0</span>;
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello C!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Add notes in your code using <code>//</code> single-line or <code>/* */</code> multi-line comments.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_comments.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Comments</div>
+          <pre><span class="c-cm">// This is a single-line comment</span>
+<span class="c-fn">printf</span>(<span class="c-str">"Hello World!\n"</span>); <span class="c-cm">// Inline comment</span>
+
+<span class="c-cm">/* Multi-line comment
+   spans multiple lines */</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello World!</span><br />
+              <span style="color:#565f89;">// Comments are ignored at compile time</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Variables -->
+    <section id="variables">
+      <h2>Variables &amp; Constants</h2>
+
+      <div class="block-desc">
+        <span>Store data in named containers using types like <code>int</code>, <code>float</code>, and <code>char</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_variables.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Variables</div>
+          <pre><span class="c-kw">int</span> myNum = <span class="c-num">15</span>;
+<span class="c-kw">int</span> myNum2;        <span class="c-cm">// declare then assign</span>
+myNum2 = <span class="c-num">15</span>;
+
+<span class="c-kw">float</span> myFloat = <span class="c-num">5.99</span>;
+<span class="c-kw">char</span> myLetter = <span class="c-str">'D'</span>;
+
+<span class="c-kw">int</span> x = <span class="c-num">5</span>, y = <span class="c-num">6</span>, sum = x + y;
+<span class="c-kw">int</span> a = <span class="c-num">5</span>, b = <span class="c-num">6</span>, c = <span class="c-num">50</span>;  <span class="c-cm">// multiple</span>
+
+<span class="c-fn">printf</span>(<span class="c-str">"%d"</span>, sum);  <span class="c-cm">// 11</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">sum = 5 + 6 = 11</span><br />
+              <span style="color:#565f89;">Variables must be declared before use</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>const</code> to declare values that cannot be changed after assignment.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_constants.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Constants</div>
+          <pre><span class="c-kw">const</span> <span class="c-kw">int</span> MINUTES_PER_HOUR = <span class="c-num">60</span>;
+<span class="c-kw">const</span> <span class="c-kw">float</span> PI = <span class="c-num">3.14</span>;
+<span class="c-kw">const</span> <span class="c-kw">int</span> BIRTHYEAR = <span class="c-num">1980</span>;  <span class="c-cm">// naming convention</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">PI = 3.14</span><br />
+              <span style="color:#565f89;">Constants cannot be modified after declaration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Format output with <code>printf()</code> using format specifiers like <code>%d</code>, <code>%f</code>, and <code>%s</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_output.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Printf Formatting</div>
+          <pre><span class="c-fn">printf</span>(<span class="c-str">"I am learning C.\n"</span>);
+<span class="c-kw">int</span> num = <span class="c-num">5</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"Number = %d\n"</span>, num);
+
+<span class="c-kw">float</span> f = <span class="c-num">5.99</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"Value = %f\n"</span>, f);
+
+<span class="c-cm">// Format specifiers</span>
+<span class="c-cm">// %d or %i → int</span>
+<span class="c-cm">// %f → float</span>
+<span class="c-cm">// %lf → double</span>
+<span class="c-cm">// %c → char</span>
+<span class="c-cm">// %s → string</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">I am learning C.</span><br />
+              <span style="color:#9ece6a;">Number = 5</span><br />
+              <span style="color:#9ece6a;">Value = 5.990000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Output integers in binary, octal, or hex format, and control field width with <code>printf()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_output.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Number Bases &amp; Width</div>
+          <pre><span class="c-kw">short</span> a = <span class="c-num">0b1010110</span>;  <span class="c-cm">// binary</span>
+<span class="c-kw">int</span> b = <span class="c-num">02713</span>;         <span class="c-cm">// octal</span>
+<span class="c-kw">long</span> c = <span class="c-num">0X1DAB83</span>;    <span class="c-cm">// hex</span>
+
+<span class="c-cm">// Octal output</span>
+<span class="c-fn">printf</span>(<span class="c-str">"a=%ho, b=%o, c=%lo\n"</span>, a, b, c);
+<span class="c-cm">// a=126, b=2713, c=7325603</span>
+
+<span class="c-cm">// Decimal output</span>
+<span class="c-fn">printf</span>(<span class="c-str">"a=%hd, b=%d, c=%ld\n"</span>, a, b, c);
+<span class="c-cm">// a=86, b=1483, c=1944451</span>
+
+<span class="c-cm">// Width &amp; alignment</span>
+<span class="c-fn">printf</span>(<span class="c-str">"%-9d %-9d\n"</span>, <span class="c-num">20</span>, <span class="c-num">345</span>);
+<span class="c-cm">// "20        345"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">a=126, b=2713, c=7325603</span><br />
+              <span style="color:#9ece6a;">a=86, b=1483, c=1944451</span><br />
+              <span style="color:#e0af68;">20        345</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strings -->
+    <section id="strings">
+      <h2>Strings</h2>
+
+      <div class="block-desc">
+        <span>In C, strings are null-terminated arrays of <code>char</code> — declare with <code>char name[]</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_strings.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Creating Strings</div>
+          <pre><span class="c-kw">char</span> greetings[] = <span class="c-str">"Hello World!"</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%s"</span>, greetings);
+
+<span class="c-cm">// Char array (null-terminated)</span>
+<span class="c-kw">char</span> hello[] = {<span class="c-str">'H'</span>,<span class="c-str">'e'</span>,<span class="c-str">'l'</span>,<span class="c-str">'l'</span>,<span class="c-str">'\0'</span>};
+<span class="c-fn">printf</span>(<span class="c-str">"%s"</span>, hello);  <span class="c-cm">// "Hell"</span>
+
+<span class="c-cm">// String literal (read-only)</span>
+<span class="c-kw">char</span> *greet = <span class="c-str">"Hello"</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%s"</span>, greet);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Hello World!</span><br />
+              <span style="color:#565f89;">C has no String type — uses char arrays</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Access individual characters with <code>str[i]</code> and modify them by assigning a new <code>char</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_strings.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Access &amp; Modify</div>
+          <pre><span class="c-kw">char</span> greetings[] = <span class="c-str">"Hello World!"</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%c"</span>, greetings[<span class="c-num">0</span>]);  <span class="c-cm">// H</span>
+
+<span class="c-cm">// Modify character</span>
+greetings[<span class="c-num">0</span>] = <span class="c-str">'J'</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%s"</span>, greetings);
+<span class="c-cm">// "Jello World!"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Jello World!</span><br />
+              <span style="color:#565f89;">String literals (char*) are read-only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conditionals -->
+    <section id="conditionals">
+      <h2>Conditionals</h2>
+
+      <div class="block-desc">
+        <span>Control program flow with <code>if</code>, <code>else if</code>, and <code>else</code> blocks.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_conditions.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">If / Else If / Else</div>
+          <pre><span class="c-kw">int</span> time = <span class="c-num">20</span>;
+<span class="c-kw">if</span> (time &lt; <span class="c-num">18</span>) {
+  <span class="c-fn">printf</span>(<span class="c-str">"Goodbye!\n"</span>);
+} <span class="c-kw">else</span> {
+  <span class="c-fn">printf</span>(<span class="c-str">"Good evening!\n"</span>);
+}
+<span class="c-cm">// Good evening!</span>
+
+time = <span class="c-num">22</span>;
+<span class="c-kw">if</span> (time &lt; <span class="c-num">10</span>) {
+  <span class="c-fn">printf</span>(<span class="c-str">"Good morning!\n"</span>);
+} <span class="c-kw">else if</span> (time &lt; <span class="c-num">20</span>) {
+  <span class="c-fn">printf</span>(<span class="c-str">"Goodbye!\n"</span>);
+} <span class="c-kw">else</span> {
+  <span class="c-fn">printf</span>(<span class="c-str">"Good evening!\n"</span>);
+}
+<span class="c-cm">// Good evening!</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Good evening!</span><br />
+              <span style="color:#9ece6a;">Good evening!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The ternary operator <code>condition ? expr1 : expr2</code> provides a compact <code>if</code>/<code>else</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_conditions.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Ternary Operator</div>
+          <pre><span class="c-kw">int</span> age = <span class="c-num">20</span>;
+(age &gt; <span class="c-num">19</span>) ? <span class="c-fn">printf</span>(<span class="c-str">"Adult\n"</span>)
+            : <span class="c-fn">printf</span>(<span class="c-str">"Teenager\n"</span>);
+<span class="c-cm">// Adult</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Adult</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>switch</code> to select one of many code blocks based on an integer expression.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_switch.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Switch</div>
+          <pre><span class="c-kw">int</span> day = <span class="c-num">4</span>;
+<span class="c-kw">switch</span> (day) {
+  <span class="c-kw">case</span> <span class="c-num">3</span>: <span class="c-fn">printf</span>(<span class="c-str">"Wednesday\n"</span>); <span class="c-kw">break</span>;
+  <span class="c-kw">case</span> <span class="c-num">4</span>: <span class="c-fn">printf</span>(<span class="c-str">"Thursday\n"</span>); <span class="c-kw">break</span>;
+  <span class="c-kw">default</span>: <span class="c-fn">printf</span>(<span class="c-str">"Weekend!\n"</span>);
+}
+<span class="c-cm">// Thursday</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Thursday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loops -->
+    <section id="loops">
+      <h2>Loops</h2>
+
+      <div class="block-desc">
+        <span>Repeat code a fixed number of times with <code>for</code> using init, condition, and increment.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_for_loop.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">For Loop</div>
+          <pre><span class="c-kw">for</span> (<span class="c-kw">int</span> i = <span class="c-num">0</span>; i &lt; <span class="c-num">5</span>; i++) {
+  <span class="c-fn">printf</span>(<span class="c-str">"%d\n"</span>, i);
+}
+<span class="c-cm">// 0 1 2 3 4</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 3 4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>while</code> (check-first) and <code>do</code>/<code>while</code> (run-at-least-once) for conditional looping.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_while_loop.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">While &amp; Do-While</div>
+          <pre><span class="c-cm">// While</span>
+<span class="c-kw">int</span> i = <span class="c-num">0</span>;
+<span class="c-kw">while</span> (i &lt; <span class="c-num">5</span>) {
+  <span class="c-fn">printf</span>(<span class="c-str">"%d "</span>, i);
+  i++;
+}
+<span class="c-cm">// 0 1 2 3 4</span>
+
+<span class="c-cm">// Do-While</span>
+i = <span class="c-num">0</span>;
+<span class="c-kw">do</span> {
+  <span class="c-fn">printf</span>(<span class="c-str">"%d "</span>, i);
+  i++;
+} <span class="c-kw">while</span> (i &lt; <span class="c-num">5</span>);
+<span class="c-cm">// 0 1 2 3 4</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">0 1 2 3 4</span><br />
+              <span style="color:#9ece6a;">0 1 2 3 4</span><br />
+              <span style="color:#565f89;">Do-while runs at least once</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>break</code> to exit a loop early and <code>continue</code> to skip to the next iteration.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_break_continue.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Break &amp; Continue</div>
+          <pre><span class="c-cm">// Break — exit loop</span>
+<span class="c-kw">for</span> (<span class="c-kw">int</span> i = <span class="c-num">0</span>; i &lt; <span class="c-num">10</span>; i++) {
+  <span class="c-kw">if</span> (i == <span class="c-num">4</span>) <span class="c-kw">break</span>;
+  <span class="c-fn">printf</span>(<span class="c-str">"%d "</span>, i);
+}
+<span class="c-cm">// 0 1 2 3</span>
+
+<span class="c-cm">// Continue — skip iteration</span>
+<span class="c-kw">for</span> (<span class="c-kw">int</span> i = <span class="c-num">0</span>; i &lt; <span class="c-num">10</span>; i++) {
+  <span class="c-kw">if</span> (i == <span class="c-num">4</span>) <span class="c-kw">continue</span>;
+  <span class="c-fn">printf</span>(<span class="c-str">"%d "</span>, i);
+}
+<span class="c-cm">// 0 1 2 3 5 6 7 8 9</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#e0af68;">break → 0 1 2 3</span><br />
+              <span style="color:#9ece6a;">continue → 0 1 2 3 5 6 7 8 9</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Arrays -->
+    <section id="arrays">
+      <h2>Arrays</h2>
+
+      <div class="block-desc">
+        <span>Store multiple values in a single variable using <code>int arr[] = {v1, v2, ...}</code> with zero-based indexing.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_arrays.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Declare &amp; Access</div>
+          <pre><span class="c-kw">int</span> myNumbers[] = {<span class="c-num">25</span>, <span class="c-num">50</span>, <span class="c-num">75</span>, <span class="c-num">100</span>};
+<span class="c-fn">printf</span>(<span class="c-str">"%d"</span>, myNumbers[<span class="c-num">0</span>]);  <span class="c-cm">// 25</span>
+
+<span class="c-cm">// Modify element</span>
+myNumbers[<span class="c-num">0</span>] = <span class="c-num">33</span>;
+
+<span class="c-cm">// Set size in advance</span>
+<span class="c-kw">int</span> nums[<span class="c-num">4</span>];
+nums[<span class="c-num">0</span>] = <span class="c-num">25</span>;
+nums[<span class="c-num">1</span>] = <span class="c-num">50</span>;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">myNumbers[0] = 25</span><br />
+              <span style="color:#565f89;">Arrays are zero-indexed, fixed size</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Iterate over an array using a <code>for</code> loop with the index as the loop variable.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_arrays.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Loop Through Array</div>
+          <pre><span class="c-kw">int</span> myNumbers[] = {<span class="c-num">25</span>, <span class="c-num">50</span>, <span class="c-num">75</span>, <span class="c-num">100</span>};
+<span class="c-kw">for</span> (<span class="c-kw">int</span> i = <span class="c-num">0</span>; i &lt; <span class="c-num">4</span>; i++) {
+  <span class="c-fn">printf</span>(<span class="c-str">"%d\n"</span>, myNumbers[i]);
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">25 50 75 100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enum -->
+    <section id="enum">
+      <h2>Enumeration</h2>
+
+      <div class="block-desc">
+        <span>Define a set of named integer constants with <code>enum</code> that auto-increment from the previous value.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_enums.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Enum</div>
+          <pre><span class="c-kw">enum</span> week { Mon = <span class="c-num">1</span>, Tues, Wed,
+              Thurs, Fri, Sat, Sun };
+
+<span class="c-kw">enum</span> week a = Mon, b = Wed, c = Sat;
+<span class="c-fn">printf</span>(<span class="c-str">"%d %d %d"</span>, a, b, c);
+<span class="c-cm">// 1 3 6</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">1 3 6</span><br />
+              <span style="color:#565f89;">Enum values auto-increment from the last assigned value</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Input -->
+    <section id="input">
+      <h2>User Input</h2>
+
+      <div class="block-desc">
+        <span>Read user input from stdin with <code>scanf()</code> using format specifiers and the <code>&amp;</code> address-of operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_user_input.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">scanf</div>
+          <pre><span class="c-kw">int</span> myNum;
+<span class="c-fn">printf</span>(<span class="c-str">"Enter a number: "</span>);
+<span class="c-fn">scanf</span>(<span class="c-str">"%d"</span>, &amp;myNum);
+<span class="c-fn">printf</span>(<span class="c-str">"You entered: %d\n"</span>, myNum);
+
+<span class="c-cm">// String input</span>
+<span class="c-kw">char</span> name[<span class="c-num">30</span>];
+<span class="c-fn">printf</span>(<span class="c-str">"Enter your name: "</span>);
+<span class="c-fn">scanf</span>(<span class="c-str">"%s"</span>, name);
+<span class="c-fn">printf</span>(<span class="c-str">"Hello %s.\n"</span>, name);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">scanf reads formatted input from stdin</span><br />
+              <span style="color:#7dcfff;">%d</span> — int, <span style="color:#7dcfff;">%f</span> — float, <span style="color:#7dcfff;">%s</span> — string<br />
+              <span style="color:#565f89;">Use &amp; for non-array variables</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pointers -->
+    <section id="pointers">
+      <h2>Pointers</h2>
+
+      <div class="block-desc">
+        <span>Use <code>&amp;</code> to get a variable's address and <code>*</code> to declare a pointer or dereference it.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_pointers.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Memory Address &amp; Pointers</div>
+          <pre><span class="c-kw">int</span> myAge = <span class="c-num">43</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%p\n"</span>, &amp;myAge);
+<span class="c-cm">// 0x7ffe5367e044</span>
+
+<span class="c-cm">// Pointer variable</span>
+<span class="c-kw">int</span>* ptr = &amp;myAge;
+<span class="c-fn">printf</span>(<span class="c-str">"%p\n"</span>, ptr);  <span class="c-cm">// same address</span>
+
+<span class="c-cm">// Dereference</span>
+<span class="c-fn">printf</span>(<span class="c-str">"%d\n"</span>, *ptr);  <span class="c-cm">// 43</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">&amp; → address-of operator</span><br />
+              <span style="color:#565f89;">* → dereference / pointer declaration</span><br />
+              <span style="color:#9ece6a;">*ptr = 43</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Operators -->
+    <section id="operators">
+      <h2>Operators</h2>
+
+      <div class="block-desc">
+        <span>Perform calculations with arithmetic operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> and compound assignments.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_operators.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Arithmetic &amp; Assignment</div>
+          <pre><span class="c-kw">int</span> sum = <span class="c-num">100</span> + <span class="c-num">50</span>;  <span class="c-cm">// 150</span>
+
+<span class="c-cm">// +  -  *  /  %</span>
+<span class="c-cm">// ++x  --x  (increment/decrement)</span>
+
+<span class="c-cm">// Assignment shortcuts</span>
+x += <span class="c-num">3</span>;  <span class="c-cm">// x = x + 3</span>
+x -= <span class="c-num">3</span>;  <span class="c-cm">// x = x - 3</span>
+x *= <span class="c-num">3</span>;  <span class="c-cm">// x = x * 3</span>
+x /= <span class="c-num">3</span>;  <span class="c-cm">// x = x / 3</span>
+x %= <span class="c-num">3</span>;  <span class="c-cm">// x = x % 3</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">100 + 50 = 150</span><br />
+              <span style="color:#565f89;">x += 3  ⇔  x = x + 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Compare values with <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code> and combine conditions with <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_operators.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Comparison &amp; Logical</div>
+          <pre><span class="c-cm">// ==  !=  &gt;  &lt;  &gt;=  &lt;=</span>
+<span class="c-kw">int</span> x = <span class="c-num">5</span>, y = <span class="c-num">3</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%d"</span>, x &gt; y);  <span class="c-cm">// 1 (true)</span>
+
+<span class="c-cm">// &amp;&amp;  ||  !  (logical AND, OR, NOT)</span>
+<span class="c-cm">// &amp;  |  ^  ~  &lt;&lt;  &gt;&gt;  (bitwise)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">x &gt; y → 1</span><br />
+              <span style="color:#565f89;">C uses 1 for true, 0 for false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Manipulate individual bits with <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, <code>&lt;&lt;</code>, and <code>&gt;&gt;</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_operators.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Bitwise Operators</div>
+          <pre><span class="c-kw">unsigned int</span> a = <span class="c-num">60</span>;  <span class="c-cm">// 0011 1100</span>
+<span class="c-kw">unsigned int</span> b = <span class="c-num">13</span>;  <span class="c-cm">// 0000 1101</span>
+
+c = a &amp; b;   <span class="c-cm">// 12 = 0000 1100</span>
+c = a | b;   <span class="c-cm">// 61 = 0011 1101</span>
+c = a ^ b;   <span class="c-cm">// 49 = 0011 0001</span>
+c = ~a;      <span class="c-cm">// -61 = 1100 0011</span>
+c = a &lt;&lt; <span class="c-num">2</span>;  <span class="c-cm">// 240 = 1111 0000</span>
+c = a &gt;&gt; <span class="c-num">2</span>;  <span class="c-cm">// 15 = 0000 1111</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">a &amp; b = 12</span><br />
+              <span style="color:#9ece6a;">a | b = 61</span><br />
+              <span style="color:#e0af68;">a &lt;&lt; 2 = 240</span><br />
+              <span style="color:#e0af68;">a &gt;&gt; 2 = 15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Types -->
+    <section id="data-types">
+      <h2>Data Types</h2>
+
+      <div class="block-desc">
+        <span>C provides basic types <code>int</code>, <code>float</code>, <code>double</code>, and <code>char</code> with varying sizes and ranges.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_data_types.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Basic Types</div>
+          <pre><span class="c-kw">int</span> myNum = <span class="c-num">5</span>;
+<span class="c-kw">float</span> myFloat = <span class="c-num">5.99</span>;
+<span class="c-kw">double</span> myDouble = <span class="c-num">3.2325467</span>;
+<span class="c-kw">char</span> myLetter = <span class="c-str">'D'</span>;
+
+<span class="c-fn">printf</span>(<span class="c-str">"%d %f %lf %c\n"</span>,
+        myNum, myFloat,
+        myDouble, myLetter);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <div style="font-size:0.7rem;color:#a9b1d6;">
+                <table style="width:100%;border-collapse:collapse;">
+                  <tr style="color:#7aa2f7;"><th>Type</th><th>Size</th><th>Range</th></tr>
+                  <tr><td>char</td><td>1 B</td><td>-128 ~ 127</td></tr>
+                  <tr><td>int</td><td>2-4 B</td><td>-32,768 ~ 32,767</td></tr>
+                  <tr><td>float</td><td>4 B</td><td>3.4E-38 ~ 3.4E+38</td></tr>
+                  <tr><td>double</td><td>8 B</td><td>1.7E-308 ~ 1.7E+308</td></tr>
+                  <tr><td>long double</td><td>10 B</td><td>3.4E-4932 ~ 1.1E+4932</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preprocessor -->
+    <section id="preprocessor">
+      <h2>Preprocessor</h2>
+
+      <div class="block-desc">
+        <span>Use preprocessor directives like <code>#define</code>, <code>#include</code>, and <code>#ifdef</code> for macros and conditional compilation.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_preprocessor.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Directives</div>
+          <pre><span class="c-pre">#define</span> MAX_ARRAY_LENGTH <span class="c-num">20</span>
+<span class="c-pre">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>
+<span class="c-pre">#include</span> <span class="c-str">"myheader.h"</span>
+<span class="c-pre">#undef</span> FILE_SIZE
+<span class="c-pre">#define</span> FILE_SIZE <span class="c-num">42</span>
+
+<span class="c-pre">#ifdef</span> DEBUG
+  <span class="c-cm">// compiled only if DEBUG is defined</span>
+<span class="c-pre">#endif</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#e0af68;">#define</span> — macro definition<br />
+              <span style="color:#e0af68;">#include</span> — file inclusion<br />
+              <span style="color:#e0af68;">#ifdef / #ifndef</span> — conditional compilation
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Access compiler-provided macros like <code>__FILE__</code>, <code>__DATE__</code>, <code>__TIME__</code>, and <code>__LINE__</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_preprocessor.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Predefined Macros</div>
+          <pre><span class="c-fn">printf</span>(<span class="c-str">"File: %s\n"</span>, <span class="c-pre">__FILE__</span>);
+<span class="c-fn">printf</span>(<span class="c-str">"Date: %s\n"</span>, <span class="c-pre">__DATE__</span>);
+<span class="c-fn">printf</span>(<span class="c-str">"Time: %s\n"</span>, <span class="c-pre">__TIME__</span>);
+<span class="c-fn">printf</span>(<span class="c-str">"Line: %d\n"</span>, <span class="c-pre">__LINE__</span>);
+<span class="c-fn">printf</span>(<span class="c-str">"ANSI: %d\n"</span>, <span class="c-pre">__STDC__</span>);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">__FILE__ → current filename</span><br />
+              <span style="color:#565f89;">__DATE__ → "MMM DD YYYY"</span><br />
+              <span style="color:#565f89;">__TIME__ → "HH:MM:SS"</span><br />
+              <span style="color:#565f89;">__LINE__ → current line number</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Create multi-line macros with <code>\</code> continuation, stringify with <code>#</code>, and paste tokens with <code>##</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_preprocessor.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Macro Continuation &amp; Operators</div>
+          <pre><span class="c-cm">// Continuation (\)</span>
+<span class="c-pre">#define</span> message_for(a, b) \
+    <span class="c-fn">printf</span>(<span class="c-pre">#a</span> <span class="c-str">" and "</span> <span class="c-pre">#b</span> <span class="c-str">": We love you!\n"</span>)
+
+<span class="c-cm">// Token pasting (##)</span>
+<span class="c-pre">#define</span> tokenpaster(n) <span class="c-fn">printf</span>(\
+  <span class="c-str">"Token " #n " = %d\n"</span>, token##n)
+
+<span class="c-cm">// Parameterized macro</span>
+<span class="c-pre">#define</span> square(x) ((x) * (x))
+<span class="c-pre">#define</span> MAX(x,y) ((x) &gt; (y) ? (x) : (y))</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">square(5) = 25</span><br />
+              <span style="color:#9ece6a;">MAX(10, 20) = 20</span><br />
+              <span style="color:#565f89;">Always wrap macro params in parentheses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Functions -->
+    <section id="functions">
+      <h2>Functions</h2>
+
+      <div class="block-desc">
+        <span>Declare and define reusable blocks of code with <code>returnType functionName()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_functions.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Declaration &amp; Definition</div>
+          <pre><span class="c-cm">// Function declaration (prototype)</span>
+<span class="c-kw">void</span> <span class="c-fn">myFunction</span>();
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+  <span class="c-fn">myFunction</span>();  <span class="c-cm">// call</span>
+  <span class="c-kw">return</span> <span class="c-num">0</span>;
+}
+
+<span class="c-cm">// Function definition</span>
+<span class="c-kw">void</span> <span class="c-fn">myFunction</span>() {
+  <span class="c-fn">printf</span>(<span class="c-str">"Good evening!\n"</span>);
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">Good evening!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Pass data to functions via parameters and return values with <code>return</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_functions.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Parameters &amp; Return</div>
+          <pre><span class="c-kw">void</span> <span class="c-fn">greet</span>(<span class="c-kw">char</span> name[], <span class="c-kw">int</span> age) {
+  <span class="c-fn">printf</span>(<span class="c-str">"Hi %s, age %d\n"</span>, name, age);
+}
+
+<span class="c-kw">int</span> <span class="c-fn">add</span>(<span class="c-kw">int</span> x, <span class="c-kw">int</span> y) {
+  <span class="c-kw">return</span> x + y;
+}
+
+<span class="c-kw">int</span> result = <span class="c-fn">add</span>(<span class="c-num">5</span>, <span class="c-num">3</span>);  <span class="c-cm">// 8</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">add(5, 3) = 8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>A function that calls itself is recursive — it must have a base case to terminate.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_functions.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Recursion</div>
+          <pre><span class="c-kw">int</span> <span class="c-fn">sum</span>(<span class="c-kw">int</span> k) {
+  <span class="c-kw">if</span> (k &gt; <span class="c-num">0</span>)
+    <span class="c-kw">return</span> k + <span class="c-fn">sum</span>(k - <span class="c-num">1</span>);
+  <span class="c-kw">return</span> <span class="c-num">0</span>;
+}
+
+<span class="c-kw">int</span> result = <span class="c-fn">sum</span>(<span class="c-num">10</span>);
+<span class="c-cm">// 10+9+8+...+1 = 55</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">sum(10) = 55</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>&lt;math.h&gt;</code> functions like <code>sqrt()</code>, <code>pow()</code>, <code>ceil()</code>, <code>floor()</code>, and <code>abs()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_math.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Math Functions</div>
+          <pre><span class="c-pre">#include</span> <span class="c-str">&lt;math.h&gt;</span>
+
+<span class="c-fn">sqrt</span>(<span class="c-num">16</span>);    <span class="c-cm">// 4.0 (square root)</span>
+<span class="c-fn">ceil</span>(<span class="c-num">1.4</span>);   <span class="c-cm">// 2.0 (round up)</span>
+<span class="c-fn">floor</span>(<span class="c-num">1.4</span>);  <span class="c-cm">// 1.0 (round down)</span>
+<span class="c-fn">pow</span>(<span class="c-num">4</span>, <span class="c-num">3</span>);   <span class="c-cm">// 64.0 (4³)</span>
+<span class="c-fn">abs</span>(-<span class="c-num">5</span>);     <span class="c-cm">// 5 (absolute)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">sqrt(16)=4.0  ceil(1.4)=2.0  floor(1.4)=1.0</span><br />
+              <span style="color:#e0af68;">pow(4,3)=64.0  abs(-5)=5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Structures -->
+    <section id="structures">
+      <h2>Structures</h2>
+
+      <div class="block-desc">
+        <span>Group related variables into a single type using <code>struct</code>, accessed with the dot operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_structs.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Define &amp; Access</div>
+          <pre><span class="c-kw">struct</span> MyStructure {
+  <span class="c-kw">int</span> myNum;
+  <span class="c-kw">char</span> myLetter;
+  <span class="c-kw">char</span> myString[<span class="c-num">30</span>];
+};
+
+<span class="c-kw">struct</span> MyStructure s1;
+s1.myNum = <span class="c-num">13</span>;
+s1.myLetter = <span class="c-str">'B'</span>;
+<span class="c-fn">strcpy</span>(s1.myString, <span class="c-str">"Some text"</span>);
+
+<span class="c-cm">// Initialize at declaration</span>
+<span class="c-kw">struct</span> MyStructure s2 = {<span class="c-num">13</span>, <span class="c-str">'B'</span>, <span class="c-str">"Hello"</span>};</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">s1.myNum = 13</span><br />
+              <span style="color:#9ece6a;">s1.myLetter = B</span><br />
+              <span style="color:#9ece6a;">s1.myString = "Some text"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Copy entire structs with <code>=</code> and modify individual members via the dot operator.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_structs.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Copy &amp; Modify</div>
+          <pre><span class="c-kw">struct</span> MyStructure s1 = {<span class="c-num">13</span>, <span class="c-str">'B'</span>};
+<span class="c-kw">struct</span> MyStructure s2;
+s2 = s1;  <span class="c-cm">// copy entire struct</span>
+
+<span class="c-cm">// Modify values</span>
+s1.myNum = <span class="c-num">30</span>;
+s1.myLetter = <span class="c-str">'C'</span>;
+<span class="c-fn">printf</span>(<span class="c-str">"%d %c"</span>, s1.myNum, s1.myLetter);
+<span class="c-cm">// 30 C</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">30 C</span><br />
+              <span style="color:#565f89;">Structs can be copied with =</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- File I/O -->
+    <section id="file-io">
+      <h2>File Processing</h2>
+
+      <div class="block-desc">
+        <span>Open a file with <code>fopen()</code>, write with <code>fprintf()</code>/<code>fputc()</code>, and close with <code>fclose()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_files.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Open, Write, Close</div>
+          <pre>FILE *fp;
+fp = <span class="c-fn">fopen</span>(<span class="c-str">"file.txt"</span>, <span class="c-str">"w"</span>);
+<span class="c-fn">fprintf</span>(fp, <span class="c-str">"Hello file!\n"</span>);
+<span class="c-fn">fputc</span>(<span class="c-str">'a'</span>, fp);
+<span class="c-fn">fclose</span>(fp);
+
+<span class="c-cm">// Modes: r, w, a, r+, w+, a+</span>
+<span class="c-cm">// Binary: rb, wb, ab, rb+, wb+, ab+</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <table style="font-size:0.7rem;width:100%;border-collapse:collapse;">
+                <tr style="color:#7aa2f7;"><th>Mode</th><th>Description</th></tr>
+                <tr><td>r</td><td>Read</td></tr>
+                <tr><td>w</td><td>Write (overwrite)</td></tr>
+                <tr><td>a</td><td>Append</td></tr>
+                <tr><td>r+</td><td>Read &amp; Write</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Read file content word-by-word with <code>fscanf()</code> or line-by-line with <code>fgets()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_files.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Read from File</div>
+          <pre>FILE *fp;
+<span class="c-kw">char</span> buff[<span class="c-num">255</span>];
+fp = <span class="c-fn">fopen</span>(<span class="c-str">"file.txt"</span>, <span class="c-str">"r"</span>);
+
+<span class="c-cm">// fscanf — word by word</span>
+<span class="c-kw">while</span> (<span class="c-fn">fscanf</span>(fp, <span class="c-str">"%s"</span>, buff) != EOF) {
+  <span class="c-fn">printf</span>(<span class="c-str">"%s "</span>, buff);
+}
+
+<span class="c-cm">// fgets — line by line</span>
+<span class="c-fn">fgets</span>(buff, <span class="c-num">200</span>, fp);
+
+<span class="c-fn">fclose</span>(fp);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">fscanf / fgets / fgetc</span><br />
+              <span style="color:#565f89;">Always close files with fclose()</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Use <code>fseek()</code> and <code>ftell()</code> to navigate within a file and get the current position or size.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_files.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">fseek &amp; ftell</div>
+          <pre>FILE *fp;
+fp = <span class="c-fn">fopen</span>(<span class="c-str">"myfile.txt"</span>, <span class="c-str">"w+"</span>);
+<span class="c-fn">fputs</span>(<span class="c-str">"This is Book"</span>, fp);
+
+<span class="c-cm">// Move file pointer to position 7</span>
+<span class="c-fn">fseek</span>(fp, <span class="c-num">7</span>, SEEK_SET);
+<span class="c-fn">fputs</span>(<span class="c-str">"Kenny Wong"</span>, fp);
+
+<span class="c-cm">// Get file size</span>
+<span class="c-fn">fseek</span>(fp, <span class="c-num">0</span>, SEEK_END);
+<span class="c-kw">long</span> size = <span class="c-fn">ftell</span>(fp);
+
+<span class="c-cm">// Rewind to beginning</span>
+<span class="c-fn">rewind</span>(fp);
+<span class="c-fn">fclose</span>(fp);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">fseek(fp, offset, origin)</span><br />
+              <span style="color:#565f89;">ftell(fp) — current position / size</span><br />
+              <span style="color:#565f89;">rewind(fp) — back to start</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>C Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

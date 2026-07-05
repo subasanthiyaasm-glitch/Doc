@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>HTML</h1>
+          <p class="subtitle">Quick reference with live previews</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#getting-started">Start</a>
+        <a href="#text-formatting">Text</a>
+        <a href="#headings">Headings</a>
+        <a href="#links-images">Links</a>
+        <a href="#tables">Tables</a>
+        <a href="#lists">Lists</a>
+        <a href="#forms">Forms</a>
+        <a href="#html5">HTML5</a>
+        <a href="#meta">Meta</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('HTML')</script>
+  <main>
+
+    <!-- Getting Started -->
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+
+      <div class="block-desc">
+        <span>Basic HTML5 document structure with <code>&lt;!doctype html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code> elements.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/default.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">hello.html</div>
+          <pre><span class="c">&lt;!doctype html&gt;</span>
+<span class="c">&lt;html lang="en"&gt;</span>
+  <span class="c">&lt;head&gt;</span>
+    <span class="c">&lt;meta charset="UTF-8" /&gt;</span>
+    <span class="c">&lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;</span>
+    <span class="c">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</span>
+    <span class="c">&lt;title&gt;</span>HTML5 Boilerplate<span class="c">&lt;/title&gt;</span>
+  <span class="c">&lt;/head&gt;</span>
+  <span class="c">&lt;body&gt;</span>
+    <span class="c">&lt;h1&gt;</span>Hello world, hello CheatSheets.zip!<span class="c">&lt;/h1&gt;</span>
+  <span class="c">&lt;/body&gt;</span>
+<span class="c">&lt;/html&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; Preview</div>
+          <div class="live-output">
+            <h1>Hello world, hello CheatSheets.zip!</h1>
+            <p>Or try it out in the jsfiddle</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>HTML comments using <code>&lt;!-- ... --&gt;</code> syntax are not rendered in the browser.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_comments.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;!-- this is a comment --&gt;</span>
+
+<span class="c">&lt;!--</span>
+    Or you can comment out a
+    large number of lines.
+<span class="c">--&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><small>&#9888; Comments are not rendered in the browser.</small></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;p&gt;</code> tag defines a paragraph of text, automatically adding spacing above and below.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_paragraphs.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;p&gt;</span>I'm from CheatSheets.zip<span class="c">&lt;/p&gt;</span>
+<span class="c">&lt;p&gt;</span>Share quick reference cheat sheet.<span class="c">&lt;/p&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p>I'm from CheatSheets.zip</p>
+            <p>Share quick reference cheat sheet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Links & Images -->
+    <section id="links-images">
+      <h2>HTML Links</h2>
+
+      <div class="block-desc">
+        <span>The <code>&lt;a&gt;</code> tag creates hyperlinks to URLs, email addresses with <code>mailto:</code>, phone numbers with <code>tel:</code>, and SMS with <code>sms:</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_links.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;a href="https://cheatsheets.zip"&gt;</span>CheatSheets<span class="c">&lt;/a&gt;</span>
+<span class="c">&lt;a href="mailto:jack@abc.com"&gt;</span>Email<span class="c">&lt;/a&gt;</span>
+<span class="c">&lt;a href="tel:+12345678"&gt;</span>Call<span class="c">&lt;/a&gt;</span>
+<span class="c">&lt;a href="sms:+12345678&body=ha%20ha"&gt;</span>Msg<span class="c">&lt;/a&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><a href="#">CheatSheets</a> &nbsp;
+            <a href="#">Email</a> &nbsp;
+            <a href="#">Call</a> &nbsp;
+            <a href="#">Msg</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="attr-table">
+        <table>
+          <tr><th>Attribute</th><th>Description</th></tr>
+          <tr><td>href</td><td>The URL that the hyperlink points to</td></tr>
+          <tr><td>rel</td><td>Relationship of the linked URL</td></tr>
+          <tr><td>target</td><td>Link target location: _self, _blank, _top, _parent</td></tr>
+        </table>
+
+      <h2>Inline Frame</h2>
+      <div class="block-desc">
+        <span>The <code>&lt;iframe&gt;</code> tag embeds another HTML page or external content inline within the current document.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_iframe.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;iframe</span>
+  src="https://maps.google.com/..."
+  width="342" height="306"
+  title="Map"
+<span class="c">&gt;&lt;/iframe&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <iframe src="https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed" width="342" height="206" title="Map"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;map&gt;</code> and <code>&lt;area&gt;</code> tags define clickable regions on an image.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_map.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Image Map</div>
+          <pre><span class="c">&lt;map name="workmap"&gt;</span>
+  <span class="c">&lt;area</span> shape="rect" coords="34,44,270,350"
+        href="#" alt="Computer"<span class="c">&gt;</span>
+<span class="c">&lt;/map&gt;</span>
+<span class="c">&lt;img</span> usemap="#workmap" src="..."<span class="c">&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <map name="shapes">
+              <area shape="rect" coords="0,0,100,100" href="#" alt="Square" style="cursor:pointer;" />
+              <area shape="circle" coords="150,50,40" href="#" alt="Circle" style="cursor:pointer;" />
+            </map>
+            <img usemap="#shapes" src="https://placehold.co/300x100/eee/ccc?text=Click:+Square+|+Circle" alt="Image map demo" style="max-width:100%;" />
+            <p><small style="color:#888;">Click the square or circle region</small></p>
+          </div>
+        </div>
+      </div>
+
+      <h2>Image Tag</h2>
+      <div class="block-desc">
+        <span>The <code>&lt;img&gt;</code> tag embeds an image with <code>src</code>, <code>alt</code>, and optional <code>loading="lazy"</code> for deferred loading.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_images.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;img</span>
+  loading="lazy"
+  src="https://xxx.png"
+  alt="Describe image here"
+  width="400"
+  height="400"
+/<span class="c">&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <img src="https://placehold.co/400x200/eee/333?text=Sample+Image" alt="Describe image here" style="max-width:100%;height:auto;" />
+          </div>
+        </div>
+      </div>
+
+      <div class="attr-table">
+        <table>
+          <tr><th>Attribute</th><th>Description</th></tr>
+          <tr><td>src</td><td>Required, Image location (URL | Path)</td></tr>
+          <tr><td>alt</td><td>Describe of the image</td></tr>
+          <tr><td>width</td><td>Width of the image</td></tr>
+          <tr><td>height</td><td>Height of the image</td></tr>
+          <tr><td>loading</td><td>How the browser should load</td></tr>
+        </table>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;base&gt;</code> tag sets the base URL for all relative links in the document.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_base.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Base URL</div>
+          <pre><span class="c">&lt;head&gt;</span>
+  <span class="c">&lt;base href="https://example.com/" /&gt;</span>
+<span class="c">&lt;/head&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><small>&#9888; &lt;base&gt; sets the base URL for all relative links in the page.</small></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Text Formatting -->
+    <section id="text-formatting">
+      <h2>Text Formatting Tags</h2>
+
+      <div class="block-desc">
+        <span>Text formatting tags like <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;mark&gt;</code>, and many others for styling inline text.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_formatting.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block wide">
+        <div class="code-panel">
+          <pre><span class="c">&lt;b&gt;</span>Bold Text<span class="c">&lt;/b&gt;</span>
+<span class="c">&lt;strong&gt;</span>Important<span class="c">&lt;/strong&gt;</span>
+<span class="c">&lt;i&gt;</span>Italic Text<span class="c">&lt;/i&gt;</span>
+<span class="c">&lt;em&gt;</span>Emphasized<span class="c">&lt;/em&gt;</span>
+<span class="c">&lt;u&gt;</span>Underline Text<span class="c">&lt;/u&gt;</span>
+<span class="c">&lt;s&gt;</span>Strikethrough<span class="c">&lt;/s&gt;</span>
+<span class="c">&lt;pre&gt;</span>Pre-formatted Text<span class="c">&lt;/pre&gt;</span>
+<span class="c">&lt;code&gt;</span>Source code<span class="c">&lt;/code&gt;</span>
+<span class="c">&lt;samp&gt;</span>Sample output<span class="c">&lt;/samp&gt;</span>
+<span class="c">&lt;kbd&gt;</span>Ctrl<span class="c">&lt;/kbd&gt;</span>
+<span class="c">&lt;var&gt;</span>variable<span class="c">&lt;/var&gt;</span>
+<span class="c">&lt;dfn&gt;</span>Definition<span class="c">&lt;/dfn&gt;</span>
+<span class="c">&lt;abbr&gt;</span>HTML<span class="c">&lt;/abbr&gt;</span>
+<span class="c">&lt;cite&gt;</span>Citation<span class="c">&lt;/cite&gt;</span>
+<span class="c">&lt;address&gt;</span>Contact info<span class="c">&lt;/address&gt;</span>
+<span class="c">&lt;bdo dir="rtl"&gt;</span>BiDi override<span class="c">&lt;/bdo&gt;</span>
+<span class="c">&lt;del&gt;</span>Deleted text<span class="c">&lt;/del&gt;</span>
+<span class="c">&lt;ins&gt;</span>Inserted text<span class="c">&lt;/ins&gt;</span>
+<span class="c">&lt;mark&gt;</span>Highlighted text<span class="c">&lt;/mark&gt;</span>
+<span class="c">&lt;sup&gt;</span>superscripted<span class="c">&lt;/sup&gt;</span>
+<span class="c">&lt;sub&gt;</span>subscripted<span class="c">&lt;/sub&gt;</span>
+<span class="c">&lt;small&gt;</span>smaller<span class="c">&lt;/small&gt;</span>
+<span class="c">&lt;blockquote&gt;</span>Text Block Quote<span class="c">&lt;/blockquote&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><b>Bold Text</b> <strong>Important</strong> <i>Italic Text</i> <em>Emphasized</em> <u>Underline</u> <s>Strikethrough</s></p>
+            <p><pre style="display:inline; background:#f5f6fa;">Pre-formatted</pre> <code>Source code</code> <samp>Sample output</samp> <kbd>Ctrl</kbd></p>
+            <p><var>username</var> = <dfn>Definition</dfn> <abbr title="HyperText Markup Language">HTML</abbr></p>
+            <p><cite>The Great Gatsby</cite> by <address style="display:inline">F. Scott Fitzgerald</address></p>
+            <p>Left to right: <bdo dir="rtl">Right to left</bdo></p>
+            <p><del>Deleted text</del> <ins>Inserted text</ins> <mark>Highlighted</mark></p>
+            <p>Superscript<sup>ed</sup> Subscript<sub>ed</sub> <small>smaller</small></p>
+            <blockquote>Text Block Quote</blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Headings -->
+    <section id="headings">
+      <h2>Headings</h2>
+
+      <div class="block-desc">
+        <span>HTML headings <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> define six levels of section headings, from most to least important.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_headings.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;h1&gt;</span>Heading 1<span class="c">&lt;/h1&gt;</span>
+<span class="c">&lt;h2&gt;</span>Heading 2<span class="c">&lt;/h2&gt;</span>
+<span class="c">&lt;h3&gt;</span>Heading 3<span class="c">&lt;/h3&gt;</span>
+<span class="c">&lt;h4&gt;</span>Heading 4<span class="c">&lt;/h4&gt;</span>
+<span class="c">&lt;h5&gt;</span>Heading 5<span class="c">&lt;/h5&gt;</span>
+<span class="c">&lt;h6&gt;</span>Heading 6<span class="c">&lt;/h6&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output headings-demo">
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <h5>Heading 5</h5>
+            <h6>Heading 6</h6>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tables -->
+    <section id="tables">
+      <h2>HTML Tables</h2>
+
+      <div class="block-desc">
+        <span>The <code>&lt;table&gt;</code> element structures tabular data with rows (<code>&lt;tr&gt;</code>), header (<code>&lt;thead&gt;</code>), and body (<code>&lt;tbody&gt;</code>) sections.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_tables.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;table&gt;</span>
+  <span class="c">&lt;thead&gt;</span>
+    <span class="c">&lt;tr&gt;</span>
+      <span class="c">&lt;td&gt;</span>name<span class="c">&lt;/td&gt;</span>
+      <span class="c">&lt;td&gt;</span>age<span class="c">&lt;/td&gt;</span>
+    <span class="c">&lt;/tr&gt;</span>
+  <span class="c">&lt;/thead&gt;</span>
+  <span class="c">&lt;tbody&gt;</span>
+    <span class="c">&lt;tr&gt;</span>
+      <span class="c">&lt;td&gt;</span>Roberta<span class="c">&lt;/td&gt;</span>
+      <span class="c">&lt;td&gt;</span>39<span class="c">&lt;/td&gt;</span>
+    <span class="c">&lt;/tr&gt;</span>
+    <span class="c">&lt;tr&gt;</span>
+      <span class="c">&lt;td&gt;</span>Oliver<span class="c">&lt;/td&gt;</span>
+      <span class="c">&lt;td&gt;</span>25<span class="c">&lt;/td&gt;</span>
+    <span class="c">&lt;/tr&gt;</span>
+  <span class="c">&lt;/tbody&gt;</span>
+<span class="c">&lt;/table&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <table>
+              <thead><tr><td><b>name</b></td><td><b>age</b></td></tr></thead>
+              <tbody>
+                <tr><td>Roberta</td><td>39</td></tr>
+                <tr><td>Oliver</td><td>25</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="attr-table">
+        <table>
+          <tr><th>Tag</th><th>Description</th></tr>
+          <tr><td>&lt;table&gt;</td><td>Defines a table</td></tr>
+          <tr><td>&lt;th&gt;</td><td>Defines a header cell in a table</td></tr>
+          <tr><td>&lt;tr&gt;</td><td>Defines a row in a table</td></tr>
+          <tr><td>&lt;td&gt;</td><td>Defines a cell in a table</td></tr>
+          <tr><td>&lt;caption&gt;</td><td>Defines a table caption</td></tr>
+          <tr><td>&lt;colgroup&gt;</td><td>Defines a group of columns</td></tr>
+          <tr><td>&lt;col&gt;</td><td>Defines a column within a table</td></tr>
+          <tr><td>&lt;thead&gt;</td><td>Groups the header content</td></tr>
+          <tr><td>&lt;tbody&gt;</td><td>Groups the body content</td></tr>
+          <tr><td>&lt;tfoot&gt;</td><td>Groups the footer content</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Lists -->
+    <section id="lists">
+      <h2>HTML Lists</h2>
+
+      <div class="block-desc">
+        <span>An unordered list (<code>&lt;ul&gt;</code>) displays items with bullets, each wrapped in <code>&lt;li&gt;</code> tags.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Unordered</div>
+          <pre><span class="c">&lt;ul&gt;</span>
+  <span class="c">&lt;li&gt;</span>Item one<span class="c">&lt;/li&gt;</span>
+  <span class="c">&lt;li&gt;</span>Item two<span class="c">&lt;/li&gt;</span>
+<span class="c">&lt;/ul&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <ul><li>Item one</li><li>Item two</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>An ordered list (<code>&lt;ol&gt;</code>) displays numbered items, each wrapped in <code>&lt;li&gt;</code> tags.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Ordered</div>
+          <pre><span class="c">&lt;ol&gt;</span>
+  <span class="c">&lt;li&gt;</span>First item<span class="c">&lt;/li&gt;</span>
+  <span class="c">&lt;li&gt;</span>Second item<span class="c">&lt;/li&gt;</span>
+<span class="c">&lt;/ol&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <ol><li>First item</li><li>Second item</li></ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>A description list (<code>&lt;dl&gt;</code>) pairs terms (<code>&lt;dt&gt;</code>) with their definitions (<code>&lt;dd&gt;</code>).</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_lists.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Definition</div>
+          <pre><span class="c">&lt;dl&gt;</span>
+  <span class="c">&lt;dt&gt;</span>A Term<span class="c">&lt;/dt&gt;</span>
+  <span class="c">&lt;dd&gt;</span>Definition<span class="c">&lt;/dd&gt;</span>
+<span class="c">&lt;/dl&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <dl><dt>A Term</dt><dd>Definition of a term</dd></dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Forms -->
+    <section id="forms">
+      <h2>HTML Forms</h2>
+
+      <div class="block-desc">
+        <span>The <code>&lt;form&gt;</code> element collects user input with labelled fields like email, password, checkbox, and a submit button.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_forms.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;form method="POST" action="api/login"&gt;</span>
+  <span class="c">&lt;label for="mail"&gt;</span>Email:<span class="c">&lt;/label&gt;</span>
+  <span class="c">&lt;input type="email" id="mail" name="mail" /&gt;</span>
+  <span class="c">&lt;label for="pw"&gt;</span>Password:<span class="c">&lt;/label&gt;</span>
+  <span class="c">&lt;input type="password" id="pw" name="pw" /&gt;</span>
+  <span class="c">&lt;input type="submit" value="Login" /&gt;</span>
+  <span class="c">&lt;input type="checkbox" id="ck" name="ck" /&gt;</span>
+  <span class="c">&lt;label for="ck"&gt;</span>Remember me<span class="c">&lt;/label&gt;</span>
+<span class="c">&lt;/form&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <form onsubmit="return false">
+              <label for="mail-demo">Email:</label>
+              <input type="email" id="mail-demo" placeholder="email" />
+              <label for="pw-demo">Password:</label>
+              <input type="password" id="pw-demo" placeholder="password" />
+              <input type="submit" value="Login" />
+              <label><input type="checkbox" /> Remember me</label>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="attr-table">
+        <table>
+          <tr><th>Attribute</th><th>Description</th></tr>
+          <tr><td>name</td><td>Name of form for scripting</td></tr>
+          <tr><td>action</td><td>URL of form script</td></tr>
+          <tr><td>method</td><td>HTTP method, POST / GET (default)</td></tr>
+          <tr><td>enctype</td><td>Media type</td></tr>
+          <tr><td>onsubmit</td><td>Runs when the form was submit</td></tr>
+          <tr><td>onreset</td><td>Runs when the form was reset</td></tr>
+        </table>
+      </div>
+
+      <h3>Input Types</h3>
+      <div class="block-desc">
+        <span>The <code>&lt;input&gt;</code> tag supports various <code>type</code> values including text, password, email, number, color, date, and file.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_form_input_types.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;input type="text" /&gt;</span>
+<span class="c">&lt;input type="password" /&gt;</span>
+<span class="c">&lt;input type="email" /&gt;</span>
+<span class="c">&lt;input type="number" /&gt;</span>
+<span class="c">&lt;input type="tel" /&gt;</span>
+<span class="c">&lt;input type="url" /&gt;</span>
+<span class="c">&lt;input type="color" /&gt;</span>
+<span class="c">&lt;input type="date" /&gt;</span>
+<span class="c">&lt;input type="range" /&gt;</span>
+<span class="c">&lt;input type="file" /&gt;</span>
+<span class="c">&lt;input type="radio" /&gt;</span>
+<span class="c">&lt;input type="checkbox" /&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p>
+              text: <input type="text" /> &nbsp;
+              password: <input type="password" /> &nbsp;
+              email: <input type="email" /> &nbsp;
+              number: <input type="number" style="width:80px" /> &nbsp;
+              tel: <input type="tel" /> &nbsp;
+              url: <input type="url" />
+            </p>
+            <p>
+              color: <input type="color" /> &nbsp;
+              date: <input type="date" /> &nbsp;
+              range: <input type="range" /> &nbsp;
+              file: <input type="file" /> &nbsp;
+              radio: <input type="radio" name="rd" /> <input type="radio" name="rd" /> &nbsp;
+              checkbox: <input type="checkbox" />
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Select &amp; Textarea</h3>
+      <div class="block-desc">
+        <span>The <code>&lt;select&gt;</code> element creates a dropdown menu with grouped options via <code>&lt;optgroup&gt;</code>, and <code>&lt;textarea&gt;</code> provides a multi-line text input.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html_forms.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;select&gt;</span>
+  <span class="c">&lt;optgroup label="Australia"&gt;</span>
+    <span class="c">&lt;option&gt;</span>Sydney<span class="c">&lt;/option&gt;</span>
+  <span class="c">&lt;/optgroup&gt;</span>
+  <span class="c">&lt;optgroup label="Canada"&gt;</span>
+    <span class="c">&lt;option&gt;</span>Ottawa<span class="c">&lt;/option&gt;</span>
+  <span class="c">&lt;/optgroup&gt;</span>
+<span class="c">&lt;/select&gt;</span>
+
+<span class="c">&lt;textarea rows="2" cols="30"&gt;&lt;/textarea&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <select>
+              <optgroup label="Australia">
+                <option>Sydney</option>
+              </optgroup>
+              <optgroup label="Canada">
+                <option>Ottawa</option>
+              </optgroup>
+            </select>
+            <br />
+            <textarea rows="2" cols="30"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HTML5 Tags -->
+    <section id="html5">
+      <h2>HTML5 Tags</h2>
+
+      <div class="block-desc">
+        <span>HTML5 semantic elements like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code> define page structure.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html5_semantic_elements.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Document Structure</div>
+          <pre><span class="c">&lt;body&gt;</span>
+  <span class="c">&lt;header&gt;</span>
+    <span class="c">&lt;nav&gt;</span>...<span class="c">&lt;/nav&gt;</span>
+  <span class="c">&lt;/header&gt;</span>
+  <span class="c">&lt;main&gt;</span>
+    <span class="c">&lt;h1&gt;</span>CheatSheets.zip<span class="c">&lt;/h1&gt;</span>
+  <span class="c">&lt;/main&gt;</span>
+  <span class="c">&lt;footer&gt;</span>
+    <span class="c">&lt;p&gt;</span>&amp;copy;2023 CheatSheets.zip<span class="c">&lt;/p&gt;</span>
+  <span class="c">&lt;/footer&gt;</span>
+<span class="c">&lt;/body&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output" style="border:1px solid #ddd;padding:0.5rem;">
+            <header style="border-bottom:1px solid #ddd;margin-bottom:0.5rem;padding-bottom:0.25rem;"><nav>Navigation</nav></header>
+            <main><h1 style="font-size:1.2rem;margin:0;">CheatSheets.zip</h1></main>
+            <footer style="border-top:1px solid #ddd;margin-top:0.5rem;padding-top:0.25rem;font-size:0.8rem;">&copy;2023 CheatSheets.zip</footer>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;video&gt;</code> element embeds a video with playback controls and multiple <code>&lt;source&gt;</code> files for fallback.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html5_video.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Video</div>
+          <pre><span class="c">&lt;video controls width="100%"&gt;</span>
+  <span class="c">&lt;source src="flower.mp4" type="video/mp4" /&gt;</span>
+  Sorry, your browser doesn't support
+  embedded videos.
+<span class="c">&lt;/video&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <video controls width="100%">
+              <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+              Sorry, your browser doesn't support embedded videos.
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;audio&gt;</code> element embeds a sound file with playback controls and fallback text for unsupported browsers.</span>
+        <a class="w3-link" href="https://www.w3schools.com/html/html5_audio.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Audio</div>
+          <pre><span class="c">&lt;audio controls src="t-rex-roar.mp3"&gt;</span>
+  Your browser does not support
+  the audio element.
+<span class="c">&lt;/audio&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <audio controls src="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;progress&gt;</code> element shows task completion and <code>&lt;mark&gt;</code> highlights text within content.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_progress.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Progress &amp; Mark</div>
+          <pre><span class="c">&lt;progress value="50" max="100"&gt;&lt;/progress&gt;</span>
+<span class="c">&lt;p&gt;</span>I Love <span class="c">&lt;mark&gt;</span>CheatSheets.zip<span class="c">&lt;/mark&gt;&lt;/p&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <progress value="50" max="100"></progress>
+            <p>I Love <mark>CheatSheets.zip</mark></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;details&gt;</code> element creates a disclosure widget, with <code>&lt;summary&gt;</code> as its visible heading.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_details.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Details &amp; Summary</div>
+          <pre><span class="c">&lt;details&gt;</span>
+  <span class="c">&lt;summary&gt;</span>Click to expand<span class="c">&lt;/summary&gt;</span>
+  Hidden content here
+<span class="c">&lt;/details&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <details>
+              <summary>Click to expand</summary>
+              Hidden content here
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;figure&gt;</code> element wraps media content and <code>&lt;figcaption&gt;</code> provides a caption for it.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_figure.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Figure &amp; Figcaption</div>
+          <pre><span class="c">&lt;figure&gt;</span>
+  <span class="c">&lt;img src="photo.jpg" alt="..." /&gt;</span>
+  <span class="c">&lt;figcaption&gt;</span>A caption<span class="c">&lt;/figcaption&gt;</span>
+<span class="c">&lt;/figure&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <figure style="margin:0;">
+              <img src="https://placehold.co/200x100/ddf/333?text=Photo" alt="Sample" style="max-width:100%;" />
+              <figcaption style="font-size:0.8rem;color:#666;">A caption</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;object&gt;</code> tag embeds external resources like PDFs, images, or HTML, with fallback text.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_object.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Object</div>
+          <pre><span class="c">&lt;object data="doc.pdf" type="application/pdf"&gt;</span>
+  Fallback text
+<span class="c">&lt;/object&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <object data="data:text/html,<p>Embedded HTML via object</p>" type="text/html" style="width:100%;height:50px;border:1px solid #ddd;border-radius:4px;">
+              Fallback text
+            </object>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The <code>&lt;ruby&gt;</code> element annotates East Asian characters with pronunciation guides using <code>&lt;rt&gt;</code> and <code>&lt;rp&gt;</code> for fallback.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_ruby.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Ruby Annotation</div>
+          <pre><span class="c">&lt;ruby&gt;</span>
+  汉 <span class="c">&lt;rp&gt;</span>(<span class="c">&lt;/rp&gt;&lt;rt&gt;</span>hàn<span class="c">&lt;/rt&gt;&lt;rp&gt;</span>)<span class="c">&lt;/rp&gt;</span>
+  字 <span class="c">&lt;rp&gt;</span>(<span class="c">&lt;/rp&gt;&lt;rt&gt;</span>zì<span class="c">&lt;/rt&gt;&lt;rp&gt;</span>)<span class="c">&lt;/rp&gt;</span>
+<span class="c">&lt;/ruby&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <ruby>汉 <rp>(</rp><rt>hàn</rt><rp>)</rp> 字 <rp>(</rp><rt>zì</rt><rp>)</rp></ruby>
+          </div>
+        </div>
+      </div>
+
+      <h3>HTML5 Tags Reference</h3>
+      <div class="attr-table">
+        <table>
+          <tr><th>Tag</th><th>Description</th></tr>
+          <tr><td>&lt;article&gt;</td><td>Content that's independent</td></tr>
+          <tr><td>&lt;aside&gt;</td><td>Secondary content</td></tr>
+          <tr><td>&lt;audio&gt;</td><td>Embeds a sound, or an audio stream</td></tr>
+          <tr><td>&lt;bdi&gt;</td><td>The Bidirectional Isolate element</td></tr>
+          <tr><td>&lt;canvas&gt;</td><td>Draw graphics via JavaScript</td></tr>
+          <tr><td>&lt;data&gt;</td><td>Machine readable content</td></tr>
+          <tr><td>&lt;datalist&gt;</td><td>A set of pre-defined options</td></tr>
+          <tr><td>&lt;details&gt;</td><td>Additional information</td></tr>
+          <tr><td>&lt;dialog&gt;</td><td>A dialog box or sub-window</td></tr>
+          <tr><td>&lt;embed&gt;</td><td>Embeds external application</td></tr>
+          <tr><td>&lt;figcaption&gt;</td><td>A caption or legend for a figure</td></tr>
+          <tr><td>&lt;figure&gt;</td><td>A figure illustrated</td></tr>
+          <tr><td>&lt;footer&gt;</td><td>Footer or least important</td></tr>
+          <tr><td>&lt;header&gt;</td><td>Masthead or important information</td></tr>
+          <tr><td>&lt;main&gt;</td><td>The main content of the document</td></tr>
+          <tr><td>&lt;mark&gt;</td><td>Text highlighted</td></tr>
+          <tr><td>&lt;meter&gt;</td><td>A scalar value within a known range</td></tr>
+          <tr><td>&lt;nav&gt;</td><td>A section of navigation links</td></tr>
+          <tr><td>&lt;noscript&gt;</td><td>Content for when scripting is disabled</td></tr>
+          <tr><td>&lt;object&gt;</td><td>Embeds an external resource</td></tr>
+          <tr><td>&lt;output&gt;</td><td>The result of a calculation</td></tr>
+          <tr><td>&lt;picture&gt;</td><td>A container for multiple image sources</td></tr>
+          <tr><td>&lt;progress&gt;</td><td>The completion progress of a task</td></tr>
+          <tr><td>&lt;rp&gt;</td><td>Provides fall-back parenthesis</td></tr>
+          <tr><td>&lt;rt&gt;</td><td>Defines the pronunciation of character</td></tr>
+          <tr><td>&lt;ruby&gt;</td><td>Represents a ruby annotation</td></tr>
+          <tr><td>&lt;section&gt;</td><td>A group in a series of related content</td></tr>
+          <tr><td>&lt;source&gt;</td><td>Resources for the media elements</td></tr>
+          <tr><td>&lt;summary&gt;</td><td>A summary for the &lt;details&gt; element</td></tr>
+          <tr><td>&lt;template&gt;</td><td>Defines the fragments of HTML</td></tr>
+          <tr><td>&lt;time&gt;</td><td>A time or date</td></tr>
+          <tr><td>&lt;track&gt;</td><td>Text tracks for the media elements</td></tr>
+          <tr><td>&lt;video&gt;</td><td>Embeds video</td></tr>
+          <tr><td>&lt;wbr&gt;</td><td>A line break opportunity</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Meta Tags -->
+    <section id="meta">
+      <h2>HTML Meta Tags</h2>
+
+      <div class="block-desc">
+        <span>The <code>&lt;meta&gt;</code> tag defines page metadata like character set, viewport, and Open Graph / Twitter card properties.</span>
+        <a class="w3-link" href="https://www.w3schools.com/tags/tag_meta.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <pre><span class="c">&lt;meta charset="utf-8" /&gt;</span>
+
+<span class="c">&lt;title&gt;</span>...<span class="c">&lt;/title&gt;</span>
+<span class="c">&lt;meta property="og:title" content="..." /&gt;</span>
+<span class="c">&lt;meta name="twitter:title" content="..." /&gt;</span>
+
+<span class="c">&lt;meta name="description" content="..." /&gt;</span>
+<span class="c">&lt;meta property="og:description" content="..." /&gt;</span>
+
+<span class="c">&lt;meta name="viewport" content="width=device-width" /&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <p><small>&#9888; Meta tags go in the <code>&lt;head&gt;</code> and are not rendered visually.</small></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="attr-table">
+        <table>
+          <tr><th>Property</th><th>Example</th></tr>
+          <tr><td>og:type</td><td>website</td></tr>
+          <tr><td>og:locale</td><td>en_CA</td></tr>
+          <tr><td>og:title</td><td>HTML cheatsheet</td></tr>
+          <tr><td>og:url</td><td>https://cheatsheets.zip/html</td></tr>
+          <tr><td>og:image</td><td>https://xxx.com/image.jpg</td></tr>
+          <tr><td>og:site_name</td><td>Name of your website</td></tr>
+          <tr><td>og:description</td><td>Description of this page</td></tr>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>HTML Cheatsheet</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mac &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .mc-kw { color:#bb9af7; }
+    .mc-fn { color:#7aa2f7; }
+    .mc-str { color:#9ece6a; }
+    .mc-cm { color:#565f89; }
+    .mc-op { color:#e0af68; }
+    kbd { display:inline-block; padding:0.1rem 0.35rem; font-size:0.7rem; font-family:inherit; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:3px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div>
+          <h1>Mac</h1>
+          <p class="subtitle">macOS shortcuts &amp; terminal commands</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-wrap">
+            <input type="search" id="search" placeholder="Search..." />
+            <kbd class="shortcut-hint">/</kbd>
+          </div>
+          <button class="theme-btn" id="theme-btn" title="Toggle theme">☀️</button>
+        </div>
+      </div>
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <nav class="toc">
+        <a href="#general">General</a>
+        <a href="#finder">Finder</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#terminal">Terminal</a>
+        <a href="#dev">Dev Tools</a>
+        <a href="#trackpad">Trackpad</a>
+        <a href="#mission-control">Mission Control</a>
+        <a href="#text-editing">Text Editing</a>
+      </nav>
+    </div>
+  </header>
+  <script src="js/header.js"></script>
+  <script>renderHeader('Mac')</script>
+  <main>
+
+    <!-- General -->
+    <section id="general">
+      <h2>General macOS Shortcuts</h2>
+
+      <div class="block-desc">
+        <span>Essential system-wide keyboard shortcuts every Mac user should know.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">System Shortcuts</div>
+          <pre><span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Space</kbd></span>      Spotlight search
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Tab</kbd></span>         Switch between apps
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>`</kbd></span>          Switch windows of same app
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Q</kbd></span>           Quit active app
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>W</kbd></span>           Close current window
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>H</kbd></span>           Hide active app
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>H</kbd></span>  Hide all other apps
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd></span>  Force Quit dialog
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd></span>  Lock screen
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>Cmd</kbd>+<kbd>Q</kbd></span>   Lock screen immediately
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>.</kbd></span>  Show hidden files in open dialogs</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pro Tips</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>🔍 <kbd>Cmd</kbd>+<kbd>Space</kbd> opens Spotlight &mdash; use it as a calculator, currency converter, and app launcher</div>
+            <div>🔄 <kbd>Cmd</kbd>+<kbd>Tab</kbd> then <kbd>↓</kbd> or <kbd>↑</kbd> to select visible windows</div>
+            <div>🚫 App won't quit? <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> is the nuclear option</div>
+            <div>🔐 <kbd>Ctrl</kbd>+<kbd>Cmd</kbd>+<kbd>Q</kbd> locks screen instantly</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Finder -->
+    <section id="finder">
+      <h2>Finder &amp; File Management</h2>
+
+      <div class="block-desc">
+        <span>Navigate, organize, and manage files efficiently in Finder.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Finder Shortcuts</div>
+          <pre><span class="mc-kw"><kbd>Cmd</kbd>+<kbd>N</kbd></span>           New Finder window
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>T</kbd></span>           New tab
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></span>   New folder
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>I</kbd></span>           Get Info
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Delete</kbd></span>      Move to Trash
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Delete</kbd></span>  Empty Trash
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>V</kbd></span>   Move file here (after Copy)
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>↓</kbd></span>         Open selected item
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>↑</kbd></span>         Go to parent folder
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>3</kbd></span>           Column view
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></span>   Go to folder (type path)
+<span class="mc-kw"><kbd>Space</kbd></span>           Quick Look preview</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pro Tips</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>📂 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> — type or paste any path to jump there</div>
+            <div>📋 <kbd>Cmd</kbd>+<kbd>C</kbd> then <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>V</kbd> = <strong>move</strong> file</div>
+            <div>👁️ <kbd>Space</kbd> on a file = instant preview (images, PDFs, video, code)</div>
+            <div>🏷️ Drag a file onto a Finder tab to move it there</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section id="screenshots">
+      <h2>Screenshots &amp; Screen Recording</h2>
+
+      <div class="block-desc">
+        <span>Capture screen content using built-in macOS screenshot tools.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Screenshot Shortcuts</div>
+          <pre><span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>3</kbd></span>         Full screen capture
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>4</kbd></span>         Select area capture
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>4</kbd>+<kbd>Space</kbd></span>  Capture specific window
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd></span>         Screenshot toolbar
+<span class="mc-kw"><kbd>Ctrl</kbd>+ any above</span>     Save to clipboard instead of file</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pro Tips</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>📋 Add <kbd>Ctrl</kbd> to any screenshot shortcut to copy to clipboard</div>
+            <div>🎬 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> opens the toolbar with screen recording options</div>
+            <div>✏️ Click screenshot thumbnail to annotate before saving</div>
+            <div>🔄 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> → Options → set save location</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terminal -->
+    <section id="terminal">
+      <h2>Terminal &amp; Shell</h2>
+
+      <div class="block-desc">
+        <span>macOS-specific terminal commands and shortcuts for power users.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Terminal Shortcuts</div>
+          <pre><span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>A</kbd></span>     Go to beginning of line
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>E</kbd></span>     Go to end of line
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>U</kbd></span>     Clear line before cursor
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>K</kbd></span>     Clear line after cursor
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>W</kbd></span>     Delete word before cursor
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>L</kbd></span>     Clear screen
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>R</kbd></span>     Search command history
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>Z</kbd></span>     Suspend process
+<span class="mc-kw"><kbd>fg</kbd></span>          Resume suspended process
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>K</kbd></span>     Clear terminal (macOS Terminal)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">macOS Commands</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;font-family:monospace;">
+            <div><span style="color:#7aa2f7;">open</span> .          <span style="color:#565f89;"># Open current dir in Finder</span></div>
+            <div><span style="color:#7aa2f7;">open</span> file.txt    <span style="color:#565f89;"># Open file with default app</span></div>
+            <div><span style="color:#7aa2f7;">pbcopy</span>           <span style="color:#565f89;"># Pipe to clipboard</span></div>
+            <div><span style="color:#7aa2f7;">pbpaste</span>          <span style="color:#565f89;"># Paste from clipboard</span></div>
+            <div><span style="color:#7aa2f7;">sips</span>             <span style="color:#565f89;"># Image processing CLI</span></div>
+            <div><span style="color:#7aa2f7;">mdfind</span>           <span style="color:#565f89;"># Spotlight from terminal</span></div>
+            <div><span style="color:#7aa2f7;">defaults</span> write   <span style="color:#565f89;"># Modify hidden settings</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dev Tools -->
+    <section id="dev">
+      <h2>Developer Tools</h2>
+
+      <div class="block-desc">
+        <span>Essential macOS developer utilities and package managers.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Homebrew &amp; Xcode</div>
+          <pre><span class="mc-kw">brew install</span> <span class="mc-str">[formula]</span>     Install package
+<span class="mc-kw">brew search</span> <span class="mc-str">[term]</span>          Search formulas
+<span class="mc-kw">brew update</span>                 Update Homebrew
+<span class="mc-kw">brew upgrade</span>                Upgrade all packages
+<span class="mc-kw">brew list</span>                   List installed packages
+<span class="mc-kw">brew services start</span> <span class="mc-str">[name]</span>  Start background service
+<span class="mc-kw">xcode-select --install</span>      Install Xcode CLI tools
+<span class="mc-kw">sw_vers</span>                     Show macOS version
+<span class="mc-kw">system_profiler</span>             System hardware info
+<span class="mc-kw">dscl . -list /Users</span>         List all user accounts</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Useful One-Liners</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;font-family:monospace;">
+            <div><span style="color:#565f89;"># Flush DNS cache</span></div>
+            <div><span style="color:#7aa2f7;">sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder</span></div>
+            <div><span style="color:#565f89;"># Show hidden files in Finder</span></div>
+            <div><span style="color:#7aa2f7;">defaults write com.apple.finder AppleShowAllFiles YES</span></div>
+            <div><span style="color:#565f89;"># Battery info</span></div>
+            <div><span style="color:#7aa2f7;">pmset -g batt</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trackpad -->
+    <section id="trackpad">
+      <h2>Trackpad Gestures</h2>
+
+      <div class="block-desc">
+        <span>Multi-touch trackpad gestures for navigation and productivity.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Gestures</div>
+          <pre><span class="mc-kw">2-finger scroll</span>        Scroll up/down/left/right
+<span class="mc-kw">2-finger tap</span>           Right-click
+<span class="mc-kw">2-finger pinch</span>         Zoom in/out
+<span class="mc-kw">3-finger swipe up</span>      Mission Control
+<span class="mc-kw">3-finger swipe down</span>    Show all windows (Exposé)
+<span class="mc-kw">3-finger swipe left/right</span>  Switch desktops / full-screen apps
+<span class="mc-kw">4-finger pinch</span>         Launchpad
+<span class="mc-kw">4-finger spread</span>        Show desktop
+<span class="mc-kw">Tap with 2 fingers</span>     Secondary click (right-click)
+<span class="mc-kw">Tap with 3 fingers</span>     Look up word / data detector</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Settings</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>⚙️ System Settings → Trackpad → Point &amp; Click, Scroll &amp; Zoom, More Gestures</div>
+            <div>🔄 Change 3-finger drag: Accessibility → Pointer Control → Trackpad Options</div>
+            <div>👆 Enable tap to click: Trackpad → Point &amp; Click → Tap to click</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission Control -->
+    <section id="mission-control">
+      <h2>Mission Control &amp; Spaces</h2>
+
+      <div class="block-desc">
+        <span>Manage multiple desktops (Spaces) and full-screen apps efficiently.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Desktop Management</div>
+          <pre><span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>↑</kbd></span>           Mission Control
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>↓</kbd></span>           Show active app windows (Exposé)
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>←</kbd></span>           Switch to left desktop
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>→</kbd></span>           Switch to right desktop
+<span class="mc-kw"><kbd>Ctrl</kbd>+<kbd>1-9</kbd></span>         Go to specific desktop
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>D</kbd></span>    Show/hide Dock
+<span class="mc-kw"><kbd>F11</kbd></span> or <kbd><span class="mc-kw">Cmd</span></kbd>+<kbd><span class="mc-kw">F3</span></kbd>  Show desktop
+<span class="mc-kw">Drag window to edge</span>    Create new desktop (in Mission Control)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pro Tips</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>📌 Assign apps to specific desktops: right-click app in Dock → Options → Assign To</div>
+            <div>🔄 Drag windows to top edge in full-screen to access menu bar</div>
+            <div>🗂️ <kbd>Ctrl</kbd>+<kbd>Number</kbd> jumps directly to that desktop</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Text Editing -->
+    <section id="text-editing">
+      <h2>Text Editing Shortcuts</h2>
+
+      <div class="block-desc">
+        <span>Text navigation and editing shortcuts that work in most macOS apps.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Cursor Movement</div>
+          <pre><span class="mc-kw"><kbd>Option</kbd>+<kbd>←</kbd></span>      Move to previous word
+<span class="mc-kw"><kbd>Option</kbd>+<kbd>→</kbd></span>      Move to next word
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>←</kbd></span>         Move to beginning of line
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>→</kbd></span>         Move to end of line
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>↑</kbd></span>         Move to beginning of document
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>↓</kbd></span>         Move to end of document
+
+<span class="mc-cm"># Selection (add Shift to any above)</span>
+<span class="mc-kw"><kbd>Shift</kbd>+<kbd>Option</kbd>+<kbd>←</kbd></span>  Select previous word
+<span class="mc-kw"><kbd>Shift</kbd>+<kbd>Cmd</kbd>+<kbd>↑</kbd></span>    Select to beginning of document
+
+<span class="mc-cm"># Deletion</span>
+<span class="mc-kw"><kbd>Option</kbd>+<kbd>Delete</kbd></span>   Delete previous word
+<span class="mc-kw"><kbd>Cmd</kbd>+<kbd>Delete</kbd></span>    Delete to beginning of line</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pro Tips</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>🎯 <kbd>Option</kbd> moves by word — <kbd>Cmd</kbd> moves by line/document</div>
+            <div>➕ Add <kbd>Shift</kbd> to any movement shortcut to extend selection</div>
+            <div>✂️ <kbd>Ctrl</kbd>+<kbd>K</kbd> deletes from cursor to end of line (in terminal)</div>
+            <div>🔄 <kbd>Cmd</kbd>+<kbd>Z</kbd> undo, <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> redo</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Mac Cheatsheet — macOS shortcuts &amp; commands</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
