@@ -94,35 +94,37 @@ document.addEventListener('DOMContentLoaded', () => {
       const text = section.textContent.toLowerCase();
       section.classList.toggle('section-hidden', !text.includes(q));
     });
+    document.querySelectorAll('.cheat-block .code-panel pre').forEach(pre => {
+      if (!pre.dataset.origHtml) pre.dataset.origHtml = pre.innerHTML;
+      pre.innerHTML = pre.dataset.origHtml;
+    });
     if (q) {
       document.querySelectorAll('.cheat-block .code-panel pre').forEach(pre => {
-        pre.querySelectorAll('.highlight').forEach(el => {
-          const parent = el.parentNode;
-          parent.replaceChild(document.createTextNode(el.textContent), el);
-          parent.normalize();
+        const idx = pre.textContent.toLowerCase().indexOf(q);
+        if (idx === -1) return;
+        walkTextNodes(pre, node => {
+          const text = node.textContent;
+          const i = text.toLowerCase().indexOf(q);
+          if (i === -1) return false;
+          const before = document.createTextNode(text.slice(0, i));
+          const mark = document.createElement('span');
+          mark.className = 'highlight';
+          mark.textContent = text.slice(i, i + q.length);
+          const after = document.createTextNode(text.slice(i + q.length));
+          node.parentNode.replaceChild(after, node);
+          node.parentNode.insertBefore(mark, after);
+          node.parentNode.insertBefore(before, mark);
+          return true;
         });
       });
-      document.querySelectorAll('.cheat-block .code-panel pre').forEach(pre => {
-        const text = pre.textContent;
-        const idx = text.toLowerCase().indexOf(q);
-        if (idx === -1) return;
-        const before = text.slice(0, idx);
-        const match = text.slice(idx, idx + q.length);
-        const after = text.slice(idx + q.length);
-        pre.innerHTML = '';
-        pre.appendChild(document.createTextNode(before));
-        const mark = document.createElement('span');
-        mark.className = 'highlight';
-        mark.textContent = match;
-        pre.appendChild(mark);
-        pre.appendChild(document.createTextNode(after));
-      });
-    } else {
-      document.querySelectorAll('.cheat-block .code-panel pre .highlight').forEach(el => {
-        const parent = el.parentNode;
-        parent.replaceChild(document.createTextNode(el.textContent), el);
-        parent.normalize();
-      });
+    }
+  }
+
+  function walkTextNodes(root, fn) {
+    const iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = iter.nextNode())) {
+      if (fn(node)) break;
     }
   }
 });
