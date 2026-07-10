@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function setTheme(dark) {
     document.body.classList.toggle('dark-theme', dark);
     localStorage.setItem('theme', dark ? 'dark' : 'light');
-    if (themeBtn) themeBtn.textContent = dark ? '💡' : '🕶️';
+    if (themeBtn) themeBtn.textContent = dark ? '☀️' : '🌙';
   }
 
   setTheme(localStorage.getItem('theme') === 'dark');

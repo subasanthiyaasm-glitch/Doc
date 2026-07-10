@@ -10,6 +10,7 @@ const LANGUAGES = [
   { id: 'VS Code', href: 'vscode-cheatsheet.html', icon: '📝' },
   { id: 'AI', href: 'ai-cheatsheet.html', icon: '🤖' },
   { id: 'Mac', href: 'mac-cheatsheet.html', icon: '🍎' },
+  { id: 'Git', href: 'git-cheatsheet.html', icon: '🌿' },
 ];
 
 function renderHeader(activeId) {
