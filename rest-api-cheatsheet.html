@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REST API &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .rk  { color: #bb9af7; }   /* keyword */
+    .rh  { color: #7aa2f7; }   /* http method / header name */
+    .rs  { color: #9ece6a; }   /* string / value */
+    .rcm { color: #565f89; }   /* comment */
+    .ro  { color: #e0af68; }   /* operator / key */
+    .rn  { color: #ff9e64; }   /* number / status code */
+    .rt  { color: #f7768e; }   /* tag / url segment */
+    .rg  { color: #73daca; }   /* good / success */
+    .rbr { color: #f7768e; }   /* bad / error */
+
+    .badge { display:inline-block; padding:0.15rem 0.55rem; border-radius:4px; font-size:0.62rem; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; margin-bottom:0.6rem; }
+    .b-basic { background:#1e40af; color:#fff; }
+    .b-core  { background:#065f46; color:#fff; }
+    .b-inter { background:#7c3aed; color:#fff; }
+    .b-adv   { background:#9a3412; color:#fff; }
+    .b-sec   { background:#be185d; color:#fff; }
+
+    /* Method pill badges */
+    .m-get    { background:#065f46; color:#6ee7b7; font-weight:700; padding:0.1rem 0.45rem; border-radius:3px; font-size:0.68rem; font-family:'JetBrains Mono',monospace; }
+    .m-post   { background:#1e3a5f; color:#93c5fd; font-weight:700; padding:0.1rem 0.45rem; border-radius:3px; font-size:0.68rem; font-family:'JetBrains Mono',monospace; }
+    .m-put    { background:#78350f; color:#fcd34d; font-weight:700; padding:0.1rem 0.45rem; border-radius:3px; font-size:0.68rem; font-family:'JetBrains Mono',monospace; }
+    .m-patch  { background:#4c1d95; color:#c4b5fd; font-weight:700; padding:0.1rem 0.45rem; border-radius:3px; font-size:0.68rem; font-family:'JetBrains Mono',monospace; }
+    .m-delete { background:#7f1d1d; color:#fca5a5; font-weight:700; padding:0.1rem 0.45rem; border-radius:3px; font-size:0.68rem; font-family:'JetBrains Mono',monospace; }
+
+    /* Status code colours */
+    .s1xx { color:#93c5fd; }
+    .s2xx { color:#6ee7b7; font-weight:600; }
+    .s3xx { color:#fcd34d; }
+    .s4xx { color:#fca5a5; font-weight:600; }
+    .s5xx { color:#f87171; font-weight:700; }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin:0.5rem 0 1rem; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; margin:0.5rem 0 1rem; }
+    @media(max-width:700px){ .grid-2,.grid-3{ grid-template-columns:1fr; } }
+
+    .info-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.8rem 1rem; }
+    .info-card h4 { margin:0 0 0.4rem; font-size:0.8rem; color:var(--accent); }
+    .info-card p, .info-card li { font-size:0.72rem; color:var(--text-muted); line-height:1.6; margin:0; }
+    .info-card ul { padding-left:1rem; margin:0; }
+
+    .tip-list { list-style:none; padding:0; margin:0; font-size:0.75rem; }
+    .tip-list li { padding:0.2rem 0; color:var(--text-muted); line-height:1.6; }
+    .tip-list li::before { content:"▸ "; color:#7aa2f7; font-weight:700; }
+    .tip-list li strong { color:var(--text); }
+
+    .method-table, .status-table, .compare-table { width:100%; border-collapse:collapse; font-size:0.74rem; }
+    .method-table th, .status-table th, .compare-table th {
+      background:var(--code-bg); color:var(--text-muted); padding:0.45rem 0.6rem;
+      text-align:left; border-bottom:1px solid var(--border);
+      font-weight:600; letter-spacing:0.3px; text-transform:uppercase; font-size:0.63rem;
+    }
+    .method-table td, .status-table td, .compare-table td { padding:0.4rem 0.6rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+    .method-table tr:last-child td, .status-table tr:last-child td, .compare-table tr:last-child td { border-bottom:none; }
+    .yes { color:#6ee7b7; font-weight:600; }
+    .no  { color:#f87171; font-weight:600; }
+    .mid { color:#fcd34d; }
+    td code { font-size:0.68rem; background:var(--inline-code-bg); color:var(--inline-code-text); padding:1px 4px; border-radius:3px; }
+
+    .url-bar { font-family:'JetBrains Mono',monospace; font-size:0.78rem; padding:0.5rem 0.8rem; background:var(--code-bg); border-radius:var(--radius-xs); margin:0.3rem 0; color:var(--code-text); overflow-x:auto; white-space:nowrap; }
+    .url-bar .method { font-weight:700; margin-right:0.5rem; }
+    .url-bar .good { color:#6ee7b7; }
+    .url-bar .bad  { color:#f87171; }
+
+    .pagination-diagram { font-family:'JetBrains Mono',monospace; font-size:0.7rem; background:var(--code-bg); color:var(--code-text); padding:0.9rem; border-radius:var(--radius-sm); line-height:1.9; overflow-x:auto; }
+
+    .header-row { display:flex; gap:0.5rem; align-items:baseline; flex-wrap:wrap; margin-bottom:0.4rem; }
+    .h-name { font-family:'JetBrains Mono',monospace; color:#7aa2f7; font-size:0.74rem; font-weight:600; }
+    .h-desc { font-size:0.71rem; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('REST API')</script>
+<script>renderSourceLink('REST API')</script>
+
+<main>
+  <div class="page-header">
+    <h1>REST API</h1>
+    <p class="subtitle">Complete reference — design, HTTP, auth, pagination &amp; more</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#basics">Basics</a>
+      <a href="#methods">HTTP Methods</a>
+      <a href="#status">Status Codes</a>
+      <a href="#endpoints">Endpoints</a>
+      <a href="#request">Request</a>
+      <a href="#response">Response</a>
+      <a href="#auth">Auth</a>
+      <a href="#pagination">Pagination</a>
+      <a href="#filtering">Filter &amp; Sort</a>
+      <a href="#versioning">Versioning</a>
+      <a href="#errors">Errors</a>
+      <a href="#caching">Caching</a>
+      <a href="#rate-limiting">Rate Limiting</a>
+      <a href="#advanced">Advanced</a>
+      <a href="#compare">REST vs Others</a>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════ BASICS ══════════════════════════ -->
+  <section id="basics">
+    <span class="badge b-basic">Basic</span>
+    <h2>REST Fundamentals</h2>
+
+    <div class="block-desc">
+      <span><strong>REST</strong> (Representational State Transfer) is an architectural style for distributed systems built on 6 constraints.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">The 6 REST Constraints</div>
+        <pre><span class="rn">1.</span> <span class="ro">Client-Server</span>
+   Separate UI from data storage; each evolves independently.
+
+<span class="rn">2.</span> <span class="ro">Stateless</span>
+   Every request contains ALL information needed.
+   Server stores NO client session state.
+
+<span class="rn">3.</span> <span class="ro">Cacheable</span>
+   Responses must label themselves cacheable or not.
+   Eliminates redundant client-server interactions.
+
+<span class="rn">4.</span> <span class="ro">Uniform Interface</span>
+   Resource identification in requests (URIs).
+   Manipulation through representations.
+   Self-descriptive messages.
+   HATEOAS — hypermedia as engine of app state.
+
+<span class="rn">5.</span> <span class="ro">Layered System</span>
+   Client can't tell if it talks to end server or intermediary.
+   Enables load balancers, CDNs, gateways.
+
+<span class="rn">6.</span> <span class="ro">Code on Demand</span> <span class="rcm">(optional)</span>
+   Server can send executable code (e.g. JavaScript).</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Key Terms</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>Resource</strong> — any concept exposed via the API (user, order, product)</li>
+            <li><strong>Representation</strong> — how a resource is transmitted (JSON, XML)</li>
+            <li><strong>URI</strong> — unique identifier for a resource</li>
+            <li><strong>Idempotent</strong> — same request N times = same result as 1 time</li>
+            <li><strong>Safe</strong> — read-only; produces no side effects</li>
+            <li><strong>Stateless</strong> — server never stores client state between requests</li>
+            <li><strong>HATEOAS</strong> — response includes links to next valid actions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>A minimal REST interaction — request and response anatomy.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">HTTP Request / Response</div>
+        <pre><span class="rcm">── REQUEST ──────────────────────────────────</span>
+<span class="rh">GET</span> /api/v1/users/42 <span class="rcm">HTTP/1.1</span>
+<span class="ro">Host</span>:          api.example.com
+<span class="ro">Accept</span>:        application/json
+<span class="ro">Authorization</span>: Bearer eyJhbGci...
+<span class="ro">X-Request-Id</span>:  550e8400-e29b-41d4-a716
+
+<span class="rcm">── RESPONSE ─────────────────────────────────</span>
+<span class="rcm">HTTP/1.1</span> <span class="rg">200 OK</span>
+<span class="ro">Content-Type</span>:  application/json
+<span class="ro">Cache-Control</span>: max-age=60
+<span class="ro">ETag</span>:          "33a64df5"
+<span class="ro">X-Request-Id</span>:  550e8400-e29b-41d4-a716
+
+{
+  <span class="rs">"id"</span>:    <span class="rn">42</span>,
+  <span class="rs">"name"</span>: <span class="rs">"Alice"</span>,
+  <span class="rs">"email"</span>:<span class="rs">"alice@example.com"</span>
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Message Parts</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.9;color:var(--text-muted);">
+          <div><strong>Request line</strong> — METHOD path HTTP/version</div>
+          <div><strong>Headers</strong> — key: value metadata</div>
+          <div><strong>Blank line</strong> — separates headers from body</div>
+          <div><strong>Body</strong> — optional payload (POST/PUT/PATCH)</div>
+          <div style="margin-top:0.5rem;"><strong>Response line</strong> — HTTP/version status code reason</div>
+          <div><strong>Response headers</strong> — Content-Type, Cache-Control, ETag…</div>
+          <div><strong>Response body</strong> — JSON / XML / binary</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ METHODS ══════════════════════════ -->
+  <section id="methods">
+    <span class="badge b-basic">Basic</span>
+    <h2>HTTP Methods</h2>
+
+    <div class="block-desc">
+      <span>Each method has defined semantics. <strong>Safe</strong> = no side effects. <strong>Idempotent</strong> = repeating gives same result.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Methods Reference</div>
+        <pre><span class="rh">GET</span>    /users          <span class="rcm"># Retrieve a list</span>
+<span class="rh">GET</span>    /users/42       <span class="rcm"># Retrieve one resource</span>
+<span class="rh">POST</span>   /users          <span class="rcm"># Create new resource</span>
+<span class="rh">PUT</span>    /users/42       <span class="rcm"># Full replace of resource</span>
+<span class="rh">PATCH</span>  /users/42       <span class="rcm"># Partial update of resource</span>
+<span class="rh">DELETE</span> /users/42       <span class="rcm"># Delete resource</span>
+<span class="rh">HEAD</span>   /users/42       <span class="rcm"># GET without body (check exists)</span>
+<span class="rh">OPTIONS</span> /users         <span class="rcm"># What methods are allowed? (CORS)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Safe &amp; Idempotent</div>
+        <div class="live-output">
+          <table class="method-table">
+            <thead><tr><th>Method</th><th>Safe</th><th>Idempotent</th><th>Body</th></tr></thead>
+            <tbody>
+              <tr><td><span class="m-get">GET</span></td>    <td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td></tr>
+              <tr><td><span class="m-post">POST</span></td>  <td class="no">No</td> <td class="no">No</td> <td class="yes">Yes</td></tr>
+              <tr><td><span class="m-put">PUT</span></td>    <td class="no">No</td> <td class="yes">Yes</td><td class="yes">Yes</td></tr>
+              <tr><td><span class="m-patch">PATCH</span></td><td class="no">No</td> <td class="no">No*</td><td class="yes">Yes</td></tr>
+              <tr><td><span class="m-delete">DELETE</span></td><td class="no">No</td><td class="yes">Yes</td><td class="mid">Rare</td></tr>
+              <tr><td><code>HEAD</code></td>  <td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td></tr>
+              <tr><td><code>OPTIONS</code></td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:0.65rem;color:var(--text-muted);margin-top:0.4rem;">* PATCH can be idempotent if designed to be</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>PUT vs PATCH</strong> — the most confused pair. PUT replaces the entire resource; PATCH updates only specified fields.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">PUT vs PATCH</div>
+        <pre><span class="rcm">── PUT: full replacement ─────────────────</span>
+<span class="rh">PUT</span> /users/42
+{
+  <span class="rs">"name"</span>:  <span class="rs">"Alice"</span>,   <span class="rcm">// ALL fields required</span>
+  <span class="rs">"email"</span>: <span class="rs">"alice@example.com"</span>,
+  <span class="rs">"role"</span>:  <span class="rs">"admin"</span>    <span class="rcm">// omitting role = delete it</span>
+}
+
+<span class="rcm">── PATCH: partial update ─────────────────</span>
+<span class="rh">PATCH</span> /users/42
+{
+  <span class="rs">"email"</span>: <span class="rs">"newemail@example.com"</span>
+  <span class="rcm">// only email changes; name &amp; role unchanged</span>
+}
+
+<span class="rcm">── JSON Merge Patch (RFC 7396) ───────────</span>
+<span class="rcm">// Set null to remove a field</span>
+<span class="rh">PATCH</span> /users/42
+{ <span class="rs">"nickname"</span>: <span class="rk">null</span> }   <span class="rcm">// removes nickname</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Rule of thumb</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div>Use <strong>PUT</strong> when client owns the full resource state (file uploads, config replacement)</div>
+          <div style="margin-top:0.5rem;">Use <strong>PATCH</strong> for partial edits — most "edit form" operations</div>
+          <div style="margin-top:0.5rem;">PATCH with no spec is dangerous — define RFC 7396 (merge patch) or RFC 6902 (JSON patch) explicitly</div>
+          <div style="margin-top:0.5rem;"><strong>Repeat PUT</strong> → same resource state (idempotent)</div>
+          <div><strong>Repeat POST</strong> → may create duplicates (not idempotent) — use idempotency key if needed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ STATUS CODES ══════════════════════════ -->
+  <section id="status">
+    <span class="badge b-basic">Basic</span>
+    <h2>HTTP Status Codes</h2>
+
+    <div class="block-desc">
+      <span>Status codes are grouped by first digit. Use them precisely — vague codes like 200 for errors break client tooling.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmessages.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Complete Status Code Reference</div>
+        <pre><span class="rcm">── 1xx Informational ────────────────────</span>
+<span class="s1xx">100</span> Continue          <span class="rcm"># Client should continue request</span>
+<span class="s1xx">101</span> Switching Protocols <span class="rcm"># WebSocket upgrade</span>
+
+<span class="rcm">── 2xx Success ──────────────────────────</span>
+<span class="s2xx">200</span> OK                <span class="rcm"># GET, PUT, PATCH succeeded</span>
+<span class="s2xx">201</span> Created           <span class="rcm"># POST created resource (+ Location header)</span>
+<span class="s2xx">202</span> Accepted          <span class="rcm"># Async processing started</span>
+<span class="s2xx">204</span> No Content        <span class="rcm"># DELETE / PUT with no body response</span>
+<span class="s2xx">206</span> Partial Content   <span class="rcm"># Range request (file streaming)</span>
+
+<span class="rcm">── 3xx Redirection ──────────────────────</span>
+<span class="s3xx">301</span> Moved Permanently <span class="rcm"># URL changed forever (update bookmarks)</span>
+<span class="s3xx">302</span> Found             <span class="rcm"># Temporary redirect</span>
+<span class="s3xx">304</span> Not Modified      <span class="rcm"># ETag match; use cached copy</span>
+<span class="s3xx">307</span> Temporary Redirect <span class="rcm"># Same method, temporary</span>
+<span class="s3xx">308</span> Permanent Redirect <span class="rcm"># Same method, permanent</span>
+
+<span class="rcm">── 4xx Client Errors ────────────────────</span>
+<span class="s4xx">400</span> Bad Request       <span class="rcm"># Malformed request / validation fail</span>
+<span class="s4xx">401</span> Unauthorized      <span class="rcm"># Auth required (not logged in)</span>
+<span class="s4xx">403</span> Forbidden         <span class="rcm"># Authenticated but lacks permission</span>
+<span class="s4xx">404</span> Not Found         <span class="rcm"># Resource does not exist</span>
+<span class="s4xx">405</span> Method Not Allowed <span class="rcm"># GET on POST-only endpoint</span>
+<span class="s4xx">408</span> Request Timeout   <span class="rcm"># Client took too long to send</span>
+<span class="s4xx">409</span> Conflict          <span class="rcm"># Duplicate / edit conflict</span>
+<span class="s4xx">410</span> Gone              <span class="rcm"># Resource permanently deleted</span>
+<span class="s4xx">415</span> Unsupported Media <span class="rcm"># Wrong Content-Type</span>
+<span class="s4xx">422</span> Unprocessable     <span class="rcm"># Semantically invalid (valid JSON, bad data)</span>
+<span class="s4xx">429</span> Too Many Requests <span class="rcm"># Rate limit hit</span>
+
+<span class="rcm">── 5xx Server Errors ────────────────────</span>
+<span class="s5xx">500</span> Internal Error    <span class="rcm"># Unhandled exception (never leak detail)</span>
+<span class="s5xx">501</span> Not Implemented   <span class="rcm"># Method not supported</span>
+<span class="s5xx">502</span> Bad Gateway       <span class="rcm"># Upstream service error</span>
+<span class="s5xx">503</span> Service Unavailable <span class="rcm"># Down for maintenance / overloaded</span>
+<span class="s5xx">504</span> Gateway Timeout   <span class="rcm"># Upstream timed out</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Common Mistakes</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>401 vs 403</strong> — 401 = not authenticated (login first). 403 = authenticated, but no permission.</li>
+            <li><strong>Never 200 for errors</strong> — <code>{"error":"not found"}</code> with 200 breaks clients and monitoring.</li>
+            <li><strong>Use 422 not 400</strong> — 422 when JSON is valid but business rules fail (e.g. future birth date).</li>
+            <li><strong>201 + Location</strong> — always send <code>Location: /users/42</code> after POST creates a resource.</li>
+            <li><strong>204 has no body</strong> — don't return JSON with a 204; some clients ignore it.</li>
+            <li><strong>409 for duplicates</strong> — creating a resource that already exists by unique key.</li>
+            <li><strong>503 + Retry-After</strong> — tell clients when to retry during planned downtime.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ ENDPOINTS ══════════════════════════ -->
+  <section id="endpoints">
+    <span class="badge b-basic">Basic</span>
+    <h2>Endpoint Design &amp; URL Conventions</h2>
+
+    <div class="block-desc">
+      <span>Well-designed URLs are predictable, noun-based, and resource-oriented — not action-based like RPC.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Good vs Bad URLs</div>
+        <pre><span class="rcm">── ✗ Bad (RPC-style / verb-based) ──────</span>
+<span class="rbr">GET  /getUser?id=42</span>
+<span class="rbr">POST /createOrder</span>
+<span class="rbr">POST /deleteProduct/5</span>
+<span class="rbr">GET  /user_list</span>
+<span class="rbr">GET  /Users/42/GetOrders</span>
+
+<span class="rcm">── ✓ Good (resource-based) ─────────────</span>
+<span class="rg">GET    /users/42</span>           <span class="rcm"># fetch user 42</span>
+<span class="rg">POST   /orders</span>             <span class="rcm"># create order</span>
+<span class="rg">DELETE /products/5</span>         <span class="rcm"># delete product</span>
+<span class="rg">GET    /users</span>              <span class="rcm"># list users</span>
+<span class="rg">GET    /users/42/orders</span>    <span class="rcm"># user's orders</span>
+
+<span class="rcm">── Nested resource depth ───────────────</span>
+<span class="rg">/users/42/orders</span>          <span class="rcm"># fine (2 levels)</span>
+<span class="rg">/orders/7/items</span>           <span class="rcm"># fine</span>
+<span class="rbr">/users/42/orders/7/items/3/reviews</span> <span class="rcm"># too deep — flatten</span>
+<span class="rg">/reviews/3</span>                <span class="rcm"># better — direct access</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Naming Rules</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>Nouns, not verbs</strong> — the HTTP method is the verb</li>
+            <li><strong>Plural collections</strong> — <code>/users</code>, <code>/orders</code>, <code>/products</code></li>
+            <li><strong>Lowercase &amp; hyphens</strong> — <code>/order-items</code> not <code>/orderItems</code></li>
+            <li><strong>No trailing slash</strong> — <code>/users</code> not <code>/users/</code></li>
+            <li><strong>No file extensions</strong> — <code>/users/42</code> not <code>/users/42.json</code></li>
+            <li><strong>Hierarchy = ownership</strong> — nest only when child can't exist without parent</li>
+            <li><strong>Max 2 levels of nesting</strong> — deeper = use query params instead</li>
+            <li><strong>Actions on resources</strong> — <code>POST /orders/7/cancel</code> for state changes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>Full CRUD mapping for a resource — the standard REST pattern.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">CRUD → HTTP mapping</div>
+        <pre><span class="rcm">Resource: /api/v1/articles</span>
+
+<span class="rh">GET</span>    /articles          <span class="rcm">→ list all articles</span>
+<span class="rh">POST</span>   /articles          <span class="rcm">→ create article</span>
+<span class="rh">GET</span>    /articles/{id}     <span class="rcm">→ get one article</span>
+<span class="rh">PUT</span>    /articles/{id}     <span class="rcm">→ replace article</span>
+<span class="rh">PATCH</span>  /articles/{id}    <span class="rcm">→ partial update</span>
+<span class="rh">DELETE</span> /articles/{id}    <span class="rcm">→ delete article</span>
+
+<span class="rcm">Sub-resources:</span>
+<span class="rh">GET</span>    /articles/{id}/comments   <span class="rcm">→ article's comments</span>
+<span class="rh">POST</span>   /articles/{id}/comments   <span class="rcm">→ add comment</span>
+<span class="rh">DELETE</span> /articles/{id}/comments/{cid} <span class="rcm">→ delete comment</span>
+
+<span class="rcm">Actions (state transitions):</span>
+<span class="rh">POST</span>   /articles/{id}/publish     <span class="rcm">→ publish action</span>
+<span class="rh">POST</span>   /articles/{id}/archive     <span class="rcm">→ archive action</span>
+<span class="rh">POST</span>   /orders/{id}/cancel        <span class="rcm">→ cancel order</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Response bodies by method</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.9;color:var(--text-muted);">
+          <div><span class="m-get">GET</span> list → array + meta (count, pagination)</div>
+          <div><span class="m-get">GET</span> single → resource object</div>
+          <div><span class="m-post">POST</span> → 201 + created resource + Location header</div>
+          <div><span class="m-put">PUT</span> → 200 + updated resource (or 204 no body)</div>
+          <div><span class="m-patch">PATCH</span> → 200 + updated resource</div>
+          <div><span class="m-delete">DELETE</span> → 204 No Content (no body)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ REQUEST ══════════════════════════ -->
+  <section id="request">
+    <span class="badge b-basic">Basic</span>
+    <h2>Request Structure</h2>
+
+    <div class="block-desc">
+      <span>Four ways to pass data in a request: path params, query params, headers, and body — each with different use cases.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Request Parameters</div>
+        <pre><span class="rcm">── Path Parameters ───────────────────────</span>
+<span class="rh">GET</span> /users/<span class="rt">{userId}</span>/orders/<span class="rt">{orderId}</span>
+<span class="rcm"># identify a specific resource — always required</span>
+<span class="rcm"># e.g. GET /users/42/orders/99</span>
+
+<span class="rcm">── Query Parameters ─────────────────────</span>
+<span class="rh">GET</span> /users<span class="rt">?page=2&amp;limit=20&amp;sort=name&amp;order=asc</span>
+<span class="rcm"># filtering, sorting, pagination, searching</span>
+<span class="rcm"># always optional; don't put IDs here</span>
+
+<span class="rcm">── Request Headers ──────────────────────</span>
+<span class="ro">Authorization</span>: Bearer &lt;token&gt;    <span class="rcm"># auth</span>
+<span class="ro">Content-Type</span>:  application/json  <span class="rcm"># body format</span>
+<span class="ro">Accept</span>:        application/json  <span class="rcm"># expected response format</span>
+<span class="ro">Accept-Language</span>: en-US           <span class="rcm"># i18n</span>
+<span class="ro">Idempotency-Key</span>: &lt;uuid&gt;          <span class="rcm"># safe retry</span>
+<span class="ro">X-Request-Id</span>:  &lt;uuid&gt;           <span class="rcm"># tracing</span>
+<span class="ro">If-None-Match</span>: "33a64df5"        <span class="rcm"># conditional GET</span>
+
+<span class="rcm">── Request Body ─────────────────────────</span>
+<span class="rcm"># POST / PUT / PATCH only</span>
+{
+  <span class="rs">"name"</span>:  <span class="rs">"Alice"</span>,
+  <span class="rs">"email"</span>: <span class="rs">"alice@example.com"</span>,
+  <span class="rs">"age"</span>:   <span class="rn">30</span>
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">When to use each</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>Path param</strong> — identifies a specific resource (<code>/users/42</code>). Required by nature.</li>
+            <li><strong>Query param</strong> — modifies or filters a collection. Optional. Bookmark-friendly.</li>
+            <li><strong>Header</strong> — cross-cutting concerns: auth, content negotiation, tracing, API version.</li>
+            <li><strong>Body</strong> — structured resource data for create/update. POST/PUT/PATCH only.</li>
+            <li><strong>Never put sensitive data in URLs</strong> — query params appear in logs and browser history.</li>
+            <li><strong>Idempotency-Key</strong> — client-generated UUID; lets server detect and deduplicate retried POSTs.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ RESPONSE ══════════════════════════ -->
+  <section id="response">
+    <span class="badge b-basic">Basic</span>
+    <h2>Response Structure</h2>
+
+    <div class="block-desc">
+      <span>Consistent response envelopes make clients predictable and easier to build. Define a standard structure and stick to it.</span>
+      <a class="w3-link" href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Standard Response Envelopes</div>
+        <pre><span class="rcm">── Single resource ───────────────────────</span>
+<span class="rcm">GET /users/42 → 200 OK</span>
+{
+  <span class="rs">"data"</span>: {
+    <span class="rs">"id"</span>:    <span class="rn">42</span>,
+    <span class="rs">"name"</span>: <span class="rs">"Alice"</span>,
+    <span class="rs">"email"</span>:<span class="rs">"alice@example.com"</span>
+  }
+}
+
+<span class="rcm">── Collection ────────────────────────────</span>
+<span class="rcm">GET /users → 200 OK</span>
+{
+  <span class="rs">"data"</span>: [ { <span class="rs">"id"</span>:<span class="rn">1</span> }, { <span class="rs">"id"</span>:<span class="rn">2</span> } ],
+  <span class="rs">"meta"</span>: {
+    <span class="rs">"total"</span>:     <span class="rn">150</span>,
+    <span class="rs">"page"</span>:      <span class="rn">1</span>,
+    <span class="rs">"perPage"</span>:   <span class="rn">20</span>,
+    <span class="rs">"totalPages"</span>:<span class="rn">8</span>
+  },
+  <span class="rs">"links"</span>: {
+    <span class="rs">"self"</span>: <span class="rs">"/users?page=1"</span>,
+    <span class="rs">"next"</span>: <span class="rs">"/users?page=2"</span>,
+    <span class="rs">"last"</span>: <span class="rs">"/users?page=8"</span>
+  }
+}
+
+<span class="rcm">── Response headers ─────────────────────</span>
+<span class="ro">Content-Type</span>:  application/json; charset=utf-8
+<span class="ro">X-Request-Id</span>:  550e8400-e29b-41d4-a716
+<span class="ro">X-Response-Time</span>: 45ms
+<span class="ro">X-RateLimit-Limit</span>:     1000
+<span class="ro">X-RateLimit-Remaining</span>: 987</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Response Design Rules</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>Always set Content-Type</strong> — <code>application/json; charset=utf-8</code></li>
+            <li><strong>Wrap in data key</strong> — room to add <code>meta</code>, <code>links</code>, <code>errors</code> later without breaking clients</li>
+            <li><strong>Use ISO 8601 for dates</strong> — <code>"2024-07-17T10:30:00Z"</code>, never timestamps or locale strings</li>
+            <li><strong>Consistent casing</strong> — pick camelCase or snake_case and never mix</li>
+            <li><strong>Never return null for collections</strong> — return <code>[]</code>, not <code>null</code></li>
+            <li><strong>Include X-Request-Id</strong> — helps correlate logs with support tickets</li>
+            <li><strong>Omit internal IDs from public APIs</strong> — use opaque slugs or UUIDs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ AUTH ══════════════════════════ -->
+  <section id="auth">
+    <span class="badge b-core">Core</span>
+    <h2>Authentication &amp; Authorization</h2>
+
+    <div class="block-desc">
+      <span><strong>Authentication</strong> = who are you? <strong>Authorization</strong> = what are you allowed to do? Always enforce both.</span>
+      <a class="w3-link" href="https://www.w3schools.com/js/js_json_jwt.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Auth Schemes</div>
+        <pre><span class="rcm">── Basic Auth ────────────────────────────</span>
+<span class="ro">Authorization</span>: Basic <span class="rs">base64(username:password)</span>
+<span class="rcm"># Only over HTTPS; credentials sent every request</span>
+<span class="rcm"># Good for: internal tools, machine-to-machine</span>
+
+<span class="rcm">── API Key ───────────────────────────────</span>
+<span class="ro">X-API-Key</span>: sk-live-abc123xyz789
+<span class="rcm"># Or in query: ?api_key=sk-live-abc123</span>
+<span class="rcm"># Simple; no expiry by default</span>
+<span class="rcm"># Good for: public APIs, server-to-server</span>
+
+<span class="rcm">── Bearer Token (JWT) ───────────────────</span>
+<span class="ro">Authorization</span>: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+<span class="rcm"># Self-contained token with claims</span>
+<span class="rcm"># Good for: stateless auth, microservices</span>
+
+<span class="rcm">── OAuth 2.0 ─────────────────────────────</span>
+<span class="rcm"># Step 1: redirect user to auth server</span>
+GET https://auth.example.com/oauth/authorize
+  ?response_type=code
+  &amp;client_id=MY_APP
+  &amp;redirect_uri=https://myapp.com/callback
+  &amp;scope=read:users write:posts
+  &amp;state=random_state_value
+
+<span class="rcm"># Step 2: exchange code for token</span>
+<span class="rh">POST</span> /oauth/token
+{ <span class="rs">"grant_type"</span>:<span class="rs">"authorization_code"</span>, <span class="rs">"code"</span>:<span class="rs">"..."</span> }</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">JWT Anatomy</div>
+        <div class="live-output" style="font-size:0.71rem;line-height:1.8;color:var(--text-muted);">
+          <div style="font-family:'JetBrains Mono',monospace;word-break:break-all;font-size:0.65rem;">
+            <span style="color:#f7768e;">eyJhbGciOiJSUzI1NiJ9</span>.<span style="color:#e0af68;">eyJzdWIiOiI0MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTcwMDAwMH0</span>.<span style="color:#9ece6a;">SflKxwRJSMeKKF2QT4fwpM...</span>
+          </div>
+          <div style="margin-top:0.5rem;"><span style="color:#f7768e;">Header</span> — algorithm &amp; token type</div>
+          <div><span style="color:#e0af68;">Payload</span> — claims: sub, iat, exp, role…</div>
+          <div><span style="color:#9ece6a;">Signature</span> — HMAC or RSA over header.payload</div>
+          <div style="margin-top:0.5rem;"><strong>Never put secrets in payload</strong> — it's base64, not encrypted</div>
+          <div><strong>Verify signature on every request</strong></div>
+          <div><strong>Short expiry + refresh token</strong> — access token 15min; refresh 7d</div>
+          <div style="margin-top:0.5rem;">OAuth 2.0 Flows:</div>
+          <div>Authorization Code — user-facing apps</div>
+          <div>Client Credentials — machine-to-machine</div>
+          <div>Device Code — TV / IoT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ PAGINATION ══════════════════════════ -->
+  <section id="pagination">
+    <span class="badge b-inter">Intermediate</span>
+    <h2>Pagination</h2>
+
+    <div class="block-desc">
+      <span>Never return unbounded collections. Three strategies: offset, cursor, and keyset — each with different trade-offs.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">1. Offset / Page Pagination</div>
+        <pre><span class="rcm">── Request ───────────────────────────────</span>
+<span class="rh">GET</span> /users?page=<span class="rn">3</span>&amp;limit=<span class="rn">20</span>
+<span class="rcm"># offset = (page-1) * limit = 40</span>
+<span class="rcm"># SQL: SELECT * FROM users LIMIT 20 OFFSET 40</span>
+
+<span class="rcm">── Response ──────────────────────────────</span>
+{
+  <span class="rs">"data"</span>: [ ... ],
+  <span class="rs">"meta"</span>: {
+    <span class="rs">"page"</span>:       <span class="rn">3</span>,
+    <span class="rs">"perPage"</span>:    <span class="rn">20</span>,
+    <span class="rs">"total"</span>:      <span class="rn">500</span>,
+    <span class="rs">"totalPages"</span>: <span class="rn">25</span>
+  },
+  <span class="rs">"links"</span>: {
+    <span class="rs">"prev"</span>: <span class="rs">"/users?page=2&amp;limit=20"</span>,
+    <span class="rs">"next"</span>: <span class="rs">"/users?page=4&amp;limit=20"</span>,
+    <span class="rs">"first"</span>:<span class="rs">"/users?page=1&amp;limit=20"</span>,
+    <span class="rs">"last"</span>: <span class="rs">"/users?page=25&amp;limit=20"</span>
+  }
+}
+
+<span class="rcm">Pros: jump to any page, total count easy
+Cons: unstable under inserts (items shift pages)
+      OFFSET N is slow on large tables (full scan)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Offset Pagination Diagram</div>
+        <div class="live-output">
+          <div class="pagination-diagram">
+<span style="color:#565f89;">Row: 1  2  3  4  5  6  7  8  9  10 ...</span>
+
+<span style="color:#9ece6a;">Page 1</span> [1 ─ 2 ─ 3 ─ 4 ─ 5]
+<span style="color:#7aa2f7;">Page 2</span>            [6 ─ 7 ─ 8 ─ 9 ─ 10]
+<span style="color:#e0af68;">Page 3</span>                        [11 ─ ...]
+
+<span style="color:#565f89;">Problem: new row inserted before page 2
+is loaded → row 6 appears on BOTH pages</span>
+
+<span style="color:#f7768e;">INSERT row at position 3 →</span>
+<span style="color:#f7768e;">page 2 now starts at old row 5 (shifted)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Cursor pagination</strong> — stable under inserts; ideal for infinite scroll / real-time feeds.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">2. Cursor Pagination</div>
+        <pre><span class="rcm">── Request ───────────────────────────────</span>
+<span class="rh">GET</span> /posts?limit=<span class="rn">20</span>&amp;cursor=<span class="rs">eyJpZCI6MTIzfQ</span>
+<span class="rcm"># cursor = opaque base64 token (encodes last seen id)</span>
+
+<span class="rcm">── SQL (cursor decodes to id=123) ────────</span>
+<span class="rcm">SELECT * FROM posts</span>
+<span class="rcm">WHERE  id &lt; 123</span>
+<span class="rcm">ORDER  BY id DESC</span>
+<span class="rcm">LIMIT  20;</span>
+
+<span class="rcm">── Response ──────────────────────────────</span>
+{
+  <span class="rs">"data"</span>: [ ... ],
+  <span class="rs">"pagination"</span>: {
+    <span class="rs">"hasNext"</span>:      <span class="rk">true</span>,
+    <span class="rs">"nextCursor"</span>:   <span class="rs">"eyJpZCI6MTAzfQ"</span>,
+    <span class="rs">"hasPrevious"</span>:  <span class="rk">true</span>,
+    <span class="rs">"prevCursor"</span>:   <span class="rs">"eyJpZCI6MTQzfQ"</span>
+  }
+}
+
+<span class="rcm">Pros: stable; constant-time regardless of offset
+      works great with infinite scroll
+Cons: no random page access; no total count
+      cursor must be opaque (internal impl hidden)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">3. Keyset / Seek Pagination</div>
+        <div class="live-output" style="font-family:'JetBrains Mono',monospace;font-size:0.69rem;line-height:1.7;color:var(--code-text);background:var(--code-bg);padding:0.75rem;border-radius:4px;">
+<span style="color:#565f89;"># Similar to cursor, but exposes the key</span><br/>
+<span style="color:#7aa2f7;">GET</span> /users?after_id=<span style="color:#ff9e64;">42</span>&amp;limit=<span style="color:#ff9e64;">20</span><br/><br/>
+<span style="color:#565f89;"># SQL</span><br/>
+SELECT * FROM users<br/>
+WHERE id &gt; 42<br/>
+ORDER BY id ASC<br/>
+LIMIT 20;<br/><br/>
+<span style="color:#9ece6a;"># Multi-column for composite sort</span><br/>
+<span style="color:#7aa2f7;">GET</span> /posts?after_date=2024-01-15<br/>
+        &amp;after_id=<span style="color:#ff9e64;">99</span>&amp;limit=<span style="color:#ff9e64;">20</span><br/><br/>
+SELECT * FROM posts<br/>
+WHERE (created_at, id) &gt; ('2024-01-15', 99)<br/>
+ORDER BY created_at, id<br/>
+LIMIT 20;<br/><br/>
+<span style="color:#565f89;"># Requires index on (created_at, id)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>Pagination strategy comparison — choose based on your access pattern.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Strategy Comparison</div>
+        <pre><span class="rcm">Feature          Offset     Cursor     Keyset</span>
+<span class="rcm">─────────────────────────────────────────────</span>
+Jump to page       ✓           ✗          ✗
+Total count        ✓           ✗          ✗
+Stable on inserts  ✗           ✓          ✓
+Performance        ✗ (slow)    ✓          ✓
+Arbitrary sort     ✓           ✓ (enc)    ✓
+Bidirectional      ✓           ✓          ✓
+Bookmarkable URL   ✓           ✗          ✓
+
+<span class="rcm">Use offset when:</span>
+  • Admin pages where jumping is needed
+  • Small tables (&lt; 100k rows)
+  • Users expect "Page 5 of 25"
+
+<span class="rcm">Use cursor/keyset when:</span>
+  • Infinite scroll / real-time feed
+  • Tables with millions of rows
+  • Stability under concurrent writes matters</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Pagination Headers (alternative)</div>
+        <div class="live-output" style="font-size:0.71rem;line-height:1.8;color:var(--text-muted);">
+          <div>GitHub-style — metadata in headers:</div>
+          <div style="font-family:'JetBrains Mono',monospace;margin-top:0.4rem;font-size:0.67rem;color:var(--code-text);">
+            <div>X-Total-Count: 500</div>
+            <div>Link: &lt;/users?page=1&gt;; rel="first",</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/users?page=2&gt;; rel="next",</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/users?page=25&gt;; rel="last"</div>
+          </div>
+          <div style="margin-top:0.6rem;"><strong>RFC 5988</strong> — Web Linking standard for Link header</div>
+          <div style="margin-top:0.4rem;"><strong>Limit range</strong> — cap max limit (e.g. 100) to prevent DoS</div>
+          <div><strong>Default limit</strong> — always set a sensible default (20 or 50)</div>
+          <div><strong>Validate limit</strong> — reject negative or too-large values with 400</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ FILTERING ══════════════════════════ -->
+  <section id="filtering">
+    <span class="badge b-inter">Intermediate</span>
+    <h2>Filtering, Sorting &amp; Searching</h2>
+
+    <div class="block-desc">
+      <span>All implemented via query parameters — compose them freely on any collection endpoint.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Filtering, Sorting, Search</div>
+        <pre><span class="rcm">── Simple filtering ──────────────────────</span>
+<span class="rh">GET</span> /users?role=admin&amp;active=true
+
+<span class="rcm">── Range filters ─────────────────────────</span>
+<span class="rh">GET</span> /orders?minAmount=100&amp;maxAmount=500
+<span class="rh">GET</span> /events?after=2024-01-01&amp;before=2024-12-31
+<span class="rcm"># OR use filter[field][op]=value style:</span>
+<span class="rh">GET</span> /orders?filter[amount][gte]=100&amp;filter[amount][lte]=500
+
+<span class="rcm">── Multi-value (IN) ─────────────────────</span>
+<span class="rh">GET</span> /products?category=shoes&amp;category=bags
+<span class="rcm"># many APIs: ?category[]=shoes&amp;category[]=bags</span>
+<span class="rcm"># or comma: ?category=shoes,bags</span>
+
+<span class="rcm">── Full-text search ──────────────────────</span>
+<span class="rh">GET</span> /articles?q=rest+api+design
+<span class="rh">GET</span> /products?search=blue+sneakers
+
+<span class="rcm">── Sorting ───────────────────────────────</span>
+<span class="rh">GET</span> /users?sort=name            <span class="rcm"># ascending</span>
+<span class="rh">GET</span> /users?sort=-createdAt      <span class="rcm"># - prefix = descending</span>
+<span class="rh">GET</span> /users?sort=-createdAt,name <span class="rcm"># multi-column</span>
+<span class="rcm"># alternative: ?sortBy=name&amp;order=asc</span>
+
+<span class="rcm">── Sparse fieldsets ─────────────────────</span>
+<span class="rh">GET</span> /users?fields=id,name,email  <span class="rcm"># return only these</span>
+<span class="rcm"># reduces payload for mobile clients</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Compound Example</div>
+        <div class="live-output" style="font-size:0.71rem;color:var(--text-muted);line-height:1.8;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--code-text);word-break:break-all;">GET /products ?category=shoes &amp;color=blue &amp;minPrice=50 &amp;maxPrice=200 &amp;sort=-rating,price &amp;q=sneakers &amp;fields=id,name,price,rating &amp;page=1&amp;limit=20</div>
+          <div style="margin-top:0.7rem;"><strong>Filter by:</strong> category + color + price range</div>
+          <div><strong>Search:</strong> "sneakers" in name/desc</div>
+          <div><strong>Sort:</strong> highest rating first, then cheapest</div>
+          <div><strong>Fields:</strong> only 4 fields (save bandwidth)</div>
+          <div><strong>Page:</strong> first 20 results</div>
+          <div style="margin-top:0.5rem;"><strong>Always index</strong> filter columns in the DB</div>
+          <div><strong>Limit filter combinations</strong> to prevent full-table scans</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ VERSIONING ══════════════════════════ -->
+  <section id="versioning">
+    <span class="badge b-inter">Intermediate</span>
+    <h2>API Versioning</h2>
+
+    <div class="block-desc">
+      <span>Versioning lets you evolve an API without breaking existing clients. Four strategies — each with different trade-offs.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Versioning Strategies</div>
+        <pre><span class="rcm">── 1. URL Path (most common) ─────────────</span>
+<span class="rh">GET</span> /api/<span class="rn">v1</span>/users
+<span class="rh">GET</span> /api/<span class="rn">v2</span>/users
+<span class="rcm">✓ Visible, cacheable, easy to route
+✗ "Dirty" URL; violates REST URI purity</span>
+
+<span class="rcm">── 2. Request Header ─────────────────────</span>
+<span class="rh">GET</span> /api/users
+<span class="ro">API-Version</span>: 2024-01-15
+<span class="rcm">✓ Clean URLs; precise date-based versioning
+✗ Not cache-friendly; invisible in browser</span>
+
+<span class="rcm">── 3. Accept Header (Content Negotiation)</span>
+<span class="rh">GET</span> /api/users
+<span class="ro">Accept</span>: application/vnd.myapi.<span class="rn">v2</span>+json
+<span class="rcm">✓ Pure REST; standard HTTP mechanism
+✗ Verbose; harder to test in browser/curl</span>
+
+<span class="rcm">── 4. Query Parameter ───────────────────</span>
+<span class="rh">GET</span> /api/users?version=<span class="rn">2</span>
+<span class="rcm">✓ Easy to test; visible in browser
+✗ Pollutes resource URI; cache issues</span>
+
+<span class="rcm">── Recommendation ───────────────────────</span>
+<span class="rcm">Use URL path for public APIs (/v1/, /v2/)
+Use header versioning for internal APIs</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Breaking vs Non-Breaking</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>Non-breaking</strong> (no version bump needed): adding new optional fields, adding new endpoints, relaxing validation, adding new optional query params</li>
+            <li><strong>Breaking</strong> (require new version): removing or renaming fields, changing field types, changing status codes, removing endpoints, changing auth</li>
+          </ul>
+          <div style="font-size:0.71rem;margin-top:0.6rem;color:var(--text-muted);">
+            <div><strong>Deprecation lifecycle:</strong></div>
+            <div>1. Announce deprecation (Sunset header)</div>
+            <div>2. Keep v1 running ≥6 months</div>
+            <div>3. Add <code>Deprecation</code> + <code>Sunset</code> headers</div>
+            <div>4. Monitor usage before killing</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;margin-top:0.5rem;color:var(--code-text);">
+            Deprecation: Sat, 1 Jan 2025 00:00:00 GMT<br/>
+            Sunset: Sat, 1 Jul 2025 00:00:00 GMT<br/>
+            Link: &lt;/api/v2/users&gt;; rel="successor-version"
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ ERRORS ══════════════════════════ -->
+  <section id="errors">
+    <span class="badge b-inter">Intermediate</span>
+    <h2>Error Handling</h2>
+
+    <div class="block-desc">
+      <span>Consistent, machine-readable error responses help clients recover gracefully. Pick one format and use it everywhere.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmessages.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Error Response Formats</div>
+        <pre><span class="rcm">── RFC 9457 (Problem Details) — recommended ─</span>
+<span class="rn">HTTP/1.1 422 Unprocessable Entity</span>
+<span class="ro">Content-Type</span>: application/problem+json
+
+{
+  <span class="rs">"type"</span>:     <span class="rs">"https://api.example.com/errors/validation"</span>,
+  <span class="rs">"title"</span>:    <span class="rs">"Validation Failed"</span>,
+  <span class="rs">"status"</span>:   <span class="rn">422</span>,
+  <span class="rs">"detail"</span>:   <span class="rs">"Request body has 2 invalid fields"</span>,
+  <span class="rs">"instance"</span>: <span class="rs">"/users"</span>,
+  <span class="rs">"errors"</span>: [
+    { <span class="rs">"field"</span>: <span class="rs">"email"</span>, <span class="rs">"message"</span>: <span class="rs">"Must be a valid email"</span> },
+    { <span class="rs">"field"</span>: <span class="rs">"age"</span>,   <span class="rs">"message"</span>: <span class="rs">"Must be 18 or older"</span> }
+  ]
+}
+
+<span class="rcm">── Simple envelope ───────────────────────</span>
+<span class="rn">HTTP/1.1 400 Bad Request</span>
+{
+  <span class="rs">"error"</span>: {
+    <span class="rs">"code"</span>:    <span class="rs">"VALIDATION_ERROR"</span>,
+    <span class="rs">"message"</span>: <span class="rs">"Invalid input"</span>,
+    <span class="rs">"details"</span>: [
+      { <span class="rs">"field"</span>: <span class="rs">"email"</span>, <span class="rs">"issue"</span>: <span class="rs">"invalid format"</span> }
+    ],
+    <span class="rs">"requestId"</span>: <span class="rs">"550e8400-e29b-41d4-a716"</span>
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Error Rules</div>
+        <div class="live-output">
+          <ul class="tip-list">
+            <li><strong>Never 200 for errors</strong> — monitoring and clients rely on status codes</li>
+            <li><strong>Machine-readable code</strong> — <code>"code": "NOT_FOUND"</code> lets clients switch on it</li>
+            <li><strong>Human-readable message</strong> — for debugging and UX display</li>
+            <li><strong>Field-level errors</strong> — list each invalid field with its specific problem</li>
+            <li><strong>Include requestId</strong> — lets users report issues and lets you find logs</li>
+            <li><strong>Don't leak internals</strong> — no stack traces, SQL errors, or file paths in 5xx</li>
+            <li><strong>Consistent structure</strong> — same shape for every error in the API</li>
+            <li><strong>Use Problem Details (RFC 9457)</strong> — it's an IETF standard; tools understand it</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ CACHING ══════════════════════════ -->
+  <section id="caching">
+    <span class="badge b-adv">Advanced</span>
+    <h2>HTTP Caching</h2>
+
+    <div class="block-desc">
+      <span>HTTP caching dramatically reduces latency and server load. Two mechanisms: <strong>expiration</strong> (Cache-Control) and <strong>validation</strong> (ETag / Last-Modified).</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmessages.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Cache-Control Directives</div>
+        <pre><span class="rcm">── Server response headers ───────────────</span>
+<span class="ro">Cache-Control</span>: max-age=<span class="rn">3600</span>
+<span class="rcm"># Cache for 1 hour; re-validate after</span>
+
+<span class="ro">Cache-Control</span>: no-cache
+<span class="rcm"># Must re-validate with server before using</span>
+
+<span class="ro">Cache-Control</span>: no-store
+<span class="rcm"># Never cache — sensitive data (passwords, tokens)</span>
+
+<span class="ro">Cache-Control</span>: public, max-age=<span class="rn">86400</span>
+<span class="rcm"># CDN + browser may cache for 24 hours</span>
+
+<span class="ro">Cache-Control</span>: private, max-age=<span class="rn">300</span>
+<span class="rcm"># Browser only (not CDN), 5 minutes</span>
+
+<span class="ro">Cache-Control</span>: s-maxage=<span class="rn">3600</span>, max-age=<span class="rn">60</span>
+<span class="rcm"># CDN: 1h, browser: 1m</span>
+
+<span class="rcm">── Validation: ETag ─────────────────────</span>
+<span class="rcm">Server sends:</span>
+<span class="ro">ETag</span>: "33a64df551425fcc55e"
+
+<span class="rcm">Client sends on next request:</span>
+<span class="ro">If-None-Match</span>: "33a64df551425fcc55e"
+
+<span class="rcm">Server replies 304 (no body) if unchanged,
+or 200 + new ETag if changed</span>
+
+<span class="rcm">── Validation: Last-Modified ────────────</span>
+<span class="ro">Last-Modified</span>: Tue, 15 Jan 2024 12:00:00 GMT
+<span class="rcm">Client:</span>
+<span class="ro">If-Modified-Since</span>: Tue, 15 Jan 2024 12:00:00 GMT</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Caching Decision Tree</div>
+        <div class="live-output" style="font-size:0.71rem;line-height:1.8;color:var(--text-muted);">
+          <div>Is data sensitive? (auth, PII)</div>
+          <div style="padding-left:0.8rem;">→ <code>no-store</code></div>
+          <div style="margin-top:0.3rem;">Is it user-specific?</div>
+          <div style="padding-left:0.8rem;">→ <code>private, max-age=X</code></div>
+          <div style="margin-top:0.3rem;">Is it public &amp; rarely changes?</div>
+          <div style="padding-left:0.8rem;">→ <code>public, max-age=86400</code></div>
+          <div style="margin-top:0.3rem;">Changes frequently but verify cheaply?</div>
+          <div style="padding-left:0.8rem;">→ <code>no-cache</code> + ETag</div>
+          <div style="margin-top:0.6rem;"><strong>ETag vs Last-Modified:</strong></div>
+          <div>ETag is stronger — handles sub-second changes and content-based identity</div>
+          <div style="margin-top:0.3rem;"><strong>304 Not Modified</strong> saves full body transfer — critical for large responses</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ RATE LIMITING ══════════════════════════ -->
+  <section id="rate-limiting">
+    <span class="badge b-adv">Advanced</span>
+    <h2>Rate Limiting</h2>
+
+    <div class="block-desc">
+      <span>Protect your API from abuse and ensure fair usage. Always communicate limits and current usage to clients via headers.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmessages.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Rate Limit Headers &amp; Algorithms</div>
+        <pre><span class="rcm">── Response headers (IETF draft standard) ─</span>
+<span class="ro">RateLimit-Limit</span>:      <span class="rn">1000</span>    <span class="rcm"># requests per window</span>
+<span class="ro">RateLimit-Remaining</span>:  <span class="rn">987</span>     <span class="rcm"># left in current window</span>
+<span class="ro">RateLimit-Reset</span>:      <span class="rn">1705315200</span> <span class="rcm"># Unix epoch when resets</span>
+<span class="ro">Retry-After</span>:          <span class="rn">30</span>      <span class="rcm"># seconds (on 429)</span>
+
+<span class="rcm">── 429 Too Many Requests response ─────────</span>
+<span class="rn">HTTP/1.1 429 Too Many Requests</span>
+<span class="ro">Retry-After</span>: 30
+{
+  <span class="rs">"error"</span>: <span class="rs">"RATE_LIMIT_EXCEEDED"</span>,
+  <span class="rs">"message"</span>: <span class="rs">"1000 requests/hour limit reached"</span>,
+  <span class="rs">"retryAfter"</span>: <span class="rn">30</span>
+}
+
+<span class="rcm">── Algorithms ───────────────────────────</span>
+<span class="rk">Fixed Window</span>
+  Simple; allow N per minute window.
+  Flaw: 2× burst at window boundary.
+
+<span class="rk">Sliding Window Log</span>
+  Precise; store timestamp of each request.
+  High memory for large-traffic APIs.
+
+<span class="rk">Sliding Window Counter</span>
+  Hybrid: counter + weighted previous window.
+  Good accuracy, low memory.
+
+<span class="rk">Token Bucket</span>
+  N tokens; refill at rate R/sec; burst allowed.
+  Most flexible; used by AWS, Stripe.
+
+<span class="rk">Leaky Bucket</span>
+  Queue of fixed size; process at constant rate.
+  Smooths bursts; FIFO queue-based.</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Rate Limit by Dimension</div>
+        <div class="live-output" style="font-size:0.71rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong>By IP</strong> — simplest; unauthenticated endpoints</div>
+          <div><strong>By API key</strong> — per-client limits; most common</div>
+          <div><strong>By user ID</strong> — after auth; fair per-account</div>
+          <div><strong>By tier</strong> — free: 100/hr, pro: 10k/hr, enterprise: unlimited</div>
+          <div><strong>By endpoint</strong> — expensive endpoints get lower limits</div>
+          <div style="margin-top:0.5rem;"><strong>Implementation:</strong></div>
+          <div>Redis INCR + EXPIRE — atomic, shared across nodes</div>
+          <div>Nginx limit_req_zone — at load balancer level</div>
+          <div>API Gateway — AWS/Apigee/Kong built-in</div>
+          <div style="margin-top:0.5rem;"><strong>Client-side best practice:</strong></div>
+          <div>Exponential backoff with jitter on 429</div>
+          <div>Honour Retry-After header</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ ADVANCED ══════════════════════════ -->
+  <section id="advanced">
+    <span class="badge b-adv">Advanced</span>
+    <h2>Advanced Concepts</h2>
+
+    <!-- HATEOAS -->
+    <div class="block-desc">
+      <span><strong>HATEOAS</strong> — responses include hyperlinks to related actions; clients navigate the API without hard-coded URLs.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">HATEOAS Example</div>
+        <pre><span class="rcm">GET /orders/7 → 200 OK</span>
+{
+  <span class="rs">"id"</span>:     <span class="rn">7</span>,
+  <span class="rs">"status"</span>: <span class="rs">"pending"</span>,
+  <span class="rs">"total"</span>:  <span class="rn">129.99</span>,
+  <span class="rs">"_links"</span>: {
+    <span class="rs">"self"</span>:    { <span class="rs">"href"</span>: <span class="rs">"/orders/7"</span> },
+    <span class="rs">"cancel"</span>:  { <span class="rs">"href"</span>: <span class="rs">"/orders/7/cancel"</span>, <span class="rs">"method"</span>: <span class="rs">"POST"</span> },
+    <span class="rs">"payment"</span>: { <span class="rs">"href"</span>: <span class="rs">"/orders/7/payment"</span>, <span class="rs">"method"</span>: <span class="rs">"POST"</span> },
+    <span class="rs">"items"</span>:   { <span class="rs">"href"</span>: <span class="rs">"/orders/7/items"</span> }
+  }
+}
+<span class="rcm"># When order ships, cancel link disappears — client
+# never needs to know the rules for allowed actions</span>
+
+<span class="rcm">── Idempotency Keys ──────────────────────</span>
+<span class="rcm">Client generates UUID; includes in request:</span>
+<span class="ro">Idempotency-Key</span>: 550e8400-e29b-41d4-a716
+
+<span class="rcm">Server: on first request → process &amp; store result
+        on retry with same key → return stored result
+        Enables safe retry of POST /payments</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Async APIs — Long-Running Jobs</div>
+        <div class="live-output" style="font-size:0.71rem;line-height:1.8;color:var(--text-muted);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--code-text);">
+            POST /reports<br/>
+            → 202 Accepted<br/>
+            Location: /jobs/abc123<br/><br/>
+            GET /jobs/abc123<br/>
+            → 200 { "status": "processing", "progress": 45 }<br/><br/>
+            GET /jobs/abc123<br/>
+            → 200 { "status": "done",<br/>
+            &nbsp;&nbsp;"result": "/reports/xyz" }
+          </div>
+          <div style="margin-top:0.5rem;"><strong>Webhooks</strong> — push result when done:</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--code-text);">
+            POST /reports<br/>
+            { "webhookUrl": "https://you.com/hook" }<br/>
+            → 202 Accepted<br/><br/>
+            # Server POSTs to your URL when done<br/>
+            POST https://you.com/hook<br/>
+            { "event": "report.done", "reportId": "xyz" }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Negotiation + Bulk -->
+    <div class="block-desc">
+      <span><strong>Content negotiation</strong> lets clients request different response formats. <strong>Bulk operations</strong> reduce round trips.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Content Negotiation &amp; Bulk</div>
+        <pre><span class="rcm">── Content negotiation ───────────────────</span>
+<span class="ro">Accept</span>: application/json        <span class="rcm"># want JSON</span>
+<span class="ro">Accept</span>: text/csv                 <span class="rcm"># want CSV export</span>
+<span class="ro">Accept</span>: application/pdf         <span class="rcm"># want PDF</span>
+<span class="ro">Accept</span>: application/json, text/html;q=0.9  <span class="rcm"># weighted</span>
+
+<span class="rcm">Server header if can't fulfil:</span>
+<span class="rn">HTTP/1.1 406 Not Acceptable</span>
+
+<span class="rcm">── Bulk create ───────────────────────────</span>
+<span class="rh">POST</span> /users/batch
+[
+  { <span class="rs">"name"</span>: <span class="rs">"Alice"</span>, <span class="rs">"email"</span>: <span class="rs">"a@x.com"</span> },
+  { <span class="rs">"name"</span>: <span class="rs">"Bob"</span>,   <span class="rs">"email"</span>: <span class="rs">"b@x.com"</span> }
+]
+<span class="rcm">→ 207 Multi-Status</span>
+{
+  <span class="rs">"results"</span>: [
+    { <span class="rs">"status"</span>:<span class="rn">201</span>, <span class="rs">"id"</span>:<span class="rn">1</span> },
+    { <span class="rs">"status"</span>:<span class="rn">409</span>, <span class="rs">"error"</span>:<span class="rs">"email exists"</span> }
+  ]
+}
+<span class="rcm">207 Multi-Status — each result has its own status</span>
+
+<span class="rcm">── Partial response (GraphQL-style) ──────</span>
+<span class="rh">GET</span> /users/42?include=orders,profile
+<span class="rcm"># server expands related resources inline</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Security Headers</div>
+        <div class="live-output" style="font-size:0.71rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong>Always send on every response:</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.66rem;color:var(--code-text);margin-top:0.3rem;">
+            Strict-Transport-Security: max-age=31536000<br/>
+            X-Content-Type-Options: nosniff<br/>
+            X-Frame-Options: DENY<br/>
+            Content-Security-Policy: default-src 'none'<br/>
+            Referrer-Policy: no-referrer<br/>
+            Permissions-Policy: geolocation=()
+          </div>
+          <div style="margin-top:0.5rem;"><strong>CORS headers (cross-origin):</strong></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.66rem;color:var(--code-text);">
+            Access-Control-Allow-Origin: https://app.example.com<br/>
+            Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br/>
+            Access-Control-Allow-Headers: Authorization,Content-Type<br/>
+            Access-Control-Max-Age: 86400
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ COMPARE ══════════════════════════ -->
+  <section id="compare">
+    <span class="badge b-adv">Advanced</span>
+    <h2>REST vs GraphQL vs gRPC</h2>
+
+    <div class="block-desc">
+      <span>No single protocol wins everywhere. Choose based on client needs, team expertise, and performance requirements.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Side-by-Side Comparison</div>
+        <pre><span class="rcm">Feature         REST        GraphQL     gRPC</span>
+<span class="rcm">─────────────────────────────────────────────────────────</span>
+Protocol        HTTP/1.1+   HTTP/1.1+   HTTP/2
+Data format     JSON/XML    JSON        Protobuf (binary)
+Typing          None        SDL schema  .proto schema
+Fetching        Fixed resp  Client def  Fixed (streaming)
+Over-fetching   Common      Solved      N/A
+Under-fetching  N-requests  One query   N/A
+Caching         Native HTTP None/custom App-level
+Versioning      URL/header  Schema evo  .proto compat
+Tooling         Universal   Growing     Generated clients
+Browser support Native      Native      Needs grpc-web
+Best for        Public APIs Flex UI     Microservices</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">When to choose each</div>
+        <div class="live-output">
+          <div class="info-card" style="margin-bottom:0.5rem;">
+            <h4>REST</h4>
+            <ul>
+              <li>Public APIs &amp; third-party integrations</li>
+              <li>Simple CRUD resources</li>
+              <li>CDN caching is important</li>
+              <li>Team familiar with HTTP</li>
+            </ul>
+          </div>
+          <div class="info-card" style="margin-bottom:0.5rem;">
+            <h4>GraphQL</h4>
+            <ul>
+              <li>Complex, nested data (feeds, dashboards)</li>
+              <li>Multiple clients with different data needs</li>
+              <li>Rapid UI iteration</li>
+              <li>Reducing over/under-fetching</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>gRPC</h4>
+            <ul>
+              <li>Internal microservice communication</li>
+              <li>Low-latency, high-throughput needed</li>
+              <li>Bi-directional streaming</li>
+              <li>Strong typing across polyglot services</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>REST API design checklist — verify before shipping.</span>
+      <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">API Design Checklist</div>
+        <pre><span class="rg">□</span> Nouns in URIs, not verbs
+<span class="rg">□</span> Plural resource names (/users not /user)
+<span class="rg">□</span> Correct HTTP methods (GET=read, POST=create…)
+<span class="rg">□</span> Correct status codes (201 on create, 204 on delete)
+<span class="rg">□</span> Versioning strategy defined (/v1/)
+<span class="rg">□</span> Pagination on all collections (default + max limit)
+<span class="rg">□</span> Filtering &amp; sorting via query params
+<span class="rg">□</span> Consistent JSON casing (camelCase or snake_case)
+<span class="rg">□</span> ISO 8601 for all dates
+<span class="rg">□</span> Consistent error format with machine-readable codes
+<span class="rg">□</span> Auth on all non-public endpoints
+<span class="rg">□</span> Input validation with 400/422 on failure
+<span class="rg">□</span> Rate limiting with RateLimit-* headers
+<span class="rg">□</span> Cache-Control headers on GETs
+<span class="rg">□</span> Security headers (HSTS, CSP, CORS)
+<span class="rg">□</span> No sensitive data in URLs
+<span class="rg">□</span> Idempotency key support on payments/critical POSTs
+<span class="rg">□</span> No stack traces in 5xx responses
+<span class="rg">□</span> OpenAPI / Swagger spec generated
+<span class="rg">□</span> Deprecation headers on v-n endpoints</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">Useful Response Headers Summary</div>
+        <div class="live-output" style="font-size:0.7rem;line-height:1.8;color:var(--text-muted);">
+          <div><span class="h-name">Content-Type</span> — MIME type of response body</div>
+          <div><span class="h-name">Cache-Control</span> — caching instructions</div>
+          <div><span class="h-name">ETag</span> — resource version fingerprint</div>
+          <div><span class="h-name">Last-Modified</span> — last change timestamp</div>
+          <div><span class="h-name">Location</span> — URL of newly created resource</div>
+          <div><span class="h-name">X-Request-Id</span> — correlation ID for tracing</div>
+          <div><span class="h-name">Retry-After</span> — seconds before retry (429/503)</div>
+          <div><span class="h-name">RateLimit-Remaining</span> — calls left in window</div>
+          <div><span class="h-name">Deprecation</span> — date this version is deprecated</div>
+          <div><span class="h-name">Sunset</span> — date this version goes offline</div>
+          <div><span class="h-name">Link</span> — pagination links (RFC 5988)</div>
+          <div><span class="h-name">Allow</span> — valid methods for this endpoint</div>
+          <div><span class="h-name">WWW-Authenticate</span> — auth scheme on 401</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

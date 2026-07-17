@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLD &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .lk  { color: #bb9af7; }   /* keyword / modifier */
+    .lc  { color: #7aa2f7; }   /* class / type name */
+    .ls  { color: #9ece6a; }   /* string */
+    .lcm { color: #565f89; }   /* comment */
+    .lm  { color: #e0af68; }   /* method / member */
+    .lo  { color: #f7768e; }   /* operator / decorator */
+    .ln  { color: #ff9e64; }   /* number / constant */
+
+    .badge { display:inline-block; padding:0.15rem 0.55rem; border-radius:4px; font-size:0.62rem; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; margin-bottom:0.6rem; }
+    .b-oop  { background:#1e40af; color:#fff; }
+    .b-sol  { background:#065f46; color:#fff; }
+    .b-rel  { background:#7c3aed; color:#fff; }
+    .b-cc   { background:#92400e; color:#fff; }
+    .b-cr   { background:#be185d; color:#fff; }
+    .b-str  { background:#0f766e; color:#fff; }
+    .b-beh  { background:#1d4ed8; color:#fff; }
+    .b-uml  { background:#374151; color:#fff; }
+    .b-sys  { background:#991b1b; color:#fff; }
+
+    .principle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.75rem; margin:0.75rem 0 1.25rem; }
+    .principle-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.9rem 1rem; }
+    .principle-card h4 { margin:0 0 0.3rem; font-size:0.8rem; color:var(--accent); }
+    .principle-card p  { margin:0; font-size:0.72rem; color:var(--text-muted); line-height:1.55; }
+    .principle-card code { font-size:0.68rem; background:var(--inline-code-bg); color:var(--inline-code-text); padding:1px 4px; border-radius:3px; }
+
+    .pattern-tag { display:inline-block; font-size:0.6rem; font-weight:600; padding:0.1rem 0.4rem; border-radius:3px; margin-left:0.4rem; vertical-align:middle; background:var(--accent-subtle-2); color:var(--accent); }
+
+    .uml-box { font-family:'JetBrains Mono',monospace; font-size:0.7rem; background:var(--code-bg); color:var(--code-text); padding:0.9rem 1.1rem; border-radius:var(--radius-sm); line-height:1.7; overflow-x:auto; }
+    .uml-box .sep { color:#444c56; }
+    .uml-box .cls { color:#7aa2f7; font-weight:600; }
+    .uml-box .mem { color:#c9d1d9; }
+    .uml-box .acc { color:#e0af68; }
+    .uml-box .rel { color:#f7768e; }
+    .uml-box .note { color:#565f89; }
+
+    .tip-row { display:flex; gap:0.6rem; flex-wrap:wrap; margin:0.6rem 0; }
+    .tip { background:var(--accent-subtle); border:1px solid var(--accent-subtle-2); border-radius:var(--radius-xs); padding:0.4rem 0.7rem; font-size:0.7rem; color:var(--text-muted); }
+    .tip strong { color:var(--accent); }
+
+    .sys-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0.75rem; margin:0.75rem 0 1.5rem; }
+    .sys-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; }
+    .sys-card h4 { margin:0 0 0.5rem; font-size:0.82rem; color:var(--text); }
+    .sys-card ul { margin:0; padding-left:1rem; }
+    .sys-card li { font-size:0.71rem; color:var(--text-muted); margin-bottom:0.2rem; line-height:1.5; }
+    .sys-card li strong { color:var(--text); }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('LLD')</script>
+<script>renderSourceLink('LLD')</script>
+
+<main>
+  <div class="page-header">
+    <h1>LLD</h1>
+    <p class="subtitle">Low-Level Design — Basic to Advanced</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#oop">OOP</a>
+      <a href="#solid">SOLID</a>
+      <a href="#relationships">Relations</a>
+      <a href="#clean-code">Clean Code</a>
+      <a href="#creational">Creational</a>
+      <a href="#structural">Structural</a>
+      <a href="#behavioral">Behavioral</a>
+      <a href="#uml">UML</a>
+      <a href="#systems">Systems</a>
+    </nav>
+  </div>
+
+    <!-- ═══════════════════════════════════════════ OOP ═══ -->
+    <section id="oop">
+      <span class="badge b-oop">Foundational</span>
+      <h2>OOP — The Four Pillars</h2>
+
+      <div class="principle-grid">
+        <div class="principle-card">
+          <h4>Encapsulation</h4>
+          <p>Bundle data and the methods that operate on it. Hide internal state; expose only a public API. Use <code>private</code> fields + <code>getters/setters</code>.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Abstraction</h4>
+          <p>Expose <em>what</em> an object does, hide <em>how</em>. Implemented via <code>abstract class</code> or <code>interface</code>. Callers depend on the contract, not the impl.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Inheritance</h4>
+          <p>A child class reuses parent behaviour (<code>extends</code>). Avoid deep chains (&gt;2 levels). Prefer composition when the "is-a" relationship is forced.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Polymorphism</h4>
+          <p>One interface, many forms. <strong>Compile-time</strong>: method overloading. <strong>Runtime</strong>: method overriding via <code>@Override</code> + dynamic dispatch.</p>
+        </div>
+      </div>
+
+      <!-- Encapsulation -->
+      <div class="block-desc">
+        <span><strong>Encapsulation</strong> — keep fields <code>private</code>; control access through methods.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Encapsulation.java</div>
+          <pre><span class="lk">public class</span> <span class="lc">BankAccount</span> {
+  <span class="lk">private</span> <span class="lc">double</span> balance;    <span class="lcm">// hidden state</span>
+
+  <span class="lk">public void</span> <span class="lm">deposit</span>(<span class="lc">double</span> amount) {
+    <span class="lk">if</span> (amount &gt; <span class="ln">0</span>) balance += amount;
+  }
+
+  <span class="lk">public double</span> <span class="lm">getBalance</span>() { <span class="lk">return</span> balance; }
+  <span class="lcm">// no public setBalance — prevents illegal direct write</span>
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Key Rules</div>
+          <div class="live-output" style="font-size:0.73rem;line-height:1.8;color:var(--text-muted);">
+            <div>Fields → <code>private</code></div>
+            <div>Read access → <code>getX()</code></div>
+            <div>Write access → validated <code>setX()</code></div>
+            <div>Invariants enforced in setters</div>
+            <div>Never expose mutable internal collections directly</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Abstraction -->
+      <div class="block-desc">
+        <span><strong>Abstraction</strong> — callers depend on the interface, not the concrete class.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Abstraction.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">Shape</span> {
+  <span class="lk">double</span> <span class="lm">area</span>();        <span class="lcm">// contract — no impl</span>
+  <span class="lk">double</span> <span class="lm">perimeter</span>();
+}
+
+<span class="lk">class</span> <span class="lc">Circle</span> <span class="lk">implements</span> <span class="lc">Shape</span> {
+  <span class="lk">private final double</span> r;
+  <span class="lc">Circle</span>(<span class="lk">double</span> r) { <span class="lk">this</span>.r = r; }
+
+  <span class="lo">@Override</span> <span class="lk">public double</span> <span class="lm">area</span>() { <span class="lk">return</span> Math.PI * r * r; }
+  <span class="lo">@Override</span> <span class="lk">public double</span> <span class="lm">perimeter</span>() { <span class="lk">return</span> <span class="ln">2</span> * Math.PI * r; }
+}
+
+<span class="lk">class</span> <span class="lc">Rectangle</span> <span class="lk">implements</span> <span class="lc">Shape</span> {
+  <span class="lk">private final double</span> w, h;
+  <span class="lc">Rectangle</span>(<span class="lk">double</span> w, <span class="lk">double</span> h) { <span class="lk">this</span>.w=w; <span class="lk">this</span>.h=h; }
+
+  <span class="lo">@Override</span> <span class="lk">public double</span> <span class="lm">area</span>() { <span class="lk">return</span> w * h; }
+  <span class="lo">@Override</span> <span class="lk">public double</span> <span class="lm">perimeter</span>() { <span class="lk">return</span> <span class="ln">2</span> * (w + h); }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">interface vs abstract class</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong style="color:var(--accent);">interface</strong></div>
+            <div>Multiple inheritance OK</div>
+            <div>All methods implicitly public</div>
+            <div>No state (except constants)</div>
+            <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">abstract class</strong></div>
+            <div>Single inheritance only</div>
+            <div>Can have state &amp; concrete methods</div>
+            <div>Use when sharing default logic</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Polymorphism -->
+      <div class="block-desc">
+        <span><strong>Polymorphism</strong> — overloading (compile-time) vs overriding (runtime).</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Polymorphism.java</div>
+          <pre><span class="lcm">// ── Compile-time: overloading ──</span>
+<span class="lk">class</span> <span class="lc">Printer</span> {
+  <span class="lk">void</span> <span class="lm">print</span>(<span class="lc">String</span> s)  { System.out.println(s); }
+  <span class="lk">void</span> <span class="lm">print</span>(<span class="lk">int</span> n)     { System.out.println(n); }
+  <span class="lk">void</span> <span class="lm">print</span>(<span class="lk">double</span> d)  { System.out.println(d); }
+}
+
+<span class="lcm">// ── Runtime: overriding ──</span>
+<span class="lk">abstract class</span> <span class="lc">Animal</span> {
+  <span class="lk">abstract void</span> <span class="lm">speak</span>();
+}
+<span class="lk">class</span> <span class="lc">Dog</span> <span class="lk">extends</span> <span class="lc">Animal</span> {
+  <span class="lo">@Override</span> <span class="lk">void</span> <span class="lm">speak</span>() { System.out.println(<span class="ls">"Woof"</span>); }
+}
+<span class="lk">class</span> <span class="lc">Cat</span> <span class="lk">extends</span> <span class="lc">Animal</span> {
+  <span class="lo">@Override</span> <span class="lk">void</span> <span class="lm">speak</span>() { System.out.println(<span class="ls">"Meow"</span>); }
+}
+
+<span class="lcm">// caller doesn't know which subtype</span>
+<span class="lc">Animal</span> a = <span class="lk">new</span> <span class="lc">Dog</span>();
+a.<span class="lm">speak</span>();  <span class="lcm">// "Woof" — decided at runtime</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">When to use each</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong style="color:var(--accent);">Overloading</strong></div>
+            <div>Same operation, different input types</div>
+            <div>Resolved by compiler</div>
+            <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Overriding</strong></div>
+            <div>Subtype changes parent behaviour</div>
+            <div>Resolved at runtime (JVM vtable)</div>
+            <div>Always annotate <code>@Override</code></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ SOLID ═══ -->
+    <section id="solid">
+      <span class="badge b-sol">Principles</span>
+      <h2>SOLID Principles</h2>
+
+      <!-- SRP -->
+      <div class="block-desc">
+        <span><strong>S — Single Responsibility:</strong> a class should have exactly one reason to change.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">SRP.java</div>
+          <pre><span class="lcm">// ✗ BAD — one class does too much</span>
+<span class="lk">class</span> <span class="lc">UserService</span> {
+  <span class="lk">void</span> <span class="lm">saveUser</span>(<span class="lc">User</span> u)   { <span class="lcm">/* DB logic */</span> }
+  <span class="lk">void</span> <span class="lm">sendEmail</span>(<span class="lc">User</span> u)  { <span class="lcm">/* Email logic */</span> }
+  <span class="lk">void</span> <span class="lm">generatePDF</span>(<span class="lc">User</span> u){ <span class="lcm">/* Report logic */</span> }
+}
+
+<span class="lcm">// ✓ GOOD — each class has one job</span>
+<span class="lk">class</span> <span class="lc">UserRepository</span>  { <span class="lk">void</span> <span class="lm">save</span>(<span class="lc">User</span> u)  {} }
+<span class="lk">class</span> <span class="lc">EmailService</span>    { <span class="lk">void</span> <span class="lm">send</span>(<span class="lc">User</span> u)  {} }
+<span class="lk">class</span> <span class="lc">ReportGenerator</span> { <span class="lk">void</span> <span class="lm">pdf</span>(<span class="lc">User</span> u)   {} }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Why it matters</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Smaller classes = easier tests</div>
+            <div>Change DB logic → only touch <code>Repository</code></div>
+            <div>Change email format → only touch <code>EmailService</code></div>
+            <div style="margin-top:0.5rem;color:var(--accent);">Smell: class with &gt;1 section of "why would this change?"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OCP -->
+      <div class="block-desc">
+        <span><strong>O — Open/Closed:</strong> open for extension, closed for modification.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">OCP.java</div>
+          <pre><span class="lcm">// ✗ BAD — adding a shape requires editing this class</span>
+<span class="lk">class</span> <span class="lc">AreaCalc</span> {
+  <span class="lk">double</span> <span class="lm">area</span>(<span class="lc">Object</span> shape) {
+    <span class="lk">if</span> (shape <span class="lk">instanceof</span> <span class="lc">Circle</span>) { <span class="lcm">/* ... */</span> }
+    <span class="lk">else if</span> (shape <span class="lk">instanceof</span> <span class="lc">Rect</span>) { <span class="lcm">/* ... */</span> }
+    <span class="lcm">// adding Triangle means editing here ← bad</span>
+  }
+}
+
+<span class="lcm">// ✓ GOOD — add a shape by implementing the interface</span>
+<span class="lk">interface</span> <span class="lc">Shape</span> { <span class="lk">double</span> <span class="lm">area</span>(); }
+
+<span class="lk">class</span> <span class="lc">Circle</span>   <span class="lk">implements</span> <span class="lc">Shape</span> { <span class="lk">public double</span> <span class="lm">area</span>() {<span class="lcm">/**/</span>} }
+<span class="lk">class</span> <span class="lc">Rect</span>     <span class="lk">implements</span> <span class="lc">Shape</span> { <span class="lk">public double</span> <span class="lm">area</span>() {<span class="lcm">/**/</span>} }
+<span class="lk">class</span> <span class="lc">Triangle</span> <span class="lk">implements</span> <span class="lc">Shape</span> { <span class="lk">public double</span> <span class="lm">area</span>() {<span class="lcm">/**/</span>} }
+<span class="lcm">// AreaCalc never changes — zero risk of regression</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pattern link</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>OCP is achieved via:</div>
+            <div>→ <strong>Strategy</strong> (swap algorithms)</div>
+            <div>→ <strong>Template Method</strong> (override steps)</div>
+            <div>→ <strong>Decorator</strong> (add behaviour)</div>
+            <div style="margin-top:0.5rem;color:var(--accent);">Smell: long if-else/switch on type tags</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LSP -->
+      <div class="block-desc">
+        <span><strong>L — Liskov Substitution:</strong> subtypes must be substitutable for their base type without breaking callers.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">LSP.java</div>
+          <pre><span class="lcm">// ✗ VIOLATION — Square breaks Rectangle's contract</span>
+<span class="lk">class</span> <span class="lc">Rectangle</span> {
+  <span class="lk">protected int</span> w, h;
+  <span class="lk">void</span> <span class="lm">setWidth</span>(<span class="lk">int</span> w)  { <span class="lk">this</span>.w = w; }
+  <span class="lk">void</span> <span class="lm">setHeight</span>(<span class="lk">int</span> h) { <span class="lk">this</span>.h = h; }
+  <span class="lk">int</span>  <span class="lm">area</span>() { <span class="lk">return</span> w * h; }
+}
+<span class="lk">class</span> <span class="lc">Square</span> <span class="lk">extends</span> <span class="lc">Rectangle</span> {
+  <span class="lcm">// forces both sides equal — breaks caller assumptions</span>
+  <span class="lo">@Override</span> <span class="lk">void</span> <span class="lm">setWidth</span>(<span class="lk">int</span> w)  { <span class="lk">this</span>.w = <span class="lk">this</span>.h = w; }
+  <span class="lo">@Override</span> <span class="lk">void</span> <span class="lm">setHeight</span>(<span class="lk">int</span> h) { <span class="lk">this</span>.w = <span class="lk">this</span>.h = h; }
+}
+
+<span class="lcm">// ✓ FIX — separate abstractions, no shared hierarchy</span>
+<span class="lk">interface</span> <span class="lc">Shape</span> { <span class="lk">int</span> <span class="lm">area</span>(); }
+<span class="lk">record</span> <span class="lc">Rect</span>(<span class="lk">int</span> w, <span class="lk">int</span> h)    <span class="lk">implements</span> <span class="lc">Shape</span> { <span class="lk">public int</span> <span class="lm">area</span>(){<span class="lk">return</span> w*h;} }
+<span class="lk">record</span> <span class="lc">Square</span>(<span class="lk">int</span> side)       <span class="lk">implements</span> <span class="lc">Shape</span> { <span class="lk">public int</span> <span class="lm">area</span>(){<span class="lk">return</span> side*side;} }</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">LSP Test</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Ask: "can I replace every use of the parent with the child without tests failing?"</div>
+            <div style="margin-top:0.5rem;">Preconditions → no stronger in subtype</div>
+            <div>Postconditions → no weaker in subtype</div>
+            <div>Invariants → preserved</div>
+            <div style="margin-top:0.5rem;color:var(--accent);">Smell: subtype throws <code>UnsupportedOperationException</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISP -->
+      <div class="block-desc">
+        <span><strong>I — Interface Segregation:</strong> clients should not be forced to depend on methods they don't use.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ISP.java</div>
+          <pre><span class="lcm">// ✗ FAT interface — Robot must implement eat()</span>
+<span class="lk">interface</span> <span class="lc">Worker</span> {
+  <span class="lk">void</span> <span class="lm">work</span>();
+  <span class="lk">void</span> <span class="lm">eat</span>();   <span class="lcm">// robots don't eat!</span>
+}
+
+<span class="lcm">// ✓ SPLIT into focused interfaces</span>
+<span class="lk">interface</span> <span class="lc">Workable</span> { <span class="lk">void</span> <span class="lm">work</span>(); }
+<span class="lk">interface</span> <span class="lc">Eatable</span>  { <span class="lk">void</span> <span class="lm">eat</span>(); }
+
+<span class="lk">class</span> <span class="lc">Human</span> <span class="lk">implements</span> <span class="lc">Workable</span>, <span class="lc">Eatable</span> {
+  <span class="lk">public void</span> <span class="lm">work</span>() { <span class="lcm">/* work */</span> }
+  <span class="lk">public void</span> <span class="lm">eat</span>()  { <span class="lcm">/* eat */</span> }
+}
+<span class="lk">class</span> <span class="lc">Robot</span> <span class="lk">implements</span> <span class="lc">Workable</span> {
+  <span class="lk">public void</span> <span class="lm">work</span>() { <span class="lcm">/* work */</span> }
+  <span class="lcm">// no eat() — clean!</span>
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Rule of thumb</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Role interfaces &gt; header interfaces</div>
+            <div>One interface per capability</div>
+            <div>Compose small interfaces as needed</div>
+            <div style="margin-top:0.5rem;color:var(--accent);">Smell: empty/throw impls in a class that "implements X but not Y"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIP -->
+      <div class="block-desc">
+        <span><strong>D — Dependency Inversion:</strong> depend on abstractions, not concretions. High-level modules should not import low-level modules.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">DIP.java</div>
+          <pre><span class="lcm">// ✗ BAD — high-level depends on concrete low-level</span>
+<span class="lk">class</span> <span class="lc">OrderService</span> {
+  <span class="lk">private</span> <span class="lc">MySQLOrderRepo</span> repo = <span class="lk">new</span> <span class="lc">MySQLOrderRepo</span>();
+  <span class="lcm">// switching to Postgres = edit OrderService ← bad</span>
+}
+
+<span class="lcm">// ✓ GOOD — depend on abstraction; inject the impl</span>
+<span class="lk">interface</span> <span class="lc">OrderRepo</span> { <span class="lk">void</span> <span class="lm">save</span>(<span class="lc">Order</span> o); }
+
+<span class="lk">class</span> <span class="lc">MySQLOrderRepo</span>    <span class="lk">implements</span> <span class="lc">OrderRepo</span> { <span class="lcm">/**/</span> }
+<span class="lk">class</span> <span class="lc">PostgresOrderRepo</span> <span class="lk">implements</span> <span class="lc">OrderRepo</span> { <span class="lcm">/**/</span> }
+
+<span class="lk">class</span> <span class="lc">OrderService</span> {
+  <span class="lk">private final</span> <span class="lc">OrderRepo</span> repo;
+  <span class="lc">OrderService</span>(<span class="lc">OrderRepo</span> repo) { <span class="lk">this</span>.repo = repo; } <span class="lcm">// DI</span>
+  <span class="lk">void</span> <span class="lm">placeOrder</span>(<span class="lc">Order</span> o) { repo.<span class="lm">save</span>(o); }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Injection types</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong>Constructor</strong> (preferred)</div>
+            <div>Deps explicit; immutable; testable</div>
+            <div style="margin-top:0.5rem;"><strong>Setter injection</strong></div>
+            <div>Optional deps; allows re-injection</div>
+            <div style="margin-top:0.5rem;"><strong>Field injection</strong> (avoid)</div>
+            <div>Hidden deps; hard to test</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ RELATIONSHIPS ═══ -->
+    <section id="relationships">
+      <span class="badge b-rel">Relationships</span>
+      <h2>Class Relationships</h2>
+
+      <div class="block-desc">
+        <span>Four ways classes relate: association, aggregation, composition, and inheritance. Choosing wrong causes brittle designs.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Relationships.java</div>
+          <pre><span class="lcm">// 1. Association — "uses" (loose coupling)</span>
+<span class="lk">class</span> <span class="lc">Doctor</span>  { <span class="lk">void</span> <span class="lm">treat</span>(<span class="lc">Patient</span> p) {} }  <span class="lcm">// no ownership</span>
+
+<span class="lcm">// 2. Aggregation — "has-a" (weak ownership, child survives)</span>
+<span class="lk">class</span> <span class="lc">Department</span> {
+  <span class="lc">List</span>&lt;<span class="lc">Employee</span>&gt; employees;  <span class="lcm">// employees exist without dept</span>
+}
+
+<span class="lcm">// 3. Composition — "has-a" (strong ownership, child dies with parent)</span>
+<span class="lk">class</span> <span class="lc">House</span> {
+  <span class="lk">private final</span> <span class="lc">Room</span> room = <span class="lk">new</span> <span class="lc">Room</span>(); <span class="lcm">// Room can't exist alone</span>
+}
+
+<span class="lcm">// 4. Inheritance — "is-a"</span>
+<span class="lk">class</span> <span class="lc">Dog</span> <span class="lk">extends</span> <span class="lc">Animal</span> {}    <span class="lcm">// Dog IS-A Animal</span>
+
+<span class="lcm">// 5. Realization / Implementation</span>
+<span class="lk">class</span> <span class="lc">Circle</span> <span class="lk">implements</span> <span class="lc">Shape</span> {} <span class="lcm">// Circle fulfils Shape contract</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">UML Arrows</div>
+          <div class="live-output" style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;line-height:2;color:var(--text-muted);">
+            <div><span style="color:#7aa2f7;">Association</span>  A ──────→ B</div>
+            <div><span style="color:#9ece6a;">Aggregation</span>  A ◇──────→ B</div>
+            <div><span style="color:#f7768e;">Composition</span>  A ◆──────→ B</div>
+            <div><span style="color:#bb9af7;">Inheritance</span>  A ────▷ B</div>
+            <div><span style="color:#e0af68;">Realization</span>  A ·····▷ B</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-row">
+        <div class="tip"><strong>Prefer composition over inheritance.</strong> Inheritance is a tight coupling; favour composing behaviours via interfaces.</div>
+        <div class="tip"><strong>Aggregation vs Composition:</strong> if child objects make sense without the parent, it's aggregation. Otherwise composition.</div>
+        <div class="tip"><strong>"is-a" test:</strong> only use inheritance when the subtype truly satisfies LSP for all parent behaviour.</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ CLEAN CODE ═══ -->
+    <section id="clean-code">
+      <span class="badge b-cc">Clean Code</span>
+      <h2>Clean Code Principles</h2>
+
+      <div class="principle-grid">
+        <div class="principle-card">
+          <h4>DRY — Don't Repeat Yourself</h4>
+          <p>Every piece of knowledge must have a single, unambiguous representation. Duplication = two places to update when logic changes.</p>
+        </div>
+        <div class="principle-card">
+          <h4>KISS — Keep It Simple</h4>
+          <p>Prefer simple solutions. Complexity is a liability. A junior should understand your code without explanation.</p>
+        </div>
+        <div class="principle-card">
+          <h4>YAGNI — You Ain't Gonna Need It</h4>
+          <p>Don't add functionality until it's required. Speculative generality increases complexity without proven benefit.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Law of Demeter</h4>
+          <p>A method should call only: itself, its params, objects it creates, its direct fields. Never call a method on an object returned by another method (<code>a.getB().getC()</code> = violation).</p>
+        </div>
+        <div class="principle-card">
+          <h4>Favour Immutability</h4>
+          <p>Immutable objects are thread-safe by default and easier to reason about. Use <code>final</code> fields, <code>record</code>s, and unmodifiable collections.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Tell, Don't Ask</h4>
+          <p>Tell objects what to do, don't query their state and decide for them. Keeps logic inside the object that owns the data.</p>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><strong>Naming &amp; method size</strong> — names should reveal intent; methods should do one thing.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">CleanCode.java</div>
+          <pre><span class="lcm">// ✗ BAD naming</span>
+<span class="lk">int</span> d;
+<span class="lk">boolean</span> <span class="lm">chk</span>(<span class="lc">User</span> u) { <span class="lk">return</span> u.age &gt;= <span class="ln">18</span>; }
+
+<span class="lcm">// ✓ GOOD naming</span>
+<span class="lk">int</span> elapsedDays;
+<span class="lk">boolean</span> <span class="lm">isAdult</span>(<span class="lc">User</span> user) { <span class="lk">return</span> user.getAge() &gt;= <span class="ln">18</span>; }
+
+<span class="lcm">// ✗ BAD — method does too many things</span>
+<span class="lk">void</span> <span class="lm">processOrder</span>(<span class="lc">Order</span> o) {
+  <span class="lcm">// 80 lines of validation + discount + save + email</span>
+}
+
+<span class="lcm">// ✓ GOOD — composed of small focused methods</span>
+<span class="lk">void</span> <span class="lm">processOrder</span>(<span class="lc">Order</span> o) {
+  <span class="lm">validate</span>(o);
+  <span class="lm">applyDiscounts</span>(o);
+  orderRepo.<span class="lm">save</span>(o);
+  emailService.<span class="lm">sendConfirmation</span>(o);
+}
+
+<span class="lcm">// Law of Demeter — ✗ train wreck</span>
+user.<span class="lm">getAddress</span>().<span class="lm">getCity</span>().<span class="lm">getName</span>();
+
+<span class="lcm">// ✓ ask user directly</span>
+user.<span class="lm">getCityName</span>();</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Quick Rules</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Function lines → &lt; 20</div>
+            <div>Parameters → ≤ 3 (use object if more)</div>
+            <div>Avoid boolean flags as params</div>
+            <div>No magic numbers → named constants</div>
+            <div>No comments for obvious code</div>
+            <div>Comments explain <em>why</em>, not <em>what</em></div>
+            <div style="margin-top:0.5rem;">Fail fast → validate at boundaries</div>
+            <div>Return early to reduce nesting</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ CREATIONAL ═══ -->
+    <section id="creational">
+      <span class="badge b-cr">Design Patterns</span>
+      <h2>Creational Patterns <span class="pattern-tag">controls object creation</span></h2>
+
+      <!-- Singleton -->
+      <div class="block-desc">
+        <span><strong>Singleton</strong> — ensure a class has only one instance; provide a global access point.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Singleton.java</div>
+          <pre><span class="lk">public class</span> <span class="lc">DatabasePool</span> {
+  <span class="lcm">// Initialization-on-demand holder — thread-safe, lazy</span>
+  <span class="lk">private static class</span> <span class="lc">Holder</span> {
+    <span class="lk">static final</span> <span class="lc">DatabasePool</span> INSTANCE = <span class="lk">new</span> <span class="lc">DatabasePool</span>();
+  }
+  <span class="lk">private</span> <span class="lc">DatabasePool</span>() {}   <span class="lcm">// prevent external instantiation</span>
+  <span class="lk">public static</span> <span class="lc">DatabasePool</span> <span class="lm">getInstance</span>() {
+    <span class="lk">return</span> <span class="lc">Holder</span>.INSTANCE;
+  }
+
+  <span class="lcm">// Enum singleton — simplest, serialization-safe</span>
+  <span class="lk">public enum</span> <span class="lc">Config</span> {
+    INSTANCE;
+    <span class="lk">public</span> <span class="lc">String</span> <span class="lm">getUrl</span>() { <span class="lk">return</span> System.<span class="lm">getenv</span>(<span class="ls">"DB_URL"</span>); }
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">When to use / avoid</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong style="color:#9ece6a;">Use for:</strong></div>
+            <div>Shared resource pools (DB, thread pool)</div>
+            <div>Config / logger instances</div>
+            <div>Registry / cache managers</div>
+            <div style="margin-top:0.5rem;"><strong style="color:#f7768e;">Avoid when:</strong></div>
+            <div>Global state makes testing hard</div>
+            <div>Multiple instances needed in tests</div>
+            <div>Prefer DI container over manual singleton</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Factory Method -->
+      <div class="block-desc">
+        <span><strong>Factory Method</strong> — define an interface for creating objects, but let subclasses decide which class to instantiate.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">FactoryMethod.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">Notification</span> { <span class="lk">void</span> <span class="lm">send</span>(<span class="lc">String</span> msg); }
+
+<span class="lk">class</span> <span class="lc">EmailNotif</span>  <span class="lk">implements</span> <span class="lc">Notification</span> { <span class="lk">public void</span> <span class="lm">send</span>(<span class="lc">String</span> m){<span class="lcm">/*email*/</span>} }
+<span class="lk">class</span> <span class="lc">SMSNotif</span>    <span class="lk">implements</span> <span class="lc">Notification</span> { <span class="lk">public void</span> <span class="lm">send</span>(<span class="lc">String</span> m){<span class="lcm">/*sms*/</span>} }
+<span class="lk">class</span> <span class="lc">PushNotif</span>   <span class="lk">implements</span> <span class="lc">Notification</span> { <span class="lk">public void</span> <span class="lm">send</span>(<span class="lc">String</span> m){<span class="lcm">/*push*/</span>} }
+
+<span class="lcm">// Factory — creation logic centralised</span>
+<span class="lk">class</span> <span class="lc">NotificationFactory</span> {
+  <span class="lk">static</span> <span class="lc">Notification</span> <span class="lm">create</span>(<span class="lc">String</span> type) {
+    <span class="lk">return switch</span> (type) {
+      <span class="lk">case</span> <span class="ls">"email"</span> -&gt; <span class="lk">new</span> <span class="lc">EmailNotif</span>();
+      <span class="lk">case</span> <span class="ls">"sms"</span>   -&gt; <span class="lk">new</span> <span class="lc">SMSNotif</span>();
+      <span class="lk">case</span> <span class="ls">"push"</span>  -&gt; <span class="lk">new</span> <span class="lc">PushNotif</span>();
+      <span class="lk">default</span> -&gt; <span class="lk">throw new</span> <span class="lc">IllegalArgumentException</span>(type);
+    };
+  }
+}
+<span class="lcm">// usage</span>
+<span class="lc">Notification</span> n = <span class="lc">NotificationFactory</span>.<span class="lm">create</span>(<span class="ls">"email"</span>);
+n.<span class="lm">send</span>(<span class="ls">"Welcome!"</span>);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Variants</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong>Simple Factory</strong></div>
+            <div>Static method; not a GoF pattern, but common</div>
+            <div style="margin-top:0.5rem;"><strong>Factory Method (GoF)</strong></div>
+            <div>Abstract creator with abstract <code>create()</code>; subclasses override</div>
+            <div style="margin-top:0.5rem;"><strong>Abstract Factory</strong></div>
+            <div>Family of related factories (e.g. UI theme: Light/Dark)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Builder -->
+      <div class="block-desc">
+        <span><strong>Builder</strong> — construct complex objects step-by-step; separate construction from representation.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Builder.java</div>
+          <pre><span class="lk">class</span> <span class="lc">HttpRequest</span> {
+  <span class="lk">private final</span> <span class="lc">String</span>  url, method;
+  <span class="lk">private final</span> <span class="lc">Map</span>&lt;<span class="lc">String</span>,<span class="lc">String</span>&gt; headers;
+  <span class="lk">private final</span> <span class="lc">String</span>  body;
+  <span class="lk">private final</span> <span class="lk">int</span>    timeout;
+
+  <span class="lk">private</span> <span class="lc">HttpRequest</span>(<span class="lc">Builder</span> b) {
+    url=b.url; method=b.method; headers=b.headers;
+    body=b.body; timeout=b.timeout;
+  }
+
+  <span class="lk">static class</span> <span class="lc">Builder</span> {
+    <span class="lk">private final</span> <span class="lc">String</span> url;
+    <span class="lk">private</span> <span class="lc">String</span>  method  = <span class="ls">"GET"</span>;
+    <span class="lk">private</span> <span class="lc">Map</span>&lt;<span class="lc">String</span>,<span class="lc">String</span>&gt; headers = <span class="lk">new</span> <span class="lc">HashMap</span>&lt;&gt;();
+    <span class="lk">private</span> <span class="lc">String</span>  body    = <span class="ls">""</span>;
+    <span class="lk">private</span> <span class="lk">int</span>    timeout = <span class="ln">30</span>;
+
+    <span class="lc">Builder</span>(<span class="lc">String</span> url) { <span class="lk">this</span>.url = url; }
+    <span class="lc">Builder</span> <span class="lm">method</span>(<span class="lc">String</span> m)  { method=m;  <span class="lk">return this</span>; }
+    <span class="lc">Builder</span> <span class="lm">header</span>(<span class="lc">String</span> k, <span class="lc">String</span> v) { headers.put(k,v); <span class="lk">return this</span>; }
+    <span class="lc">Builder</span> <span class="lm">body</span>(<span class="lc">String</span> b)    { body=b;    <span class="lk">return this</span>; }
+    <span class="lc">Builder</span> <span class="lm">timeout</span>(<span class="lk">int</span> t)   { timeout=t; <span class="lk">return this</span>; }
+    <span class="lc">HttpRequest</span> <span class="lm">build</span>()      { <span class="lk">return new</span> <span class="lc">HttpRequest</span>(<span class="lk">this</span>); }
+  }
+}
+<span class="lcm">// usage</span>
+<span class="lc">HttpRequest</span> req = <span class="lk">new</span> <span class="lc">HttpRequest</span>.<span class="lc">Builder</span>(<span class="ls">"https://api.example.com"</span>)
+    .<span class="lm">method</span>(<span class="ls">"POST"</span>)
+    .<span class="lm">header</span>(<span class="ls">"Content-Type"</span>, <span class="ls">"application/json"</span>)
+    .<span class="lm">body</span>(<span class="ls">"{\"key\":\"val\"}"</span>)
+    .<span class="lm">timeout</span>(<span class="ln">60</span>)
+    .<span class="lm">build</span>();</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Use Builder when</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>≥4 constructor params</div>
+            <div>Many optional parameters</div>
+            <div>Need to validate before construction</div>
+            <div>Immutable object required</div>
+            <div style="margin-top:0.5rem;"><strong>Lombok shortcut:</strong></div>
+            <div><code>@Builder</code> on the class</div>
+            <div style="margin-top:0.5rem;"><strong>Java 16+ records:</strong></div>
+            <div>Use <code>record</code> for truly simple immutables</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prototype -->
+      <div class="block-desc">
+        <span><strong>Prototype</strong> — clone an existing object instead of creating a new one from scratch.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Prototype.java</div>
+          <pre><span class="lk">abstract class</span> <span class="lc">Shape</span> <span class="lk">implements</span> <span class="lc">Cloneable</span> {
+  <span class="lk">int</span> x, y;
+  <span class="lk">abstract</span> <span class="lc">Shape</span> <span class="lm">clone</span>();
+}
+
+<span class="lk">class</span> <span class="lc">Circle</span> <span class="lk">extends</span> <span class="lc">Shape</span> {
+  <span class="lk">int</span> radius;
+  <span class="lc">Circle</span>(<span class="lc">Circle</span> src) { <span class="lcm">// copy constructor</span>
+    <span class="lk">this</span>.x=src.x; <span class="lk">this</span>.y=src.y; <span class="lk">this</span>.radius=src.radius;
+  }
+  <span class="lo">@Override</span> <span class="lk">public</span> <span class="lc">Circle</span> <span class="lm">clone</span>() { <span class="lk">return new</span> <span class="lc">Circle</span>(<span class="lk">this</span>); }
+}
+
+<span class="lcm">// usage — cheap copy of expensive-to-create object</span>
+<span class="lc">Circle</span> original = <span class="lk">new</span> <span class="lc">Circle</span>();
+original.radius = <span class="ln">10</span>;
+<span class="lc">Circle</span> copy = original.<span class="lm">clone</span>();
+copy.radius = <span class="ln">20</span>;  <span class="lcm">// original unaffected</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Use cases</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Object creation is costly (DB/network)</div>
+            <div>Need many similar objects with small diffs</div>
+            <div>Game entities, document templates</div>
+            <div style="margin-top:0.5rem;"><strong>Deep vs Shallow copy:</strong></div>
+            <div>Shallow: copies references (fast, risky)</div>
+            <div>Deep: copies referenced objects too (safe)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ STRUCTURAL ═══ -->
+    <section id="structural">
+      <span class="badge b-str">Design Patterns</span>
+      <h2>Structural Patterns <span class="pattern-tag">how classes are composed</span></h2>
+
+      <!-- Adapter -->
+      <div class="block-desc">
+        <span><strong>Adapter</strong> — convert an incompatible interface into one the client expects. "Wrapper" pattern.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Adapter.java</div>
+          <pre><span class="lcm">// Target interface the client expects</span>
+<span class="lk">interface</span> <span class="lc">MediaPlayer</span> { <span class="lk">void</span> <span class="lm">play</span>(<span class="lc">String</span> file); }
+
+<span class="lcm">// Incompatible 3rd-party library</span>
+<span class="lk">class</span> <span class="lc">VLCPlayer</span> {
+  <span class="lk">void</span> <span class="lm">playVLC</span>(<span class="lc">String</span> file) { System.out.println(<span class="ls">"VLC: "</span> + file); }
+}
+
+<span class="lcm">// Adapter bridges the gap</span>
+<span class="lk">class</span> <span class="lc">VLCAdapter</span> <span class="lk">implements</span> <span class="lc">MediaPlayer</span> {
+  <span class="lk">private final</span> <span class="lc">VLCPlayer</span> vlc = <span class="lk">new</span> <span class="lc">VLCPlayer</span>();
+  <span class="lo">@Override</span>
+  <span class="lk">public void</span> <span class="lm">play</span>(<span class="lc">String</span> file) { vlc.<span class="lm">playVLC</span>(file); }
+}
+
+<span class="lcm">// Client uses target interface — unaware of VLC</span>
+<span class="lc">MediaPlayer</span> player = <span class="lk">new</span> <span class="lc">VLCAdapter</span>();
+player.<span class="lm">play</span>(<span class="ls">"movie.avi"</span>);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Real-world examples</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Java I/O: <code>InputStreamReader</code> adapts <code>InputStream</code> → <code>Reader</code></div>
+            <div>JDBC: each DB driver adapts to JDBC API</div>
+            <div>SDK wrappers around third-party APIs</div>
+            <div style="margin-top:0.5rem;"><strong>Object Adapter</strong> — wraps via composition (preferred)</div>
+            <div><strong>Class Adapter</strong> — wraps via multiple inheritance (Java: impossible, use object adapter)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decorator -->
+      <div class="block-desc">
+        <span><strong>Decorator</strong> — attach additional responsibilities to an object dynamically without subclassing.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Decorator.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">Coffee</span> { <span class="lk">double</span> <span class="lm">cost</span>(); <span class="lc">String</span> <span class="lm">desc</span>(); }
+
+<span class="lk">class</span> <span class="lc">Espresso</span> <span class="lk">implements</span> <span class="lc">Coffee</span> {
+  <span class="lk">public double</span> <span class="lm">cost</span>() { <span class="lk">return</span> <span class="ln">1.5</span>; }
+  <span class="lk">public</span> <span class="lc">String</span> <span class="lm">desc</span>() { <span class="lk">return</span> <span class="ls">"Espresso"</span>; }
+}
+
+<span class="lcm">// Base decorator</span>
+<span class="lk">abstract class</span> <span class="lc">CoffeeDecorator</span> <span class="lk">implements</span> <span class="lc">Coffee</span> {
+  <span class="lk">protected final</span> <span class="lc">Coffee</span> wrapped;
+  <span class="lc">CoffeeDecorator</span>(<span class="lc">Coffee</span> c) { wrapped = c; }
+}
+
+<span class="lk">class</span> <span class="lc">MilkDecorator</span> <span class="lk">extends</span> <span class="lc">CoffeeDecorator</span> {
+  <span class="lc">MilkDecorator</span>(<span class="lc">Coffee</span> c) { <span class="lk">super</span>(c); }
+  <span class="lk">public double</span> <span class="lm">cost</span>() { <span class="lk">return</span> wrapped.<span class="lm">cost</span>() + <span class="ln">0.3</span>; }
+  <span class="lk">public</span> <span class="lc">String</span> <span class="lm">desc</span>() { <span class="lk">return</span> wrapped.<span class="lm">desc</span>() + <span class="ls">", Milk"</span>; }
+}
+
+<span class="lcm">// Build at runtime: Espresso + Milk + Vanilla</span>
+<span class="lc">Coffee</span> c = <span class="lk">new</span> <span class="lc">VanillaDecorator</span>(<span class="lk">new</span> <span class="lc">MilkDecorator</span>(<span class="lk">new</span> <span class="lc">Espresso</span>()));
+System.out.println(c.<span class="lm">desc</span>() + <span class="ls">" $"</span> + c.<span class="lm">cost</span>()); <span class="lcm">// $1.9</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Java stdlib examples</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><code>BufferedReader(new FileReader(f))</code></div>
+            <div><code>Collections.unmodifiableList(list)</code></div>
+            <div><code>Collections.synchronizedList(list)</code></div>
+            <div style="margin-top:0.5rem;"><strong>vs Inheritance:</strong></div>
+            <div>Inheritance = static; fixed at compile time</div>
+            <div>Decorator = dynamic; composed at runtime</div>
+            <div>Avoids class explosion (2^n combinations)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Facade -->
+      <div class="block-desc">
+        <span><strong>Facade</strong> — provide a simplified interface to a complex subsystem.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Facade.java</div>
+          <pre><span class="lcm">// Complex subsystem classes</span>
+<span class="lk">class</span> <span class="lc">CPU</span>       { <span class="lk">void</span> <span class="lm">freeze</span>(){} <span class="lk">void</span> <span class="lm">jump</span>(<span class="lk">long</span> pos){} <span class="lk">void</span> <span class="lm">execute</span>(){} }
+<span class="lk">class</span> <span class="lc">Memory</span>    { <span class="lk">void</span> <span class="lm">load</span>(<span class="lk">long</span> pos, <span class="lk">byte</span>[] data){} }
+<span class="lk">class</span> <span class="lc">HardDisk</span>  { <span class="lk">byte</span>[] <span class="lm">read</span>(<span class="lk">long</span> lba, <span class="lk">int</span> size){ <span class="lk">return null</span>; } }
+
+<span class="lcm">// Facade — one easy method for clients</span>
+<span class="lk">class</span> <span class="lc">ComputerFacade</span> {
+  <span class="lk">private final</span> <span class="lc">CPU</span> cpu = <span class="lk">new</span> <span class="lc">CPU</span>();
+  <span class="lk">private final</span> <span class="lc">Memory</span> mem = <span class="lk">new</span> <span class="lc">Memory</span>();
+  <span class="lk">private final</span> <span class="lc">HardDisk</span> hdd = <span class="lk">new</span> <span class="lc">HardDisk</span>();
+
+  <span class="lk">void</span> <span class="lm">start</span>() {
+    cpu.<span class="lm">freeze</span>();
+    mem.<span class="lm">load</span>(<span class="ln">0</span>, hdd.<span class="lm">read</span>(<span class="ln">0</span>, <span class="ln">1024</span>));
+    cpu.<span class="lm">jump</span>(<span class="ln">0</span>);
+    cpu.<span class="lm">execute</span>();
+  }
+}
+
+<span class="lcm">// Client — one call, no knowledge of subsystem</span>
+<span class="lk">new</span> <span class="lc">ComputerFacade</span>().<span class="lm">start</span>();</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Proxy vs Facade vs Adapter</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong>Facade</strong> — simplify a subsystem</div>
+            <div><strong>Adapter</strong> — make incompatible interface compatible</div>
+            <div><strong>Proxy</strong> — control access to an object</div>
+            <div style="margin-top:0.5rem;">Real examples:</div>
+            <div>SLF4J — facade over Log4j/Logback</div>
+            <div>Spring's <code>JdbcTemplate</code> — facade over JDBC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proxy -->
+      <div class="block-desc">
+        <span><strong>Proxy</strong> — a surrogate that controls access to the real object; adds lazy loading, caching, or access control.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Proxy.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">Image</span> { <span class="lk">void</span> <span class="lm">display</span>(); }
+
+<span class="lk">class</span> <span class="lc">RealImage</span> <span class="lk">implements</span> <span class="lc">Image</span> {
+  <span class="lk">private final</span> <span class="lc">String</span> file;
+  <span class="lc">RealImage</span>(<span class="lc">String</span> file) {
+    <span class="lk">this</span>.file = file;
+    <span class="lm">loadFromDisk</span>();   <span class="lcm">// expensive!</span>
+  }
+  <span class="lk">private void</span> <span class="lm">loadFromDisk</span>() { System.out.println(<span class="ls">"Loading: "</span> + file); }
+  <span class="lk">public void</span> <span class="lm">display</span>()      { System.out.println(<span class="ls">"Display: "</span> + file); }
+}
+
+<span class="lcm">// Lazy proxy — defers expensive load until first display()</span>
+<span class="lk">class</span> <span class="lc">ProxyImage</span> <span class="lk">implements</span> <span class="lc">Image</span> {
+  <span class="lk">private</span> <span class="lc">RealImage</span> real;
+  <span class="lk">private final</span> <span class="lc">String</span> file;
+  <span class="lc">ProxyImage</span>(<span class="lc">String</span> file) { <span class="lk">this</span>.file = file; }
+  <span class="lk">public void</span> <span class="lm">display</span>() {
+    <span class="lk">if</span> (real == <span class="lk">null</span>) real = <span class="lk">new</span> <span class="lc">RealImage</span>(file);
+    real.<span class="lm">display</span>();
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Proxy types</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong>Virtual Proxy</strong> — lazy init expensive object</div>
+            <div><strong>Protection Proxy</strong> — access control / auth</div>
+            <div><strong>Remote Proxy</strong> — represents remote object (RMI)</div>
+            <div><strong>Caching Proxy</strong> — cache results of operations</div>
+            <div><strong>Logging Proxy</strong> — log calls transparently</div>
+            <div style="margin-top:0.5rem;">Java: <code>java.lang.reflect.Proxy</code> — dynamic proxies via reflection</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Composite -->
+      <div class="block-desc">
+        <span><strong>Composite</strong> — compose objects into tree structures; treat individual objects and compositions uniformly.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Composite.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">FileSystem</span> { <span class="lk">void</span> <span class="lm">show</span>(<span class="lc">String</span> indent); }
+
+<span class="lk">class</span> <span class="lc">File</span> <span class="lk">implements</span> <span class="lc">FileSystem</span> {        <span class="lcm">// Leaf</span>
+  <span class="lk">private final</span> <span class="lc">String</span> name;
+  <span class="lc">File</span>(<span class="lc">String</span> name) { <span class="lk">this</span>.name = name; }
+  <span class="lk">public void</span> <span class="lm">show</span>(<span class="lc">String</span> indent) { System.out.println(indent + name); }
+}
+
+<span class="lk">class</span> <span class="lc">Directory</span> <span class="lk">implements</span> <span class="lc">FileSystem</span> {  <span class="lcm">// Composite</span>
+  <span class="lk">private final</span> <span class="lc">String</span> name;
+  <span class="lk">private final</span> <span class="lc">List</span>&lt;<span class="lc">FileSystem</span>&gt; children = <span class="lk">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+
+  <span class="lc">Directory</span>(<span class="lc">String</span> name) { <span class="lk">this</span>.name = name; }
+  <span class="lk">void</span> <span class="lm">add</span>(<span class="lc">FileSystem</span> fs) { children.add(fs); }
+
+  <span class="lk">public void</span> <span class="lm">show</span>(<span class="lc">String</span> indent) {
+    System.out.println(indent + name + <span class="ls">"/"</span>);
+    children.<span class="lm">forEach</span>(c -&gt; c.<span class="lm">show</span>(indent + <span class="ls">"  "</span>));
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">When to use</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Tree structures (file systems, UI components, org charts)</div>
+            <div>Client should treat leaf and container the same way</div>
+            <div style="margin-top:0.5rem;"><strong>Real examples:</strong></div>
+            <div>Swing: <code>JPanel</code> contains <code>JButton</code>s and more <code>JPanel</code>s</div>
+            <div>XML/HTML DOM tree</div>
+            <div>File system directories</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ BEHAVIORAL ═══ -->
+    <section id="behavioral">
+      <span class="badge b-beh">Design Patterns</span>
+      <h2>Behavioral Patterns <span class="pattern-tag">how objects communicate</span></h2>
+
+      <!-- Observer -->
+      <div class="block-desc">
+        <span><strong>Observer</strong> — when one object changes state, all its dependents are notified automatically.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Observer.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">Observer</span>   { <span class="lk">void</span> <span class="lm">update</span>(<span class="lc">String</span> event); }
+<span class="lk">interface</span> <span class="lc">Observable</span> {
+  <span class="lk">void</span> <span class="lm">subscribe</span>(<span class="lc">Observer</span> o);
+  <span class="lk">void</span> <span class="lm">unsubscribe</span>(<span class="lc">Observer</span> o);
+  <span class="lk">void</span> <span class="lm">notifyAll</span>(<span class="lc">String</span> event);
+}
+
+<span class="lk">class</span> <span class="lc">StockMarket</span> <span class="lk">implements</span> <span class="lc">Observable</span> {
+  <span class="lk">private final</span> <span class="lc">List</span>&lt;<span class="lc">Observer</span>&gt; observers = <span class="lk">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+  <span class="lk">private double</span> price;
+
+  <span class="lk">void</span> <span class="lm">setPrice</span>(<span class="lk">double</span> p) {
+    price = p;
+    <span class="lm">notifyAll</span>(<span class="ls">"PRICE_CHANGE:"</span> + p);
+  }
+  <span class="lk">public void</span> <span class="lm">subscribe</span>(<span class="lc">Observer</span> o)   { observers.add(o); }
+  <span class="lk">public void</span> <span class="lm">unsubscribe</span>(<span class="lc">Observer</span> o) { observers.remove(o); }
+  <span class="lk">public void</span> <span class="lm">notifyAll</span>(<span class="lc">String</span> e)    { observers.<span class="lm">forEach</span>(o -&gt; o.<span class="lm">update</span>(e)); }
+}
+
+<span class="lk">class</span> <span class="lc">Trader</span> <span class="lk">implements</span> <span class="lc">Observer</span> {
+  <span class="lk">public void</span> <span class="lm">update</span>(<span class="lc">String</span> e) { System.out.println(<span class="ls">"Trader: "</span> + e); }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Java built-ins</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><code>java.util.Observable</code> (deprecated)</div>
+            <div><code>PropertyChangeListener</code></div>
+            <div>Reactor / RxJava — reactive streams</div>
+            <div>Spring <code>ApplicationEvent</code></div>
+            <div style="margin-top:0.5rem;"><strong>Push vs Pull:</strong></div>
+            <div>Push — subject sends full data in event</div>
+            <div>Pull — observer fetches data after notification</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy -->
+      <div class="block-desc">
+        <span><strong>Strategy</strong> — define a family of algorithms, encapsulate each, and make them interchangeable at runtime.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Strategy.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">SortStrategy</span> { <span class="lk">void</span> <span class="lm">sort</span>(<span class="lk">int</span>[] arr); }
+
+<span class="lk">class</span> <span class="lc">BubbleSort</span> <span class="lk">implements</span> <span class="lc">SortStrategy</span> {
+  <span class="lk">public void</span> <span class="lm">sort</span>(<span class="lk">int</span>[] arr) { <span class="lcm">/* bubble sort */</span> }
+}
+<span class="lk">class</span> <span class="lc">QuickSort</span>  <span class="lk">implements</span> <span class="lc">SortStrategy</span> {
+  <span class="lk">public void</span> <span class="lm">sort</span>(<span class="lk">int</span>[] arr) { <span class="lcm">/* quick sort */</span> }
+}
+
+<span class="lk">class</span> <span class="lc">Sorter</span> {
+  <span class="lk">private</span> <span class="lc">SortStrategy</span> strategy;
+  <span class="lk">void</span> <span class="lm">setStrategy</span>(<span class="lc">SortStrategy</span> s) { strategy = s; }
+  <span class="lk">void</span> <span class="lm">sort</span>(<span class="lk">int</span>[] arr) { strategy.<span class="lm">sort</span>(arr); }
+}
+
+<span class="lcm">// Switch algorithms without touching Sorter</span>
+<span class="lc">Sorter</span> sorter = <span class="lk">new</span> <span class="lc">Sorter</span>();
+sorter.<span class="lm">setStrategy</span>(<span class="lk">new</span> <span class="lc">QuickSort</span>());
+sorter.<span class="lm">sort</span>(data);
+sorter.<span class="lm">setStrategy</span>(arr.length &lt; <span class="ln">10</span> ? <span class="lk">new</span> <span class="lc">BubbleSort</span>() : <span class="lk">new</span> <span class="lc">QuickSort</span>());
+</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Real uses</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Payment methods (card, UPI, wallet)</div>
+            <div>Auth strategies (OAuth, JWT, SAML)</div>
+            <div>Compression algorithms (ZIP, GZIP)</div>
+            <div>Routing strategies in load balancers</div>
+            <div style="margin-top:0.5rem;"><strong>Java 8+ shortcut:</strong></div>
+            <div>Strategy = <code>@FunctionalInterface</code></div>
+            <div>Pass lambdas instead of concrete classes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Command -->
+      <div class="block-desc">
+        <span><strong>Command</strong> — encapsulate a request as an object; supports undo/redo, queuing, and logging.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Command.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">Command</span> { <span class="lk">void</span> <span class="lm">execute</span>(); <span class="lk">void</span> <span class="lm">undo</span>(); }
+
+<span class="lk">class</span> <span class="lc">TextEditor</span> {
+  <span class="lk">private</span> <span class="lc">StringBuilder</span> text = <span class="lk">new</span> <span class="lc">StringBuilder</span>();
+  <span class="lk">void</span> <span class="lm">write</span>(<span class="lc">String</span> s)   { text.append(s); }
+  <span class="lk">void</span> <span class="lm">delete</span>(<span class="lk">int</span> n)    { text.delete(text.length()-n, text.length()); }
+  <span class="lc">String</span> <span class="lm">getText</span>()      { <span class="lk">return</span> text.toString(); }
+}
+
+<span class="lk">class</span> <span class="lc">WriteCommand</span> <span class="lk">implements</span> <span class="lc">Command</span> {
+  <span class="lk">private final</span> <span class="lc">TextEditor</span> editor; <span class="lk">private final</span> <span class="lc">String</span> text;
+  <span class="lc">WriteCommand</span>(<span class="lc">TextEditor</span> e, <span class="lc">String</span> t) { editor=e; text=t; }
+  <span class="lk">public void</span> <span class="lm">execute</span>() { editor.<span class="lm">write</span>(text); }
+  <span class="lk">public void</span> <span class="lm">undo</span>()    { editor.<span class="lm">delete</span>(text.length()); }
+}
+
+<span class="lk">class</span> <span class="lc">CommandHistory</span> {
+  <span class="lk">private final</span> <span class="lc">Deque</span>&lt;<span class="lc">Command</span>&gt; history = <span class="lk">new</span> <span class="lc">ArrayDeque</span>&lt;&gt;();
+  <span class="lk">void</span> <span class="lm">execute</span>(<span class="lc">Command</span> cmd) { cmd.<span class="lm">execute</span>(); history.push(cmd); }
+  <span class="lk">void</span> <span class="lm">undo</span>()              { <span class="lk">if</span> (!history.isEmpty()) history.pop().<span class="lm">undo</span>(); }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Use cases</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Text editors (Ctrl+Z undo)</div>
+            <div>Transaction scripts</div>
+            <div>Task queues / job schedulers</div>
+            <div>GUI button actions</div>
+            <div>Macro recording</div>
+            <div style="margin-top:0.5rem;">Key roles: Invoker → Command → Receiver</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State -->
+      <div class="block-desc">
+        <span><strong>State</strong> — allow an object to change its behaviour when its internal state changes; eliminates large if-else chains.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">State.java</div>
+          <pre><span class="lk">interface</span> <span class="lc">VendingState</span> {
+  <span class="lk">void</span> <span class="lm">insertCoin</span>(<span class="lc">VendingMachine</span> m);
+  <span class="lk">void</span> <span class="lm">selectItem</span>(<span class="lc">VendingMachine</span> m);
+  <span class="lk">void</span> <span class="lm">dispense</span>(<span class="lc">VendingMachine</span> m);
+}
+
+<span class="lk">class</span> <span class="lc">IdleState</span> <span class="lk">implements</span> <span class="lc">VendingState</span> {
+  <span class="lk">public void</span> <span class="lm">insertCoin</span>(<span class="lc">VendingMachine</span> m) {
+    System.out.println(<span class="ls">"Coin accepted"</span>);
+    m.<span class="lm">setState</span>(<span class="lk">new</span> <span class="lc">HasCoinState</span>());
+  }
+  <span class="lk">public void</span> <span class="lm">selectItem</span>(<span class="lc">VendingMachine</span> m) { System.out.println(<span class="ls">"Insert coin first"</span>); }
+  <span class="lk">public void</span> <span class="lm">dispense</span>(<span class="lc">VendingMachine</span> m)   { System.out.println(<span class="ls">"Insert coin first"</span>); }
+}
+
+<span class="lk">class</span> <span class="lc">VendingMachine</span> {
+  <span class="lk">private</span> <span class="lc">VendingState</span> state = <span class="lk">new</span> <span class="lc">IdleState</span>();
+  <span class="lk">void</span> <span class="lm">setState</span>(<span class="lc">VendingState</span> s) { state = s; }
+  <span class="lk">void</span> <span class="lm">insertCoin</span>() { state.<span class="lm">insertCoin</span>(<span class="lk">this</span>); }
+  <span class="lk">void</span> <span class="lm">selectItem</span>() { state.<span class="lm">selectItem</span>(<span class="lk">this</span>); }
+  <span class="lk">void</span> <span class="lm">dispense</span>()   { state.<span class="lm">dispense</span>(<span class="lk">this</span>); }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">State vs Strategy</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong>Strategy</strong> — algorithm chosen by client; states unaware of each other</div>
+            <div><strong>State</strong> — transitions happen internally; states know each other</div>
+            <div style="margin-top:0.5rem;">Real use cases:</div>
+            <div>Order lifecycle (PENDING → PAID → SHIPPED)</div>
+            <div>Traffic light controller</div>
+            <div>ATM states (idle, card inserted, PIN entered)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Template Method -->
+      <div class="block-desc">
+        <span><strong>Template Method</strong> — define the skeleton of an algorithm in a base class; let subclasses fill in the steps.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">TemplateMethod.java</div>
+          <pre><span class="lk">abstract class</span> <span class="lc">DataMigration</span> {
+  <span class="lcm">// Template method — fixed algorithm skeleton</span>
+  <span class="lk">final void</span> <span class="lm">migrate</span>() {
+    <span class="lm">extractData</span>();      <span class="lcm">// step 1</span>
+    <span class="lm">transformData</span>();    <span class="lcm">// step 2</span>
+    <span class="lm">loadData</span>();         <span class="lcm">// step 3</span>
+    <span class="lm">sendReport</span>();       <span class="lcm">// step 4 — concrete (shared)</span>
+  }
+
+  <span class="lk">abstract void</span> <span class="lm">extractData</span>();
+  <span class="lk">abstract void</span> <span class="lm">transformData</span>();
+  <span class="lk">abstract void</span> <span class="lm">loadData</span>();
+
+  <span class="lk">void</span> <span class="lm">sendReport</span>() { System.out.println(<span class="ls">"Migration done"</span>); } <span class="lcm">// hook</span>
+}
+
+<span class="lk">class</span> <span class="lc">CSVMigration</span> <span class="lk">extends</span> <span class="lc">DataMigration</span> {
+  <span class="lk">void</span> <span class="lm">extractData</span>()   { <span class="lcm">/* read CSV */</span> }
+  <span class="lk">void</span> <span class="lm">transformData</span>() { <span class="lcm">/* map fields */</span> }
+  <span class="lk">void</span> <span class="lm">loadData</span>()      { <span class="lcm">/* insert rows */</span> }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Hollywood Principle</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>"Don't call us, we'll call you"</div>
+            <div>Base class calls the subclass methods</div>
+            <div style="margin-top:0.5rem;"><strong>Hook methods</strong> = optional overrides with default impl</div>
+            <div style="margin-top:0.5rem;">Examples:</div>
+            <div><code>HttpServlet.doGet()</code></div>
+            <div>JUnit <code>setUp()</code> / <code>tearDown()</code></div>
+            <div>Spring <code>AbstractController</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chain of Responsibility -->
+      <div class="block-desc">
+        <span><strong>Chain of Responsibility</strong> — pass a request along a chain of handlers; each decides to handle or pass it on.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ChainOfResponsibility.java</div>
+          <pre><span class="lk">abstract class</span> <span class="lc">AuthHandler</span> {
+  <span class="lk">protected</span> <span class="lc">AuthHandler</span> next;
+  <span class="lc">AuthHandler</span> <span class="lm">setNext</span>(<span class="lc">AuthHandler</span> n) { next=n; <span class="lk">return</span> n; }
+  <span class="lk">abstract void</span> <span class="lm">handle</span>(<span class="lc">Request</span> req);
+}
+
+<span class="lk">class</span> <span class="lc">RateLimitHandler</span> <span class="lk">extends</span> <span class="lc">AuthHandler</span> {
+  <span class="lk">public void</span> <span class="lm">handle</span>(<span class="lc">Request</span> req) {
+    <span class="lk">if</span> (req.isRateLimited()) { System.out.println(<span class="ls">"429 Too Many Requests"</span>); <span class="lk">return</span>; }
+    <span class="lk">if</span> (next != <span class="lk">null</span>) next.<span class="lm">handle</span>(req);
+  }
+}
+<span class="lk">class</span> <span class="lc">AuthTokenHandler</span> <span class="lk">extends</span> <span class="lc">AuthHandler</span> {
+  <span class="lk">public void</span> <span class="lm">handle</span>(<span class="lc">Request</span> req) {
+    <span class="lk">if</span> (!req.hasValidToken()) { System.out.println(<span class="ls">"401 Unauthorized"</span>); <span class="lk">return</span>; }
+    <span class="lk">if</span> (next != <span class="lk">null</span>) next.<span class="lm">handle</span>(req);
+  }
+}
+
+<span class="lcm">// Chain: RateLimit → AuthToken → Controller</span>
+<span class="lc">AuthHandler</span> chain = <span class="lk">new</span> <span class="lc">RateLimitHandler</span>();
+chain.<span class="lm">setNext</span>(<span class="lk">new</span> <span class="lc">AuthTokenHandler</span>()).<span class="lm">setNext</span>(<span class="lk">new</span> <span class="lc">ControllerHandler</span>());</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Use cases</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Middleware / filter pipelines</div>
+            <div>Logging levels (DEBUG→INFO→WARN→ERROR)</div>
+            <div>Approval workflows (manager→director→VP)</div>
+            <div>Exception handling chains</div>
+            <div style="margin-top:0.5rem;">Java: Servlet Filters, Spring Security filter chain</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Iterator + Mediator summary row -->
+      <div class="block-desc">
+        <span>Other important behavioral patterns at a glance.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Iterator.java</div>
+          <pre><span class="lcm">// Iterator — sequential access without exposing internals</span>
+<span class="lk">interface</span> <span class="lc">Iterator</span>&lt;<span class="lc">T</span>&gt; { <span class="lk">boolean</span> <span class="lm">hasNext</span>(); <span class="lc">T</span> <span class="lm">next</span>(); }
+
+<span class="lk">class</span> <span class="lc">NumberRange</span> <span class="lk">implements</span> <span class="lc">Iterable</span>&lt;<span class="lc">Integer</span>&gt; {
+  <span class="lk">private final int</span> start, end;
+  <span class="lc">NumberRange</span>(<span class="lk">int</span> s, <span class="lk">int</span> e) { start=s; end=e; }
+  <span class="lk">public</span> <span class="lc">Iterator</span>&lt;<span class="lc">Integer</span>&gt; <span class="lm">iterator</span>() {
+    <span class="lk">return new</span> <span class="lc">Iterator</span>&lt;&gt;() {
+      <span class="lk">int</span> cur = start;
+      <span class="lk">public boolean</span> <span class="lm">hasNext</span>() { <span class="lk">return</span> cur &lt;= end; }
+      <span class="lk">public</span> <span class="lc">Integer</span> <span class="lm">next</span>()    { <span class="lk">return</span> cur++; }
+    };
+  }
+}
+<span class="lcm">// for-each works on any Iterable</span>
+<span class="lk">for</span> (<span class="lk">int</span> n : <span class="lk">new</span> <span class="lc">NumberRange</span>(<span class="ln">1</span>, <span class="ln">5</span>)) System.out.println(n);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Mediator.java</div>
+          <div class="live-output" style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;line-height:1.7;color:var(--code-text);background:var(--code-bg);padding:0.75rem;border-radius:4px;overflow-x:auto;">
+<span class="lk">// Mediator — centralise communication</span><br/>
+<span class="lk">// between objects so they don't reference</span><br/>
+<span class="lk">// each other directly (chat room model)</span><br/><br/>
+<span class="lo">interface</span> <span class="lc">Mediator</span> {<br/>
+&nbsp;&nbsp;<span class="lk">void</span> <span class="lm">send</span>(<span class="lc">String</span> msg, <span class="lc">Colleague</span> from);<br/>
+}<br/><br/>
+<span class="lo">class</span> <span class="lc">ChatRoom</span> <span class="lo">implements</span> <span class="lc">Mediator</span> {<br/>
+&nbsp;&nbsp;<span class="lk">private</span> <span class="lc">List</span>&lt;<span class="lc">Colleague</span>&gt; members = <span class="lo">new</span> <span class="lc">ArrayList</span>&lt;&gt;();<br/>
+&nbsp;&nbsp;<span class="lk">void</span> <span class="lm">join</span>(<span class="lc">Colleague</span> c) { members.add(c); }<br/>
+&nbsp;&nbsp;<span class="lk">public void</span> <span class="lm">send</span>(<span class="lc">String</span> msg, <span class="lc">Colleague</span> from) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;members.stream()<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.filter(m -&gt; m != from)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.forEach(m -&gt; m.<span class="lm">receive</span>(msg));<br/>
+&nbsp;&nbsp;}<br/>
+}
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-row">
+        <div class="tip"><strong>Memento</strong> — capture &amp; restore an object's internal state (save/undo). Store snapshots in a caretaker; state never exposed.</div>
+        <div class="tip"><strong>Visitor</strong> — add operations to a class hierarchy without modifying it. Element accepts a Visitor; visitor does the work per type.</div>
+        <div class="tip"><strong>Interpreter</strong> — define a grammar for a simple language and interpret sentences. Used in SQL parsers, regex engines, expression evaluators.</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ UML ═══ -->
+    <section id="uml">
+      <span class="badge b-uml">UML</span>
+      <h2>UML Diagrams Quick Reference</h2>
+
+      <div class="block-desc">
+        <span>Class diagram notation — the core of every LLD interview.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Class Diagram Notation</div>
+          <pre><span class="lcm">┌──────────────────────────────┐</span>
+<span class="lcm">│       &lt;&lt;interface&gt;&gt;          │</span>
+<span class="lcm">│          Shape               │</span>
+<span class="lcm">├──────────────────────────────┤</span>
+<span class="lcm">│ + area(): double             │  &lt;-- + public</span>
+<span class="lcm">│ + perimeter(): double        │  &lt;-- # protected</span>
+<span class="lcm">├──────────────────────────────┤  &lt;-- - private</span>
+<span class="lcm">│ (no fields in interface)     │  &lt;-- ~ package</span>
+<span class="lcm">└──────────────────────────────┘</span>
+
+<span class="lcm">┌──────────────────────────────┐</span>
+<span class="lcm">│           Circle             │  &lt;- class name</span>
+<span class="lcm">├──────────────────────────────┤</span>
+<span class="lcm">│ - radius: double             │  &lt;- fields</span>
+<span class="lcm">│ - colour: String             │</span>
+<span class="lcm">├──────────────────────────────┤</span>
+<span class="lcm">│ + area(): double             │  &lt;- methods</span>
+<span class="lcm">│ + perimeter(): double        │</span>
+<span class="lcm">│ + setRadius(r: double): void │</span>
+<span class="lcm">└──────────────────────────────┘</span>
+
+<span class="lcm">Relationships in diagrams:</span>
+<span class="lcm">A ────────▷ B   inheritance (A extends B)</span>
+<span class="lcm">A ·········▷ B   realization (A implements B)</span>
+<span class="lcm">A ──────────→ B  association (A uses B)</span>
+<span class="lcm">A ◇──────────→ B aggregation (A has-a B, weak)</span>
+<span class="lcm">A ◆──────────→ B composition (A owns B, strong)</span>
+<span class="lcm">A ···········→ B dependency (A depends on B)</span>
+
+<span class="lcm">Multiplicity:</span>
+<span class="lcm">1     one          *    many</span>
+<span class="lcm">0..1  zero or one  1..* one or more</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Diagram types & when to use</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.9;color:var(--text-muted);">
+            <div><strong style="color:var(--accent);">Class Diagram</strong></div>
+            <div>Structure: classes, fields, methods, relations</div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--accent);">Sequence Diagram</strong></div>
+            <div>Time-ordered messages between objects</div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--accent);">Use Case Diagram</strong></div>
+            <div>Actor interactions with the system</div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--accent);">Activity Diagram</strong></div>
+            <div>Flow of control / business logic</div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--accent);">State Machine</strong></div>
+            <div>Object states and transitions</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sequence Diagram -->
+      <div class="block-desc">
+        <span><strong>Sequence Diagram</strong> — shows the order of messages between objects over time.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Sequence: Login Flow</div>
+          <pre><span class="lcm">Client        Controller     AuthService    UserRepo</span>
+<span class="lcm">  |                |               |              |</span>
+<span class="lcm">  |-- POST /login →|               |              |</span>
+<span class="lcm">  |                |-- authenticate(u,p) --------→|</span>
+<span class="lcm">  |                |               |←-- User obj --|</span>
+<span class="lcm">  |                |-- validate(user) →|           |</span>
+<span class="lcm">  |                |←-- JWT token -----|           |</span>
+<span class="lcm">  |←- 200 + token -|               |              |</span>
+<span class="lcm">  |</span>
+<span class="lcm">Notation:</span>
+<span class="lcm">──→   synchronous call</span>
+<span class="lcm">·····→ async / event</span>
+<span class="lcm">────  activation bar (object is active)</span>
+<span class="lcm">╔══╗  alt / loop / opt frame</span>
+<span class="lcm">X     object destruction</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Interview Tips</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div>Draw class diagram first</div>
+            <div>Then sequence for the main flow</div>
+            <div>Identify actors and their roles</div>
+            <div>Show error paths if asked</div>
+            <div style="margin-top:0.5rem;"><strong>Tools:</strong></div>
+            <div>draw.io / Lucidchart</div>
+            <div>PlantUML (text-based)</div>
+            <div>Mermaid.js (in-browser)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ SYSTEMS ═══ -->
+    <section id="systems">
+      <span class="badge b-sys">Interview</span>
+      <h2>LLD System Design Problems</h2>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">Classic interview problems — key classes and design decisions for each.</p>
+
+      <div class="sys-grid">
+        <div class="sys-card">
+          <h4>Parking Lot</h4>
+          <ul>
+            <li><strong>Entities:</strong> ParkingLot, Floor, Slot, Vehicle, Ticket</li>
+            <li><strong>Enums:</strong> SlotType (SMALL/MEDIUM/LARGE), VehicleType</li>
+            <li><strong>Key methods:</strong> <code>parkVehicle()</code>, <code>removeVehicle()</code>, <code>findNearestSlot()</code></li>
+            <li><strong>Pattern:</strong> Strategy (slot assignment), Observer (capacity alerts)</li>
+            <li><strong>Concurrency:</strong> lock slot before assigning to prevent race</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>Library Management System</h4>
+          <ul>
+            <li><strong>Entities:</strong> Book, BookItem, Member, Librarian, Loan, Fine</li>
+            <li><strong>Key methods:</strong> <code>searchCatalog()</code>, <code>checkOut()</code>, <code>returnBook()</code>, <code>payFine()</code></li>
+            <li><strong>Pattern:</strong> Singleton (catalog), Observer (reservation queue)</li>
+            <li><strong>Relations:</strong> Book → many BookItems (copies); Member borrows BookItem</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>Elevator System</h4>
+          <ul>
+            <li><strong>Entities:</strong> ElevatorController, Elevator, Floor, Request</li>
+            <li><strong>Enums:</strong> Direction (UP/DOWN/IDLE), ElevatorState</li>
+            <li><strong>Key methods:</strong> <code>addRequest()</code>, <code>processNext()</code>, <code>move()</code></li>
+            <li><strong>Pattern:</strong> State (elevator states), Strategy (scheduling: FCFS, SCAN/LOOK)</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>ATM Machine</h4>
+          <ul>
+            <li><strong>Entities:</strong> ATM, Card, Account, CashDispenser, Keypad, Screen</li>
+            <li><strong>States:</strong> Idle → CardInserted → PINEntered → SelectingTransaction → Dispensing</li>
+            <li><strong>Pattern:</strong> State (ATM states), Singleton (ATM), Chain of Responsibility (auth checks)</li>
+            <li><strong>Key:</strong> atomicity — debit account and dispense cash must succeed/fail together</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>Chess Game</h4>
+          <ul>
+            <li><strong>Entities:</strong> Board, Cell, Piece, Player, Game, Move</li>
+            <li><strong>Subclasses:</strong> King, Queen, Rook, Bishop, Knight, Pawn (all extend Piece)</li>
+            <li><strong>Key methods:</strong> <code>isValidMove()</code>, <code>movePiece()</code>, <code>isCheckmate()</code></li>
+            <li><strong>Pattern:</strong> Command (move history/undo), Observer (game events)</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>Vending Machine</h4>
+          <ul>
+            <li><strong>Entities:</strong> VendingMachine, Item, Inventory, Coin, Transaction</li>
+            <li><strong>States:</strong> Idle → HasMoney → SelectionMade → Dispensing → Change</li>
+            <li><strong>Pattern:</strong> State (machine states), Singleton (machine instance), Strategy (change dispensing)</li>
+            <li><strong>Key:</strong> refund on cancel; exact change vs change dispensing logic</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>Ride Sharing (Uber/Ola)</h4>
+          <ul>
+            <li><strong>Entities:</strong> Rider, Driver, Trip, Location, Payment, Rating</li>
+            <li><strong>Key methods:</strong> <code>requestRide()</code>, <code>matchDriver()</code>, <code>startTrip()</code>, <code>endTrip()</code></li>
+            <li><strong>Pattern:</strong> Observer (driver location updates), Strategy (pricing, driver matching), Singleton (RideManager)</li>
+          </ul>
+        </div>
+        <div class="sys-card">
+          <h4>Hotel Booking</h4>
+          <ul>
+            <li><strong>Entities:</strong> Hotel, Room, Booking, Guest, Payment, RoomType</li>
+            <li><strong>States:</strong> Room — Available → Reserved → CheckedIn → Cleaning → Available</li>
+            <li><strong>Key methods:</strong> <code>searchRooms(dates, type)</code>, <code>book()</code>, <code>checkIn()</code>, <code>checkOut()</code></li>
+            <li><strong>Pattern:</strong> State (room), Factory (room types), Observer (availability)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Design interview approach -->
+      <div class="block-desc">
+        <span><strong>LLD Interview Approach</strong> — a repeatable 5-step method for any design question.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Step-by-step method</div>
+          <pre><span class="lcm">1. CLARIFY REQUIREMENTS (2 min)</span>
+   - Functional: what does it do?
+   - Non-functional: scale, concurrent users?
+   - Constraints: no 3rd-party libs? specific language?
+
+<span class="lcm">2. IDENTIFY ENTITIES (3 min)</span>
+   - Nouns from requirements → candidate classes
+   - Group related attributes together
+   - Distinguish entity vs value object vs enum
+
+<span class="lcm">3. DEFINE RELATIONSHIPS (3 min)</span>
+   - Is-a (inheritance) or Has-a (composition)?
+   - Multiplicities: 1:1, 1:N, M:N
+   - Draw rough class diagram
+
+<span class="lcm">4. CORE METHODS &amp; FLOWS (5 min)</span>
+   - Key operations: what are the primary verbs?
+   - Walk through a main scenario with sequence
+   - Identify state transitions if applicable
+
+<span class="lcm">5. APPLY PATTERNS (3 min)</span>
+   - Which patterns fit naturally?
+   - Add extension points (OCP)
+   - Mention concurrency concerns if relevant</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Pattern Selection Guide</div>
+          <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong style="color:var(--accent);">"only one instance"</strong> → Singleton</div>
+            <div><strong style="color:var(--accent);">"create without specifying class"</strong> → Factory</div>
+            <div><strong style="color:var(--accent);">"complex object step by step"</strong> → Builder</div>
+            <div><strong style="color:var(--accent);">"notify many on change"</strong> → Observer</div>
+            <div><strong style="color:var(--accent);">"swap algorithm at runtime"</strong> → Strategy</div>
+            <div><strong style="color:var(--accent);">"object changes behaviour by state"</strong> → State</div>
+            <div><strong style="color:var(--accent);">"add behaviour without subclass"</strong> → Decorator</div>
+            <div><strong style="color:var(--accent);">"incompatible interface"</strong> → Adapter</div>
+            <div><strong style="color:var(--accent);">"undo/redo"</strong> → Command</div>
+            <div><strong style="color:var(--accent);">"pass request along chain"</strong> → Chain of Resp.</div>
+            <div><strong style="color:var(--accent);">"simplify complex subsystem"</strong> → Facade</div>
+            <div><strong style="color:var(--accent);">"tree of objects"</strong> → Composite</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

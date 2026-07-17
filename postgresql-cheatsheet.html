@@ -15,22 +15,29 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="header-top">
-        <div>
-          <h1>SQL</h1>
-          <p class="subtitle">Quick reference with psql commands</p>
-        </div>
-        <div class="header-actions">
-          <div class="search-wrap">
-            <input type="search" id="search" placeholder="Search..." />
-            <kbd class="shortcut-hint">/</kbd>
-          </div>
-          <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
-        </div>
-      </div>
-      <nav class="tab-bar" id="tab-bar"></nav>
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">📚 Cheatsheets</div>
+    <div class="search-wrap">
+      <input type="search" id="search" placeholder="Search..." />
+      <kbd class="shortcut-hint">/</kbd>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+      <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </aside>
+  <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+  <script src="js/header.js"></script>
+  <script>renderHeader('SQL')</script>
+  <script>renderSourceLink('SQL')</script>
+  <main>
+    <div class="page-header">
+      <h1>SQL</h1>
+      <p class="subtitle">Quick reference with psql commands</p>
+      <span id="source-link"></span>
       <nav class="toc">
         <a href="#getting-started">Start</a>
         <a href="#connect">Connect</a>
@@ -44,12 +51,9 @@
         <a href="#backup">Backup</a>
         <a href="#remote">Remote</a>
         <a href="#csv">CSV</a>
+        <a href="#numeric-types">Numeric Types</a>
       </nav>
     </div>
-  </header>
-  <script src="js/header.js"></script>
-  <script>renderHeader('SQL')</script>
-  <main>
 
     <!-- Getting Started -->
     <section id="getting-started">
@@ -1482,6 +1486,36 @@ host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
       </div>
     </section>
 
+    <!-- Numeric Types -->
+    <section id="numeric-types">
+      <h2>Numeric Types</h2>
+      <div class="block-desc">
+        <span>Comparison of SQL numeric integer types by storage size and value range.</span>
+        <a class="w3-link" href="https://www.postgresql.org/docs/current/datatype-numeric.html" target="_blank">PostgreSQL Docs →</a>
+      </div>
+      <div class="attr-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Bytes</th>
+              <th>Min (Signed)</th>
+              <th>Min (Unsigned)</th>
+              <th>Max (Signed)</th>
+              <th>Max (Unsigned)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>TINYINT</td><td>1</td><td>-128</td><td>0</td><td>127</td><td>255</td></tr>
+            <tr><td>SMALLINT</td><td>2</td><td>-32768</td><td>0</td><td>32767</td><td>65535</td></tr>
+            <tr><td>MEDIUMINT</td><td>3</td><td>-8388608</td><td>0</td><td>8388607</td><td>16777215</td></tr>
+            <tr><td>INT</td><td>4</td><td>-2147483648</td><td>0</td><td>2147483647</td><td>4294967295</td></tr>
+            <tr><td>BIGINT</td><td>8</td><td>-2^63</td><td>0</td><td>2^64-1</td><td>2^64-1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -1489,5 +1523,13 @@ host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
   </footer>
 
   <script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
 </body>
 </html>

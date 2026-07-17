@@ -15,22 +15,29 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="header-top">
-        <div>
-          <h1>VS Code</h1>
-          <p class="subtitle">Quick reference with shortcuts &amp; features</p>
-        </div>
-        <div class="header-actions">
-          <div class="search-wrap">
-            <input type="search" id="search" placeholder="Search..." />
-            <kbd class="shortcut-hint">/</kbd>
-          </div>
-          <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
-        </div>
-      </div>
-      <nav class="tab-bar" id="tab-bar"></nav>
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">📚 Cheatsheets</div>
+    <div class="search-wrap">
+      <input type="search" id="search" placeholder="Search..." />
+      <kbd class="shortcut-hint">/</kbd>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+      <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </aside>
+  <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+  <script src="js/header.js"></script>
+  <script>renderHeader('VS Code')</script>
+  <script>renderSourceLink('VS Code')</script>
+  <main>
+    <div class="page-header">
+      <h1>VS Code</h1>
+      <p class="subtitle">Quick reference with shortcuts &amp; features</p>
+      <span id="source-link"></span>
       <nav class="toc">
         <a href="#getting-started">Basics</a>
         <a href="#editing">Editing</a>
@@ -46,10 +53,6 @@
         <a href="#snippets">Snippets</a>
       </nav>
     </div>
-  </header>
-  <script src="js/header.js"></script>
-  <script>renderHeader('VS Code')</script>
-  <main>
 
     <!-- Getting Started -->
     <section id="getting-started">
@@ -576,5 +579,13 @@
   </footer>
 
   <script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
 </body>
 </html>

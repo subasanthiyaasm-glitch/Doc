@@ -15,26 +15,36 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="header-top">
-        <div>
-          <h1>Shell</h1>
-          <p class="subtitle">Quick reference with basic commands</p>
-        </div>
-        <div class="header-actions">
-          <div class="search-wrap">
-            <input type="search" id="search" placeholder="Search..." />
-            <kbd class="shortcut-hint">/</kbd>
-          </div>
-          <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
-        </div>
-      </div>
-      <nav class="tab-bar" id="tab-bar"></nav>
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">📚 Cheatsheets</div>
+    <div class="search-wrap">
+      <input type="search" id="search" placeholder="Search..." />
+      <kbd class="shortcut-hint">/</kbd>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+      <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </aside>
+  <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+  <script src="js/header.js"></script>
+  <script>renderHeader('Shell')</script>
+  <script>renderSourceLink('Shell')</script>
+  <main>
+    <div class="page-header">
+      <h1>Shell</h1>
+      <p class="subtitle">Quick reference with basic commands</p>
+      <span id="source-link"></span>
       <nav class="toc">
+        <a href="#most-used">Most Used</a>
         <a href="#start">Start</a>
         <a href="#navigation">Navigation</a>
         <a href="#files">Files</a>
+        <a href="#processes">Processes</a>
+        <a href="#network">Network</a>
         <a href="#permissions">Permissions</a>
         <a href="#text-processing">Text Processing</a>
         <a href="#pipes">Pipes</a>
@@ -42,10 +52,52 @@
         <a href="#scripting">Scripting</a>
       </nav>
     </div>
-  </header>
-  <script src="js/header.js"></script>
-  <script>renderHeader('Shell')</script>
-  <main>
+
+    <!-- Most Used Commands -->
+    <section id="most-used">
+      <h2>Most Used Commands</h2>
+
+      <div class="block-desc">
+        <span>The commands you reach for every day — quick reference with keyboard shortcuts.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/index.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Essential Commands</div>
+          <pre>$ <span class="sh-fn">ls</span> <span class="sh-op">-</span>la           <span class="sh-cm"># list files (long + hidden)</span>
+$ <span class="sh-fn">cd</span> ~/project     <span class="sh-cm"># change directory</span>
+$ <span class="sh-fn">pwd</span>              <span class="sh-cm"># print working directory</span>
+$ <span class="sh-fn">cat</span> file.txt     <span class="sh-cm"># print file contents</span>
+$ <span class="sh-fn">grep</span> <span class="sh-op">-</span>r <span class="sh-str">"text"</span> .  <span class="sh-cm"># search recursively</span>
+$ <span class="sh-fn">find</span> . <span class="sh-op">-</span>name <span class="sh-str">"*.js"</span>  <span class="sh-cm"># find files</span>
+$ <span class="sh-fn">history</span>          <span class="sh-cm"># command history</span>
+$ <span class="sh-fn">man</span> ls           <span class="sh-cm"># manual page</span>
+$ <span class="sh-fn">which</span> node       <span class="sh-cm"># path of a binary</span>
+$ <span class="sh-fn">sudo</span> !!          <span class="sh-cm"># re-run last cmd as root</span>
+$ <span class="sh-op">!!</span>               <span class="sh-cm"># repeat last command</span>
+$ <span class="sh-op">!$</span>               <span class="sh-cm"># last argument of prev cmd</span>
+$ <span class="sh-fn">clear</span>            <span class="sh-cm"># clear the terminal</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">Path shorthand:</span><br />
+              <span style="color:#9ece6a;">~    → home directory</span><br />
+              <span style="color:#9ece6a;">.    → current directory</span><br />
+              <span style="color:#9ece6a;">..   → parent directory</span><br />
+              <span style="color:#9ece6a;">-    → previous directory (cd -)</span><br /><br />
+              <span style="color:#7dcfff;">Keyboard shortcuts:</span><br />
+              <span style="color:#e0af68;">Ctrl+C  — kill running process</span><br />
+              <span style="color:#e0af68;">Ctrl+Z  — suspend (then fg/bg)</span><br />
+              <span style="color:#e0af68;">Ctrl+D  — exit / EOF</span><br />
+              <span style="color:#e0af68;">Ctrl+L  — clear screen</span><br />
+              <span style="color:#e0af68;">Ctrl+R  — reverse search history</span><br />
+              <span style="color:#e0af68;">Tab     — autocomplete path/cmd</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Getting Started -->
     <section id="start">
@@ -186,6 +238,103 @@ $ <span class="sh-fn">du</span> <span class="sh-op">-</span>sh dir</pre>
       </div>
     </section>
 
+    <!-- Processes -->
+    <section id="processes">
+      <h2>Processes</h2>
+
+      <div class="block-desc">
+        <span>View running processes with <code>ps</code> and <code>top</code>; send signals with <code>kill</code>; manage background jobs with <code>bg</code>, <code>fg</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_processes.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ps, top, kill</div>
+          <pre>$ <span class="sh-fn">ps</span> aux                 <span class="sh-cm"># all running processes</span>
+$ <span class="sh-fn">ps</span> aux <span class="sh-op">|</span> <span class="sh-fn">grep</span> node     <span class="sh-cm"># filter by name</span>
+$ <span class="sh-fn">top</span>                    <span class="sh-cm"># live process monitor</span>
+$ <span class="sh-fn">top</span> <span class="sh-op">-</span>u john           <span class="sh-cm"># top for a specific user</span>
+
+$ <span class="sh-fn">kill</span> <span class="sh-op">1234</span>             <span class="sh-cm"># SIGTERM — graceful stop</span>
+$ <span class="sh-fn">kill</span> <span class="sh-op">-9</span> <span class="sh-op">1234</span>          <span class="sh-cm"># SIGKILL — force kill</span>
+$ <span class="sh-fn">kill</span> <span class="sh-op">-15</span> <span class="sh-op">1234</span>         <span class="sh-cm"># SIGTERM explicit</span>
+$ <span class="sh-fn">kill</span> <span class="sh-op">-1</span> <span class="sh-op">1234</span>          <span class="sh-cm"># SIGHUP — reload config</span>
+$ <span class="sh-fn">killall</span> node           <span class="sh-cm"># kill all by name</span>
+$ <span class="sh-fn">pkill</span> <span class="sh-op">-f</span> <span class="sh-str">"my-app"</span>    <span class="sh-cm"># kill by pattern</span>
+
+$ <span class="sh-fn">cmd</span> <span class="sh-op">&amp;</span>                 <span class="sh-cm"># run in background</span>
+$ <span class="sh-fn">jobs</span>                  <span class="sh-cm"># list background jobs</span>
+$ <span class="sh-fn">fg</span> %1                 <span class="sh-cm"># bring job 1 to foreground</span>
+$ <span class="sh-fn">bg</span> %1                 <span class="sh-cm"># resume job 1 in bg</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">Common signals:</span><br />
+              <span style="color:#9ece6a;">&nbsp;1 SIGHUP  — reload config</span><br />
+              <span style="color:#9ece6a;">&nbsp;2 SIGINT  — Ctrl+C interrupt</span><br />
+              <span style="color:#e0af68;">&nbsp;9 SIGKILL — force kill (cannot be caught)</span><br />
+              <span style="color:#9ece6a;">15 SIGTERM — graceful shutdown (default)</span><br /><br />
+              <span style="color:#7dcfff;">top keyboard shortcuts:</span><br />
+              <span style="color:#565f89;">q — quit &nbsp;&nbsp;&nbsp; k — kill a PID</span><br />
+              <span style="color:#565f89;">M — sort by memory usage</span><br />
+              <span style="color:#565f89;">P — sort by CPU usage</span><br />
+              <span style="color:#565f89;">u — filter by user</span><br />
+              <span style="color:#565f89;">? — help</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Network -->
+    <section id="network">
+      <h2>Network</h2>
+
+      <div class="block-desc">
+        <span>Check IP addresses with <code>ifconfig</code>/<code>ip</code>, inspect open ports with <code>lsof</code>, test connectivity with <code>ping</code>, and transfer data with <code>curl</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/index.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ifconfig / ip / lsof</div>
+          <pre>$ <span class="sh-fn">ifconfig</span>               <span class="sh-cm"># all interfaces (macOS/BSD)</span>
+$ <span class="sh-fn">ifconfig</span> en0           <span class="sh-cm"># specific interface</span>
+$ <span class="sh-fn">ip</span> addr                <span class="sh-cm"># all IPs (Linux)</span>
+$ <span class="sh-fn">ip</span> addr show eth0      <span class="sh-cm"># specific interface</span>
+$ <span class="sh-fn">ip</span> route               <span class="sh-cm"># routing table</span>
+
+$ <span class="sh-fn">lsof</span> <span class="sh-op">-</span>i                <span class="sh-cm"># all open network connections</span>
+$ <span class="sh-fn">lsof</span> <span class="sh-op">-</span>i :<span class="sh-op">8080</span>          <span class="sh-cm"># who is using port 8080?</span>
+$ <span class="sh-fn">lsof</span> <span class="sh-op">-</span>i tcp            <span class="sh-cm"># TCP connections only</span>
+$ <span class="sh-fn">lsof</span> <span class="sh-op">-</span>i <span class="sh-op">-</span>P <span class="sh-op">-</span>n        <span class="sh-cm"># no DNS/port name lookup</span>
+$ <span class="sh-fn">lsof</span> <span class="sh-op">-</span>u john           <span class="sh-cm"># open files by user</span>
+$ <span class="sh-fn">lsof</span> /var/log/sys.log  <span class="sh-cm"># who has this file open?</span>
+
+$ <span class="sh-fn">ping</span> google.com         <span class="sh-cm"># test connectivity</span>
+$ <span class="sh-fn">curl</span> <span class="sh-op">-</span>I https://site.com  <span class="sh-cm"># HTTP headers only</span>
+$ <span class="sh-fn">netstat</span> <span class="sh-op">-</span>an            <span class="sh-cm"># all connections</span>
+$ <span class="sh-fn">ss</span> <span class="sh-op">-</span>tulnp              <span class="sh-cm"># listening ports (Linux)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">ifconfig en0 output:</span><br />
+              <span style="color:#9ece6a;">en0: flags=8863 mtu 1500</span><br />
+              <span style="color:#9ece6a;">&nbsp; inet 192.168.1.10 netmask 0xff...</span><br />
+              <span style="color:#9ece6a;">&nbsp; inet6 fe80::1%en0</span><br />
+              <span style="color:#9ece6a;">&nbsp; ether a4:83:e7:xx:xx:xx</span><br /><br />
+              <span style="color:#7dcfff;">lsof -i :8080 output:</span><br />
+              <span style="color:#e0af68;">COMMAND  PID  USER  TYPE  NODE NAME</span><br />
+              <span style="color:#e0af68;">node    1234  john  IPv4  TCP  *:8080 (LISTEN)</span><br /><br />
+              <span style="color:#565f89;">lsof useful flags:</span><br />
+              <span style="color:#565f89;">-P — show port numbers not names</span><br />
+              <span style="color:#565f89;">-n — no DNS resolution (faster)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Permissions -->
     <section id="permissions">
       <h2>Permissions</h2>
@@ -196,24 +345,121 @@ $ <span class="sh-fn">du</span> <span class="sh-op">-</span>sh dir</pre>
       </div>
       <div class="cheat-block">
         <div class="code-panel">
-          <div class="panel-label">Permissions</div>
-          <pre>$ <span class="sh-fn">chmod</span> <span class="sh-op">7</span><span class="sh-op">5</span><span class="sh-op">5</span> script.sh
-$ <span class="sh-fn">chmod</span> +x script.sh
-$ <span class="sh-fn">chown</span> user:group file.txt
-$ <span class="sh-fn">umask</span>
+          <div class="panel-label">chmod, chown, umask</div>
+          <pre>$ <span class="sh-fn">chmod</span> <span class="sh-op">755</span> script.sh    <span class="sh-cm"># set by octal</span>
+$ <span class="sh-fn">chmod</span> +x script.sh    <span class="sh-cm"># add execute for all</span>
+$ <span class="sh-fn">chmod</span> u+w file        <span class="sh-cm"># user: add write</span>
+$ <span class="sh-fn">chmod</span> go-w file       <span class="sh-cm"># group+other: remove write</span>
+$ <span class="sh-fn">chmod</span> a=r file        <span class="sh-cm"># all: set read only</span>
+$ <span class="sh-fn">chmod</span> <span class="sh-op">-</span>R <span class="sh-op">755</span> dir/     <span class="sh-cm"># recursive</span>
+$ <span class="sh-fn">chown</span> john:dev file.txt
+$ <span class="sh-fn">chown</span> <span class="sh-op">-</span>R john:dev dir/
+$ <span class="sh-fn">umask</span>                  <span class="sh-cm"># current default mask</span>
+$ <span class="sh-fn">umask</span> <span class="sh-op">022</span>             <span class="sh-cm"># new files get 644</span>
 $ <span class="sh-fn">ls</span> <span class="sh-op">-</span>l</pre>
         </div>
         <div class="live-panel">
           <div class="live-output">
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
-              <span style="color:#9ece6a;">-rwxr-xr-x  1 john  staff  1024 Jul  5 12:00 script.sh</span><br /><br />
-              <span style="color:#7dcfff;">Permission breakdown:</span><br />
-              <span style="color:#565f89;">-rwxr-xr-x</span><br />
-              <span style="color:#565f89;">^ ^^^ ^^^ ^^^</span><br />
-              <span style="color:#565f89;">| user group other</span><br />
-              <span style="color:#565f89;">type (— file, d dir)</span><br /><br />
-              <span style="color:#e0af68;">r=4 w=2 x=1</span><br />
-              <span style="color:#e0af68;">755 → rwxr-xr-x</span>
+              <span style="color:#9ece6a;">-rwxr-xr-x  1 john staff script.sh</span><br />
+              <span style="color:#7dcfff;">Symbolic: u/g/o/a  ±  r/w/x</span><br />
+              <span style="color:#565f89;">u=user &nbsp;g=group &nbsp;o=other &nbsp;a=all</span><br />
+              <span style="color:#565f89;">+ add &nbsp;&nbsp; - remove &nbsp; = set exact</span><br /><br />
+              <span style="color:#7dcfff;">ls -l column layout:</span><br />
+              <span style="color:#565f89;">-rwxr-xr-x  1  john  staff  1024  file</span><br />
+              <span style="color:#565f89;">^^^^^^^^^^ ^^ ^^^^ ^^^^^^ ^^^^</span><br />
+              <span style="color:#565f89;">perms  links user  group  size</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Each permission digit is the sum of <strong>r=4 w=2 x=1</strong>. Three digits cover <strong>user</strong>, <strong>group</strong>, <strong>other</strong> — e.g. <code>chmod 755</code> = user rwx(7), group r-x(5), other r-x(5).</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_permissions.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Permission Chart (octal reference)</div>
+          <pre><span class="sh-cm"># Octal  Symbolic    User  Group Other  Typical use</span>
+<span class="sh-op">777</span>     rwxrwxrwx   rwx   rwx   rwx   <span class="sh-cm"># all full (avoid!)</span>
+<span class="sh-op">755</span>     rwxr-xr-x   rwx   r-x   r-x   <span class="sh-cm"># executables, dirs</span>
+<span class="sh-op">750</span>     rwxr-x---   rwx   r-x   ---   <span class="sh-cm"># restricted exec</span>
+<span class="sh-op">700</span>     rwx------   rwx   ---   ---   <span class="sh-cm"># owner-only exec</span>
+<span class="sh-op">664</span>     rw-rw-r--   rw-   rw-   r--   <span class="sh-cm"># group can write</span>
+<span class="sh-op">644</span>     rw-r--r--   rw-   r--   r--   <span class="sh-cm"># regular files std</span>
+<span class="sh-op">640</span>     rw-r-----   rw-   r--   ---   <span class="sh-cm"># private readable</span>
+<span class="sh-op">600</span>     rw-------   rw-   ---   ---   <span class="sh-cm"># private file</span>
+<span class="sh-op">400</span>     r--------   r--   ---   ---   <span class="sh-cm"># read-only</span>
+<span class="sh-op">000</span>     ---------   ---   ---   ---   <span class="sh-cm"># no access</span>
+
+<span class="sh-cm"># Digit → bits: 7=rwx  6=rw-  5=r-x  4=r--  0=---</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.72rem;line-height:1.6;">
+              <span style="color:#7dcfff;font-weight:bold;">Bit decoder &nbsp; r=4 &nbsp; w=2 &nbsp; x=1</span><br />
+              <table style="border-collapse:collapse;width:100%;margin-top:0.25rem;">
+                <tr style="color:#7dcfff;border-bottom:1px solid #2d3149;">
+                  <th style="padding:0.1rem 0.35rem;text-align:left;">Digit</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:left;">Sym</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:center;">Read</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:center;">Write</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:center;">Exec</th>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">7</td>
+                  <td style="padding:0.1rem 0.35rem;color:#9ece6a;">rwx</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">6</td>
+                  <td style="padding:0.1rem 0.35rem;color:#9ece6a;">rw-</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">5</td>
+                  <td style="padding:0.1rem 0.35rem;color:#9ece6a;">r-x</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">4</td>
+                  <td style="padding:0.1rem 0.35rem;color:#9ece6a;">r--</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">2</td>
+                  <td style="padding:0.1rem 0.35rem;color:#9ece6a;">-w-</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">1</td>
+                  <td style="padding:0.1rem 0.35rem;color:#9ece6a;">--x</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">✓</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">0</td>
+                  <td style="padding:0.1rem 0.35rem;color:#565f89;">---</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#565f89;">✗</td>
+                </tr>
+              </table>
+              <br />
+              <span style="color:#7dcfff;">chmod 755 = User(7) Group(5) Other(5)</span><br />
+              <span style="color:#565f89;">d rwx r-x r-x → directory 755</span>
             </div>
           </div>
         </div>
@@ -437,5 +683,13 @@ greet <span class="sh-str">"World"</span>
   </footer>
 
   <script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
 </body>
 </html>

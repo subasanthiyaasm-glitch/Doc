@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Concepts &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .ai-section { margin-bottom: 2rem; }
+    .ai-section h3 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--text); }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('AI Concepts')</script>
+<script>renderSourceLink('AI Concepts')</script>
+
+<main>
+
+  <div class="page-header">
+    <h1>AI Concepts</h1>
+    <p class="subtitle">Machine Learning, Math &amp; Data Foundations</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#ml">Machine Learning</a>
+      <a href="#linear-algebra">Linear Algebra</a>
+      <a href="#probability">Probability</a>
+      <a href="#vectors">Vectors</a>
+      <a href="#bitness">Bitness</a>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 1: MACHINE LEARNING
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="ml" class="ai-section">
+    <h2>Machine Learning Fundamentals</h2>
+    <div class="block-desc">
+      <span><strong>Machine Learning (ML)</strong> is a subset of AI that provides machines the ability to learn automatically and improve from experience without being explicitly programmed. Core building blocks: <code>Algorithms</code>, <code>Models</code>, <code>Features</code>, and <code>Data</code>.</span>
+      <a class="w3-link" href="https://www.w3schools.com/python/python_ml_getting_started.asp" target="_blank">W3Schools →</a>
+    </div>
+
+    <!-- Key Concepts -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Key Concepts &amp; Vocabulary</div>
+        <pre><span class="lcm"># ── Core ML Terminology ──</span>
+
+<span class="ls">Algorithms:</span>       Rules &amp; statistical techniques to learn patterns from data
+<span class="ls">Model:</span>            Trained by an ML algorithm on data
+<span class="ls">Predictor Variable:</span> Feature of data used to predict the output
+<span class="ls">Response Variable:</span>  Output variable predicted from the predictor
+<span class="ls">Training Data:</span>     Data used to build the model
+<span class="ls">Testing Data:</span>      Data used to evaluate the model
+
+<span class="lcm"># ── ML Problem Types ──</span>
+Every ML problem falls into one of three categories:
+
+<span class="ln">1.</span> <span class="ls">Regression</span>     — predict continuous values
+<span class="ln">2.</span> <span class="ls">Classification</span> — predict discrete labels
+<span class="ln">3.</span> <span class="ls">Clustering</span>     — group similar data points</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ ML Process</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>1.</strong> Define Objective</div>
+          <div><strong>2.</strong> Data Gathering</div>
+          <div><strong>3.</strong> Data Preparation</div>
+          <div><strong>4.</strong> Data Exploration (EDA)</div>
+          <div><strong>5.</strong> Model Building</div>
+          <div><strong>6.</strong> Model Evaluation</div>
+          <div><strong>7.</strong> Prediction &amp; Deployment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Types of ML Learning -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Three Types of Learning</div>
+        <pre><span class="lcm"># ── Supervised Learning ──</span>
+Trained on <span class="ls">labeled data</span> (input → known output)
+<span class="ls">Regression:</span>     predict continuous value (price, temp)
+<span class="ls">Classification:</span>  predict discrete label (spam / not spam)
+<span class="ls">Algorithms:</span>     Linear Regression, Logistic Regression,
+                 SVM, KNN, Decision Tree, Random Forest,
+                 Naïve Bayes
+
+<span class="lcm"># ── Unsupervised Learning ──</span>
+Trained on <span class="ls">unlabeled data</span> — discovers hidden patterns
+<span class="ls">Clustering:</span>     group similar data points (K-Means, C-Means)
+<span class="ls">Association:</span>     find co-occurring rules (Apriori)
+<span class="lcm"># No guidance — algorithm finds structure on its own</span>
+
+<span class="lcm"># ── Reinforcement Learning ──</span>
+An <span class="ls">agent</span> interacts with an <span class="ls">environment</span>,
+produces actions, and discovers rewards.
+<span class="ls">State → Action → Reward → Next State</span>
+<span class="ls">Algorithms:</span>     Q-Learning, SARSA
+Used in: game AI, robotics, autonomous driving</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Comparison Table</div>
+        <div class="live-output" style="font-size:0.65rem;color:var(--text-muted);line-height:1.6;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;"></td>
+              <td style="padding:2px 4px;font-weight:600;">Supervised</td>
+              <td style="padding:2px 4px;font-weight:600;">Unsupervised</td>
+              <td style="padding:2px 4px;font-weight:600;">Reinforcement</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;">Data</td>
+              <td style="padding:2px 4px;">Labeled</td>
+              <td style="padding:2px 4px;">Unlabeled</td>
+              <td style="padding:2px 4px;">No pre-defined</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;">Training</td>
+              <td style="padding:2px 4px;">External supervision</td>
+              <td style="padding:2px 4px;">No supervision</td>
+              <td style="padding:2px 4px;">No supervision</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;">Approach</td>
+              <td style="padding:2px 4px;">Map input → known output</td>
+              <td style="padding:2px 4px;">Discover patterns</td>
+              <td style="padding:2px 4px;">Trial and error</td>
+            </tr>
+            <tr>
+              <td style="padding:2px 4px;font-weight:600;">Problems</td>
+              <td style="padding:2px 4px;">Regression, Classification</td>
+              <td style="padding:2px 4px;">Association, Clustering</td>
+              <td style="padding:2px 4px;">Reward-based</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supervised Algorithms -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Supervised Algorithms (Python)</div>
+        <pre><span class="lk">import</span> numpy <span class="lk">as</span> np
+<span class="lk">from</span> sklearn.linear_model <span class="lk">import</span> <span class="lc">LinearRegression</span>, <span class="lc">LogisticRegression</span>
+<span class="lk">from</span> sklearn.tree <span class="lk">import</span> <span class="lc">DecisionTreeClassifier</span>
+<span class="lk">from</span> sklearn.ensemble <span class="lk">import</span> <span class="lc">RandomForestClassifier</span>
+<span class="lk">from</span> sklearn.svm <span class="lk">import</span> <span class="lc">SVC</span>
+<span class="lk">from</span> sklearn.neighbors <span class="lk">import</span> <span class="lc">KNeighborsClassifier</span>
+<span class="lk">from</span> sklearn.naive_bayes <span class="lk">import</span> <span class="lc">GaussianNB</span>
+
+<span class="lcm"># ── Linear Regression ──</span>
+<span class="lcm"># Predict continuous Y from independent X</span>
+<span class="lcm"># Equation: Y = B₀ + B₁X + E</span>
+<span class="lcm"># Dependent (Y): response variable to predict</span>
+<span class="lcm"># Independent (X): predictor variable</span>
+model = <span class="lc">LinearRegression</span>()
+model.<span class="lm">fit</span>(X_train, y_train)
+preds = model.<span class="lm">predict</span>(X_test)
+
+<span class="lcm"># ── Logistic Regression ──</span>
+<span class="lcm"># Predict categorical dependent variable</span>
+<span class="lcm"># Uses sigmoid: output between 0 and 1</span>
+log_model = <span class="lc">LogisticRegression</span>()
+log_model.<span class="lm">fit</span>(X_train, y_train)
+
+<span class="lcm"># ── Decision Tree ──</span>
+<span class="lcm"># Inverted tree: each node = a feature,</span>
+<span class="lcm"># links = decisions, leaves = outcomes</span>
+tree = <span class="lc">DecisionTreeClassifier</span>(max_depth=<span class="ln">5</span>)
+tree.<span class="lm">fit</span>(X_train, y_train)
+
+<span class="lcm"># ── Random Forest ──</span>
+<span class="lcm"># Ensemble of multiple decision trees ("forest")</span>
+<span class="lcm"># Combines predictions for accuracy &amp; stability</span>
+rf = <span class="lc">RandomForestClassifier</span>(n_estimators=<span class="ln">100</span>)
+rf.<span class="lm">fit</span>(X_train, y_train)
+
+<span class="lcm"># ── SVM (Support Vector Machine) ──</span>
+<span class="lcm"># Finds optimal hyperplane to separate classes</span>
+<span class="lcm"># Uses support vectors to maximize margin</span>
+svm = <span class="lc">SVC</span>(kernel=<span class="ls">'rbf'</span>)
+svm.<span class="lm">fit</span>(X_train, y_train)
+
+<span class="lcm"># ── KNN (K Nearest Neighbour) ──</span>
+<span class="lcm"># Classifies by majority vote of k nearest points</span>
+knn = <span class="lc">KNeighborsClassifier</span>(n_neighbors=<span class="ln">3</span>)
+knn.<span class="lm">fit</span>(X_train, y_train)
+
+<span class="lcm"># ── Naïve Bayes ──</span>
+<span class="lcm"># Applies Bayes' theorem with independence assumption</span>
+nb = <span class="lc">GaussianNB</span>()
+nb.<span class="lm">fit</span>(X_train, y_train)</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Algorithm Summary</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Linear Regression</strong> — Y = B₀ + B₁X + E (continuous)</div>
+          <div><strong>Logistic Regression</strong> — sigmoid → probability (categorical)</div>
+          <div><strong>Decision Tree</strong> — recursive feature splits (inverted tree)</div>
+          <div><strong>Random Forest</strong> — ensemble of trees (more stable)</div>
+          <div><strong>SVM</strong> — optimal hyperplane, kernel trick for higher dims</div>
+          <div><strong>KNN</strong> — classify by nearest neighbors</div>
+          <div><strong>Naïve Bayes</strong> — Bayes' theorem, feature independence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Evaluation Metrics -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Evaluation Metrics</div>
+        <pre><span class="lcm"># ── Classification Metrics ──</span>
+
+<span class="lcm"># Accuracy = correct / total predictions</span>
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+
+<span class="lcm"># Precision = TP / (TP + FP)</span>
+<span class="lcm"># "Of all predicted positive, how many are correct?"</span>
+
+<span class="lcm"># Recall = TP / (TP + FN)</span>
+<span class="lcm"># "Of all actual positive, how many did we catch?"</span>
+
+<span class="lcm"># F1 Score = 2 × (Precision × Recall) / (Precision + Recall)</span>
+<span class="lcm"># Harmonic mean — balances precision &amp; recall</span>
+
+<span class="lcm"># ── Regression Metrics ──</span>
+
+<span class="lcm"># MSE = mean((actual − predicted)²)</span>
+<span class="lcm"># Mean Squared Error — penalizes large errors</span>
+
+<span class="lcm"># R² = variance explained by the model</span>
+<span class="lcm"># 1.0 = perfect, 0.0 = no better than mean</span>
+
+<span class="lcm"># ── Confusion Matrix ──</span>
+<span class="lcm"># Example: 100 observations, predicted "Yes" 60 times</span>
+<span class="lcm"># 50 actually "Yes" (TP), 10 actually "No" (FP)</span>
+
+<span class="ls">           Predicted Yes  Predicted No</span>
+<span class="ls">Actual Yes      50 (TP)       10 (FN)</span>
+<span class="ls">Actual No       10 (FP)       30 (TN)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Metrics at a Glance</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Accuracy</strong> — correct / total</div>
+          <div><strong>Precision</strong> — TP / (TP + FP)</div>
+          <div><strong>Recall</strong> — TP / (TP + FN)</div>
+          <div><strong>F1 Score</strong> — 2 × (P × R) / (P + R)</div>
+          <div><strong>MSE</strong> — mean((actual − predicted)²)</div>
+          <div><strong>R²</strong> — variance explained by model</div>
+          <div style="margin-top:0.4rem;font-family:monospace;font-size:0.65rem;">
+            <code>TP FP</code><br/>
+            <code>FN TN</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 2: LINEAR ALGEBRA
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="linear-algebra" class="ai-section">
+    <h2>Linear Algebra for ML</h2>
+    <div class="block-desc">
+      <span><strong>Algebra</strong> is the language of science, engineering, and economics. <strong>Linear Algebra</strong> focuses on linear equations and matrices — the data structures powering every ML algorithm. <code>NumPy</code> is the standard library.</span>
+      <a class="w3-link" href="https://www.w3schools.com/python/numpy/default.asp" target="_blank">W3Schools →</a>
+    </div>
+
+    <!-- Core Algebra Components -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Core Components of Algebra</div>
+        <pre><span class="lcm"># ── Algebra Foundations ──</span>
+
+<span class="ls">Variables:</span>   Letters (x, a, b) = placeholders for unknowns
+<span class="ls">Constants:</span>   Fixed numbers (5, −10, π)
+<span class="ls">Expressions:</span> Combination of numbers, variables, ops (3x + 5)
+<span class="ls">Equations:</span>   Statement that two expressions are equal
+
+<span class="lcm"># ── The "Balance" Scale ──</span>
+<span class="lcm"># Whatever you do to one side, do to the other</span>
+
+<span class="lcm"># Example: solve for x</span>
+<span class="lcm"># x + 5 = 12</span>
+<span class="lcm"># x + 5 − 5 = 12 − 5</span>
+<span class="lcm"># x = 7</span>
+
+<span class="lcm"># ── Algebra Use Cases ──</span>
+<span class="ln">1.</span> Solve real-world problems (taxi: y = 2x + 5)
+<span class="ln">2.</span> Identify patterns &amp; predict trends
+<span class="ln">3.</span> Simplify complex situations into equations
+
+<span class="lcm"># ── Branches ──</span>
+<span class="ls">Elementary Algebra:</span>  Basic variables solving equations
+<span class="ls">Linear Algebra:</span>      Linear equations &amp; matrices (AI/DS)
+<span class="ls">Abstract Algebra:</span>    Groups, rings, fields</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Why Algebra Matters</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Taxi example:</strong> y = 2x + 5 (cost per mile + base)</div>
+          <div><strong>Linear Algebra</strong> powers all of ML &amp; data science</div>
+          <div>Variables act as unknowns — equations solve for them</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.65rem;">
+            <code>x + 5 = 12 → x = 7</code><br/>
+            <code>ŷ = 25 − 0.5x</code> (linear model)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vectors & Unit Vectors -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Vectors &amp; Dot Product</div>
+        <pre><span class="lk">import</span> numpy <span class="lk">as</span> np
+
+<span class="lcm"># ── Vectors ──</span>
+<span class="lcm"># Ordered list of numbers with magnitude &amp; direction</span>
+a = np.<span class="lm">array</span>([<span class="ln">1</span>, <span class="ln">2</span>, <span class="ln">3</span>])
+b = np.<span class="lm">array</span>([<span class="ln">4</span>, <span class="ln">5</span>, <span class="ln">6</span>])
+
+<span class="lcm"># Magnitude (L2 norm) |v| = √(3² + 4²) = 5</span>
+mag = np.<span class="lm">linalg.norm</span>(a)
+
+<span class="lcm"># Unit vector = v / |v| (direction, length 1)</span>
+u = a / mag   <span class="lcm"># [0.267, 0.535, 0.802]</span>
+
+<span class="lcm"># ── Dot Product ──</span>
+<span class="lcm"># a · b = Σ(aᵢ × bᵢ) → scalar</span>
+<span class="lcm"># a · b = (1)(3) + (2)(4) = 11</span>
+dp = np.<span class="lm">dot</span>(a, b)   <span class="lcm"># also: a @ b</span>
+
+<span class="lcm"># Interpretation:</span>
+<span class="lcm"># High positive → similar direction</span>
+<span class="lcm"># Zero → perpendicular (unrelated)</span>
+<span class="lcm"># High negative → opposite directions</span>
+
+<span class="lcm"># ── Feature Representation ──</span>
+<span class="lcm"># House as vector: [sq_ft, bedrooms, age]</span>
+house = np.<span class="lm">array</span>([<span class="ln">2000</span>, <span class="ln">3</span>, <span class="ln">10</span>])</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ ML Applications</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Feature Representation:</strong> data = vectors</div>
+          <div style="font-family:monospace;font-size:0.65rem;"><code>[sq_ft, bedrooms, age]</code></div>
+          <div style="margin-top:0.3rem;"><strong>SVM:</strong> kernel trick uses dot products for higher-dim coordinates</div>
+          <div><strong>Neural Nets:</strong> dot(input, weight) → neuron activation</div>
+          <div><strong>Word Embeddings:</strong> dot product = semantic similarity</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.65rem;">
+            <code>a · b = (1)(3) + (2)(4) = 11</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrices -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Matrices &amp; Operations</div>
+        <pre><span class="lcm"># ── Matrix Basics ──</span>
+<span class="lcm"># Rectangular array of numbers</span>
+M = np.<span class="lm">array</span>([[<span class="ln">1</span>, <span class="ln">2</span>], [<span class="ln">3</span>, <span class="ln">4</span>]])
+
+<span class="lcm"># Transpose — flip rows ↔ columns</span>
+T = M.<span class="lm">T</span>   <span class="lcm"># [[1,3], [2,4]]</span>
+
+<span class="lcm"># Matrix multiplication</span>
+A = np.<span class="lm">array</span>([[<span class="ln">1</span>, <span class="ln">2</span>], [<span class="ln">3</span>, <span class="ln">4</span>]])
+B = np.<span class="lm">array</span>([[<span class="ln">5</span>, <span class="ln">6</span>], [<span class="ln">7</span>, <span class="ln">8</span>]])
+C = A @ B   <span class="lcm"># [[19,22],[43,50]]</span>
+
+<span class="lcm"># Identity matrix — acts like "1"</span>
+I = np.<span class="lm">eye</span>(<span class="ln">3</span>)   <span class="lcm"># 3×3 with 1s on diagonal</span>
+
+<span class="lcm"># Determinant &amp; Inverse</span>
+det = np.<span class="lm">linalg.det</span>(A)
+inv = np.<span class="lm">linalg.inv</span>(A)
+
+<span class="lcm"># ── Confusion Matrix Example ──</span>
+<span class="lcm"># 100 obs, predicted "Yes" 60 times</span>
+<span class="lcm"># 50 actually Yes (TP), 10 actually No (FP)</span>
+<span class="ls">Predicted Yes row: [50, 10]</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ ML Applications</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Data as Matrix</strong> — rows = samples, cols = features</div>
+          <div><strong>Batch Processing</strong> — input matrix × weight matrix</div>
+          <div><strong>PCA</strong> — eigenvectors of covariance = principal components</div>
+          <div><strong>Confusion Matrix</strong> — evaluates classification performance</div>
+          <div style="margin-top:0.4rem;font-family:monospace;font-size:0.65rem;">
+            <code>Y = XW + b</code> (linear model)<br/>
+            <code>Y = softmax(XW + b)</code> (classifier)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Eigenvalues & SVD & PCA -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Eigenvalues, SVD &amp; PCA</div>
+        <pre><span class="lcm"># ── Eigenvalues &amp; Eigenvectors ──</span>
+<span class="lcm"># Av = λv → matrix A scales vector v by λ</span>
+vals, vecs = np.<span class="lm">linalg.eig</span>(A)
+
+<span class="lcm"># Used in PCA for dimensionality reduction</span>
+<span class="lcm"># Covariance matrix → eigenvectors = principal components</span>
+
+<span class="lcm"># ── Singular Value Decomposition (SVD) ──</span>
+<span class="lcm"># A = UΣVᵀ</span>
+<span class="lcm"># U: left singular vectors</span>
+<span class="lcm"># Σ: singular values (diagonal)</span>
+<span class="lcm"># Vᵀ: right singular vectors</span>
+U, S, Vt = np.<span class="lm">linalg.svd</span>(A)
+
+<span class="lcm"># ── PCA (Principal Component Analysis) ──</span>
+<span class="lcm"># 1. Center data (subtract mean)</span>
+<span class="lcm"># 2. Compute covariance matrix</span>
+<span class="lcm"># 3. Find eigenvectors (principal components)</span>
+<span class="lcm"># 4. Project data onto top-k components</span>
+
+<span class="lcm"># Reduces dimensions while retaining information</span>
+<span class="lcm"># Removes redundant features (e.g., temp_C and temp_F</span>
+<span class="lcm"># are linearly dependent → span same line)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Span &amp; Basis</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Span:</strong> all possible linear combinations of a set of vectors</div>
+          <div><strong>Basis Vectors:</strong> linearly independent vectors that span a space</div>
+          <div style="margin-top:0.3rem;"><strong>Dimensionality Reduction:</strong></div>
+          <div>If features are linearly dependent (e.g., °C and °F), they span the same line</div>
+          <div>Remove redundant dimensions without losing info</div>
+          <div style="margin-top:0.3rem;"><strong>SVD:</strong> A = UΣVᵀ — decomposes any matrix</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Linear Equations & Regression -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Solving Linear Equations</div>
+        <pre><span class="lcm"># ── Linear Equations ──</span>
+<span class="lcm"># Find variable values that satisfy a system</span>
+
+<span class="lcm"># Example: fitted regression line</span>
+<span class="lcm"># ŷ = 25 − 0.5x</span>
+<span class="lcm"># If training hours (x) = 7:</span>
+x = <span class="ln">7</span>
+y_hat = <span class="ln">25</span> - <span class="ln">0.5</span> * x   <span class="lcm"># = 21.5</span>
+
+<span class="lcm"># ── Linear Regression ──</span>
+<span class="lcm"># Solves system of linear equations to find</span>
+<span class="lcm"># best-fitting line between X (input) and Y (output)</span>
+<span class="lcm"># Goal: minimize error between predicted &amp; actual</span>
+
+<span class="lcm"># ── Optimization ──</span>
+<span class="lcm"># Many ML processes solve equations or approximate</span>
+<span class="lcm"># via Gradient Descent to minimize error functions</span>
+<span class="lcm"># e.g., minimizing Mean Squared Error (MSE)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Key Insight</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.7rem;"><strong>ŷ = 25 − 0.5x</strong></div>
+          <div style="margin-top:0.3rem;">x = 7 → ŷ = 21.5</div>
+          <div style="margin-top:0.4rem;"><strong>Linear Regression</strong> explicitly solves linear equations for best-fit line</div>
+          <div><strong>Optimization</strong> uses Gradient Descent to minimize MSE</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.65rem;">
+            <code>Y = XW + b</code><br/>
+            minimize ‖Y − (XW + b)‖²
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 3: PROBABILITY IN ML
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="probability" class="ai-section">
+    <h2>Probability in Machine Learning</h2>
+    <div class="block-desc">
+      <span>Probability theory underpins all of ML — from <code>Bayes' theorem</code> in classifiers to <code>cross-entropy loss</code> in neural networks. Models are fundamentally probability distributions.</span>
+      <a class="w3-link" href="https://www.w3schools.com/python/python_probability_statistics.asp" target="_blank">W3Schools →</a>
+    </div>
+
+    <!-- Random Variables -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Random Variables</div>
+        <pre><span class="lcm"># ── Random Variable ──</span>
+<span class="lcm"># A variable whose values are numerical outcomes</span>
+<span class="lcm"># of a random phenomenon</span>
+
+<span class="lcm"># Example: Coin toss</span>
+<span class="lcm"># X = 1 for Heads, X = 0 for Tails</span>
+
+<span class="lcm"># ── Discrete Random Variable ──</span>
+<span class="lcm"># Countable values (gaps between them)</span>
+<span class="ls">Example:</span> Number of bedrooms (1, 2, 3...)
+<span class="ls">ML use:</span> Classification → discrete categories
+
+<span class="lcm"># ── Continuous Random Variable ──</span>
+<span class="lcm"># Any value within a range (no gaps)</span>
+<span class="ls">Example:</span> Exact price of a house, weight
+<span class="ls">ML use:</span> Regression → continuous outputs
+
+<span class="lcm"># ── Loss Functions Differ ──</span>
+<span class="ls">Continuous:</span>  MSE (Mean Squared Error)
+<span class="ls">Discrete:</span>    Cross-Entropy Loss
+
+<span class="lcm"># ── SGD &amp; Random Variables ──</span>
+<span class="lcm"># Stochastic Gradient Descent selects a randomly</span>
+<span class="lcm"># chosen data point → data index is a random variable</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ In ML Context</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Linear Regression:</strong> input (House Area) + target (Price) are random variables</div>
+          <div><strong>SGD:</strong> randomly samples data points to estimate gradients</div>
+          <div><strong>Discrete:</strong> classification (dogs vs cats)</div>
+          <div><strong>Continuous:</strong> regression (house prices)</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.65rem;">
+            <code>Discrete → Cross-Entropy</code><br/>
+            <code>Continuous → MSE</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expected Value & Variance -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Expected Value &amp; Variance</div>
+        <pre><span class="lcm"># ── Expected Value E[X] ──</span>
+<span class="lcm"># Long-run average of repetitions</span>
+<span class="lcm"># Represents the "center" of a distribution</span>
+
+<span class="lcm"># Example: rolling a die</span>
+E_die = (<span class="ln">1</span>+<span class="ln">2</span>+<span class="ln">3</span>+<span class="ln">4</span>+<span class="ln">5</span>+<span class="ln">6</span>) / <span class="ln">6</span>   <span class="lcm"># = 3.5</span>
+
+<span class="lcm"># Cost Function = expected value (average) of errors</span>
+<span class="lcm"># MSE = average squared difference over dataset</span>
+
+<span class="lcm"># ── Variance σ² ──</span>
+<span class="lcm"># How spread out numbers are from the mean</span>
+<span class="lcm"># High variance = widely scattered</span>
+<span class="lcm"># Low variance = clustered near mean</span>
+
+<span class="lcm"># ── Standard Deviation σ ──</span>
+<span class="lcm"># √variance — back to original units</span>
+
+<span class="lcm"># ── ML Applications ──</span>
+<span class="ls">SGD:</span>  high variance in updates → loss wiggles
+<span class="ls">Mini-batch:</span>  reduces variance → smoother convergence
+<span class="ls">Xavier Init:</span>  maintains consistent variance across layers
+<span class="ls">Feature Scaling:</span> normalizes variance → easier optimization</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Optimization Impact</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>E[X]</strong> = long-run average = center of distribution</div>
+          <div><strong>Var(X)</strong> = spread from mean (σ²)</div>
+          <div><strong>σ</strong> = std deviation (same units as data)</div>
+          <div style="margin-top:0.3rem;"><strong>SGD:</strong> high variance updates → noisy loss curve</div>
+          <div><strong>Mini-batch:</strong> reduces variance, smoother convergence</div>
+          <div><strong>Xavier Init:</strong> keeps activation variance stable across layers</div>
+          <div><strong>Feature Scaling:</strong> transforms loss landscape from narrow valley → symmetric bowl</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conditional Probability -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Conditional Probability</div>
+        <pre><span class="lcm"># ── Core Formula ──</span>
+<span class="lcm"># P(A|B) = P(A∩B) / P(B)</span>
+<span class="lcm"># "Shrinking the world" — filter by known event B</span>
+
+<span class="lcm"># ── Intersection vs. Conditional ──</span>
+<span class="lcm"># P(A∩B): global scope (entire universe)</span>
+<span class="lcm"># P(A|B): filtered scope (only where B is true)</span>
+
+<span class="lcm"># ── Example: Bug Rate ──</span>
+<span class="lcm"># Total files = 100 (universe)</span>
+<span class="lcm"># Junior files = 20 (condition B)</span>
+<span class="lcm"># Buggy junior files = 5 (intersection A∩B)</span>
+
+p_A_inter_B = <span class="ln">5.0</span> / <span class="ln">100.0</span>   <span class="lcm"># 0.05 (global bug rate)</span>
+
+<span class="lcm"># Condition B applied — scope reduced</span>
+p_A_given_B = <span class="ln">5.0</span> / <span class="ln">20.0</span>    <span class="lcm"># 0.25 (junior bug rate)</span>
+
+<span class="lcm"># ── More Conditions → More Precision ──</span>
+<span class="lcm"># P(A | B ∩ C ∩ D)</span>
+<span class="lcm"># Denominator shrinks → more specific, smaller sample</span>
+<span class="lcm"># ML: Personalized predictions</span>
+<span class="lcm"># P(Buy | User=JavaDev ∩ City=Mumbai ∩ Time=Night)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ ML Applications</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.7rem;"><strong>P(A|B) = P(A∩B) / P(B)</strong></div>
+          <div style="margin-top:0.3rem;"><strong>Classification:</strong> P(label | features)</div>
+          <div><strong>LLMs:</strong> P(next_token | all_previous_tokens)</div>
+          <div><strong>Agents:</strong> P(success | action ∩ environment)</div>
+          <div style="margin-top:0.3rem;"><strong>Naive Bayes:</strong> uses conditional probability to predict categories</div>
+          <div><strong>Cross-Entropy:</strong> measures difference between actual &amp; predicted distributions</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Addition & Multiplication Rules -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Addition &amp; Multiplication Rules</div>
+        <pre><span class="lcm"># ── Addition Rule ──</span>
+<span class="lcm"># P(A ∪ B) = P(A) + P(B) − P(A∩B)</span>
+<span class="lcm"># Probability that A OR B occurs</span>
+
+<span class="lcm"># Mutually exclusive: P(A∪B) = P(A) + P(B)</span>
+<span class="lcm"># Example: rolling 2 or 4 on a die = 1/6 + 1/6 = 1/3</span>
+
+<span class="lcm"># ML: Multi-class classification</span>
+<span class="lcm"># Sum of probabilities for all classes = 1 (Softmax)</span>
+
+<span class="lcm"># ── Multiplication Rule ──</span>
+<span class="lcm"># P(A∩B) = P(A) × P(B|A)</span>
+<span class="lcm"># Probability that A AND B both occur</span>
+
+<span class="lcm"># Independent: P(A∩B) = P(A) × P(B)</span>
+
+<span class="lcm"># ── Chain Rule (4-Stage) ──</span>
+<span class="lcm"># P(A∩B∩C∩D) = P(A) · P(B|A) · P(C|A∩B) · P(D|A∩B∩C)</span>
+
+<span class="lcm"># Example: "Perfect Trade"</span>
+<span class="lcm"># P(Bullish)           = 0.60</span>
+<span class="lcm"># P(Rate Cut | Bullish) = 0.30</span>
+<span class="lcm"># P(Rise | Both)        = 0.80</span>
+<span class="lcm"># P(ITM | All)          = 0.90</span>
+<span class="lcm"># Total: 0.6 × 0.3 × 0.8 × 0.9 = 12.96%</span>
+
+<span class="lcm"># ── Backpropagation Connection ──</span>
+<span class="lcm"># Chain Rule in calculus (gradient flow):</span>
+<span class="lcm"># dy/dx = dy/du · du/dx</span>
+<span class="lcm"># Multiply local gradients moving backward</span>
+<span class="lcm"># Repeated multiplication → Vanishing Gradients</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Practical Use</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.65rem;">
+            <strong>Addition:</strong> P(A∪B) = P(A)+P(B)−P(A∩B)<br/>
+            <strong>Multiply:</strong> P(A∩B) = P(A)·P(B|A)
+          </div>
+          <div style="margin-top:0.3rem;"><strong>Multi-class:</strong> Softmax ensures Σ = 1</div>
+          <div><strong>Backprop:</strong> chain rule = multiplication of gradients</div>
+          <div><strong>Vanishing:</strong> 0.25 × 0.25 × ... → 0 (stops learning)</div>
+          <div style="margin-top:0.3rem;"><strong>Sequence Prediction:</strong> LLMs predict next word using multiplication rule, one word at a time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bayes' Theorem -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Bayes' Theorem</div>
+        <pre><span class="lcm"># ── Bayes' Theorem ──</span>
+<span class="lcm"># P(A|B) = P(B|A) × P(A) / P(B)</span>
+<span class="lcm"># "Given evidence B, update belief about A"</span>
+
+<span class="lcm"># ── Spam Detection Example ──</span>
+P_spam      = <span class="ln">0.3</span>     <span class="lcm"># prior: 30% of emails are spam</span>
+P_word      = <span class="ln">0.05</span>    <span class="lcm"># "free" in 5% of all emails</span>
+P_word_spam = <span class="ln">0.8</span>     <span class="lcm"># "free" in 80% of spam</span>
+
+<span class="lcm"># P(Spam | word="free")</span>
+P_spam_given = (P_word_spam * P_spam) / P_word
+<span class="lcm"># = (0.8 × 0.3) / 0.05 = 4.8 → clamped to ~0.96</span>
+
+<span class="lcm"># ── Naive Bayes ──</span>
+<span class="lcm"># Applies Bayes' theorem for each feature</span>
+<span class="lcm"># Assumes feature independence</span>
+<span class="lk">from</span> sklearn.naive_bayes <span class="lk">import</span> <span class="lc">GaussianNB</span>
+clf = <span class="lc">GaussianNB</span>()
+clf.<span class="lm">fit</span>(X_train, y_train)
+pred = clf.<span class="lm">predict</span>(X_test)</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Bayes Breakdown</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.7rem;"><strong>P(A|B) = P(B|A)·P(A) / P(B)</strong></div>
+          <div style="margin-top:0.3rem;">
+            <strong>P(A)</strong> — prior (initial belief)<br/>
+            <strong>P(B|A)</strong> — likelihood (evidence given A)<br/>
+            <strong>P(B)</strong> — marginal (total evidence)<br/>
+            <strong>P(A|B)</strong> — posterior (updated belief)
+          </div>
+          <div style="margin-top:0.3rem;"><strong>Spam:</strong> "free" → 96% chance spam</div>
+          <div><strong>Naive Bayes:</strong> classifier using feature independence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross-Entropy Loss -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Cross-Entropy Loss</div>
+        <pre><span class="lk">import</span> numpy <span class="lk">as</span> np
+
+<span class="lcm"># ── Cross-Entropy ──</span>
+<span class="lcm"># -Σ y_true × log(y_pred)</span>
+<span class="lcm"># Measures distance between true &amp; predicted distributions</span>
+
+<span class="lcm"># ── Binary Cross-Entropy (binary classification) ──</span>
+<span class="lk">def</span> <span class="lm">bce_loss</span>(y_true, y_pred):
+    eps = <span class="ln">1e-7</span>  <span class="lcm"># avoid log(0)</span>
+    <span class="lk">return</span> -np.<span class="lm">mean</span>(
+        y_true * np.<span class="lm">log</span>(y_pred + eps) +
+        (<span class="ln">1</span> - y_true) * np.<span class="lm">log</span>(<span class="ln">1</span> - y_pred + eps)
+    )
+
+<span class="lcm"># ── Categorical Cross-Entropy (multi-class) ──</span>
+<span class="lk">def</span> <span class="lm">cce_loss</span>(y_true, y_pred):
+    <span class="lk">return</span> -np.<span class="lm">sum</span>(y_true * np.<span class="lm">log</span>(y_pred + <span class="ln">1e-7</span>))
+
+<span class="lcm"># ── PyTorch Built-in ──</span>
+<span class="lk">import</span> torch.nn <span class="lk">as</span> nn
+loss_fn = nn.<span class="lc">CrossEntropyLoss</span>()
+loss = loss_fn(logits, labels)
+
+<span class="lcm"># ── Sigmoid Function ──</span>
+<span class="lcm"># σ(x) = 1 / (1 + e⁻ˣ)</span>
+<span class="lcm"># Converts score → probability (0 to 1)</span>
+<span class="lcm"># Used in Word2Vec training</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Summary Table</div>
+        <div class="live-output" style="font-size:0.65rem;color:var(--text-muted);line-height:1.6;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;">Concept</td>
+              <td style="padding:2px 4px;font-weight:600;">ML Application</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Random Variable</td>
+              <td style="padding:2px 4px;">Features &amp; Labels</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Expected Value</td>
+              <td style="padding:2px 4px;">Cost Function (MSE)</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Variance</td>
+              <td style="padding:2px 4px;">SGD variance; Xavier Init</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Multiplication</td>
+              <td style="padding:2px 4px;">Backprop chain rule; Vanishing gradients</td>
+            </tr>
+            <tr>
+              <td style="padding:2px 4px;">Stochastic</td>
+              <td style="padding:2px 4px;">SGD random sampling</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 4: VECTORS & EMBEDDINGS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="vectors" class="ai-section">
+    <h2>Vectors &amp; Embeddings</h2>
+    <div class="block-desc">
+      <span>Word vectors map discrete tokens into continuous geometric space where <code>distance = similarity</code>. The <code>Distributional Hypothesis</code>: "You shall know a word by the company it keeps." Semantic understanding in AI is an emergent property of geometric alignment.</span>
+      <a class="w3-link" href="https://www.w3schools.com/python/numpy/default.asp" target="_blank">W3Schools →</a>
+    </div>
+
+    <!-- The Fundamental Problem -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">The Fundamental Problem</div>
+        <pre><span class="lcm"># ── Symbol vs. Meaning ──</span>
+<span class="lcm"># "cat" is an arbitrary signifier</span>
+<span class="lcm"># Computer sees ASCII: 01100011 01100001 01110100</span>
+<span class="lcm"># "dog" → 01100100 01101111 01100111</span>
+<span class="lcm"># No mathematical overlap in bit patterns</span>
+
+<span class="lcm"># ── Distributional Hypothesis (1950s) ──</span>
+<span class="lcm"># J.R. Firth: "You shall know a word by the</span>
+<span class="lcm">#             company it keeps."</span>
+<span class="lcm">#</span>
+<span class="lcm"># "cat" appears near: purr, meow, fur, claw, pet</span>
+<span class="lcm"># "dog" appears near: bark, fur, claw, pet</span>
+<span class="lcm"># → Shared context overlap = semantic similarity</span>
+<span class="lcm">#</span>
+<span class="lcm"># "apple" appears near: eat, pie, tree, juice</span>
+<span class="lcm"># → Negligible overlap with "cat"</span>
+
+<span class="lcm"># Convert "meaning" → "probability"</span>
+<span class="lcm"># High co-occurrence probability → close vectors</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ The Goal</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div>Move from <strong>discrete</strong> (isolated symbols) to <strong>continuous</strong> (vector space)</div>
+          <div style="margin-top:0.3rem;">On the map: <strong>distance = similarity</strong></div>
+          <div>"cat" close to "dog" → machine deduces shared attributes</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.65rem;">
+            cat → [0.95, 0.88, −0.90]<br/>
+            dog → [0.92, 0.85, −0.85]<br/>
+            apple → [−0.95, −0.80, 0.98]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- One-Hot Encoding Problem -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">One-Hot Encoding (Why It Fails)</div>
+        <pre><span class="lcm"># ── Vocabulary V ──</span>
+V = [<span class="ls">"cat"</span>, <span class="ls">"dog"</span>, <span class="ls">"apple"</span>, <span class="ls">"king"</span>,
+     <span class="ls">"queen"</span>, <span class="ls">"ate"</span>, <span class="ls">"chased"</span>]
+|V| = <span class="ln">7</span>
+
+<span class="lcm"># One-hot: vector of length |V|, single '1'</span>
+cat  = [<span class="ln">1</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>]
+dog  = [<span class="ln">0</span>,<span class="ln">1</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>]
+apple= [<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">1</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>]
+
+<span class="lcm"># ── Orthogonality Problem ──</span>
+<span class="lcm"># Dot product of any two one-hot vectors = 0</span>
+<span class="lcm"># Sim(cat, dog) = 0</span>
+<span class="lcm"># Sim(cat, apple) = 0</span>
+<span class="lcm"># → Semantically blind! Every word is equally dissimilar</span>
+<span class="lcm"># → Geometric distance between any two = √2</span>
+
+<span class="lcm"># For 50K vocab: one sentence of 10 words</span>
+<span class="lcm"># = 500,000 values, 499,990 are zeros</span>
+<span class="lcm"># → Computationally intractable for deep learning</span>
+
+<span class="lcm"># ── Solution: Dense Embeddings ──</span>
+<span class="lcm"># Compress: 50,000 sparse → 300 or 1024 dense floats</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ One-Hot vs Dense</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>One-Hot:</strong> all pairs have sim = 0</div>
+          <div style="font-family:monospace;font-size:0.65rem;"><code>cat · dog = 0</code> (orthogonal)</div>
+          <div style="margin-top:0.3rem;"><strong>Dense:</strong> meaningful similarity</div>
+          <div style="font-family:monospace;font-size:0.65rem;"><code>cat · dog ≈ 0.999</code> (close)</div>
+          <div style="margin-top:0.3rem;">Dimensions encode semantic features: animacy, action, food/object</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cosine Similarity -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Cosine Similarity</div>
+        <pre><span class="lk">import</span> numpy <span class="lk">as</span> np
+
+<span class="lk">def</span> <span class="lm">cosine_sim</span>(a, b):
+    <span class="lk">return</span> np.<span class="lm">dot</span>(a, b) / (
+        np.<span class="lm">linalg.norm</span>(a) * np.<span class="lm">linalg.norm</span>(b)
+    )
+
+<span class="lcm"># One-hot: all pairs = 0</span>
+cat_oh = np.<span class="lm">array</span>([<span class="ln">1</span>,<span class="ln">0</span>,<span class="ln">0</span>,<span class="ln">0</span>])
+dog_oh = np.<span class="lm">array</span>([<span class="ln">0</span>,<span class="ln">1</span>,<span class="ln">0</span>,<span class="ln">0</span>])
+<span class="lm">cosine_sim</span>(cat_oh, dog_oh)   <span class="lcm"># 0.0 — semantically blind</span>
+
+<span class="lcm"># Dense embeddings — meaningful similarity</span>
+cat_vec  = np.<span class="lm">array</span>([<span class="ln">0.95</span>, <span class="ln">0.88</span>, -<span class="ln">0.90</span>])
+dog_vec  = np.<span class="lm">array</span>([<span class="ln">0.92</span>, <span class="ln">0.85</span>, -<span class="ln">0.85</span>])
+apple_vec= np.<span class="lm">array</span>([-<span class="ln">0.95</span>,-<span class="ln">0.80</span>, <span class="ln">0.98</span>])
+
+<span class="lm">cosine_sim</span>(cat_vec, dog_vec)     <span class="lcm"># ~0.999 (similar!)</span>
+<span class="lm">cosine_sim</span>(cat_vec, apple_vec)   <span class="lcm"># ~-0.97  (opposite)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Vector Arithmetic</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.7rem;">
+            <strong>V(King) − V(Man) + V(Woman) ≈ V(Queen)</strong>
+          </div>
+          <div style="margin-top:0.4rem;">"Gender" is a measurable vector offset applied consistently across gendered word pairs.</div>
+          <div style="margin-top:0.3rem;">Not hard-coded — a mathematical inevitability of training forces.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Training Dynamics: Initialization & Pull -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Training: Initialization &amp; Pull</div>
+        <pre><span class="lcm"># ── Step 1: Random Initialization ──</span>
+<span class="lcm"># Tabula Rasa — model starts ignorant</span>
+<span class="lcm"># Random normal distribution (μ=0, σ=1.0)</span>
+
+<span class="ls">Word   Dim1(x)  Dim2(y)  Dim3(z)</span>
+<span class="ls">Cat      0.20    -0.50     0.80</span>
+<span class="ls">Dog     -0.90     0.10    -0.20</span>
+<span class="ls">Apple    0.25    -0.45     0.75</span>
+<span class="ls">King     0.05     0.90    -0.10</span>
+
+<span class="lcm"># Paradox: cat near apple (dist ≈ 0.086)</span>
+<span class="lcm">#          cat far from dog  (dist ≈ 1.60)</span>
+<span class="lcm"># Training must fix this!</span>
+
+<span class="lcm"># ── Skip-Gram Task ──</span>
+<span class="lcm"># Given target word → predict context words</span>
+<span class="lcm"># Input → Hidden (embedding) → Output (softmax)</span>
+
+<span class="lcm"># ── The "Pull" (Positive Sampling) ──</span>
+<span class="lcm"># Training pair: Target="dog", Context="chased"</span>
+v_dog    = [-<span class="ln">0.90</span>,  <span class="ln">0.10</span>, -<span class="ln">0.20</span>]
+u_chased = [ <span class="ln">0.10</span>, -<span class="ln">0.30</span>,  <span class="ln">0.40</span>]
+
+<span class="lcm"># Dot product = similarity score</span>
+score = (-<span class="ln">0.90</span>*<span class="ln">0.10</span>) + (<span class="ln">0.10</span>*-<span class="ln">0.30</span>) + (-<span class="ln">0.20</span>*<span class="ln">0.40</span>)
+<span class="lcm"># = -0.09 - 0.03 - 0.08 = -0.20</span>
+
+<span class="lcm"># Sigmoid → probability</span>
+<span class="lcm"># σ(x) = 1 / (1 + e⁻ˣ)</span>
+P = <span class="ln">1</span> / (<span class="ln">1</span> + np.<span class="lm">exp</span>(<span class="ln">0.20</span>))   <span class="lcm"># ≈ 0.45</span>
+
+<span class="lcm"># Target = 1.0 (they ARE neighbors)</span>
+error = <span class="ln">0.45</span> - <span class="ln">1.0</span>   <span class="lcm"># = -0.55</span>
+
+<span class="lcm"># Gradient descent update (η = 0.1)</span>
+adj = -error * u_chased * <span class="ln">0.1</span>
+<span class="lcm"># = 0.055 × [0.10, -0.30, 0.40]</span>
+<span class="lcm"># = [0.0055, -0.0165, 0.022]</span>
+
+new_dog = v_dog + adj
+<span class="lcm"># = [-0.8945, 0.0835, -0.178]</span>
+<span class="lcm"># Dog shifted slightly toward Chased</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Why "Cat" Follows "Dog"</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Shared context effect:</strong></div>
+          <div>"The cat chased the mouse" → cat pulled toward "chased"</div>
+          <div>"The dog chased the cat" → dog pulled toward "chased"</div>
+          <div style="margin-top:0.3rem;">Both pulled toward same point → they converge!</div>
+          <div>Even though "The dog is a cat" never appears, shared neighbor "chased" acts as gravitational anchor.</div>
+          <div style="margin-top:0.3rem;"><strong>"Apple" left behind:</strong> pulled toward "ate" not "chased" → separate cluster with "pear", "banana", "pie"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Negative Sampling -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Negative Sampling (The "Push")</div>
+        <pre><span class="lcm"># ── Problem: Mode Collapse ──</span>
+<span class="lcm"># Without negative sampling, all vectors could</span>
+<span class="lcm"># converge to same point (dot product → max)</span>
+<span class="lcm"># Error → 0 by claiming everything is synonym</span>
+
+<span class="lcm"># ── Solution: Negative Sampling ──</span>
+<span class="lcm"># For each positive pair (Dog/Chased),</span>
+<span class="lcm"># randomly select k words that are NOT the context</span>
+
+<span class="lcm"># Negative samples for "Dog": "King", "Apple"</span>
+<span class="lcm"># Goal:</span>
+<span class="lcm">#   Dog + Chased → P → 1.0 (Pull)</span>
+<span class="lcm">#   Dog + King   → P → 0.0 (Push)</span>
+<span class="lcm">#   Dog + Apple  → P → 0.0 (Push)</span>
+
+<span class="lcm"># ── Negative Update Math ──</span>
+v_dog   = [-<span class="ln">0.89</span>,  <span class="ln">0.08</span>, -<span class="ln">0.17</span>]
+v_apple = [ <span class="ln">0.25</span>, -<span class="ln">0.45</span>,  <span class="ln">0.75</span>]
+
+score = (-<span class="ln">0.89</span>*<span class="ln">0.25</span>)+(<span class="ln">0.08</span>*-<span class="ln">0.45</span>)+(-<span class="ln">0.17</span>*<span class="ln">0.75</span>)
+<span class="lcm"># = -0.22 - 0.036 - 0.1275 = -0.38</span>
+
+P = <span class="ln">1</span> / (<span class="ln">1</span> + np.<span class="lm">exp</span>(<span class="ln">0.38</span>))   <span class="lcm"># ≈ 0.40</span>
+error = <span class="ln">0.40</span> - <span class="ln">0.0</span>            <span class="lcm"># = +0.40 (positive → push!)</span>
+
+<span class="lcm"># Push: subtract Apple from Dog</span>
+new_dog = v_dog - (error * v_apple * <span class="ln">0.1</span>)
+<span class="lcm"># Increases distance between them</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Training Dynamics</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Pull:</strong> shared contexts (chased, pet, fur) = springs pulling cat &amp; dog together</div>
+          <div style="margin-top:0.2rem;"><strong>Push:</strong> negative sampling = magnets pushing cat away from apple, king, tree</div>
+          <div style="margin-top:0.3rem;">Over millions of iterations → vectors settle into <strong>Low Energy State</strong></div>
+          <div style="margin-top:0.3rem;font-size:0.65rem;">
+            <strong>1. Random init</strong> — all words random<br/>
+            <strong>2. Pull</strong> — shared contexts attract<br/>
+            <strong>3. Push</strong> — negative sampling repels<br/>
+            <strong>4. Converge</strong> — semantic clusters form
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Vectors & Emergent Properties -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Final Vectors &amp; Emergent Properties</div>
+        <pre><span class="lcm"># ── After Training (Converged State) ──</span>
+<span class="ls">Word   Dim1(Living)  Dim2(Active)  Dim3(Food)</span>
+<span class="ls">Cat      0.95          0.88         -0.90</span>
+<span class="ls">Dog      0.92          0.85         -0.85</span>
+<span class="ls">Apple   -0.95         -0.80          0.98</span>
+<span class="ls">King     0.96         -0.50         -0.60</span>
+
+<span class="lcm"># Cat vs Dog (Animal cluster):</span>
+<span class="lcm"># Both high in Dim1 (Living), Dim2 (Active)</span>
+<span class="lcm"># Both negative in Dim3 (Not Food)</span>
+<span class="lcm"># → cosine similarity ≈ 1.0</span>
+
+<span class="lcm"># Cat vs Apple (Semantic gap):</span>
+<span class="lcm"># Cat: Living (0.95), Not Food (-0.90)</span>
+<span class="lcm"># Apple: Non-Living (-0.95), Food (0.98)</span>
+<span class="lcm"># → maximally distant</span>
+
+<span class="lcm"># King: Living (0.96) but not Pet (-0.50)</span>
+<span class="lcm"># → distinct "Human/Ruler" cluster</span>
+
+<span class="lcm"># ── Vector Arithmetic ──</span>
+<span class="lcm"># Arrow King→Man = "Maleness"</span>
+<span class="lcm"># Arrow Queen→Woman = same direction &amp; length</span>
+<span class="lcm"># V(King) − V(Man) + V(Woman) ≈ V(Queen)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Convergence Table</div>
+        <div class="live-output" style="font-size:0.65rem;color:var(--text-muted);line-height:1.6;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;">Stage</td>
+              <td style="padding:2px 4px;font-weight:600;">Cat vs Dog</td>
+              <td style="padding:2px 4px;font-weight:600;">Cat vs Apple</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Init</td>
+              <td style="padding:2px 4px;">Random</td>
+              <td style="padding:2px 4px;">Random (could be close!)</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Early</td>
+              <td style="padding:2px 4px;">Moving closer</td>
+              <td style="padding:2px 4px;">Moving apart</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Mid</td>
+              <td style="padding:2px 4px;">Animal cluster</td>
+              <td style="padding:2px 4px;">Food cluster</td>
+            </tr>
+            <tr>
+              <td style="padding:2px 4px;">Final</td>
+              <td style="padding:2px 4px;">Almost identical</td>
+              <td style="padding:2px 4px;">Opposite / orthogonal</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TF-IDF & Embeddings Pipeline -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">TF-IDF &amp; Embeddings</div>
+        <pre><span class="lcm"># ── TF-IDF: Term Frequency × Inverse Doc Freq ──</span>
+<span class="lk">from</span> sklearn.feature_extraction.text <span class="lk">import</span> <span class="lc">TfidfVectorizer</span>
+
+docs = [<span class="ls">"the cat chased the dog"</span>,
+        <span class="ls">"the king ate the apple"</span>]
+
+vec = <span class="lc">TfidfVectorizer</span>()
+X = vec.<span class="lm">fit_transform</span>(docs)
+<span class="lcm"># Sparse matrix of TF-IDF scores</span>
+
+<span class="lcm"># ── Word2Vec (Static Embeddings) ──</span>
+<span class="lcm"># Architecture: Input → Hidden → Output</span>
+<span class="lcm"># Hidden layer = the embedding vector</span>
+<span class="lcm"># Training: predict context from target (Skip-Gram)</span>
+<span class="lcm"># Negative Sampling: push non-neighbors apart</span>
+<span class="lcm"># Result: similar words cluster in vector space</span>
+<span class="lcm"># Limitation: "bank" has one vector regardless of context</span>
+
+<span class="lcm"># ── Transformer Contextual Embeddings ──</span>
+<span class="lcm"># "bank" in "river bank" vs "bank account"</span>
+<span class="lcm"># → different vectors depending on context</span>
+
+<span class="lcm"># Input = word_vector + positional_encoding</span>
+<span class="lcm"># Self-Attention: looks at EVERY word simultaneously</span>
+<span class="lcm"># "The bank of the river" → bank → Water/Nature</span>
+<span class="lcm"># "The bank of money"     → bank → Finance</span>
+
+<span class="lcm"># Vector is dynamic — shifts based on surrounding words</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Embedding Pipeline</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>1. Random init</strong> — all words at random points</div>
+          <div><strong>2. Pull</strong> — shared contexts attract vectors</div>
+          <div><strong>3. Push</strong> — negative sampling repels non-neighbors</div>
+          <div><strong>4. Converge</strong> — semantic clusters form</div>
+          <div style="margin-top:0.3rem;font-size:0.65rem;">
+            <code>cat</code> &amp; <code>dog</code> → animal cluster<br/>
+            <code>apple</code> → food cluster (far away)
+          </div>
+          <div style="margin-top:0.3rem;"><strong>Word2Vec:</strong> static (one vector per word)</div>
+          <div><strong>Transformer:</strong> contextual (vector changes per sentence)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 5: BITNESS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="bitness" class="ai-section">
+    <h2>Bitness — 32-bit vs 64-bit</h2>
+    <div class="block-desc">
+      <span>Bitness defines a CPU's <code>address width</code> — how many bits it uses to reference memory. 1 Address = 1 Byte (byte-addressable memory). Bit-depth defines address length, not data size.</span>
+    </div>
+
+    <!-- Bit Progression -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">The Bit Progression (Powers of 2)</div>
+        <pre><span class="lcm"># Doubling bits → exponentially increases range: 2ⁿ</span>
+
+<span class="ls">8-bit:</span>   0–255
+         ASCII chars, RGB colors (8 bits each)
+         <span class="lcm"># Basic unit of data</span>
+
+<span class="ls">16-bit:</span>  0–65,535
+         <span class="lcm"># Legacy systems, early games</span>
+
+<span class="ls">32-bit:</span>  0–4,294,967,295 (≈ 4.29 billion)
+         Main CPUs (1990–2010)
+         India's Vikram 32-bit space chip
+         <span class="lcm"># Legacy standard</span>
+
+<span class="ls">64-bit:</span>  0–18,446,744,073,709,551,615 (≈ 18.4 quintillion)
+         Current CPUs (Dhruv64)
+         Enables huge RAM addressing
+         <span class="lcm"># Modern standard</span>
+
+<span class="ls">128/256-bit:</span>  Specialized use
+         AES-256 encryption
+         SIMD vector processing
+         <span class="lcm"># NOT for general CPU addressing (pointer bloat)</span>
+         Combinations ≈ 1.15 × 10⁷⁷</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Bit Progression</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.65rem;">
+            <strong>8-bit:</strong>  0–255 (ASCII, RGB)<br/>
+            <strong>16-bit:</strong> 0–65,535<br/>
+            <strong>32-bit:</strong> 0–4.29B (legacy CPUs)<br/>
+            <strong>64-bit:</strong> 0–18.4 quintillion<br/>
+            <strong>256-bit:</strong> used in AES encryption
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RAM Addressing -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">RAM Addressing (32-bit vs 64-bit)</div>
+        <pre><span class="lcm"># Memory is byte-addressable — every byte has a unique address</span>
+
+<span class="lcm"># ── 32-bit: 2³² addresses ──</span>
+<span class="ln">2^32</span> = <span class="ln">4,294,967,296</span> bytes ≈ <span class="ln">4 GB</span> max RAM
+<span class="lcm"># 32-bit architectures → 4 GB ceiling</span>
+
+<span class="lcm"># ── 64-bit: 2⁶⁴ addresses ──</span>
+<span class="ln">2^64</span> = <span class="ln">18,446,744,073,709,551,616</span> bytes ≈ <span class="ln">16 EB</span>
+<span class="lcm"># Practically: 256 TB – 4 PB (48–57 address lines)</span>
+
+<span class="lcm"># ── 2025 Real-World Limit ──</span>
+<span class="lcm"># Modern CPUs use 48–57 address lines</span>
+Min: <span class="ln">256 TB</span>    Max: <span class="ln">4 PB</span> physical RAM
+
+<span class="lcm"># ── Two's Complement for -1 ──</span>
+<span class="lcm"># All bits = 1</span>
+8-bit:  <span class="ln">11111111</span> = -1 (also 255 unsigned)
+64-bit: <span class="ln">1111...1111</span> = -1 (64 ones)
+<span class="lcm"># Adding 1 to -1 overflows to 0 — perfect for CPU arithmetic</span>
+
+<span class="lcm"># ── Addressing vs Processing ──</span>
+<span class="lcm"># A 64-bit CPU handles 64-bit integers,</span>
+<span class="lcm"># NOT 64 cores</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Quick Reference</div>
+        <div class="live-output" style="font-size:0.65rem;color:var(--text-muted);line-height:1.6;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;font-weight:600;"></td>
+              <td style="padding:2px 4px;font-weight:600;">32-bit</td>
+              <td style="padding:2px 4px;font-weight:600;">64-bit</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Max Uint</td>
+              <td style="padding:2px 4px;">4.29B</td>
+              <td style="padding:2px 4px;">18.4 quintillion</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Max RAM</td>
+              <td style="padding:2px 4px;">4 GB</td>
+              <td style="padding:2px 4px;">256 TB – 4 PB</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Pointer</td>
+              <td style="padding:2px 4px;">4 bytes</td>
+              <td style="padding:2px 4px;">8 bytes</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:2px 4px;">Era</td>
+              <td style="padding:2px 4px;">1990–2010</td>
+              <td style="padding:2px 4px;">2010–present</td>
+            </tr>
+            <tr>
+              <td style="padding:2px 4px;">Limitation</td>
+              <td style="padding:2px 4px;">Address width</td>
+              <td style="padding:2px 4px;">Physical wiring / OS</td>
+            </tr>
+          </table>
+          <div style="margin-top:0.3rem;"><strong>Win 11 Home:</strong> 128 GB max &nbsp; <strong>Win Server:</strong> 4 PB max</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Type Sizes -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Data Type Sizes &amp; Bit-to-Memory</div>
+        <pre><span class="lcm"># ── C Fixed-Width Types ──</span>
+<span class="lc">int8_t</span>     = <span class="ln">1</span> byte     <span class="lcm"># range: -128 to 127</span>
+<span class="lc">int16_t</span>    = <span class="ln">2</span> bytes    <span class="lcm"># range: ±32,767</span>
+<span class="lc">int32_t</span>    = <span class="ln">4</span> bytes    <span class="lcm"># range: ±2.1B</span>
+<span class="lc">int64_t</span>    = <span class="ln">8</span> bytes    <span class="lcm"># range: ±9.2 quintillion</span>
+<span class="lc">float</span>      = <span class="ln">4</span> bytes    <span class="lcm"># ~7 decimal digits</span>
+<span class="lc">double</span>     = <span class="ln">8</span> bytes    <span class="lcm"># ~15 decimal digits</span>
+
+<span class="lcm"># ── Bit-to-Memory Ratio ──</span>
+<span class="lcm"># CPUs allocate in fixed 8-byte chunks (alignment)</span>
+<span class="ls">Max Value              Bits    Memory Used</span>
+<span class="ls">255                    8-bit   1 Byte</span>
+<span class="ls">65,535                 16-bit  2 Bytes</span>
+<span class="ls">4,294,967,295          32-bit  4 Bytes</span>
+<span class="ls">18,446,744,073,709,551,615  64-bit  8 Bytes</span>
+
+<span class="lcm"># ── Python: Arbitrary Precision ──</span>
+<span class="lk">import</span> sys
+sys.<span class="lm">getsizeof</span>(<span class="ln">0</span>)        <span class="lcm"># 28 bytes (overhead)</span>
+sys.<span class="lm">getsizeof</span>(<span class="ln">2**30</span>)    <span class="lcm"># 32 bytes</span>
+sys.<span class="lm">getsizeof</span>(<span class="ln">2**100</span>)   <span class="lcm"># 44 bytes</span>
+
+<span class="lcm"># ── Max Number on 16 GB Mac ──</span>
+<span class="lcm"># Hardware native: 2⁶⁴ − 1 = 18.4 quintillion</span>
+<span class="lcm">#   → 8 bytes per number → ~2 billion in 16 GB</span>
+<span class="lcm"># Software arbitrary: all 16 GB as one integer</span>
+<span class="lcm">#   → ~11.5 billion digits</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Type Sizes</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.65rem;">
+            <code>int8_t</code>     = 1 byte<br/>
+            <code>int16_t</code>    = 2 bytes<br/>
+            <code>int32_t</code>    = 4 bytes<br/>
+            <code>int64_t</code>    = 8 bytes<br/>
+            <code>float</code>      = 4 bytes<br/>
+            <code>double</code>     = 8 bytes
+          </div>
+          <div style="margin-top:0.3rem;"><strong>Python:</strong> int is arbitrary precision (limited by RAM)</div>
+          <div style="margin-top:0.2rem;"><strong>Fixed vs Dynamic:</strong></div>
+          <div>Hardware: fixed widths (8, 32, 64) for speed</div>
+          <div>Software: dynamic types (BigInt) limited by RAM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overflow, Endianness, Hardware -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Overflow, Endianness &amp; Hardware</div>
+        <pre><span class="lcm"># ── Integer Overflow ──</span>
+<span class="lcm"># Adding 1 to 2⁶⁴ − 1 wraps to 0 or negative</span>
+
+<span class="lcm"># ── Floating-Point Limit ──</span>
+<span class="ln">1.8e308</span>   <span class="lcm"># max before inf</span>
+<span class="ln">1.8e309</span>   <span class="lcm"># → inf (Infinity)</span>
+<span class="lcm"># Any number larger → treated as inf by hardware</span>
+
+<span class="lcm"># ── 2025 Hardware Mechanics ──</span>
+
+<span class="ls">5-Level Paging (PML5):</span>
+  5 layers of page tables → up to <span class="ln">4 PB</span> RAM
+
+<span class="ls">TLB (Translation Lookaside Buffer):</span>
+  Caches recent address translations → faster lookups
+
+<span class="ls">ASLR (Address Space Layout Randomization):</span>
+  Randomizes program memory positions → security
+
+<span class="lcm"># ── Endianness ──</span>
+<span class="lcm"># How bytes are ordered in memory</span>
+<span class="lcm"># Value: 0x0A0B0C0D</span>
+
+<span class="ls">Big-endian (network):</span>   0A 0B 0C 0D  <span class="lcm"># MSB first</span>
+<span class="ls">Little-endian (x86/ARM):</span> 0D 0C 0B 0A  <span class="lcm"># LSB first</span>
+
+<span class="lcm"># Python check:</span>
+<span class="kw">import</span> sys
+sys.byteorder   <span class="lcm"># → "little" on most modern CPUs</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Endianness &amp; Limits</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div style="font-family:monospace;font-size:0.65rem;">
+            Value: <code>0x0A0B0C0D</code><br/><br/>
+            <strong>Big-endian (network):</strong><br/>
+            <code>0A 0B 0C 0D</code> → MSB first<br/><br/>
+            <strong>Little-endian (x86/ARM):</strong><br/>
+            <code>0D 0C 0B 0A</code> → LSB first
+          </div>
+          <div style="margin-top:0.3rem;font-size:0.65rem;">
+            <strong>Python:</strong> <code>sys.byteorder</code> → "little"<br/>
+            <strong>Float max:</strong> 1.8 × 10³⁰⁸ before inf
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Key Takeaways</div>
+        <pre><span class="ln">1.</span> <span class="ls">1 Address = 1 Byte:</span>
+   Bit-depth defines address length, not data size
+
+<span class="ln">2.</span> <span class="ls">Addressing ≠ Processing:</span>
+   64-bit CPU handles 64-bit integers, not 64 cores
+
+<span class="ln">3.</span> <span class="ls">Beyond 64-bit:</span>
+   256-bit used in cryptography
+   Combinations ≈ 1.15 × 10⁷⁷
+   Effectively impossible to brute-force
+
+<span class="ln">4.</span> <span class="ls">Addressing vs Storage:</span>
+   Addressing: where data lives (e.g., 16 EB max)
+   Storage: how large a number can be (18.4 quintillion)
+
+<span class="ln">5.</span> <span class="ls">Fixed vs Dynamic:</span>
+   Hardware: fixed widths (8, 32, 64) for speed
+   Software: dynamic types (BigInt) limited by RAM</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ At a Glance</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>1 Address = 1 Byte</strong></div>
+          <div><strong>32-bit:</strong> 4 GB max RAM</div>
+          <div><strong>64-bit:</strong> 256 TB – 4 PB max RAM</div>
+          <div style="margin-top:0.3rem;"><strong>Addressing:</strong> where data lives</div>
+          <div><strong>Storage:</strong> how large a number can be</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.65rem;">
+            <code>Hardware: fixed widths for speed</code><br/>
+            <code>Software: BigInt limited by RAM</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>AI Concepts Cheatsheet — ML · Linear Algebra · Probability · Vectors · Bitness</p>
+</footer>
+
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

@@ -8,36 +8,42 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="header-top">
-        <div>
-          <h1>Java</h1>
-          <p class="subtitle">Quick reference with live previews</p>
-        </div>
-        <div class="header-actions">
-          <div class="search-wrap">
-            <input type="search" id="search" placeholder="Search..." />
-            <kbd class="shortcut-hint">/</kbd>
-          </div>
-          <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
-        </div>
-      </div>
-      <nav class="tab-bar" id="tab-bar"></nav>
-      <nav class="toc">
-        <a href="#getting-started">Start</a>
-        <a href="#strings">Strings</a>
-        <a href="#arrays">Arrays</a>
-        <a href="#conditionals">Conditionals</a>
-        <a href="#loops">Loops</a>
-        <a href="#collections">Collections</a>
-        <a href="#misc">Misc</a>
-      </nav>
-    </div>
-  </header>
-  <script src="js/header.js"></script>
-  <script>renderHeader('Java')</script>
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('Java')</script>
+<script>renderSourceLink('Java')</script>
   <main>
+  <div class="page-header">
+    <h1>Java</h1>
+    <p class="subtitle">Quick reference with live previews</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#getting-started">Start</a>
+      <a href="#strings">Strings</a>
+      <a href="#arrays">Arrays</a>
+      <a href="#conditionals">Conditionals</a>
+      <a href="#loops">Loops</a>
+      <a href="#collections">Collections</a>
+      <a href="#misc">Misc</a>
+      <a href="#servlet">Servlet</a>
+      <a href="#jsp">JSP</a>
+      <a href="#jdbc">JDBC</a>
+    </nav>
+  </div>
 
     <!-- Getting Started -->
     <section id="getting-started">
@@ -1002,6 +1008,379 @@ transient  try  void  volatile  while</pre>
       </div>
     </section>
 
+    <!-- Servlet -->
+    <section id="servlet">
+      <h2>Servlet</h2>
+
+      <div class="block-desc">
+        <span><code>HttpServlet</code> handles HTTP requests via <code>doGet()</code> and <code>doPost()</code> methods; the container manages request/response objects.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">HttpServlet</div>
+          <pre><span class="lk">import</span> javax.servlet.*;
+<span class="lk">import</span> javax.servlet.http.*;
+<span class="lk">import</span> java.io.*;
+
+<span class="lk">public class</span> <span class="lc">MyServlet</span> <span class="lk">extends</span> <span class="lc">HttpServlet</span> {
+
+  <span class="lk">protected void</span> <span class="lm">doGet</span>(<span class="lc">HttpServletRequest</span> req,
+      <span class="lc">HttpServletResponse</span> resp)
+      <span class="lk">throws</span> <span class="lc">IOException</span> {
+    resp.<span class="lm">setContentType</span>(<span class="ls">"text/html"</span>);
+    <span class="lc">PrintWriter</span> out = resp.<span class="lm">getWriter</span>();
+    out.<span class="lm">println</span>(<span class="ls">"&lt;h1&gt;GET OK&lt;/h1&gt;"</span>);
+  }
+
+  <span class="lk">protected void</span> <span class="lm">doPost</span>(<span class="lc">HttpServletRequest</span> req,
+      <span class="lc">HttpServletResponse</span> resp)
+      <span class="lk">throws</span> <span class="lc">IOException</span> {
+    <span class="lc">String</span> name = req.<span class="lm">getParameter</span>(<span class="ls">"name"</span>);
+    resp.<span class="lm">getWriter</span>().<span class="lm">println</span>(<span class="ls">"Hello "</span> + name);
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Container (Tomcat) creates</span><br />
+              <span style="color:#565f89;">// HttpServletRequest &amp; Response</span><br />
+              <span style="color:#9ece6a;">GET → doGet()</span><br />
+              <span style="color:#9ece6a;">POST → doPost()</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>RequestDispatcher</code> forwards a request to another servlet or JSP, sharing request attributes with the target.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">RequestDispatcher</div>
+          <pre><span class="c">// Servlet 1 — set attribute &amp; forward</span>
+req.<span class="lm">setAttribute</span>(<span class="ls">"n"</span>, <span class="ln">2</span>);
+<span class="lc">RequestDispatcher</span> rd =
+    req.<span class="lm">getRequestDispatcher</span>(<span class="ls">"targetServletURL"</span>);
+rd.<span class="lm">forward</span>(req, resp);
+
+<span class="c">// Servlet 2 — read attribute</span>
+<span class="kt">int</span> n = (<span class="lc">Integer</span>) req.<span class="lm">getAttribute</span>(<span class="ls">"n"</span>);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Forward transfers control</span><br />
+              <span style="color:#e0af68;">Servlet1 → setAttribute → forward</span><br />
+              <span style="color:#9ece6a;">Servlet2 → getAttribute (n=2)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>HttpSession</code> stores data across multiple requests for the same user; use <code>setAttribute</code> and <code>getAttribute</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">HttpSession</div>
+          <pre><span class="c">// Servlet 1 — store session data</span>
+<span class="lc">HttpSession</span> session = req.<span class="lm">getSession</span>();
+session.<span class="lm">setAttribute</span>(<span class="ls">"n"</span>, <span class="ln">10</span>);
+
+<span class="c">// Servlet 2 — read session data</span>
+<span class="lc">HttpSession</span> session = req.<span class="lm">getSession</span>();
+<span class="kt">int</span> temp = (<span class="lc">Integer</span>) session.<span class="lm">getAttribute</span>(<span class="ls">"n"</span>);
+
+<span class="c">// Remove session data</span>
+session.<span class="lm">removeAttribute</span>(<span class="ls">"n"</span>);</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Session persists across requests</span><br />
+              <span style="color:#e0af68;">Servlet1: setAttribute("n",10)</span><br />
+              <span style="color:#9ece6a;">Servlet2: getAttribute("n") → 10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>Cookies</code> store small data on the client browser; created with <code>new Cookie()</code> and sent via <code>response.addCookie()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Cookies</div>
+          <pre><span class="c">// Servlet 1 — create &amp; send cookie</span>
+<span class="lc">Cookie</span> cookie = <span class="lk">new</span> <span class="lc">Cookie</span>(<span class="ls">"n"</span>, <span class="ls">"10"</span>);
+resp.<span class="lm">addCookie</span>(cookie);
+
+<span class="c">// Servlet 2 — read cookies</span>
+<span class="lc">Cookie</span>[] cookies = req.<span class="lm">getCookies</span>();
+<span class="lk">for</span> (<span class="lc">Cookie</span> c : cookies) {
+  <span class="lk">if</span> (c.<span class="lm">getName</span>().<span class="lm">equals</span>(<span class="ls">"n"</span>)) {
+    <span class="lc">String</span> val = c.<span class="lm">getValue</span>(); <span class="c">// "10"</span>
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// Cookie lives on the client</span><br />
+              <span style="color:#e0af68;">new Cookie("n","10") → addCookie()</span><br />
+              <span style="color:#9ece6a;">getCookies() → name="n", value="10"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>@WebServlet</code> annotation replaces <code>web.xml</code> mapping; <code>ServletConfig</code> and <code>ServletContext</code> provide init parameters.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Annotations vs web.xml</div>
+          <pre><span class="c">// Modern: annotation (no XML)</span>
+<span class="lc">@WebServlet</span>(<span class="ls">"/myurl"</span>)
+<span class="lk">public class</span> <span class="lc">MyServlet</span> <span class="lk">extends</span> <span class="lc">HttpServlet</span> {
+  <span class="lc">ServletConfig</span> cfg = <span class="lm">getServletConfig</span>();
+  <span class="lc">String</span> val = cfg.<span class="lm">getInitParameter</span>(<span class="ls">"key"</span>);
+
+  <span class="lc">ServletContext</span> ctx = <span class="lm">getServletContext</span>();
+  <span class="lc">String</span> dbPass = ctx.<span class="lm">getInitParameter</span>(<span class="ls">"dbPassword"</span>);
+}
+
+<span class="c">&lt;!-- Legacy: web.xml --&gt;</span>
+&lt;<span class="lk">servlet</span>&gt;
+  &lt;<span class="lk">servlet-name</span>&gt;MyServlet&lt;/<span class="lk">servlet-name</span>&gt;
+  &lt;<span class="lk">servlet-class</span>&gt;com.example.MyServlet&lt;/<span class="lk">servlet-class</span>&gt;
+&lt;/<span class="lk">servlet</span>&gt;
+&lt;<span class="lk">servlet-mapping</span>&gt;
+  &lt;<span class="lk">servlet-name</span>&gt;MyServlet&lt;/<span class="lk">servlet-name</span>&gt;
+  &lt;<span class="lk">url-pattern</span>&gt;/myurl&lt;/<span class="lk">url-pattern</span>&gt;
+&lt;/<span class="lk">servlet-mapping</span>&gt;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">@WebServlet("/myurl")</span><br />
+              <span style="color:#565f89;">ServletConfig → servlet-specific</span><br />
+              <span style="color:#565f89;">ServletContext → app-wide (all servlets)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JSP -->
+    <section id="jsp">
+      <h2>JSP</h2>
+
+      <div class="block-desc">
+        <span>JSP scripting elements: <code>&lt;% %&gt;</code> (scriptlet), <code>&lt;%! %&gt;</code> (declaration), <code>&lt;%= %&gt;</code> (expression).</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_jsp.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Scripting Elements</div>
+          <pre><span class="c">&lt;!-- Scriptlet: Java code in service method --&gt;</span>
+<span class="lm">&lt;%</span>
+  <span class="lc">String</span> name = <span class="ls">"User"</span>;
+  out.<span class="lm">println</span>(<span class="ls">"Hello "</span> + name);
+<span class="lm">%&gt;</span>
+
+<span class="c">&lt;!-- Declaration: class-level variable --&gt;</span>
+<span class="lm">&lt;%!</span>
+  <span class="kt">int</span> count = <span class="ln">0</span>;
+  <span class="lk">public int</span> <span class="lm">getCount</span>() { <span class="lk">return</span> ++count; }
+<span class="lm">%&gt;</span>
+
+<span class="c">&lt;!-- Expression: print value directly --&gt;</span>
+Current Count: <span class="lm">&lt;%=</span> <span class="lm">getCount</span>() <span class="lm">%&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#e0af68;">&lt;% %&gt; — scriptlet (service method)</span><br />
+              <span style="color:#e0af68;">&lt;%! %&gt; — declaration (class level)</span><br />
+              <span style="color:#e0af68;">&lt;%= %&gt; — expression (output)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>JSP directives control page attributes with <code>@page</code>, include files with <code>@include</code>, and tag libraries with <code>@taglib</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_jsp.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Directives</div>
+          <pre><span class="c">&lt;!-- Page directive --&gt;</span>
+<span class="lm">&lt;%@ page</span>
+  <span class="lo">language</span>=<span class="ls">"java"</span>
+  <span class="lo">contentType</span>=<span class="ls">"text/html; charset=UTF-8"</span>
+  <span class="lo">import</span>=<span class="ls">"java.util.*, java.sql.*"</span>
+  <span class="lo">errorPage</span>=<span class="ls">"error.jsp"</span>
+  <span class="lo">session</span>=<span class="ls">"true"</span> <span class="lm">%&gt;</span>
+
+<span class="c">&lt;!-- Include directive --&gt;</span>
+<span class="lm">&lt;%@ include</span> <span class="lo">file</span>=<span class="ls">"header.jsp"</span> <span class="lm">%&gt;</span>
+
+<span class="c">&lt;!-- Taglib directive --&gt;</span>
+<span class="lm">&lt;%@ taglib</span> <span class="lo">uri</span>=<span class="ls">"uri"</span> <span class="lo">prefix</span>=<span class="ls">"aa"</span> <span class="lm">%&gt;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#e0af68;">@page — imports, content type, error page</span><br />
+              <span style="color:#e0af68;">@include — reusable components</span><br />
+              <span style="color:#e0af68;">@taglib — custom tag libraries</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>JSP lifecycle: load → convert to Servlet → compile → execute → send response; JSP <em>is</em> a Servlet cached by the engine.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_jsp.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Lifecycle</div>
+          <pre><span class="c">// JSP Engine pipeline</span>
+<span class="ln">1.</span> JSP Engine loads <span class="ls">page.jsp</span>
+<span class="ln">2.</span> Converts to Servlet:
+    HTML   → <span class="lm">out.println</span>()
+    JSP tags → Java code
+<span class="ln">3.</span> Compiles Servlet → <span class="ls">.class</span>
+<span class="ln">4.</span> Executes Servlet → generates HTML
+<span class="ln">5.</span> Sends response to browser
+
+<span class="c">// Best practice: prefer JavaBeans / MVC</span>
+<span class="c">// over heavy scriptlets</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">.jsp → .java → .class → HTML</span><br />
+              <span style="color:#565f89;">JSP is cached &amp; reused until changed</span><br />
+              <span style="color:#e0af68;">MVC: Servlet(Controller) → JSP(View)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JDBC -->
+    <section id="jdbc">
+      <h2>JDBC</h2>
+
+      <div class="block-desc">
+        <span><strong>JDBC</strong> (Java Database Connectivity) connects Java apps to databases via <code>DriverManager</code> and standard SQL operations.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_jdbc.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Connection Steps</div>
+          <pre><span class="kn">import</span> java.sql.*;
+
+<span class="c">// 1. Load driver</span>
+<span class="lc">Class</span>.<span class="lm">forName</span>(<span class="ls">"com.mysql.cj.jdbc.Driver"</span>);
+
+<span class="c">// 2. Get connection</span>
+<span class="lc">Connection</span> con = <span class="lc">DriverManager</span>.<span class="lm">getConnection</span>(
+    <span class="ls">"jdbc:mysql://localhost:3306/login"</span>,
+    <span class="ls">"root"</span>, <span class="ls">"root"</span>);
+
+<span class="c">// 3. Create statement</span>
+<span class="lc">PreparedStatement</span> stmt = con.<span class="lm">prepareStatement</span>(
+    <span class="ls">"SELECT * FROM Emp WHERE name = ?"</span>);
+
+<span class="c">// 4. Execute query</span>
+stmt.<span class="lm">setString</span>(<span class="ln">1</span>, <span class="ls">"arun"</span>);
+<span class="lc">ResultSet</span> rs = stmt.<span class="lm">executeQuery</span>();
+
+<span class="c">// 5. Process results</span>
+<span class="kw">while</span>(rs.<span class="lm">next</span>()) {
+  <span class="lc">String</span> name = rs.<span class="lm">getString</span>(<span class="ls">"name"</span>);
+}
+
+<span class="c">// 6. Close resources</span>
+con.<span class="lm">close</span>();</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">// JDBC Steps:</span><br />
+              <span style="color:#e0af68;">1. Load Driver</span><br />
+              <span style="color:#e0af68;">2. Connection</span><br />
+              <span style="color:#e0af68;">3. PreparedStatement</span><br />
+              <span style="color:#e0af68;">4. Execute → ResultSet</span><br />
+              <span style="color:#e0af68;">5. Process → Close</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><code>PreparedStatement</code> pre-compiles SQL with <code>?</code> placeholders, preventing SQL injection and improving performance.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_jdbc.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">INSERT / UPDATE / Batch</div>
+          <pre><span class="c">// INSERT with PreparedStatement</span>
+<span class="lc">PreparedStatement</span> ins = con.<span class="lm">prepareStatement</span>(
+    <span class="ls">"INSERT INTO Emp VALUES(?, ?)"</span>);
+ins.<span class="lm">setString</span>(<span class="ln">1</span>, <span class="ls">"arun"</span>);
+ins.<span class="lm">setString</span>(<span class="ln">2</span>, <span class="ls">"value2"</span>);
+ins.<span class="lm">executeUpdate</span>();
+
+<span class="c">// UPDATE</span>
+<span class="lc">PreparedStatement</span> upd = con.<span class="lm">prepareStatement</span>(
+    <span class="ls">"UPDATE Emp SET salary = ? WHERE id = ?"</span>);
+upd.<span class="lm">setInt</span>(<span class="ln">1</span>, <span class="ln">50000</span>);
+upd.<span class="lm">setInt</span>(<span class="ln">2</span>, <span class="ln">123</span>);
+upd.<span class="lm">executeUpdate</span>();
+
+<span class="c">// Batch inserts</span>
+<span class="lc">PreparedStatement</span> batch = con.<span class="lm">prepareStatement</span>(
+    <span class="ls">"INSERT INTO Emp VALUES(?, ?)"</span>);
+batch.<span class="lm">setString</span>(<span class="ln">1</span>, <span class="ls">"user1"</span>);
+batch.<span class="lm">setString</span>(<span class="ln">2</span>, <span class="ls">"data1"</span>);
+batch.<span class="lm">addBatch</span>();
+batch.<span class="lm">executeBatch</span>();</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">▶ Preview</div>
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#9ece6a;">INSERT → executeUpdate()</span><br />
+              <span style="color:#9ece6a;">UPDATE → executeUpdate()</span><br />
+              <span style="color:#e0af68;">Batch → addBatch() + executeBatch()</span><br />
+              <span style="color:#565f89;">Always use ? placeholders for user input</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -1009,5 +1388,13 @@ transient  try  void  volatile  while</pre>
   </footer>
 
   <script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
 </body>
 </html>

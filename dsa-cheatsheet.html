@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSA &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .lk  { color: #bb9af7; }
+    .lc  { color: #7aa2f7; }
+    .ls  { color: #9ece6a; }
+    .lcm { color: #565f89; }
+    .lm  { color: #e0af68; }
+    .lo  { color: #f7768e; }
+    .ln  { color: #ff9e64; }
+
+    .badge { display:inline-block; padding:0.15rem 0.55rem; border-radius:4px; font-size:0.62rem; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; margin-bottom:0.6rem; }
+    .b-comp  { background:#1e40af; color:#fff; }
+    .b-arr   { background:#065f46; color:#fff; }
+    .b-link  { background:#7c3aed; color:#fff; }
+    .b-stk   { background:#92400e; color:#fff; }
+    .b-hash  { background:#be185d; color:#fff; }
+    .b-tree  { background:#0f766e; color:#fff; }
+    .b-grph  { background:#1d4ed8; color:#fff; }
+    .b-sort  { background:#991b1b; color:#fff; }
+    .b-srch  { background:#78350f; color:#fff; }
+    .b-dp    { background:#166534; color:#fff; }
+    .b-trie  { background:#6b21a8; color:#fff; }
+    .b-blm   { background:#9a3412; color:#fff; }
+
+    .complexity-table { width:100%; border-collapse:collapse; font-size:0.72rem; margin:0.75rem 0; }
+    .complexity-table th { background:var(--accent); color:#fff; padding:0.45rem 0.7rem; text-align:left; font-weight:600; }
+    .complexity-table td { padding:0.4rem 0.7rem; border-bottom:1px solid var(--border); color:var(--text-muted); }
+    .complexity-table tr:hover td { background:var(--surface); }
+
+    .sort-table { width:100%; border-collapse:collapse; font-size:0.68rem; margin:0.75rem 0; }
+    .sort-table th { background:var(--accent); color:#fff; padding:0.4rem 0.55rem; text-align:left; font-weight:600; white-space:nowrap; }
+    .sort-table td { padding:0.35rem 0.55rem; border-bottom:1px solid var(--border); color:var(--text-muted); }
+    .sort-table tr:hover td { background:var(--surface); }
+
+    .principle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.75rem; margin:0.75rem 0 1.25rem; }
+    .principle-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.9rem 1rem; }
+    .principle-card h4 { margin:0 0 0.3rem; font-size:0.8rem; color:var(--accent); }
+    .principle-card p  { margin:0; font-size:0.72rem; color:var(--text-muted); line-height:1.55; }
+    .principle-card code { font-size:0.68rem; background:var(--inline-code-bg); color:var(--inline-code-text); padding:1px 4px; border-radius:3px; }
+
+    .tip-row { display:flex; gap:0.6rem; flex-wrap:wrap; margin:0.6rem 0; }
+    .tip { background:var(--accent-subtle); border:1px solid var(--accent-subtle-2); border-radius:var(--radius-xs); padding:0.4rem 0.7rem; font-size:0.7rem; color:var(--text-muted); }
+    .tip strong { color:var(--accent); }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('DSA')</script>
+<script>renderSourceLink('DSA')</script>
+
+<main>
+  <div class="page-header">
+    <h1>DSA</h1>
+    <p class="subtitle">Data Structures & Algorithms quick reference</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#complexity">Complexity</a>
+      <a href="#arrays">Arrays</a>
+      <a href="#linkedlist">LinkedList</a>
+      <a href="#stack-queue">Stack & Queue</a>
+      <a href="#hashmap">HashMap</a>
+      <a href="#trees">Trees</a>
+      <a href="#graphs">Graphs</a>
+      <a href="#sorting">Sorting</a>
+      <a href="#searching">Searching</a>
+      <a href="#dp">Dynamic Programming</a>
+      <a href="#trie">Trie</a>
+      <a href="#bloom">Bloom Filter</a>
+      <a href="#bellman-ford">Bellman-Ford</a>
+      <a href="#dijkstra">Dijkstra</a>
+      <a href="#floyd-warshall">Floyd-Warshall</a>
+      <a href="#hashing">Hashing</a>
+      <a href="#partition-equal">Partition Equal Subset</a>
+      <a href="#algo-complexity">Algo Complexity</a>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ COMPLEXITY ═══ -->
+  <section id="complexity">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Big O Complexity</h2>
+
+    <div class="block-desc">
+      <span>Big O notation describes the upper bound of an algorithm's growth rate. Always consider <strong>worst case</strong> unless stated otherwise.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/index.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Time Complexity</div>
+        <table class="complexity-table">
+          <tr><th>Big O</th><th>Name</th><th>Example</th></tr>
+          <tr><td style="color:#9ece6a;font-weight:600;">O(1)</td><td>Constant</td><td>Array index access, HashMap lookup</td></tr>
+          <tr><td style="color:#7aa2f7;font-weight:600;">O(log n)</td><td>Logarithmic</td><td>Binary search, balanced BST operations</td></tr>
+          <tr><td style="color:#e0af68;font-weight:600;">O(n)</td><td>Linear</td><td>Single loop through array, linear search</td></tr>
+          <tr><td style="color:#bb9af7;font-weight:600;">O(n log n)</td><td>Linearithmic</td><td>Merge sort, heap sort, Tim sort</td></tr>
+          <tr><td style="color:#f7768e;font-weight:600;">O(n&sup2;)</td><td>Quadratic</td><td>Bubble sort, nested loops, insertion sort</td></tr>
+          <tr><td style="color:#ff9e64;font-weight:600;">O(2&sup;n)</td><td>Exponential</td><td>Recursive Fibonacci, power set generation</td></tr>
+          <tr><td style="color:#ff9e64;font-weight:600;">O(n!)</td><td>Factorial</td><td>Permutations, brute-force TSP</td></tr>
+        </table>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Growth Comparison</div>
+        <div class="live-output" style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;line-height:2;color:var(--text-muted);">
+          <div>n=10 → O(1)=<span style="color:#9ece6a;">1</span>  O(log n)=<span style="color:#7aa2f7;">3</span>  O(n)=<span style="color:#e0af68;">10</span></div>
+          <div>n=10 → O(n log n)=<span style="color:#bb9af7;">33</span>  O(n&sup2;)=<span style="color:#f7768e;">100</span>  O(2&sup;n)=<span style="color:#ff9e64;">1024</span></div>
+          <div style="margin-top:0.6rem;color:var(--accent);">Best → Worst:</div>
+          <div><span style="color:#9ece6a;">O(1)</span> &lt; <span style="color:#7aa2f7;">O(log n)</span> &lt; <span style="color:#e0af68;">O(n)</span></div>
+          <div>&lt; <span style="color:#bb9af7;">O(n log n)</span> &lt; <span style="color:#f7768e;">O(n&sup2;)</span> &lt; <span style="color:#ff9e64;">O(2&sup;n)</span></div>
+          <div style="margin-top:0.6rem;"><strong style="color:var(--accent);">Space Complexity</strong></div>
+          <div>O(1) — in-place (swap vars)</div>
+          <div>O(n) — extra array/hashmap of size n</div>
+          <div>O(log n) — recursive call stack (balanced tree)</div>
+          <div>O(n) — worst-case recursive call stack</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Space Complexity</strong> — measures extra memory used relative to input size.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Space Complexity</div>
+        <table class="complexity-table">
+          <tr><th>Big O</th><th>Space</th><th>When</th></tr>
+          <tr><td style="color:#9ece6a;font-weight:600;">O(1)</td><td>Constant</td><td>In-place algorithms (swap, two pointers)</td></tr>
+          <tr><td style="color:#7aa2f7;font-weight:600;">O(log n)</td><td>Logarithmic</td><td>Recursive with halving (binary search)</td></tr>
+          <tr><td style="color:#e0af68;font-weight:600;">O(n)</td><td>Linear</td><td>HashMap, auxiliary array, full recursion tree</td></tr>
+          <tr><td style="color:#bb9af7;font-weight:600;">O(n&sup2;)</td><td>Quadratic</td><td>2D matrix, adjacency matrix</td></tr>
+        </table>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Tips</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Recursive vs Iterative</strong></div>
+          <div>Recursive adds O(depth) stack space</div>
+          <div>Iterative can be O(1) space</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">In-place ≠ O(1) space</strong></div>
+          <div>Merge sort is in-place but needs O(n) aux</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Amortized O(1)</strong></div>
+          <div>ArrayList.add() — occasionally O(n) resize</div>
+          <div>HashMap.put() — occasionally O(n) rehash</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ ARRAYS ═══ -->
+  <section id="arrays">
+    <span class="badge b-arr">Data Structure</span>
+    <h2>Arrays</h2>
+
+    <div class="block-desc">
+      <span><strong>Fixed-size</strong> contiguous block. <code>O(1)</code> random access by index, <code>O(n)</code> insert/delete (shifting required).</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_arrays.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Array Basics</div>
+        <pre><span class="lcm">// Declaration & initialization</span>
+<span class="lk">int</span>[] arr = <span class="lk">new int</span>[<span class="ln">5</span>];          <span class="lcm">// {0,0,0,0,0}</span>
+<span class="lk">int</span>[] arr = {<span class="ln">3</span>, <span class="ln">1</span>, <span class="ln">4</span>, <span class="ln">1</span>, <span class="ln">5</span>};  <span class="lcm">// literal init</span>
+
+<span class="lcm">// Access — O(1)</span>
+<span class="lk">int</span> val = arr[<span class="ln">2</span>];               <span class="lcm">// 4</span>
+
+<span class="lcm">// Update — O(1)</span>
+arr[<span class="ln">0</span>] = <span class="ln">99</span>;
+
+<span class="lcm">// Length</span>
+<span class="lk">int</span> len = arr.length;            <span class="lcm">// 5</span>
+
+<span class="lcm">// Iteration</span>
+<span class="lk">for</span> (<span class="lk">int</span> i = <span class="ln">0</span>; i &lt; arr.length; i++) {
+  System.out.println(arr[i]);
+}
+<span class="lcm">// enhanced for-each</span>
+<span class="lk">for</span> (<span class="lk">int</span> v : arr) {
+  System.out.println(v);
+}
+
+<span class="lcm">// Sort (ascending)</span>
+Arrays.sort(arr);
+
+<span class="lcm">// Binary search (must be sorted)</span>
+<span class="lk">int</span> idx = Arrays.binarySearch(arr, <span class="ln">4</span>);
+
+<span class="lcm">// 2D Array</span>
+<span class="lk">int</span>[][] matrix = <span class="lk">new int</span>[<span class="ln">3</span>][<span class="ln">4</span>];
+matrix[<span class="ln">1</span>][<span class="ln">2</span>] = <span class="ln">42</span>;</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Time Complexity</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Operations</strong></div>
+          <div>Access by index → <span style="color:#9ece6a;font-weight:600;">O(1)</span></div>
+          <div>Search (unsorted) → <span style="color:#e0af68;font-weight:600;">O(n)</span></div>
+          <div>Search (sorted) → <span style="color:#7aa2f7;font-weight:600;">O(log n)</span></div>
+          <div>Insert at end → <span style="color:#9ece6a;font-weight:600;">O(1)*</span></div>
+          <div>Insert at index → <span style="color:#f7768e;font-weight:600;">O(n)</span></div>
+          <div>Delete at index → <span style="color:#f7768e;font-weight:600;">O(n)</span></div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Key Properties</strong></div>
+          <div>Contiguous memory → cache-friendly</div>
+          <div>Fixed size (use ArrayList for dynamic)</div>
+          <div>Zero-indexed</div>
+          <div>* Amortized for ArrayList.add()</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>ArrayList</strong> — Java's dynamic array. Resizes automatically. Same O(1) access, amortized O(1) append.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">ArrayList.java</div>
+        <pre><span class="lc">ArrayList</span>&lt;<span class="lc">Integer</span>&gt; list = <span class="lk">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+
+list.<span class="lm">add</span>(<span class="ln">10</span>);             <span class="lcm">// append — O(1) amortized</span>
+list.<span class="lm">add</span>(<span class="ln">0</span>, <span class="ln">5</span>);           <span class="lcm">// insert at index — O(n)</span>
+list.<span class="lm">remove</span>(<span class="ln">0</span>);           <span class="lcm">// remove at index — O(n)</span>
+list.<span class="lm">get</span>(<span class="ln">2</span>);             <span class="lcm">// access — O(1)</span>
+list.<span class="lm">set</span>(<span class="ln">1</span>, <span class="ln">99</span>);          <span class="lcm">// update — O(1)</span>
+list.<span class="lm">size</span>();              <span class="lcm">// O(1)</span>
+list.<span class="lm">contains</span>(<span class="ln">10</span>);        <span class="lcm">// O(n)</span>
+list.<span class="lm">indexOf</span>(<span class="ln">10</span>);         <span class="lcm">// O(n)</span>
+
+<span class="lcm">// Convert array ↔ list</span>
+<span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt; asList = Arrays.<span class="lm">asList</span>(arr);
+<span class="lc">Integer</span>[] back = list.<span class="lm">toArray</span>(<span class="kw">new</span> <span class="lc">Integer</span>[<span class="ln">0</span>]);</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ ArrayList vs Array</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:#9ece6a;">Array</strong></div>
+          <div>Fixed size</div>
+          <div>Primitive types OK</div>
+          <div>Slightly faster (no boxing)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#7aa2f7;">ArrayList</strong></div>
+          <div>Dynamic resizing</div>
+          <div>Generics (objects only)</div>
+          <div>Useful methods (add, remove, contains)</div>
+          <div style="margin-top:0.5rem;color:var(--accent);">Load factor = 1.5x growth on resize</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ LINKED LIST ═══ -->
+  <section id="linkedlist">
+    <span class="badge b-link">Data Structure</span>
+    <h2>Linked List</h2>
+
+    <div class="block-desc">
+      <span><strong>Dynamic size</strong> chain of nodes. <code>O(1)</code> insert/delete at head; <code>O(n)</code> access by index (no random access).</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_linkedlists.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">LinkedList.java</div>
+        <pre><span class="lk">class</span> <span class="lc">ListNode</span> {
+  <span class="lk">int</span> val;
+  <span class="lc">ListNode</span> next;
+  <span class="lc">ListNode</span>(<span class="lk">int</span> val) { <span class="lk">this</span>.val = val; }
+}
+
+<span class="lcm">// Singly Linked List</span>
+<span class="lk">class</span> <span class="lc">SinglyLinkedList</span> {
+  <span class="lc">ListNode</span> head;
+  <span class="lk">int</span> size = <span class="ln">0</span>;
+
+  <span class="lcm">// Insert at head — O(1)</span>
+  <span class="lk">void</span> <span class="lm">addFirst</span>(<span class="lk">int</span> val) {
+    <span class="lc">ListNode</span> node = <span class="kw">new</span> <span class="lc">ListNode</span>(val);
+    node.next = head;
+    head = node;
+    size++;
+  }
+
+  <span class="lcm">// Remove at head — O(1)</span>
+  <span class="lk">int</span> <span class="lm">removeFirst</span>() {
+    <span class="kw">if</span> (head == <span class="kw">null</span>) <span class="kw">throw new</span> <span class="lc">NoSuchElementException</span>();
+    <span class="lk">int</span> val = head.val;
+    head = head.next;
+    size--;
+    <span class="kw">return</span> val;
+  }
+
+  <span class="lcm">// Search — O(n)</span>
+  <span class="kw">boolean</span> <span class="lm">contains</span>(<span class="lk">int</span> val) {
+    <span class="lc">ListNode</span> cur = head;
+    <span class="kw">while</span> (cur != <span class="kw">null</span>) {
+      <span class="kw">if</span> (cur.val == val) <span class="kw">return true</span>;
+      cur = cur.next;
+    }
+    <span class="kw">return false</span>;
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Time Complexity</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Singly Linked List</strong></div>
+          <div>Access by index → <span style="color:#f7768e;font-weight:600;">O(n)</span></div>
+          <div>Insert/delete head → <span style="color:#9ece6a;font-weight:600;">O(1)</span></div>
+          <div>Insert/delete tail → <span style="color:#f7768e;font-weight:600;">O(n)</span></div>
+          <div>Search → <span style="color:#f7768e;font-weight:600;">O(n)</span></div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Doubly Linked List</strong></div>
+          <div>Insert/delete tail → <span style="color:#9ece6a;font-weight:600;">O(1)</span> (with tail pointer)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Use Cases</strong></div>
+          <div>Stack / Queue implementations</div>
+          <div>LRU Cache (doubly linked + hashmap)</div>
+          <div>When frequent insert/delete at head</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Two Pointer Technique</strong> — fast/slow pointers to detect cycles and find middle of linked list.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">TwoPointers.java</div>
+        <pre><span class="lcm">// Detect cycle — Floyd's algorithm</span>
+<span class="kw">boolean</span> <span class="lm">hasCycle</span>(<span class="lc">ListNode</span> head) {
+  <span class="lc">ListNode</span> slow = head, fast = head;
+  <span class="kw">while</span> (fast != <span class="kw">null</span> && fast.next != <span class="kw">null</span>) {
+    slow = slow.next;
+    fast = fast.next.next;
+    <span class="kw">if</span> (slow == fast) <span class="kw">return true</span>;
+  }
+  <span class="kw">return false</span>;
+}
+
+<span class="lcm">// Find middle node</span>
+<span class="lc">ListNode</span> <span class="lm">findMiddle</span>(<span class="lc">ListNode</span> head) {
+  <span class="lc">ListNode</span> slow = head, fast = head;
+  <span class="kw">while</span> (fast.next != <span class="kw">null</span> && fast.next.next != <span class="kw">null</span>) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  <span class="kw">return</span> slow;
+}
+
+<span class="lcm">// Reverse linked list — O(n) time, O(1) space</span>
+<span class="lc">ListNode</span> <span class="lm">reverse</span>(<span class="lc">ListNode</span> head) {
+  <span class="lc">ListNode</span> prev = <span class="kw">null</span>, cur = head;
+  <span class="kw">while</span> (cur != <span class="kw">null</span>) {
+    <span class="lc">ListNode</span> next = cur.next;
+    cur.next = prev;
+    prev = cur;
+    cur = next;
+  }
+  <span class="kw">return</span> prev;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Technique Patterns</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Slow / Fast Pointers</strong></div>
+          <div>Cycle detection (Floyd's)</div>
+          <div>Middle of linked list</div>
+          <div>Nth from end (advance fast N first)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Reverse Pattern</strong></div>
+          <div>Iterative with prev/cur/next</div>
+          <div>Useful for palindrome check</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Merge Two Sorted Lists</strong></div>
+          <div>Compare heads, append smaller</div>
+          <div>O(n + m) time, O(1) space</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ STACK & QUEUE ═══ -->
+  <section id="stack-queue">
+    <span class="badge b-stk">Data Structure</span>
+    <h2>Stack & Queue</h2>
+
+    <div class="block-desc">
+      <span><strong>Stack (LIFO)</strong> — Last In, First Out. <strong>Queue (FIFO)</strong> — First In, First Out. Both O(1) enqueue/dequeue with <code>ArrayDeque</code>.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_stacks.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Stack.java</div>
+        <pre><span class="lcm">// Stack — LIFO (Last In, First Out)</span>
+<span class="lc">Deque</span>&lt;<span class="lc">Integer</span>&gt; stack = <span class="kw">new</span> <span class="lc">ArrayDeque</span>&lt;&gt;();
+
+stack.<span class="lm">push</span>(<span class="ln">10</span>);         <span class="lcm">// add to top — O(1)</span>
+stack.<span class="lm">push</span>(<span class="ln">20</span>);
+stack.<span class="lm">push</span>(<span class="ln">30</span>);
+
+<span class="kw">int</span> top = stack.<span class="lm">peek</span>();    <span class="lcm">// 30 (no remove) — O(1)</span>
+<span class="kw">int</span> popped = stack.<span class="lm">pop</span>();   <span class="lcm">// 30 — O(1)</span>
+<span class="kw">boolean</span> empty = stack.<span class="lm">isEmpty</span>(); <span class="lcm">// false</span>
+
+<span class="lcm">// Java also has Stack class (legacy — use ArrayDeque)</span>
+<span class="lc">Stack</span>&lt;<span class="lc">Integer</span>&gt; legacy = <span class="kw">new</span> <span class="lc">Stack</span>&lt;&gt;();</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Stack Use Cases</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">LIFO — Last In, First Out</strong></div>
+          <div>Undo / redo operations</div>
+          <div>Function call stack (recursion)</div>
+          <div>Expression evaluation (postfix)</div>
+          <div>Balanced parentheses check</div>
+          <div>DFS traversal (explicit stack)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Browser back button</strong></div>
+          <div>Push visited URLs, pop to go back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Queue (FIFO)</strong> — First In, First Out. Use <code>ArrayDeque</code> for efficient queue operations.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_queues.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Queue.java</div>
+        <pre><span class="lcm">// Queue — FIFO (First In, First Out)</span>
+<span class="lc">Deque</span>&lt;<span class="lc">Integer</span>&gt; queue = <span class="kw">new</span> <span class="lc">ArrayDeque</span>&lt;&gt;();
+
+queue.<span class="lm">offer</span>(<span class="ln">10</span>);        <span class="lcm">// add to rear — O(1)</span>
+queue.<span class="lm">offer</span>(<span class="ln">20</span>);
+queue.<span class="lm">offer</span>(<span class="ln">30</span>);
+
+<span class="kw">int</span> front = queue.<span class="lm">peek</span>();   <span class="lcm">// 10 (no remove) — O(1)</span>
+<span class="kw">int</span> dequeued = queue.<span class="lm">poll</span>(); <span class="lcm">// 10 — O(1)</span>
+
+<span class="lcm">// PriorityQueue — min-heap (smallest first)</span>
+<span class="lc">PriorityQueue</span>&lt;<span class="lc">Integer</span>&gt; pq = <span class="kw">new</span> <span class="lc">PriorityQueue</span>&lt;&gt;();
+pq.<span class="lm">offer</span>(<span class="ln">30</span>);
+pq.<span class="lm">offer</span>(<span class="ln">10</span>);
+pq.<span class="lm">offer</span>(<span class="ln">20</span>);
+<span class="kw">int</span> min = pq.<span class="lm">poll</span>();  <span class="lcm">// 10 — O(log n)</span>
+
+<span class="lcm">// Deque — double-ended queue</span>
+<span class="lc">Deque</span>&lt;<span class="lc">String</span>&gt; dq = <span class="kw">new</span> <span class="lc">ArrayDeque</span>&lt;&gt;();
+dq.<span class="lm">offerFirst</span>(<span class="ls">"A"</span>);  <span class="lcm">// add to front</span>
+dq.<span class="lm">offerLast</span>(<span class="ls">"B"</span>);   <span class="lcm">// add to rear</span>
+dq.<span class="lm">pollFirst</span>();       <span class="lcm">// remove from front</span>
+dq.<span class="lm">pollLast</span>();        <span class="lcm">// remove from rear</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Queue Types</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Queue (FIFO)</strong></div>
+          <div>BFS traversal</div>
+          <div>Task scheduling</div>
+          <div>Print queue, message queue</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">PriorityQueue (Heap)</strong></div>
+          <div>Dijkstra's shortest path</div>
+          <div>Kth largest/smallest element</div>
+          <div>Merge K sorted lists</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Deque (Double-ended)</strong></div>
+          <div>Sliding window (monotonic deque)</div>
+          <div>Can serve as both stack and queue</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ HASHMAP ═══ -->
+  <section id="hashmap">
+    <span class="badge b-hash">Data Structure</span>
+    <h2>HashMap</h2>
+
+    <div class="block-desc">
+      <span><strong>Key-value O(1)</strong> average lookup via hashing. Handles collisions with chaining or open addressing. Load factor triggers resize.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_hashmaps.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">HashMap.java</div>
+        <pre><span class="lc">HashMap</span>&lt;<span class="lc">String</span>, <span class="lc">Integer</span>&gt; map = <span class="kw">new</span> <span class="lc">HashMap</span>&lt;&gt;();
+
+<span class="lcm">// Put — O(1) amortized</span>
+map.<span class="lm">put</span>(<span class="ls">"apple"</span>, <span class="ln">3</span>);
+map.<span class="lm">put</span>(<span class="ls">"banana"</span>, <span class="ln">5</span>);
+
+<span class="lcm">// Get — O(1) average</span>
+<span class="kw">int</span> count = map.<span class="lm">get</span>(<span class="ls">"apple"</span>);        <span class="lcm">// 3</span>
+<span class="kw">int</span> safe = map.<span class="lm">getOrDefault</span>(<span class="ls">"x"</span>, <span class="ln">0</span>); <span class="lcm">// 0</span>
+
+<span class="lcm">// Contains — O(1)</span>
+<span class="kw">boolean</span> has = map.<span class="lm">containsKey</span>(<span class="ls">"apple"</span>); <span class="lcm">// true</span>
+
+<span class="lcm">// Remove — O(1)</span>
+map.<span class="lm">remove</span>(<span class="ls">"banana"</span>);
+
+<span class="lcm">// Size</span>
+<span class="kw">int</span> sz = map.<span class="lm">size</span>();                <span class="lcm">// 1</span>
+
+<span class="lcm">// Iterate</span>
+<span class="kw">for</span> (<span class="lc">Map.Entry</span>&lt;<span class="lc">String</span>,<span class="lc">Integer</span>&gt; e : map.<span class="lm">entrySet</span>()) {
+  System.out.println(e.<span class="lm">getKey</span>() + <span class="ls">" → "</span> + e.<span class="lm">getValue</span>());
+}
+
+<span class="lcm">// Frequency count pattern</span>
+<span class="kw">int</span>[] freq = <span class="kw">new int</span>[<span class="ln">256</span>];
+<span class="kw">for</span> (<span class="kw">char</span> c : s.<span class="lm">toCharArray</span>()) {
+  freq[c]++;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Hash Collision Handling</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Chaining (Java HashMap)</strong></div>
+          <div>Each bucket → linked list / tree</div>
+          <div>Load factor &gt; 0.75 → resize 2x</div>
+          <div>O(1) average, O(n) worst case</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Open Addressing</strong></div>
+          <div>Linear probe: next slot</div>
+          <div>Quadratic probe: i&sup2; steps</div>
+          <div>Double hashing: h1 + i*h2</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">LinkedHashMap</strong></div>
+          <div>Preserves insertion order</div>
+          <div>Use for LRU cache implementation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Two Sum pattern</strong> — classic hashmap usage for complementary lookups in O(n).</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">TwoSum.java</div>
+        <pre><span class="lcm">// Find two indices that sum to target — O(n)</span>
+<span class="kw">int</span>[] <span class="lm">twoSum</span>(<span class="kw">int</span>[] nums, <span class="kw">int</span> target) {
+  <span class="lc">HashMap</span>&lt;<span class="lc">Integer</span>, <span class="lc">Integer</span>&gt; seen = <span class="kw">new</span> <span class="lc">HashMap</span>&lt;&gt;();
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; nums.length; i++) {
+    <span class="kw">int</span> complement = target - nums[i];
+    <span class="kw">if</span> (seen.<span class="lm">containsKey</span>(complement)) {
+      <span class="kw">return new int</span>[] { seen.<span class="lm">get</span>(complement), i };
+    }
+    seen.<span class="lm">put</span>(nums[i], i);
+  }
+  <span class="kw">return new int</span>[<span class="ln">0</span>];
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ HashMap Patterns</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Common Patterns</strong></div>
+          <div>Two Sum (complement lookup)</div>
+          <div>Frequency counting</div>
+          <div>Group Anagrams (sorted key)</div>
+          <div>Subarray Sum = K (prefix sum map)</div>
+          <div>LRU Cache (LinkedHashMap)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Java Alternatives</strong></div>
+          <div><code>HashMap</code> — fastest, no order</div>
+          <div><code>LinkedHashMap</code> — insertion order</div>
+          <div><code>TreeMap</code> — sorted by key, O(log n)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ TREES ═══ -->
+  <section id="trees">
+    <span class="badge b-tree">Data Structure</span>
+    <h2>Trees & BST</h2>
+
+    <div class="block-desc">
+      <span><strong>Binary Tree</strong> — each node has at most 2 children. <strong>BST</strong> — left &lt; root &lt; right. Inorder traversal gives sorted order.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_trees.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BinarySearchTree.java</div>
+        <pre><span class="lk">class</span> <span class="lc">TreeNode</span> {
+  <span class="lk">int</span> val;
+  <span class="lc">TreeNode</span> left, right;
+  <span class="lc">TreeNode</span>(<span class="lk">int</span> val) { <span class="lk">this</span>.val = val; }
+}
+
+<span class="lk">class</span> <span class="lc">BST</span> {
+  <span class="lc">TreeNode</span> root;
+
+  <span class="lcm">// Insert — O(log n) average</span>
+  <span class="lc">TreeNode</span> <span class="lm">insert</span>(<span class="lc">TreeNode</span> node, <span class="lk">int</span> val) {
+    <span class="kw">if</span> (node == <span class="kw">null</span>) <span class="kw">return new</span> <span class="lc">TreeNode</span>(val);
+    <span class="kw">if</span> (val &lt; node.val)
+      node.left = <span class="lm">insert</span>(node.left, val);
+    <span class="kw">else if</span> (val &gt; node.val)
+      node.right = <span class="lm">insert</span>(node.right, val);
+    <span class="kw">return</span> node;
+  }
+
+  <span class="lcm">// Search — O(log n) average</span>
+  <span class="kw">boolean</span> <span class="lm">search</span>(<span class="lc">TreeNode</span> node, <span class="lk">int</span> val) {
+    <span class="kw">if</span> (node == <span class="kw">null</span>) <span class="kw">return false</span>;
+    <span class="kw">if</span> (val == node.val) <span class="kw">return true</span>;
+    <span class="kw">if</span> (val &lt; node.val) <span class="kw">return</span> <span class="lm">search</span>(node.left, val);
+    <span class="kw">return</span> <span class="lm">search</span>(node.right, val);
+  }
+
+  <span class="lcm">// Inorder traversal — O(n) — yields sorted order</span>
+  <span class="kw">void</span> <span class="lm">inorder</span>(<span class="lc">TreeNode</span> node) {
+    <span class="kw">if</span> (node == <span class="kw">null</span>) <span class="kw">return</span>;
+    <span class="lm">inorder</span>(node.left);
+    System.out.println(node.val);
+    <span class="lm">inorder</span>(node.right);
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Tree Traversals</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">DFS Traversals</strong></div>
+          <div><strong>Inorder:</strong> Left → Root → Right (sorted)</div>
+          <div><strong>Preorder:</strong> Root → Left → Right (clone tree)</div>
+          <div><strong>Postorder:</strong> Left → Right → Root (delete tree)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">BFS Traversal</strong></div>
+          <div><strong>Level-order:</strong> Level by level (use queue)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">BST Properties</strong></div>
+          <div>Inorder = sorted ascending</div>
+          <div>Min = leftmost, Max = rightmost</div>
+          <div>Balanced BST height = O(log n)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>BFS Level-order Traversal</strong> — visit nodes level by level using a queue.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BFSTraversal.java</div>
+        <pre><span class="lc">List</span>&lt;<span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt;&gt; <span class="lm">levelOrder</span>(<span class="lc">TreeNode</span> root) {
+  <span class="lc">List</span>&lt;<span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+  <span class="kw">if</span> (root == <span class="kw">null</span>) <span class="kw">return</span> result;
+
+  <span class="lc">Queue</span>&lt;<span class="lc">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="lc">ArrayDeque</span>&lt;&gt;();
+  queue.<span class="lm">offer</span>(root);
+
+  <span class="kw">while</span> (!queue.<span class="lm">isEmpty</span>()) {
+    <span class="kw">int</span> levelSize = queue.<span class="lm">size</span>();
+    <span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt; level = <span class="kw">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; levelSize; i++) {
+      <span class="lc">TreeNode</span> node = queue.<span class="lm">poll</span>();
+      level.<span class="lm">add</span>(node.val);
+      <span class="kw">if</span> (node.left != <span class="kw">null</span>) queue.<span class="lm">offer</span>(node.left);
+      <span class="kw">if</span> (node.right != <span class="kw">null</span>) queue.<span class="lm">offer</span>(node.right);
+    }
+    result.<span class="lm">add</span>(level);
+  }
+  <span class="kw">return</span> result;
+}
+
+<span class="lcm">// Max depth — O(n)</span>
+<span class="kw">int</span> <span class="lm">maxDepth</span>(<span class="lc">TreeNode</span> root) {
+  <span class="kw">if</span> (root == <span class="kw">null</span>) <span class="kw">return</span> <span class="ln">0</span>;
+  <span class="kw">return</span> <span class="ln">1</span> + Math.<span class="lm">max</span>(
+    <span class="lm">maxDepth</span>(root.left),
+    <span class="lm">maxDepth</span>(root.right)
+  );
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Tree Types</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Balanced Trees</strong></div>
+          <div>AVL — strictly balanced, faster lookup</div>
+          <div>Red-Black — loosely balanced, faster insert</div>
+          <div>B/B+ Tree — disk-based, databases</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Heap (Priority Queue)</strong></div>
+          <div>Min-heap: parent ≤ children</div>
+          <div>Max-heap: parent ≥ children</div>
+          <div>Insert/extract: O(log n)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Common Problems</strong></div>
+          <div>Validate BST (inorder check)</div>
+          <div>LCA (Lowest Common Ancestor)</div>
+          <div>Serialize / Deserialize tree</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ GRAPHS ═══ -->
+  <section id="graphs">
+    <span class="badge b-grph">Data Structure</span>
+    <h2>Graphs</h2>
+
+    <div class="block-desc">
+      <span><strong>Adjacency list</strong> — array of lists. Each vertex stores its neighbors. Space O(V+E). Use for sparse graphs.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_graphs.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">GraphRepresentation.java</div>
+        <pre><span class="lcm">// Adjacency List — preferred for most problems</span>
+<span class="lc">Map</span>&lt;<span class="lc">Integer</span>, <span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt;&gt; adj = <span class="kw">new</span> <span class="lc">HashMap</span>&lt;&gt;();
+
+<span class="kw">void</span> <span class="lm">addEdge</span>(<span class="kw">int</span> u, <span class="kw">int</span> v, <span class="kw">boolean</span> directed) {
+  adj.<span class="lm">computeIfAbsent</span>(u, k -&gt; <span class="kw">new</span> <span class="lc">ArrayList</span>&lt;&gt;()).<span class="lm">add</span>(v);
+  <span class="kw">if</span> (!directed) {
+    adj.<span class="lm">computeIfAbsent</span>(v, k -&gt; <span class="kw">new</span> <span class="lc">ArrayList</span>&lt;&gt;()).<span class="lm">add</span>(u);
+  }
+}
+
+<span class="lcm">// Adjacency Matrix — for dense graphs</span>
+<span class="kw">int</span>[][] matrix = <span class="kw">new int</span>[V][V];
+matrix[u][v] = <span class="ln">1</span>;  <span class="lcm">// edge exists</span>
+<span class="lcm">// Space: O(V²) — waste for sparse graphs</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Representation</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Adjacency List</strong></div>
+          <div>Space: O(V + E)</div>
+          <div>Check edge: O(degree)</div>
+          <div>Iterate neighbors: O(degree)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Adjacency Matrix</strong></div>
+          <div>Space: O(V&sup2;)</div>
+          <div>Check edge: O(1)</div>
+          <div>Best for dense graphs (E ≈ V&sup2;)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Graph Types</strong></div>
+          <div>Directed / Undirected</div>
+          <div>Weighted / Unweighted</div>
+          <div>Cyclic / Acyclic (DAG)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>BFS</strong> — shortest path in unweighted graphs. <strong>DFS</strong> — explores all paths, cycle detection, topological sort.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BFS.java</div>
+        <pre><span class="lcm">// BFS — Shortest path in unweighted graph</span>
+<span class="kw">int</span>[] <span class="lm">bfs</span>(<span class="lc">Map</span>&lt;<span class="lc">Integer</span>,<span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt;&gt; adj, <span class="kw">int</span> start) {
+  <span class="kw">int</span> n = adj.<span class="lm">size</span>();
+  <span class="kw">int</span>[] dist = <span class="kw">new int</span>[n];
+  Arrays.<span class="lm">fill</span>(dist, -<span class="ln">1</span>);
+  dist[start] = <span class="ln">0</span>;
+
+  <span class="lc">Queue</span>&lt;<span class="lc">Integer</span>&gt; queue = <span class="kw">new</span> <span class="lc">ArrayDeque</span>&lt;&gt;();
+  queue.<span class="lm">offer</span>(start);
+
+  <span class="kw">while</span> (!queue.<span class="lm">isEmpty</span>()) {
+    <span class="kw">int</span> u = queue.<span class="lm">poll</span>();
+    <span class="kw">for</span> (<span class="kw">int</span> v : adj.<span class="lm">getOrDefault</span>(u, <span class="lc">List</span>.<span class="lm">of</span>())) {
+      <span class="kw">if</span> (dist[v] == -<span class="ln">1</span>) {
+        dist[v] = dist[u] + <span class="ln">1</span>;
+        queue.<span class="lm">offer</span>(v);
+      }
+    }
+  }
+  <span class="kw">return</span> dist;
+}
+
+<span class="lcm">// Complexity: O(V + E)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ BFS vs DFS</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">BFS (Queue)</strong></div>
+          <div>Shortest path (unweighted)</div>
+          <div>Level-by-level traversal</div>
+          <div>Space: O(V) for queue</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">DFS (Stack / Recursion)</strong></div>
+          <div>Explore all paths</div>
+          <div>Cycle detection</div>
+          <div>Topological sort (DAG)</div>
+          <div>Connected components</div>
+          <div>Space: O(V) for call stack</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>DFS</strong> — depth-first traversal using recursion or explicit stack.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">DFS.java</div>
+        <pre><span class="lcm">// DFS — Recursive</span>
+<span class="kw">void</span> <span class="lm">dfs</span>(<span class="lc">Map</span>&lt;<span class="lc">Integer</span>,<span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt;&gt; adj, <span class="kw">int</span> u, <span class="kw">boolean</span>[] visited) {
+  visited[u] = <span class="kw">true</span>;
+  System.out.<span class="lm">print</span>(u + <span class="ls">" "</span>);
+  <span class="kw">for</span> (<span class="kw">int</span> v : adj.<span class="lm">getOrDefault</span>(u, <span class="lc">List</span>.<span class="lm">of</span>())) {
+    <span class="kw">if</span> (!visited[v]) <span class="lm">dfs</span>(adj, v, visited);
+  }
+}
+
+<span class="lcm">// Detect cycle in undirected graph</span>
+<span class="kw">boolean</span> <span class="lm">hasCycle</span>(<span class="lc">Map</span>&lt;<span class="lc">Integer</span>,<span class="lc">List</span>&lt;<span class="lc">Integer</span>&gt;&gt; adj, <span class="kw">int</span> u, <span class="kw">boolean</span>[] visited, <span class="kw">int</span> parent) {
+  visited[u] = <span class="kw">true</span>;
+  <span class="kw">for</span> (<span class="kw">int</span> v : adj.<span class="lm">getOrDefault</span>(u, <span class="lc">List</span>.<span class="lm">of</span>())) {
+    <span class="kw">if</span> (!visited[v]) {
+      <span class="kw">if</span> (<span class="lm">hasCycle</span>(adj, v, visited, u)) <span class="kw">return true</span>;
+    } <span class="kw">else if</span> (v != parent) {
+      <span class="kw">return true</span>;
+    }
+  }
+  <span class="kw">return false</span>;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Graph Algorithms</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Shortest Path</strong></div>
+          <div>Dijkstra — weighted, non-negative O((V+E)logV)</div>
+          <div>Bellman-Ford — handles negatives O(VE)</div>
+          <div>Floyd-Warshall — all-pairs O(V&sup3;)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">MST (Minimum Spanning Tree)</strong></div>
+          <div>Kruskal's — sort edges, union-find</div>
+          <div>Prim's — grow tree from vertex</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Other</strong></div>
+          <div>Topological sort (DAG only)</div>
+          <div>Strongly connected components</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ SORTING ═══ -->
+  <section id="sorting">
+    <span class="badge b-sort">Algorithm</span>
+    <h2>Sorting Algorithms</h2>
+
+    <div class="block-desc">
+      <span>Comparison-based sorting comparison table. All comparison sorts have a lower bound of <code>O(n log n)</code>.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_sorting.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Sorting Comparison</div>
+        <table class="sort-table">
+          <tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable</th></tr>
+          <tr><td>Bubble Sort</td><td style="color:#9ece6a;">O(n)</td><td style="color:#f7768e;">O(n&sup2;)</td><td style="color:#f7768e;">O(n&sup2;)</td><td>O(1)</td><td style="color:#9ece6a;">Yes</td></tr>
+          <tr><td>Selection Sort</td><td style="color:#f7768e;">O(n&sup2;)</td><td style="color:#f7768e;">O(n&sup2;)</td><td style="color:#f7768e;">O(n&sup2;)</td><td>O(1)</td><td style="color:#f7768e;">No</td></tr>
+          <tr><td>Insertion Sort</td><td style="color:#9ece6a;">O(n)</td><td style="color:#f7768e;">O(n&sup2;)</td><td style="color:#f7768e;">O(n&sup2;)</td><td>O(1)</td><td style="color:#9ece6a;">Yes</td></tr>
+          <tr><td>Merge Sort</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#f7768e;">O(n)</td><td style="color:#9ece6a;">Yes</td></tr>
+          <tr><td>Quick Sort</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#f7768e;">O(n&sup2;)</td><td style="color:#f7768e;">O(log n)</td><td style="color:#f7768e;">No</td></tr>
+          <tr><td>Heap Sort</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#bb9af7;">O(n log n)</td><td style="color:#bb9af7;">O(n log n)</td><td>O(1)</td><td style="color:#f7768e;">No</td></tr>
+        </table>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ When to Use</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Merge Sort</strong></div>
+          <div>Stable sort needed</div>
+          <div>Linked list sort (no random access needed)</div>
+          <div>Guaranteed O(n log n)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Quick Sort</strong></div>
+          <div>General purpose, fast in practice</div>
+          <div>In-place (O(log n) stack)</div>
+          <div>Cache-friendly (sequential access)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Insertion Sort</strong></div>
+          <div>Small arrays (n &lt; 20)</div>
+          <div>Nearly sorted data</div>
+          <div>Used inside Tim Sort (Java's Arrays.sort)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Quick Sort</strong> — divide and conquer with in-place partitioning. Most-used general-purpose sort.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">QuickSort.java</div>
+        <pre><span class="kw">void</span> <span class="lm">quickSort</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> low, <span class="kw">int</span> high) {
+  <span class="kw">if</span> (low &lt; high) {
+    <span class="kw">int</span> pivot = <span class="lm">partition</span>(arr, low, high);
+    <span class="lm">quickSort</span>(arr, low, pivot - <span class="ln">1</span>);
+    <span class="lm">quickSort</span>(arr, pivot + <span class="ln">1</span>, high);
+  }
+}
+
+<span class="kw">int</span> <span class="lm">partition</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> low, <span class="kw">int</span> high) {
+  <span class="kw">int</span> pivot = arr[high];  <span class="lcm">// Lomuto partition</span>
+  <span class="kw">int</span> i = low - <span class="ln">1</span>;
+  <span class="kw">for</span> (<span class="kw">int</span> j = low; j &lt; high; j++) {
+    <span class="kw">if</span> (arr[j] &lt;= pivot) {
+      i++;
+      <span class="kw">int</span> temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
+    }
+  }
+  <span class="kw">int</span> temp = arr[i+<span class="ln">1</span>]; arr[i+<span class="ln">1</span>] = arr[high]; arr[high] = temp;
+  <span class="kw">return</span> i + <span class="ln">1</span>;
+}
+
+<span class="lcm">// Best: O(n log n), Worst: O(n²) — already sorted input</span>
+<span class="lcm">// Mitigate: randomize pivot or use median-of-three</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Merge Sort</div>
+        <div class="live-output" style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;line-height:1.7;color:var(--code-text);background:var(--code-bg);padding:0.75rem;border-radius:4px;overflow-x:auto;">
+<span class="lm">void</span> <span class="lm">mergeSort</span>(<span class="lk">int</span>[] arr, <span class="lk">int</span> l, <span class="lk">int</span> r) {<br/>
+&nbsp;&nbsp;<span class="kw">if</span> (l &lt; r) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="lk">int</span> mid = l + (r - l) / <span class="ln">2</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="lm">mergeSort</span>(arr, l, mid);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="lm">mergeSort</span>(arr, mid+<span class="ln">1</span>, r);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="lm">merge</span>(arr, l, mid, r);<br/>
+&nbsp;&nbsp;}<br/>
+}<br/>
+<br/>
+<span class="lcm">// merge() — O(n) merge two sorted halves</span><br/>
+<span class="lcm">// Time: O(n log n) all cases</span><br/>
+<span class="lcm">// Space: O(n) auxiliary array</span><br/>
+<span class="lcm">// Stable: yes (preserves relative order)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ SEARCHING ═══ -->
+  <section id="searching">
+    <span class="badge b-srch">Algorithm</span>
+    <h2>Searching Algorithms</h2>
+
+    <div class="block-desc">
+      <span><strong>Linear Search</strong> — check every element, <code>O(n)</code>. <strong>Binary Search</strong> — halve the search space, <code>O(log n)</code> on sorted data.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_searching.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BinarySearch.java</div>
+        <pre><span class="lcm">// Binary Search — O(log n) — must be sorted</span>
+<span class="kw">int</span> <span class="lm">binarySearch</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> target) {
+  <span class="kw">int</span> lo = <span class="ln">0</span>, hi = arr.length - <span class="ln">1</span>;
+  <span class="kw">while</span> (lo &lt;= hi) {
+    <span class="kw">int</span> mid = lo + (hi - lo) / <span class="ln">2</span>;  <span class="lcm">// avoid overflow</span>
+    <span class="kw">if</span> (arr[mid] == target) <span class="kw">return</span> mid;
+    <span class="kw">else if</span> (arr[mid] &lt; target) lo = mid + <span class="ln">1</span>;
+    <span class="kw">else</span> hi = mid - <span class="ln">1</span>;
+  }
+  <span class="kw">return</span> -<span class="ln">1</span>;  <span class="lcm">// not found</span>
+}
+
+<span class="lcm">// Lower bound — first index where arr[idx] >= target</span>
+<span class="kw">int</span> <span class="lm">lowerBound</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> target) {
+  <span class="kw">int</span> lo = <span class="ln">0</span>, hi = arr.length;
+  <span class="kw">while</span> (lo &lt; hi) {
+    <span class="kw">int</span> mid = lo + (hi - lo) / <span class="ln">2</span>;
+    <span class="kw">if</span> (arr[mid] &lt; target) lo = mid + <span class="ln">1</span>;
+    <span class="kw">else</span> hi = mid;
+  }
+  <span class="kw">return</span> lo;
+}
+
+<span class="lcm">// Upper bound — first index where arr[idx] > target</span>
+<span class="kw">int</span> <span class="lm">upperBound</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> target) {
+  <span class="kw">int</span> lo = <span class="ln">0</span>, hi = arr.length;
+  <span class="kw">while</span> (lo &lt; hi) {
+    <span class="kw">int</span> mid = lo + (hi - lo) / <span class="ln">2</span>;
+    <span class="kw">if</span> (arr[mid] &lt;= target) lo = mid + <span class="ln">1</span>;
+    <span class="kw">else</span> hi = mid;
+  }
+  <span class="kw">return</span> lo;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Binary Search Variants</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Classic Patterns</strong></div>
+          <div>Find exact target → standard BS</div>
+          <div>Find first/last occurrence → lower/upper bound</div>
+          <div>Find min in rotated sorted array</div>
+          <div>Search in 2D sorted matrix</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Binary Search on Answer</strong></div>
+          <div>Min capacity to ship packages in D days</div>
+          <div>Koko eating bananas</div>
+          <div>Split array largest sum</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Jump Search — O(&radic;n)</strong></div>
+          <div>Jump blocks of size &radic;n, then linear scan</div>
+          <div>Between linear and binary</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ DYNAMIC PROGRAMMING ═══ -->
+  <section id="dp">
+    <span class="badge b-dp">Algorithm</span>
+    <h2>Dynamic Programming</h2>
+
+    <div class="principle-grid">
+      <div class="principle-card">
+        <h4>Memoization (Top-Down)</h4>
+        <p>Recursion + cache. Write the recursive solution first, then store results in a HashMap/array to avoid recomputation. Easier to think about.</p>
+      </div>
+      <div class="principle-card">
+        <h4>Tabulation (Bottom-Up)</h4>
+        <p>Iterative, fill a table from base cases up. Eliminates recursion stack. Often more space-efficient with rolling array optimization.</p>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Fibonacci</strong> — classic DP example. Naive recursion is O(2&sup;n); DP makes it O(n).</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_dynamicprog.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Fibonacci.java</div>
+        <pre><span class="lcm">// ❌ Naive recursion — O(2^n) time, O(n) stack</span>
+<span class="kw">long</span> <span class="lm">fibNaive</span>(<span class="kw">int</span> n) {
+  <span class="kw">if</span> (n &lt;= <span class="ln">1</span>) <span class="kw">return</span> n;
+  <span class="kw">return</span> <span class="lm">fibNaive</span>(n-<span class="ln">1</span>) + <span class="lm">fibNaive</span>(n-<span class="ln">2</span>);
+}
+
+<span class="lcm">// ✅ Memoization (Top-Down) — O(n) time, O(n) space</span>
+<span class="kw">long</span> <span class="lm">fibMemo</span>(<span class="kw">int</span> n, <span class="kw">long</span>[] memo) {
+  <span class="kw">if</span> (n &lt;= <span class="ln">1</span>) <span class="kw">return</span> n;
+  <span class="kw">if</span> (memo[n] != <span class="ln">0</span>) <span class="kw">return</span> memo[n];
+  memo[n] = <span class="lm">fibMemo</span>(n-<span class="ln">1</span>, memo) + <span class="lm">fibMemo</span>(n-<span class="ln">2</span>, memo);
+  <span class="kw">return</span> memo[n];
+}
+
+<span class="lcm">// ✅ Tabulation (Bottom-Up) — O(n) time, O(n) space</span>
+<span class="kw">long</span> <span class="lm">fibTab</span>(<span class="kw">int</span> n) {
+  <span class="kw">if</span> (n &lt;= <span class="ln">1</span>) <span class="kw">return</span> n;
+  <span class="kw">long</span>[] dp = <span class="kw">new long</span>[n + <span class="ln">1</span>];
+  dp[<span class="ln">0</span>] = <span class="ln">0</span>; dp[<span class="ln">1</span>] = <span class="ln">1</span>;
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">2</span>; i &lt;= n; i++) {
+    dp[i] = dp[i-<span class="ln">1</span>] + dp[i-<span class="ln">2</span>];
+  }
+  <span class="kw">return</span> dp[n];
+}
+
+<span class="lcm">// ✅ Space-optimized — O(n) time, O(1) space</span>
+<span class="kw">long</span> <span class="lm">fibOpt</span>(<span class="kw">int</span> n) {
+  <span class="kw">if</span> (n &lt;= <span class="ln">1</span>) <span class="kw">return</span> n;
+  <span class="kw">long</span> a = <span class="ln">0</span>, b = <span class="ln">1</span>;
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">2</span>; i &lt;= n; i++) {
+    <span class="kw">long</span> c = a + b;
+    a = b;
+    b = c;
+  }
+  <span class="kw">return</span> b;
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Memoization vs Tabulation</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Memoization (Top-Down)</strong></div>
+          <div>Start from n, recurse down</div>
+          <div>Lazily computes only needed states</div>
+          <div>Easier to convert from recursion</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Tabulation (Bottom-Up)</strong></div>
+          <div>Start from 0, build up to n</div>
+          <div>Computes all states</div>
+          <div>No recursion stack overhead</div>
+          <div>Easier to optimize space (rolling)</div>
+          <div style="margin-top:0.5rem;color:var(--accent);">Both give same time complexity</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Coin Change</strong> — given coins and a target amount, find the minimum number of coins needed.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">CoinChange.java</div>
+        <pre><span class="lcm">// Minimum coins to make amount — O(amount * coins)</span>
+<span class="kw">int</span> <span class="lm">coinChange</span>(<span class="kw">int</span>[] coins, <span class="kw">int</span> amount) {
+  <span class="kw">int</span>[] dp = <span class="kw">new int</span>[amount + <span class="ln">1</span>];
+  Arrays.<span class="lm">fill</span>(dp, amount + <span class="ln">1</span>);  <span class="lcm">// "infinity"</span>
+  dp[<span class="ln">0</span>] = <span class="ln">0</span>;
+
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">1</span>; i &lt;= amount; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> coin : coins) {
+      <span class="kw">if</span> (coin &lt;= i && dp[i - coin] + <span class="ln">1</span> &lt; dp[i]) {
+        dp[i] = dp[i - coin] + <span class="ln">1</span>;
+      }
+    }
+  }
+  <span class="kw">return</span> dp[amount] &gt; amount ? -<span class="ln">1</span> : dp[amount];
+}
+
+<span class="lcm">// Example: coins=[1,5,10,25], amount=30</span>
+<span class="lcm">// Result: 2 coins (25 + 5)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ DP Problem Patterns</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">1D DP</strong></div>
+          <div>Climbing Stairs, House Robber</div>
+          <div>Longest Increasing Subsequence</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">2D DP</strong></div>
+          <div>Unique Paths, Edit Distance</div>
+          <div>Longest Common Subsequence</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Knapsack</strong></div>
+          <div>0/1 Knapsack — each item once</div>
+          <div>Unbounded Knapsack — unlimited items</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Substring</strong></div>
+          <div>Longest Palindromic Substring</div>
+          <div>Word Break</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ TRIE ═══ -->
+  <section id="trie">
+    <span class="badge b-trie">Data Structure</span>
+    <h2>Trie (Prefix Tree)</h2>
+
+    <div class="block-desc">
+      <span><strong>Prefix tree</strong> — stores strings character by character. <code>O(L)</code> insert/search where L = word length. Used for autocomplete and spell checking.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_tries.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Trie.java</div>
+        <pre><span class="kw">class</span> <span class="lc">TrieNode</span> {
+  <span class="lc">TrieNode</span>[] children = <span class="kw">new</span> <span class="lc">TrieNode</span>[<span class="ln">26</span>];
+  <span class="kw">boolean</span> isEnd = <span class="kw">false</span>;
+}
+
+<span class="kw">class</span> <span class="lc">Trie</span> {
+  <span class="lc">TrieNode</span> root = <span class="kw">new</span> <span class="lc">TrieNode</span>();
+
+  <span class="lcm">// Insert — O(L)</span>
+  <span class="kw">void</span> <span class="lm">insert</span>(<span class="lc">String</span> word) {
+    <span class="lc">TrieNode</span> node = root;
+    <span class="kw">for</span> (<span class="kw">char</span> c : word.<span class="lm">toCharArray</span>()) {
+      <span class="kw">int</span> idx = c - <span class="ls">'a'</span>;
+      <span class="kw">if</span> (node.children[idx] == <span class="kw">null</span>)
+        node.children[idx] = <span class="kw">new</span> <span class="lc">TrieNode</span>();
+      node = node.children[idx];
+    }
+    node.isEnd = <span class="kw">true</span>;
+  }
+
+  <span class="lcm">// Search — O(L)</span>
+  <span class="kw">boolean</span> <span class="lm">search</span>(<span class="lc">String</span> word) {
+    <span class="lc">TrieNode</span> node = <span class="lm">findPrefix</span>(word);
+    <span class="kw">return</span> node != <span class="kw">null</span> && node.isEnd;
+  }
+
+  <span class="lcm">// Starts with — O(L)</span>
+  <span class="kw">boolean</span> <span class="lm">startsWith</span>(<span class="lc">String</span> prefix) {
+    <span class="kw">return</span> <span class="lm">findPrefix</span>(prefix) != <span class="kw">null</span>;
+  }
+
+  <span class="kw">private</span> <span class="lc">TrieNode</span> <span class="lm">findPrefix</span>(<span class="lc">String</span> s) {
+    <span class="lc">TrieNode</span> node = root;
+    <span class="kw">for</span> (<span class="kw">char</span> c : s.<span class="lm">toCharArray</span>()) {
+      <span class="kw">int</span> idx = c - <span class="ls">'a'</span>;
+      <span class="kw">if</span> (node.children[idx] == <span class="kw">null</span>) <span class="kw">return null</span>;
+      node = node.children[idx];
+    }
+    <span class="kw">return</span> node;
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Trie Applications</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Operations — O(L) each</strong></div>
+          <div>Insert word</div>
+          <div>Search exact word</div>
+          <div>Prefix matching</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Use Cases</strong></div>
+          <div>Autocomplete / search suggestions</div>
+          <div>Spell checking</div>
+          <div>IP routing (longest prefix match)</div>
+          <div>Word Game AI (Boggle, Scrabble)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Space Optimization</strong></div>
+          <div>Compressed Trie (Radix Tree)</div>
+          <div>Ternary Search Trie</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ BLOOM FILTER ═══ -->
+  <section id="bloom">
+    <span class="badge b-blm">Data Structure</span>
+    <h2>Bloom Filter</h2>
+
+    <div class="block-desc">
+      <span><strong>Probabilistic</strong> data structure. Says "definitely not in set" or "probably in set". <code>O(k)</code> lookup where k = number of hash functions. Never has false negatives.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BloomFilter.java</div>
+        <pre><span class="kw">class</span> <span class="lc">BloomFilter</span> {
+  <span class="kw">private</span> <span class="kw">final</span> <span class="kw">boolean</span>[] bitArray;
+  <span class="kw">private</span> <span class="kw">final int</span> size;
+  <span class="kw">private</span> <span class="kw">final int</span> numHashes;
+
+  <span class="lc">BloomFilter</span>(<span class="kw">int</span> expectedItems, <span class="kw">double</span> fpr) {
+    <span class="lcm">// optimal size: -(n * ln(p)) / (ln2)²</span>
+    <span class="kw">this</span>.size = (<span class="kw">int</span>)(-expectedItems * Math.<span class="lm">log</span>(fpr) / (Math.<span class="lm">log</span>(<span class="ln">2</span>) * Math.<span class="lm">log</span>(<span class="ln">2</span>)));
+    <span class="kw">this</span>.numHashes = (<span class="kw">int</span>)(Math.<span class="lm">log</span>(<span class="ln">2</span>) * size / expectedItems);
+    bitArray = <span class="kw">new boolean</span>[size];
+  }
+
+  <span class="lcm">// Hash functions using different seeds</span>
+  <span class="kw">private int</span> <span class="lm">hash</span>(<span class="lc">String</span> val, <span class="kw">int</span> seed) {
+    <span class="kw">int</span> h = seed;
+    <span class="kw">for</span> (<span class="kw">char</span> c : val.<span class="lm">toCharArray</span>()) {
+      h = h * <span class="ln">31</span> + c;
+    }
+    <span class="kw">return</span> Math.<span class="lm">abs</span>(h) % size;
+  }
+
+  <span class="lcm">// Add — O(k)</span>
+  <span class="kw">void</span> <span class="lm">add</span>(<span class="lc">String</span> val) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; numHashes; i++) {
+      bitArray[<span class="lm">hash</span>(val, i)] = <span class="kw">true</span>;
+    }
+  }
+
+  <span class="lcm">// Might contain — O(k) — NO false negatives</span>
+  <span class="kw">boolean</span> <span class="lm">mightContain</span>(<span class="lc">String</span> val) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; numHashes; i++) {
+      <span class="kw">if</span> (!bitArray[<span class="lm">hash</span>(val, i)]) <span class="kw">return false</span>;
+    }
+    <span class="kw">return true</span>;  <span class="lcm">// might be false positive</span>
+  }
+}
+
+<span class="lcm">// Usage</span>
+<span class="lc">BloomFilter</span> bf = <span class="kw">new</span> <span class="lc">BloomFilter</span>(<span class="ln">1000000</span>, <span class="ln">0.01</span>); <span class="lcm">// 1M items, 1% FPR</span>
+bf.<span class="lm">add</span>(<span class="ls">"user@example.com"</span>);
+bf.<span class="lm">mightContain</span>(<span class="ls">"user@example.com"</span>); <span class="lcm">// true (always)</span>
+bf.<span class="lm">mightContain</span>(<span class="ls">"other@test.com"</span>);  <span class="lcm">// false (probably)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Properties</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Guarantees</strong></div>
+          <div>False Positives: <span style="color:#f7768e;">possible</span></div>
+          <div>False Negatives: <span style="color:#9ece6a;">impossible</span></div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Trade-offs</strong></div>
+          <div>Space: O(m) bits — very compact</div>
+          <div>Lookup: O(k) — constant time</div>
+          <div>No delete operation (use Counting BF)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Use Cases</strong></div>
+          <div>Database / CDN cache (avoid disk lookups)</div>
+          <div>Spam filtering (email check)</div>
+          <div>Chrome's malicious URL checker</div>
+          <div>Bitcoin SPV nodes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tip-row">
+    <div class="tip"><strong>Two Pointer:</strong> Use when array is sorted or looking for pairs. O(n) time, O(1) space. Sliding window is a variation.</div>
+    <div class="tip"><strong>Sliding Window:</strong> Fixed or variable window over arrays/strings. Use HashMap to track counts. O(n) time.</div>
+    <div class="tip"><strong>Prefix Sum:</strong> Precompute cumulative sums for O(1) range queries. Useful for subarray sum problems.</div>
+    <div class="tip"><strong>Top-K Elements:</strong> Use a min-heap of size K. O(n log k) time. Or use quickselect for O(n) average.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ BELLMAN-FORD ═══ -->
+  <section id="bellman-ford">
+    <span class="badge b-grph">Graph Algorithm</span>
+    <h2>Bellman-Ford Algorithm</h2>
+
+    <div class="block-desc">
+      <span>Single-source shortest path algorithm that handles <strong>negative edge weights</strong> and detects negative weight cycles. Runs in <code>O(VE)</code> time.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_graphs.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BellmanFord.java</div>
+        <pre><span class="kw">class</span> <span class="lc">Edge</span> {
+  <span class="kw">int</span> src, dest, weight;
+  <span class="lc">Edge</span>(<span class="kw">int</span> s, <span class="kw">int</span> d, <span class="kw">int</span> w) {
+    src = s; dest = d; weight = w;
+  }
+}
+
+<span class="kw">void</span> <span class="lm">bellmanFord</span>(<span class="lc">Edge</span>[] edges, <span class="kw">int</span> V, <span class="kw">int</span> src) {
+  <span class="kw">int</span>[] dist = <span class="kw">new int</span>[V];
+  Arrays.<span class="lm">fill</span>(dist, Integer.MAX_VALUE);
+  dist[src] = <span class="ln">0</span>;
+
+  <span class="lcm">// Relax edges V-1 times</span>
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">1</span>; i &lt; V; i++) {
+    <span class="kw">for</span> (<span class="lc">Edge</span> e : edges) {
+      <span class="kw">if</span> (dist[e.src] != Integer.MAX_VALUE
+          && dist[e.src] + e.weight &lt; dist[e.dest]) {
+        dist[e.dest] = dist[e.src] + e.weight;
+      }
+    }
+  }
+
+  <span class="lcm">// Check for negative-weight cycles</span>
+  <span class="kw">for</span> (<span class="lc">Edge</span> e : edges) {
+    <span class="kw">if</span> (dist[e.src] != Integer.MAX_VALUE
+        && dist[e.src] + e.weight &lt; dist[e.dest]) {
+      System.out.<span class="lm">println</span>(<span class="ls">"Negative cycle detected"</span>);
+      <span class="kw">return</span>;
+    }
+  }
+
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; V; i++) {
+    System.out.<span class="lm">println</span>(i + <span class="ls">" → "</span> + dist[i]);
+  }
+}
+
+<span class="lcm">// Time:  O(V × E)</span>
+<span class="lcm">// Space: O(V)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ How It Works</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Steps</strong></div>
+          <div>1. Init dist[src] = 0, all others = ∞</div>
+          <div>2. Repeat V-1 times: relax all edges</div>
+          <div>3. One more pass — if dist improves, negative cycle</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Key Properties</strong></div>
+          <div>Handles negative edge weights ✓</div>
+          <div>Detects negative-weight cycles ✓</div>
+          <div>Edge list representation</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">When to Use</strong></div>
+          <div>Graph has negative weights</div>
+          <div>Need to detect negative cycles</div>
+          <div>Single-source shortest path</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ DIJKSTRA ═══ -->
+  <section id="dijkstra">
+    <span class="badge b-grph">Graph Algorithm</span>
+    <h2>Dijkstra's Algorithm</h2>
+
+    <div class="block-desc">
+      <span>Single-source shortest path for graphs with <strong>non-negative weights</strong>. Uses a priority queue for <code>O((V+E) log V)</code> time. Greedy approach.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_graphs.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Dijkstra.java</div>
+        <pre><span class="kw">void</span> <span class="lm">dijkstra</span>(<span class="lc">List</span>&lt;<span class="lc">List</span>&lt;<span class="lc">int</span>[]&gt;&gt; adj, <span class="kw">int</span> src) {
+  <span class="kw">int</span> V = adj.<span class="lm">size</span>();
+  <span class="kw">int</span>[] dist = <span class="kw">new int</span>[V];
+  Arrays.<span class="lm">fill</span>(dist, Integer.MAX_VALUE);
+  dist[src] = <span class="ln">0</span>;
+
+  <span class="lcm">// PriorityQueue stores {distance, vertex}</span>
+  <span class="lc">PriorityQueue</span>&lt;<span class="kw">int</span>[]&gt; pq = <span class="kw">new</span> <span class="lc">PriorityQueue</span>&lt;&gt;(
+    <span class="lc">Comparator</span>.<span class="lm">comparingInt</span>(a -&gt; a[<span class="ln">0</span>])
+  );
+  pq.<span class="lm">offer</span>(<span class="kw">new int</span>[] {<span class="ln">0</span>, src});
+
+  <span class="kw">while</span> (!pq.<span class="lm">isEmpty</span>()) {
+    <span class="kw">int</span>[] cur = pq.<span class="lm">poll</span>();
+    <span class="kw">int</span> d = cur[<span class="ln">0</span>], u = cur[<span class="ln">1</span>];
+    <span class="kw">if</span> (d &gt; dist[u]) <span class="kw">continue</span>;  <span class="lcm">// stale entry</span>
+
+    <span class="kw">for</span> (<span class="kw">int</span>[] edge : adj.<span class="lm">get</span>(u)) {
+      <span class="kw">int</span> v = edge[<span class="ln">0</span>], w = edge[<span class="ln">1</span>];
+      <span class="kw">if</span> (dist[u] + w &lt; dist[v]) {
+        dist[v] = dist[u] + w;
+        pq.<span class="lm">offer</span>(<span class="kw">new int</span>[] {dist[v], v});
+      }
+    }
+  }
+}
+
+<span class="lcm">// Time:  O((V + E) log V) with binary heap</span>
+<span class="lcm">// Space: O(V)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ How It Works</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Greedy Strategy</strong></div>
+          <div>1. Init dist[src] = 0, all others = ∞</div>
+          <div>2. Pick unvisited vertex with smallest dist</div>
+          <div>3. Relax all its neighbors</div>
+          <div>4. Repeat until PQ is empty</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Constraints</strong></div>
+          <div>Non-negative edge weights only ✗</div>
+          <div>No negative cycle detection</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">When to Use</strong></div>
+          <div>Weighted graph, non-negative edges</div>
+          <div>Single-source shortest path</div>
+          <div>Faster than Bellman-Ford</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ FLOYD-WARSHALL ═══ -->
+  <section id="floyd-warshall">
+    <span class="badge b-grph">Graph Algorithm</span>
+    <h2>Floyd-Warshall Algorithm</h2>
+
+    <div class="block-desc">
+      <span><strong>All-pairs shortest path</strong> using dynamic programming. Works with negative edges (not negative cycles). Runs in <code>O(V³)</code> time, <code>O(V²)</code> space.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_graphs.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">FloydWarshall.java</div>
+        <pre><span class="kw">void</span> <span class="lm">floydWarshall</span>(<span class="kw">int</span>[][] graph) {
+  <span class="kw">int</span> V = graph.length;
+  <span class="kw">int</span>[][] dist = <span class="kw">new int</span>[V][V];
+
+  <span class="lcm">// Init dist matrix from graph</span>
+  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; V; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="ln">0</span>; j &lt; V; j++) {
+      dist[i][j] = graph[i][j];
+    }
+  }
+
+  <span class="lcm">// k = intermediate vertex</span>
+  <span class="kw">for</span> (<span class="kw">int</span> k = <span class="ln">0</span>; k &lt; V; k++) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; V; i++) {
+      <span class="kw">for</span> (<span class="kw">int</span> j = <span class="ln">0</span>; j &lt; V; j++) {
+        <span class="kw">if</span> (dist[i][k] != Integer.MAX_VALUE
+            && dist[k][j] != Integer.MAX_VALUE) {
+          dist[i][j] = Math.<span class="lm">min</span>(dist[i][j],
+              dist[i][k] + dist[k][j]);
+        }
+      }
+    }
+  }
+
+  <span class="lcm">// Print shortest path matrix</span>
+  <span class="kw">for</span> (<span class="kw">int</span>[] row : dist) {
+    System.out.<span class="lm">println</span>(Arrays.<span class="lm">toString</span>(row));
+  }
+}
+
+<span class="lcm">// Time:  O(V³)</span>
+<span class="lcm">// Space: O(V²)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ How It Works</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">DP Recurrence</strong></div>
+          <div>dist[i][j] = min(dist[i][j],</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[i][k] + dist[k][j])</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Key Properties</strong></div>
+          <div>All-pairs shortest paths</div>
+          <div>Handles negative edges</div>
+          <div>Does NOT handle negative cycles</div>
+          <div>Very simple 3-loop implementation</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">When to Use</strong></div>
+          <div>Dense graphs (V small)</div>
+          <div>Need shortest paths between ALL pairs</div>
+          <div>Transitive closure variant</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ HASHING ═══ -->
+  <section id="hashing">
+    <span class="badge b-hash">Data Structure</span>
+    <h2>Hashing Concepts</h2>
+
+    <div class="block-desc">
+      <span><strong>Hash functions</strong> map keys to bucket indices. <code>O(1)</code> average lookup. Collision handling via chaining or open addressing. Load factor triggers resize.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_data_hashmaps.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">HashingInternals.java</div>
+        <pre><span class="lcm">// Java's String.hashCode(): h = s[0]*31^(n-1) + ... + s[n-1]</span>
+<span class="kw">int</span> <span class="lm">hash</span>(<span class="lc">String</span> key) {
+  <span class="kw">int</span> h = <span class="ln">0</span>;
+  <span class="kw">for</span> (<span class="kw">char</span> c : key.<span class="lm">toCharArray</span>()) {
+    h = h * <span class="ln">31</span> + c;
+  }
+  <span class="kw">return</span> h;
+}
+
+<span class="lcm">// Bucket index from hash code</span>
+<span class="kw">int</span> idx = hash &amp; (capacity - <span class="ln">1</span>);  <span class="lcm">// same as hash % capacity</span>
+
+<span class="lcm">// HashMap internals:</span>
+<span class="lcm">// Default capacity: 16, load factor: 0.75</span>
+<span class="lcm">// When entries &gt; capacity × loadFactor → resize 2x</span>
+<span class="lcm">// Bucket chain &gt; 8 entries → treeify (red-black)</span>
+
+<span class="lc">HashMap</span>&lt;<span class="lc">String</span>, <span class="lc">Integer</span>&gt; map = <span class="kw">new</span> <span class="lc">HashMap</span>&lt;&gt;();
+map.<span class="lm">put</span>(<span class="ls">"hello"</span>, <span class="ln">1</span>);
+map.<span class="lm">get</span>(<span class="ls">"hello"</span>);            <span class="lcm">// O(1) avg</span>
+map.<span class="lm">containsKey</span>(<span class="ls">"hello"</span>);  <span class="lcm">// O(1) avg</span>
+
+<span class="lcm">// HashSet — backed by HashMap with dummy value</span>
+<span class="lc">HashSet</span>&lt;<span class="lc">String</span>&gt; set = <span class="kw">new</span> <span class="lc">HashSet</span>&lt;&gt;();
+set.<span class="lm">add</span>(<span class="ls">"apple"</span>);
+set.<span class="lm">contains</span>(<span class="ls">"apple"</span>);    <span class="lcm">// O(1) avg</span>
+
+<span class="lcm">// Override hashCode + equals for custom objects</span>
+<span class="kw">class</span> <span class="lc">Person</span> {
+  <span class="lc">String</span> name;
+  <span class="kw">int</span> age;
+
+  <span class="kw">public int</span> <span class="lm">hashCode</span>() {
+    <span class="kw">return</span> Objects.<span class="lm">hash</span>(name, age);
+  }
+
+  <span class="kw">public boolean</span> <span class="lm">equals</span>(<span class="lc">Object</span> o) {
+    <span class="kw">if</span> (<span class="kw">this</span> == o) <span class="kw">return true</span>;
+    <span class="kw">if</span> (!(o <span class="kw">instanceof</span> <span class="lc">Person</span>)) <span class="kw">return false</span>;
+    <span class="lc">Person</span> p = (<span class="lc">Person</span>) o;
+    <span class="kw">return</span> age == p.age && name.<span class="lm">equals</span>(p.name);
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Collision Handling</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Separate Chaining (Java)</strong></div>
+          <div>Each bucket → linked list or tree</div>
+          <div>Chain &gt; 8 → treeify (O(log n))</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Open Addressing</strong></div>
+          <div>Linear probe: (h+1)%n, (h+2)%n...</div>
+          <div>Quadratic probe: h+i²</div>
+          <div>Double hash: h1+i×h2</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Load Factor &amp; Resize</strong></div>
+          <div>Default threshold: 0.75</div>
+          <div>Resize = double capacity, rehash all</div>
+          <div>Cost: O(n) amortized per insert</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ PARTITION EQUAL SUBSET SUM ═══ -->
+  <section id="partition-equal">
+    <span class="badge b-dp">DP Algorithm</span>
+    <h2>Partition Equal Subset Sum</h2>
+
+    <div class="block-desc">
+      <span>Given an array, determine if it can be split into two subsets with equal sum. Reduce to <strong>subset sum = totalSum/2</strong>. Uses 1D boolean DP in <code>O(n × target)</code>.</span>
+      <a class="w3-link" href="https://www.w3schools.com/dsa/dsa_algo_dynamicprog.php" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">PartitionEqualSubset.java</div>
+        <pre><span class="kw">boolean</span> <span class="lm">canPartition</span>(<span class="kw">int</span>[] nums) {
+  <span class="kw">int</span> total = <span class="ln">0</span>;
+  <span class="kw">for</span> (<span class="kw">int</span> num : nums) total += num;
+
+  <span class="lcm">// Odd total → impossible to split equally</span>
+  <span class="kw">if</span> (total % <span class="ln">2</span> != <span class="ln">0</span>) <span class="kw">return false</span>;
+
+  <span class="kw">int</span> target = total / <span class="ln">2</span>;
+  <span class="kw">boolean</span>[] dp = <span class="kw">new boolean</span>[target + <span class="ln">1</span>];
+  dp[<span class="ln">0</span>] = <span class="kw">true</span>;  <span class="lcm">// zero sum always possible</span>
+
+  <span class="kw">for</span> (<span class="kw">int</span> num : nums) {
+    <span class="lcm">// Traverse right-to-left to avoid reuse</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = target; i &gt;= num; i--) {
+      dp[i] = dp[i] || dp[i - num];
+    }
+  }
+
+  <span class="kw">return</span> dp[target];
+}
+
+<span class="lcm">// Example: [1, 5, 11, 5]</span>
+<span class="lcm">// total = 22, target = 11</span>
+<span class="lcm">// Subsets: [11] and [1, 5, 5] → true</span>
+
+<span class="lcm">// Time:  O(n × target)</span>
+<span class="lcm">// Space: O(target)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ DP Walkthrough</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Key Insight</strong></div>
+          <div>If totalSum is odd → return false</div>
+          <div>Otherwise find subset with sum = total/2</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">dp[i] = can we make sum i?</strong></div>
+          <div>Init: dp[0] = true</div>
+          <div>For each num: update dp[target → num]</div>
+          <div>Right-to-left prevents counting same num twice</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Related Problems</strong></div>
+          <div>0/1 Knapsack — same DP structure</div>
+          <div>Subset Sum, Target Sum (LC #494)</div>
+          <div>Count of Subset Sum</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ ALGO COMPLEXITY ═══ -->
+  <section id="algo-complexity">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Algorithmic Complexity</h2>
+
+    <div class="block-desc">
+      <span><strong>Amortized analysis</strong>, <strong>Master theorem</strong>, and <strong>recurrence relations</strong> — advanced tools for analyzing algorithm efficiency beyond basic Big O.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Amortized &amp; Recurrences</div>
+        <pre><span class="lcm">// ── Amortized Analysis ──</span>
+<span class="lcm">// Average cost over a sequence of operations</span>
+<span class="lcm">// ArrayList.add(): usually O(1), occasionally O(n)</span>
+<span class="lcm">// → amortized O(1) per operation</span>
+<span class="lc">ArrayList</span>&lt;<span class="lc">Integer</span>&gt; list = <span class="kw">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; <span class="ln">1000000</span>; i++) {
+  list.<span class="lm">add</span>(i);  <span class="lcm">// amortized O(1)</span>
+}
+
+<span class="lcm">// ── Master Theorem ──</span>
+<span class="lcm">// For T(n) = aT(n/b) + O(n^d):</span>
+<span class="lcm">//   Case 1: log_b(a) &gt; d → O(n^log_b(a))</span>
+<span class="lcm">//   Case 2: log_b(a) = d → O(n^d × log n)</span>
+<span class="lcm">//   Case 3: log_b(a) &lt; d → O(n^d)</span>
+<span class="lcm">//</span>
+<span class="lcm">// Examples:</span>
+<span class="lcm">// Merge Sort: T(n)=2T(n/2)+O(n)</span>
+<span class="lcm">//   a=2, b=2, d=1 → log₂2=1=d → Case 2</span>
+<span class="lcm">//   → O(n log n)</span>
+<span class="lcm">//</span>
+<span class="lcm">// Binary Search: T(n)=T(n/2)+O(1)</span>
+<span class="lcm">//   a=1, b=2, d=0 → log₂1=0=d → Case 2</span>
+<span class="lcm">//   → O(log n)</span>
+
+<span class="lcm">// ── Recurrence Relations ──</span>
+<span class="lcm">// T(n) = T(n-1) + O(n) → O(n²)  (selection sort)</span>
+<span class="lcm">// T(n) = T(n-1) + O(1) → O(n)   (linked list traversal)</span>
+<span class="lcm">// T(n) = 2T(n-1) + O(1) → O(2ⁿ) (tower of hanoi)</span>
+<span class="lcm">// T(n) = T(n/2) + O(1) → O(log n) (binary search)</span>
+<span class="lcm">// T(n) = 2T(n/2) + O(n) → O(n log n) (merge sort)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Quick Reference</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Amortized Analysis</strong></div>
+          <div>3 methods: aggregate, accounting, potential</div>
+          <div>ArrayList, HashMap, Splay tree</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Master Theorem</strong></div>
+          <div>For T(n) = aT(n/b) + O(n^d)</div>
+          <div>Compare log_b(a) vs d</div>
+          <div>Covers most divide-and-conquer algos</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Space Complexity Classes</strong></div>
+          <div>O(1) — in-place, fixed vars</div>
+          <div>O(log n) — recursive halving</div>
+          <div>O(n) — extra array or full recursion</div>
+          <div>O(n²) — adjacency matrix, 2D DP</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>DSA Cheatsheet &mdash; data structures & algorithms reference</footer>
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

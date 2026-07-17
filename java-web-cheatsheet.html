@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java Web &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .lk  { color: #bb9af7; }
+    .lc  { color: #7aa2f7; }
+    .ls  { color: #9ece6a; }
+    .lcm { color: #565f89; }
+    .lm  { color: #e0af68; }
+    .lo  { color: #f7768e; }
+    .ln  { color: #ff9e64; }
+
+    .badge { display:inline-block; padding:0.15rem 0.55rem; border-radius:4px; font-size:0.62rem; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; margin-bottom:0.6rem; }
+    .b-srv  { background:#1e40af; color:#fff; }
+    .b-jsp  { background:#065f46; color:#fff; }
+    .b-str  { background:#7c3aed; color:#fff; }
+    .b-xml  { background:#92400e; color:#fff; }
+    .b-xsd  { background:#be185d; color:#fff; }
+
+    .cmp-table { width:100%; border-collapse:collapse; font-size:0.7rem; margin:0.75rem 0; }
+    .cmp-table th { background:var(--accent); color:#fff; padding:0.45rem 0.7rem; text-align:left; font-weight:600; }
+    .cmp-table td { padding:0.4rem 0.7rem; border-bottom:1px solid var(--border); color:var(--text-muted); }
+    .cmp-table tr:hover td { background:var(--surface); }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('Java Web')</script>
+<script>renderSourceLink('Java Web')</script>
+
+<main>
+  <div class="page-header">
+    <h1>Java Web</h1>
+    <p class="subtitle">Servlet, JSP, Struts &amp; XML quick reference</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#servlet">Servlet</a>
+      <a href="#jsp">JSP</a>
+      <a href="#struts">Struts</a>
+      <a href="#xml">XML &amp; DTD</a>
+      <a href="#schema">XSD Schema</a>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ SERVLET ═══ -->
+  <section id="servlet">
+    <span class="badge b-srv">Server-Side</span>
+    <h2>Servlet</h2>
+
+    <div class="block-desc">
+      <span><strong>HttpServletRequest / HttpServletResponse</strong> &mdash; Tomcat creates these objects automatically. Client sends request, server returns response.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools &rarr;</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">HttpServlet.java</div>
+        <pre><span class="kw">import</span> java.io.*;
+<span class="kw">import</span> javax.servlet.*;
+<span class="kw">import</span> javax.servlet.http.*;
+
+<span class="kw">public class</span> <span class="lc">MyServlet</span> <span class="kw">extends</span> <span class="lc">HttpServlet</span> {
+
+  <span class="kw">protected void</span> <span class="lm">doGet</span>(<span class="lc">HttpServletRequest</span> req,
+      <span class="lc">HttpServletResponse</span> resp)
+      <span class="kw">throws</span> <span class="lc">IOException</span>, <span class="lc">ServletException</span> {
+
+    <span class="lcm">// Read request data</span>
+    <span class="lc">String</span> user = req.<span class="lm">getParameter</span>(<span class="ls">"user"</span>);
+
+    <span class="lcm">// Set response content type</span>
+    resp.<span class="lm">setContentType</span>(<span class="ls">"text/html"</span>);
+
+    <span class="lcm">// Write response</span>
+    <span class="lc">PrintWriter</span> out = resp.<span class="lm">getWriter</span>();
+    out.<span class="lm">println</span>(<span class="ls">"&lt;h1&gt;Hello "</span> + user + <span class="ls">"&lt;/h1&gt;"</span>);
+  }
+
+  <span class="kw">protected void</span> <span class="lm">doPost</span>(<span class="lc">HttpServletRequest</span> req,
+      <span class="lc">HttpServletResponse</span> resp)
+      <span class="kw">throws</span> <span class="lc">IOException</span>, <span class="lc">ServletException</span> {
+    <span class="lm">doGet</span>(req, resp);
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Lifecycle</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Servlet Lifecycle</strong></div>
+          <div>1. <code>init()</code> &mdash; called once at startup</div>
+          <div>2. <code>service()</code> &mdash; routes to doGet/doPost</div>
+          <div>3. <code>destroy()</code> &mdash; cleanup on shutdown</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Request / Response</strong></div>
+          <div><strong>Client &rarr; Server:</strong> HttpServletRequest</div>
+          <div><strong>Server &rarr; Client:</strong> HttpServletResponse</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">HTTP Methods</strong></div>
+          <div><code>doGet()</code> &mdash; URL parameters, bookmark-safe</div>
+          <div><code>doPost()</code> &mdash; form body, secure for data</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>RequestDispatcher</strong> &mdash; forwards request/response to another servlet or JSP. Data is shared via <code>request.setAttribute()</code>.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">RequestDispatcher</div>
+        <pre><span class="lcm">// Servlet A — set data and forward</span>
+<span class="lc">RequestDispatcher</span> rd = req.<span class="lm">getRequestDispatcher</span>(<span class="ls">"targetServletURL"</span>);
+req.<span class="lm">setAttribute</span>(<span class="ls">"n"</span>, <span class="ln">2</span>);
+rd.<span class="lm">forward</span>(req, resp);
+
+<span class="lcm">// Servlet B — read forwarded data</span>
+<span class="kw">int</span> n = (<span class="lc">Integer</span>) req.<span class="lm">getAttribute</span>(<span class="ls">"n"</span>);
+
+<span class="lcm">// sendRedirect() vs forward()</span>
+<span class="lcm">// forward  — server-side, same request</span>
+<span class="lcm">// redirect — client-side, new request</span>
+resp.<span class="lm">sendRedirect</span>(<span class="ls">"otherPage.jsp"</span>);</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Forward vs Redirect</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">forward()</strong></div>
+          <div>Server-side transfer</div>
+          <div>Same request/response objects</div>
+          <div>URL stays the same</div>
+          <div>Use for internal dispatch</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">sendRedirect()</strong></div>
+          <div>Client-side redirect (302)</div>
+          <div>New request/response created</div>
+          <div>URL changes in browser</div>
+          <div>Use for external navigation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>HttpSession</strong> &mdash; stores data across multiple requests for the same user. Server maintains session state.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">HttpSession</div>
+        <pre><span class="lcm">// Servlet 1 — store session data</span>
+<span class="lc">HttpSession</span> session = req.<span class="lm">getSession</span>();
+session.<span class="lm">setAttribute</span>(<span class="ls">"n"</span>, <span class="ln">10</span>);
+
+<span class="lcm">// Servlet 2 — retrieve session data</span>
+<span class="lc">HttpSession</span> session = req.<span class="lm">getSession</span>();
+<span class="kw">int</span> temp = (<span class="lc">Integer</span>) session.<span class="lm">getAttribute</span>(<span class="ls">"n"</span>);
+
+<span class="lcm">// Delete session attribute</span>
+session.<span class="lm">removeAttribute</span>(<span class="ls">"n"</span>);
+
+<span class="lcm">// Invalidate entire session</span>
+session.<span class="lm">invalidate</span>();</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Session Details</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">How it Works</strong></div>
+          <div>1. <code>getSession()</code> creates/returns session</div>
+          <div>2. Session ID stored in cookie (JSESSIONID)</div>
+          <div>3. Server maps requests to sessions</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Key Methods</strong></div>
+          <div><code>getAttribute(name)</code> &mdash; get value</div>
+          <div><code>setAttribute(name, val)</code> &mdash; set value</div>
+          <div><code>removeAttribute(name)</code> &mdash; remove value</div>
+          <div><code>invalidate()</code> &mdash; destroy session</div>
+          <div><code>getId()</code> &mdash; get session ID</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Scope</strong></div>
+          <div>Session &mdash; across requests (user-specific)</div>
+          <div>Request &mdash; within one request only</div>
+          <div>Application &mdash; shared by all users</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Cookies</strong> &mdash; client-side storage. Data is sent back to server with every request. Use for lightweight preferences.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Cookies</div>
+        <pre><span class="lcm">// Servlet 1 — create and send cookie</span>
+<span class="lc">Cookie</span> cookie = <span class="kw">new</span> <span class="lc">Cookie</span>(<span class="ls">"n"</span>, <span class="ls">"10"</span>);
+cookie.<span class="lm">setMaxAge</span>(<span class="ln">86400</span>); <span class="lcm">// 24 hours</span>
+resp.<span class="lm">addCookie</span>(cookie);
+
+<span class="lcm">// Servlet 2 — read cookies</span>
+<span class="lc">Cookie</span>[] cookies = req.<span class="lm">getCookies</span>();
+<span class="kw">for</span> (<span class="lc">Cookie</span> c : cookies) {
+  <span class="kw">if</span> (c.<span class="lm">getName</span>().<span class="lm">equals</span>(<span class="ls">"n"</span>)) {
+    <span class="lc">String</span> temp = c.<span class="lm">getValue</span>();
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Cookie vs Session</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:#9ece6a;">Cookies (Client)</strong></div>
+          <div>Stored in browser</div>
+          <div>Sent with every request</div>
+          <div>Size limit ~4KB</div>
+          <div>User can disable/delete</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#7aa2f7;">Sessions (Server)</strong></div>
+          <div>Stored on server</div>
+          <div>Referenced by session ID</div>
+          <div>No size limit</div>
+          <div>More secure (not exposed)</div>
+          <div style="margin-top:0.5rem;color:var(--accent);">Cookie: remember me &bull; Session: shopping cart</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>ServletContext vs ServletConfig</strong> &mdash; Context is application-wide (shared by all servlets), Config is servlet-specific.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">web.xml Config</div>
+        <pre><span class="lcm">&lt;!-- web.xml — application-wide params --&gt;</span>
+&lt;<span class="lc">context-param</span>&gt;
+  &lt;<span class="lc">param-name</span>&gt;dbPassword&lt;/<span class="lc">param-name</span>&gt;
+  &lt;<span class="lc">param-value</span>&gt;secret123&lt;/<span class="lc">param-value</span>&gt;
+&lt;/<span class="lc">context-param</span>&gt;
+
+<span class="lcm">&lt;!-- Servlet-specific params --&gt;</span>
+&lt;<span class="lc">servlet</span>&gt;
+  &lt;<span class="lc">servlet-name</span>&gt;MyServlet&lt;/<span class="lc">servlet-name</span>&gt;
+  &lt;<span class="lc">init-param</span>&gt;
+    &lt;<span class="lc">param-name</span>&gt;maxConnections&lt;/<span class="lc">param-name</span>&gt;
+    &lt;<span class="lc">param-value</span>&gt;100&lt;/<span class="lc">param-value</span>&gt;
+  &lt;/<span class="lc">init-param</span>&gt;
+&lt;/<span class="lc">servlet</span>&gt;
+
+<span class="lcm">// Java — reading params</span>
+<span class="lc">String</span> dbPass = <span class="lm">getServletContext</span>()
+    .<span class="lm">getInitParameter</span>(<span class="ls">"dbPassword"</span>);
+
+<span class="lc">String</span> maxConn = <span class="lm">getServletConfig</span>()
+    .<span class="lm">getInitParameter</span>(<span class="ls">"maxConnections"</span>);</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Config Comparison</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">ServletContext</strong></div>
+          <div>Shared across ALL servlets</div>
+          <div>Defined with <code>&lt;context-param&gt;</code></div>
+          <div>Use for: DB config, app-wide settings</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">ServletConfig</strong></div>
+          <div>Only for current servlet</div>
+          <div>Defined with <code>&lt;init-param&gt;</code></div>
+          <div>Use for: servlet-specific settings</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Both use getInitParameter(name)</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Annotations vs web.xml</strong> &mdash; modern Servlet 3.0+ uses annotations, older versions use XML deployment descriptor.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Annotations vs XML</div>
+        <pre><span class="lcm">// Modern — Annotation (Servlet 3.0+)</span>
+<span class="kw">@WebServlet</span>(<span class="ls">"/myServlet"</span>)
+<span class="kw">public class</span> <span class="lc">MyServlet</span>
+    <span class="kw">extends</span> <span class="lc">HttpServlet</span> { ... }
+
+<span class="lcm">// With init params</span>
+<span class="kw">@WebServlet</span>(
+  name = <span class="ls">"MyServlet"</span>,
+  urlPatterns = {<span class="ls">"/myServlet"</span>, <span class="ls">"/alt"</span>},
+  initParams = {
+    <span class="kw">@WebInitParam</span>(name=<span class="ls">"max"</span>, value=<span class="ls">"100"</span>)
+  }
+)
+
+<span class="lcm">// Legacy — web.xml</span>
+&lt;<span class="lc">servlet</span>&gt;
+  &lt;<span class="lc">servlet-name</span>&gt;MyServlet&lt;/<span class="lc">servlet-name</span>&gt;
+  &lt;<span class="lc">servlet-class</span>&gt;com.app.MyServlet&lt;/<span class="lc">servlet-class</span>&gt;
+&lt;/<span class="lc">servlet</span>&gt;
+&lt;<span class="lc">servlet-mapping</span>&gt;
+  &lt;<span class="lc">servlet-name</span>&gt;MyServlet&lt;/<span class="lc">servlet-name</span>&gt;
+  &lt;<span class="lc">url-pattern</span>&gt;/myServlet&lt;/<span class="lc">url-pattern</span>&gt;
+&lt;/<span class="lc">servlet-mapping</span>&gt;</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Comparison</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:#9ece6a;">Annotations (@WebServlet)</strong></div>
+          <div>No XML needed</div>
+          <div>Compact, readable</div>
+          <div>Requires Servlet 3.0+</div>
+          <div>Harder to change without recompile</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#7aa2f7;">web.xml</strong></div>
+          <div>External configuration</div>
+          <div>Change without recompile</div>
+          <div>Works with all versions</div>
+          <div>Verbose for many servlets</div>
+          <div style="margin-top:0.5rem;color:var(--accent);">Modern projects: annotations preferred</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ JSP ═══ -->
+  <section id="jsp">
+    <span class="badge b-jsp">View Layer</span>
+    <h2>JSP</h2>
+
+    <div class="block-desc">
+      <span><strong>Scripting Elements</strong> &mdash; Scriptlet <code>&lt;% %&gt;</code>, Declaration <code>&lt;%! %&gt;</code>, Expression <code>&lt;%= %&gt;</code> for embedding Java in HTML.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_jsp.asp" target="_blank">W3Schools &rarr;</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Scripting Elements</div>
+        <pre><span class="lcm">&lt;!-- Scriptlet: Java code in service method --&gt;</span>
+&lt;<span class="lo">%</span>
+  <span class="lc">String</span> name = <span class="ls">"User"</span>;
+  out.<span class="lm">println</span>(<span class="ls">"Hello "</span> + name);
+<span class="lo">%</span>&gt;
+
+<span class="lcm">&lt;!-- Declaration: Class-level variable/method --&gt;</span>
+&lt;<span class="lo">%!</span>
+  <span class="kw">int</span> count = <span class="ln">0</span>;
+  <span class="kw">public int</span> <span class="lm">getCount</span>() {
+    <span class="kw">return</span> ++count;
+  }
+<span class="lo">%!</span>&gt;
+
+<span class="lcm">&lt;!-- Expression: Print value directly --&gt;</span>
+Current Count: &lt;<span class="lo">%=</span> <span class="lm">getCount</span>() <span class="lo">%&gt;</span>
+
+<span class="lcm">&lt;!-- No semicolon in expression! --&gt;</span>
+&lt;<span class="lo">%=</span> <span class="ls">"Hello World"</span> <span class="lo">%&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Element Types</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Scriptlet &lt;% %&gt;</strong></div>
+          <div>Java code inside service method</div>
+          <div>Scope: request processing only</div>
+          <div>Can use <code>out</code>, <code>request</code>, <code>response</code></div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Declaration &lt;%! %&gt;</strong></div>
+          <div>Variables/methods at class level</div>
+          <div>Scope: entire servlet instance</div>
+          <div>Shared across all requests</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Expression &lt;%= %&gt;</strong></div>
+          <div>Equivalent to <code>out.println()</code></div>
+          <div>No semicolon needed</div>
+          <div>Evaluates and outputs result</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Directives</strong> &mdash; <code>@page</code>, <code>@include</code>, <code>@taglib</code> control translation-time behavior and imports.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Directives</div>
+        <pre><span class="lcm">&lt;%@ page %&gt; — Page attributes --&gt;</span>
+&lt;<span class="lo">%@</span> <span class="lm">page</span>
+  <span class="lm">language</span>=<span class="ls">"java"</span>
+  <span class="lm">contentType</span>=<span class="ls">"text/html; charset=UTF-8"</span>
+  <span class="lm">import</span>=<span class="ls">"java.util.*, java.sql.*"</span>
+  <span class="lm">errorPage</span>=<span class="ls">"error.jsp"</span>
+  <span class="lm">session</span>=<span class="ls">"true"</span> <span class="lo">%&gt;</span>
+
+<span class="lcm">&lt;%@ include %&gt; — Static include --&gt;</span>
+&lt;<span class="lo">%@</span> <span class="lm">include</span> <span class="lm">file</span>=<span class="ls">"header.jsp"</span> <span class="lo">%&gt;</span>
+
+<span class="lcm">&lt;%@ taglib %&gt; — Custom tag libraries --&gt;</span>
+&lt;<span class="lo">%@</span> <span class="lm">taglib</span>
+  <span class="lm">uri</span>=<span class="ls">"http://java.sun.com/jsp/jstl/core"</span>
+  <span class="lm">prefix</span>=<span class="ls">"c"</span> <span class="lo">%&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Directive Summary</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">@page</strong></div>
+          <div>language, contentType, import</div>
+          <div>errorPage, session, buffer</div>
+          <div>Controls page-level settings</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">@include</strong></div>
+          <div>Static file inclusion at translation</div>
+          <div>Included content merged into JSP</div>
+          <div>One copy, shared headers/footers</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">@taglib</strong></div>
+          <div>Import custom tag libraries</div>
+          <div>Prefix maps to URI of TLD</div>
+          <div>Enables <code>&lt;c:if&gt;</code>, <code>&lt;c:forEach&gt;</code></div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Best Practice:</strong> Avoid heavy scriptlets &mdash; use JavaBeans or MVC</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>JSP Lifecycle</strong> &mdash; JSP is translated to a Servlet, compiled, and executed. Cached until the JSP file changes.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Lifecycle Steps</div>
+        <pre><span class="lcm">// JSP Lifecycle (automatic by JSP engine)</span>
+
+<span class="ln">1</span>. <span class="lc">JSP Engine</span> loads <span class="ls">index.jsp</span>
+
+<span class="ln">2</span>. <span class="lc">Translation</span> &mdash; converts to <span class="ls">index_jsp.java</span>
+   <span class="lcm">// HTML becomes println() statements</span>
+   <span class="lcm">// JSP tags become Java code</span>
+   <span class="lcm">// Directives configure the servlet</span>
+
+<span class="ln">3</span>. <span class="lc">Compilation</span> &mdash; javac to <span class="ls">index_jsp.class</span>
+
+<span class="ln">4</span>. <span class="lc">Execution</span> &mdash; service() generates HTML
+
+<span class="ln">5</span>. <span class="lc">Response</span> &mdash; HTML sent to browser
+
+<span class="lcm">// Key insight:</span>
+<span class="lcm">// JSP IS a Servlet under the hood</span>
+<span class="lcm">// The engine caches the compiled version</span>
+<span class="lcm">// Only recompiles when JSP changes</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Use Cases</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">When to Use JSP</strong></div>
+          <div>Dynamic content (user-specific data)</div>
+          <div>Database integration via JDBC</div>
+          <div>Enterprise applications with Servlets</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">MVC Pattern</strong></div>
+          <div><strong>Servlet</strong> = Controller (logic)</div>
+          <div><strong>JSP</strong> = View (presentation)</div>
+          <div><strong>JavaBean</strong> = Model (data)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">JSP vs Servlet</strong></div>
+          <div>JSP &mdash; HTML-centric with Java snippets</div>
+          <div>Servlet &mdash; Java-centric with HTML output</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ STRUTS ═══ -->
+  <section id="struts">
+    <span class="badge b-str">Framework</span>
+    <h2>Struts 1</h2>
+
+    <div class="block-desc">
+      <span><strong>Struts 1 Flow</strong> &mdash; Request &rarr; ActionServlet &rarr; struts-config.xml &rarr; JSP. Uses MVC pattern with XML-based configuration.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_servlets.asp" target="_blank">W3Schools &rarr;</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Request Flow</div>
+        <pre><span class="lcm">// Struts 1 MVC Request Flow</span>
+
+<span class="ln">1</span>. Client sends: <span class="ls">/hello.do</span>
+
+<span class="ln">2</span>. <span class="lc">ActionServlet</span> (Front Controller)
+   &darr; parses URL, reads struts-config.xml
+
+<span class="ln">3</span>. <span class="lc">struts-config.xml</span> (Action Mapping)
+   &lt;<span class="lc">action</span> <span class="lm">path</span>=<span class="ls">"/hello"</span>
+             <span class="lm">forward</span>=<span class="ls">"/pages/Hello.jsp"</span>/&gt;
+
+<span class="ln">4</span>. Forward to <span class="lc">Hello.jsp</span>
+
+<span class="ln">5</span>. JSP reads <span class="ls">MessageResources.properties</span>
+   <span class="lo">&lt;bean:message key="hello.message"/&gt;</span>
+
+<span class="ln">6</span>. Response: <span class="ls">"Hello World"</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Flow Diagram</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">MVC Components</strong></div>
+          <div><strong>Model</strong> &mdash; JavaBeans, EJBs</div>
+          <div><strong>View</strong> &mdash; JSP pages</div>
+          <div><strong>Controller</strong> &mdash; ActionServlet</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Request Lifecycle</strong></div>
+          <div>Client &rarr; ActionServlet</div>
+          <div>ActionServlet &rarr; struts-config.xml</div>
+          <div>struts-config.xml &rarr; Action class</div>
+          <div>Action class &rarr; JSP</div>
+          <div>JSP &rarr; Response to client</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>struts-config.xml</strong> &mdash; maps URL patterns to JSP pages and defines message resources for i18n.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">struts-config.xml</div>
+        <pre>&lt;<span class="lc">struts-config</span>&gt;
+
+  &lt;<span class="lc">action-mappings</span>&gt;
+    &lt;<span class="lc">action</span>
+      <span class="lm">path</span>=<span class="ls">"/hello"</span>
+      <span class="lm">forward</span>=<span class="ls">"/pages/Hello.jsp"</span>/&gt;
+  &lt;/<span class="lc">action-mappings</span>&gt;
+
+  &lt;<span class="lc">message-resources</span>
+    <span class="lm">parameter</span>=<span class="ls">"MessageResources"</span>/&gt;
+
+&lt;/<span class="lc">struts-config</span>&gt;
+
+<span class="lcm">&lt;!-- Key attributes --&gt;</span>
+<span class="lcm">// path     = URL pattern (appended with .do)</span>
+<span class="lcm">// forward  = destination JSP</span>
+<span class="lcm">// name     = form bean name (optional)</span>
+<span class="lcm">// type     = Action class (optional)</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Action Mapping</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">URL Pattern</strong></div>
+          <div><code>/hello</code> maps to <code>/hello.do</code></div>
+          <div>ActionServlet strips <code>.do</code></div>
+          <div>Looks up <code>/hello</code> in config</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Common Attributes</strong></div>
+          <div><code>path</code> &mdash; URL to match</div>
+          <div><code>forward</code> &mdash; JSP destination</div>
+          <div><code>name</code> &mdash; form bean reference</div>
+          <div><code>type</code> &mdash; Action class name</div>
+          <div><code>scope</code> &mdash; request or session</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Multiple mappings allowed</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>MessageResources</strong> &mdash; i18n text stored in <code>.properties</code> files. Referenced via <code>&lt;bean:message&gt;</code> tag in JSP.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">MessageResources.properties</div>
+        <pre><span class="lcm"># File: WEB-INF/classes/MessageResources.properties</span>
+<span class="ls">hello.message</span>=Hello World
+<span class="ls">welcome.message</span>=Welcome to Struts!
+<span class="ls">error.message</span>=Something went wrong
+<span class="ls">form.name</span>=Enter your name</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Hello.jsp</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">JSP using Bean Tag</strong></div>
+          <div>&lt;%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %&gt;</div>
+          <div>&lt;bean:message key="hello.message"/&gt;</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Result Output</strong></div>
+          <div>Hello World</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">i18n Support</strong></div>
+          <div>MessageResources_en.properties &mdash; English</div>
+          <div>MessageResources_fr.properties &mdash; French</div>
+          <div>Framework picks locale automatically</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>WAR Deployment</strong> &mdash; deploy by copying <code>.war</code> to Tomcat <code>webapps/</code>. Auto-extracts to folder.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">WAR File Structure</div>
+        <pre><span class="lcm">// Deploy: Copy struts1.war to tomcat/webapps/</span>
+<span class="lcm">// Tomcat auto-extracts to struts1/ folder</span>
+
+<span class="ls">struts1/</span>
+├── <span class="ls">WEB-INF/</span>
+│   ├── <span class="lm">struts-config.xml</span>      <span class="lcm">&larr; Action mappings</span>
+│   ├── <span class="ls">classes/</span>
+│   │   └── <span class="lm">MessageResources.properties</span>
+│   └── <span class="ls">lib/</span>                   <span class="lcm">&larr; Struts JARs</span>
+└── <span class="ls">pages/</span>
+    └── <span class="lm">Hello.jsp</span>              <span class="lcm">&larr; JSP View</span>
+
+<span class="lcm">// Access:</span>
+<span class="lcm">// http://localhost:8080/struts1/hello.do</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Deployment Checklist</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Key Files</strong></div>
+          <div><code>struts-config.xml</code> &mdash; action mappings</div>
+          <div><code>MessageResources.properties</code> &mdash; i18n text</div>
+          <div><code>Hello.jsp</code> &mdash; JSP view</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Quick Reference</strong></div>
+          <div>WAR &rarr; deploy app</div>
+          <div>Action Mapping &rarr; URL to JSP</div>
+          <div>Message Key &rarr; i18n text</div>
+          <div>Bean Tag &rarr; read property</div>
+          <div>URL Pattern &rarr; <code>/hello.do</code></div>
+          <div style="margin-top:0.5rem;color:var(--accent);">Struts1 is XML-config driven MVC</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ XML & DTD ═══ -->
+  <section id="xml">
+    <span class="badge b-xml">Markup</span>
+    <h2>XML &amp; DTD</h2>
+
+    <div class="block-desc">
+      <span><strong>XML Rules</strong> &mdash; well-formed XML requires one root element, case sensitivity, proper closing tags, and quoted attributes.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/" target="_blank">W3Schools &rarr;</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">XML Rules</div>
+        <pre><span class="lcm">&lt;!-- Rule 1: One root element required --&gt;</span>
+&lt;<span class="lc">root</span>&gt;
+  &lt;<span class="lc">child</span>&gt;content&lt;/<span class="lc">child</span>&gt;
+&lt;/<span class="lc">root</span>&gt;
+
+<span class="lcm">&lt;!-- Rule 2: Case sensitive --&gt;</span>
+&lt;<span class="lc">Tag</span>&gt;content&lt;/<span class="lc">Tag</span>&gt;     <span class="lcm">&larr; OK</span>
+&lt;<span class="lc">tag</span>&gt;content&lt;/<span class="lc">tag</span>&gt;     <span class="lcm">&larr; different element!</span>
+
+<span class="lcm">&lt;!-- Rule 3: Every tag needs a closing tag --&gt;</span>
+&lt;<span class="lc">tag</span>&gt;&lt;/<span class="lc">tag</span>&gt;              <span class="lcm">&larr; full form</span>
+&lt;<span class="lc">tag</span>/&gt;                   <span class="lcm">&larr; self-closing</span>
+
+<span class="lcm">&lt;!-- Rule 4: Attribute values in quotes --&gt;</span>
+&lt;<span class="lc">tag</span> <span class="lm">attr</span>=<span class="ls">"value"</span>/&gt;
+&lt;<span class="lc">tag</span> <span class="lm">attr</span>=<span class="ls">'value'</span>/&gt;</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Purpose</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">What is XML?</strong></div>
+          <div>eXtensible Markup Language</div>
+          <div>Self-describing data format</div>
+          <div>Platform &amp; language independent</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Common Uses</strong></div>
+          <div>Data transfer between systems</div>
+          <div>Configuration files</div>
+          <div>Custom markup for structured data</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Java Web XML Files</strong></div>
+          <div><code>web.xml</code> &mdash; Servlet config (DTD)</div>
+          <div><code>struts-config.xml</code> &mdash; Struts config</div>
+          <div><code>pom.xml</code> &mdash; Maven config (Schema)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>DTD (Document Type Definition)</strong> &mdash; defines the structure and allowed elements/attributes of an XML document.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_intro.asp" target="_blank">W3Schools &rarr;</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">DTD Syntax</div>
+        <pre><span class="lcm">&lt;!-- Reference DTD in XML --&gt;</span>
+&lt;?xml version=<span class="ls">"1.0"</span>?&gt;
+&lt;!DOCTYPE <span class="lc">teams</span> SYSTEM <span class="ls">"teams.dtd"</span>&gt;
+
+<span class="lcm">&lt;!-- Element declarations --&gt;</span>
+&lt;!ELEMENT <span class="lc">teams</span> (<span class="lc">team</span><span class="ln">+</span>)&gt;
+&lt;!ELEMENT <span class="lc">team</span> (<span class="lc">name</span>, <span class="lc">salary</span>)&gt;
+&lt;!ELEMENT <span class="lc">name</span> (#PCDATA)&gt;
+&lt;!ELEMENT <span class="lc">salary</span> (#PCDATA)&gt;
+
+<span class="lcm">&lt;!-- Attribute declaration --&gt;</span>
+&lt;!ATTLIST <span class="lc">team</span>
+  <span class="lm">aid</span> ID #REQUIRED&gt;
+
+<span class="lcm">&lt;!-- ATTLIST format: --&gt;</span>
+<span class="lcm">&lt;!ATTLIST element-name</span>
+<span class="lcm">  attr-name attr-type default&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ DTD Symbols</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Occurrence Symbols</strong></div>
+          <div><code>+</code> &mdash; 1 or more</div>
+          <div><code>*</code> &mdash; 0 or more</div>
+          <div><code>?</code> &mdash; 0 or 1 (optional)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Combination Symbols</strong></div>
+          <div><code>|</code> &mdash; OR (A|B|C)</div>
+          <div><code>(,)</code> &mdash; AND (comma-separated)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Data Types</strong></div>
+          <div><code>#PCDATA</code> &mdash; parsed text content</div>
+          <div><code>EMPTY</code> &mdash; no content</div>
+          <div><code>ANY</code> &mdash; any content allowed</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Attribute Defaults</strong></div>
+          <div><code>#REQUIRED</code> &mdash; mandatory</div>
+          <div><code>#IMPLIED</code> &mdash; optional</div>
+          <div><code>#FIXED "val"</code> &mdash; fixed value</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Complete DTD Example</strong> &mdash; a teams DTD defining structure, data types, and a required unique ID attribute.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">teams.dtd</div>
+        <pre><span class="lcm">&lt;!-- teams.dtd --&gt;</span>
+&lt;!ELEMENT <span class="lc">teams</span> (<span class="lc">team</span><span class="ln">+</span>)&gt;
+&lt;!ELEMENT <span class="lc">team</span> (<span class="lc">name</span>, <span class="lc">salary</span>)&gt;
+&lt;!ELEMENT <span class="lc">name</span> (#PCDATA)&gt;
+&lt;!ELEMENT <span class="lc">salary</span> (#PCDATA)&gt;
+&lt;!ATTLIST <span class="lc">team</span> <span class="lm">aid</span> ID #REQUIRED&gt;
+
+<span class="lcm">&lt;!-- teams.xml --&gt;</span>
+&lt;?xml version=<span class="ls">"1.0"</span>?&gt;
+&lt;!DOCTYPE <span class="lc">teams</span> SYSTEM <span class="ls">"teams.dtd"</span>&gt;
+&lt;<span class="lc">teams</span>&gt;
+  &lt;<span class="lc">team</span> <span class="lm">aid</span>=<span class="ls">"t1"</span>&gt;
+    &lt;<span class="lc">name</span>&gt;Arun&lt;/<span class="lc">name</span>&gt;
+    &lt;<span class="lc">salary</span>&gt;50000&lt;/<span class="lc">salary</span>&gt;
+  &lt;/<span class="lc">team</span>&gt;
+  &lt;<span class="lc">team</span> <span class="lm">aid</span>=<span class="ls">"t2"</span>&gt;
+    &lt;<span class="lc">name</span>&gt;Priya&lt;/<span class="lc">name</span>&gt;
+    &lt;<span class="lc">salary</span>&gt;62000&lt;/<span class="lc">salary</span>&gt;
+  &lt;/<span class="lc">team</span>&gt;
+&lt;/<span class="lc">teams</span>&gt;</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Validation</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">DTD Validates</strong></div>
+          <div>Element structure (nesting)</div>
+          <div>Order of child elements</div>
+          <div>Number of occurrences (+, *, ?)</div>
+          <div>Required attributes</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">This DTD says</strong></div>
+          <div><code>teams</code> contains 1+ <code>team</code></div>
+          <div><code>team</code> has <code>name</code> then <code>salary</code></div>
+          <div><code>team</code> requires <code>aid</code> attribute</div>
+          <div><code>aid</code> must be unique ID type</div>
+          <div style="margin-top:0.5rem;color:var(--accent);">DTD checks structure only, not data types</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ XSD SCHEMA ═══ -->
+  <section id="schema">
+    <span class="badge b-xsd">Validation</span>
+    <h2>XSD Schema</h2>
+
+    <div class="block-desc">
+      <span><strong>XML Schema (XSD)</strong> &mdash; more powerful than DTD. Supports data types, namespaces, inheritance, and content + structure validation.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/schema_intro.asp" target="_blank">W3Schools &rarr;</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Schema Basic Structure</div>
+        <pre>&lt;<span class="lc">xs:schema</span>
+  <span class="lm">xmlns:xs</span>=<span class="ls">"http://www.w3.org/2001/XMLSchema"</span>&gt;
+
+  <span class="lcm">&lt;!-- Complex Type --&gt;</span>
+  &lt;<span class="lc">xs:complexType</span> <span class="lm">name</span>=<span class="ls">"teamType"</span>&gt;
+    &lt;<span class="lc">xs:sequence</span>&gt;
+      &lt;<span class="lc">xs:element</span> <span class="lm">name</span>=<span class="ls">"name"</span>
+                  <span class="lm">type</span>=<span class="ls">"xs:string"</span>/&gt;
+      &lt;<span class="lc">xs:element</span> <span class="lm">name</span>=<span class="ls">"salary"</span>
+                  <span class="lm">type</span>=<span class="ls">"xs:integer"</span>/&gt;
+    &lt;/<span class="lc">xs:sequence</span>&gt;
+    &lt;<span class="lc">xs:attribute</span> <span class="lm">name</span>=<span class="ls">"aid"</span>
+                  <span class="lm">type</span>=<span class="ls">"xs:ID"</span>
+                  <span class="lm">use</span>=<span class="ls">"required"</span>/&gt;
+  &lt;/<span class="lc">xs:complexType</span>&gt;
+
+  <span class="lcm">&lt;!-- Root Element --&gt;</span>
+  &lt;<span class="lc">xs:element</span> <span class="lm">name</span>=<span class="ls">"teams"</span>&gt;
+    &lt;<span class="lc">xs:complexType</span>&gt;
+      &lt;<span class="lc">xs:sequence</span>&gt;
+        &lt;<span class="lc">xs:element</span> <span class="lm">name</span>=<span class="ls">"team"</span>
+                    <span class="lm">type</span>=<span class="ls">"teamType"</span>
+                    <span class="lm">maxOccurs</span>=<span class="ls">"unbounded"</span>/&gt;
+      &lt;/<span class="lc">xs:sequence</span>&gt;
+    &lt;/<span class="lc">xs:complexType</span>&gt;
+  &lt;/<span class="lc">xs:element</span>&gt;
+
+&lt;/<span class="lc">xs:schema</span>&gt;</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Simple vs Complex</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Simple Types</strong></div>
+          <div>Text, numbers, dates</div>
+          <div><code>xs:string</code>, <code>xs:integer</code></div>
+          <div><code>xs:date</code>, <code>xs:boolean</code></div>
+          <div>No children or attributes</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Complex Types</strong></div>
+          <div>Elements with children</div>
+          <div>Elements with attributes</div>
+          <div>Can combine simple + complex</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Occurrence Attributes</strong></div>
+          <div><code>minOccurs</code> &mdash; minimum count</div>
+          <div><code>maxOccurs</code> &mdash; <code>"unbounded"</code> = unlimited</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>xs:sequence and xs:attribute</strong> &mdash; sequence enforces element order, attributes define metadata on elements.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Schema Details</div>
+        <pre><span class="lcm">&lt;!-- xs:sequence — ordered children --&gt;</span>
+&lt;<span class="lc">xs:complexType</span>&gt;
+  &lt;<span class="lc">xs:sequence</span>&gt;
+    &lt;<span class="lc">xs:element</span> <span class="lm">name</span>=<span class="ls">"first"</span>
+                <span class="lm">type</span>=<span class="ls">"xs:string"</span>/&gt;
+    &lt;<span class="lc">xs:element</span> <span class="lm">name</span>=<span class="ls">"last"</span>
+                <span class="lm">type</span>=<span class="ls">"xs:string"</span>/&gt;
+  &lt;/<span class="lc">xs:sequence</span>&gt;
+&lt;/<span class="lc">xs:complexType</span>&gt;
+
+<span class="lcm">&lt;!-- xs:attribute — element metadata --&gt;</span>
+&lt;<span class="lc">xs:attribute</span> <span class="lm">name</span>=<span class="ls">"id"</span>
+              <span class="lm">type</span>=<span class="ls">"xs:integer"</span>
+              <span class="lm">use</span>=<span class="ls">"required"</span>/&gt;
+
+&lt;<span class="lc">xs:attribute</span> <span class="lm">name</span>=<span class="ls">"lang"</span>
+              <span class="lm">type</span>=<span class="ls">"xs:string"</span>
+              <span class="lm">use</span>=<span class="ls">"optional"</span>
+              <span class="lm">default</span>=<span class="ls">"en"</span>/&gt;
+
+<span class="lcm">&lt;!-- use values --&gt;</span>
+<span class="lcm">required  = mandatory attribute</span>
+<span class="lcm">optional  = can be omitted</span>
+<span class="lcm">prohibited = must not be present</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Common Patterns</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">xs:sequence</strong></div>
+          <div>Children must appear in order</div>
+          <div>All children required by default</div>
+          <div>Use minOccurs/maxOccurs to adjust</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">xs:choice</strong></div>
+          <div>Only one child allowed</div>
+          <div>Like DTD's pipe (|) operator</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">xs:all</strong></div>
+          <div>Children in any order</div>
+          <div>Each child 0 or 1 times</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">xs:any</strong></div>
+          <div>Allows any element</div>
+          <div>Like DTD's ANY keyword</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>DTD vs Schema</strong> &mdash; Schema is XML-based with rich data types and namespace support. DTD is simpler but limited.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Comparison Table</div>
+        <table class="cmp-table">
+          <tr><th>Feature</th><th>DTD</th><th>Schema (XSD)</th></tr>
+          <tr><td><strong>Syntax</strong></td><td>Simple, custom</td><td>XML-based</td></tr>
+          <tr><td><strong>Data Types</strong></td><td style="color:#f7768e;">Limited (#PCDATA)</td><td style="color:#9ece6a;">Rich (string, int, date, etc.)</td></tr>
+          <tr><td><strong>Namespaces</strong></td><td style="color:#f7768e;">No</td><td style="color:#9ece6a;">Full support</td></tr>
+          <tr><td><strong>Inheritance</strong></td><td style="color:#f7768e;">No</td><td style="color:#9ece6a;">Complex type extension</td></tr>
+          <tr><td><strong>Validation</strong></td><td>Structure only</td><td>Structure + Content</td></tr>
+          <tr><td><strong>File Extension</strong></td><td>.dtd</td><td>.xsd</td></tr>
+          <tr><td><strong>Reference</strong></td><td>&lt;!DOCTYPE&gt;</td><td>schemaLocation attr</td></tr>
+          <tr><td><strong>Readability</strong></td><td>Compact</td><td>Verbose but self-documenting</td></tr>
+        </table>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ When to Use</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Use DTD when</strong></div>
+          <div>Simple structure validation</div>
+          <div>Legacy systems (web.xml, struts)</div>
+          <div>Minimal validation needed</div>
+          <div>Quick setup, readable syntax</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Use Schema when</strong></div>
+          <div>Data type validation needed</div>
+          <div>Namespace support required</div>
+          <div>Complex constraints (patterns)</div>
+          <div>Modern applications (pom.xml)</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Java Web Examples</strong></div>
+          <div><code>web.xml</code> &mdash; DTD</div>
+          <div><code>struts-config.xml</code> &mdash; DTD</div>
+          <div><code>pom.xml</code> &mdash; Schema</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Java Web Cheatsheet &mdash; Servlet, JSP, Struts &amp; XML reference</footer>
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

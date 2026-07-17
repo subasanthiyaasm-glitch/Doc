@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Tools &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .sh-kw { color:#bb9af7; }
+    .sh-fn { color:#7aa2f7; }
+    .sh-str { color:#9ece6a; }
+    .sh-cm { color:#565f89; }
+    .sh-op { color:#e0af68; }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('File Tools')</script>
+<script>renderSourceLink('File Tools')</script>
+
+<main>
+  <div class="page-header">
+    <h1>File Tools</h1>
+    <p class="subtitle">File sync &amp; integrity quick reference</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#checksum">Checksum</a>
+      <a href="#hashing">Hashing Algorithms</a>
+      <a href="#rsync">Rsync</a>
+      <a href="#rsync-algo">Rsync Algorithm</a>
+      <a href="#commands">Shell Commands</a>
+    </nav>
+  </div>
+
+    <!-- Checksum -->
+    <section id="checksum">
+      <h2>Checksum</h2>
+
+      <div class="block-desc">
+        <span>A <strong>checksum</strong> is a fixed-size value computed from data to detect errors; a <strong>rolling checksum</strong> can be updated incrementally as a window slides, while a <strong>strong checksum</strong> (hash) provides full collision-resistant verification.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_hashing.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Rolling vs Strong Checksum</div>
+          <pre><span class="c">// Rolling Checksum — fast, incremental</span>
+<span class="c">// Used to find matching blocks efficiently</span>
+<span class="c">// Example: Adler-32 / Rabin fingerprint</span>
+<span class="c">// Slides a window across the data;</span>
+<span class="c">// new value = old − outgoing + incoming</span>
+
+<span class="c">// Strong Checksum — slow, collision-resistant</span>
+<span class="c">// Used to verify final data integrity</span>
+<span class="c">// Example: SHA-256, MD5</span>
+<span class="c">// Must recompute over entire data</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">Rolling Checksum</span><br />
+              <span style="color:#9ece6a;">O(1) per step — just adjust window</span><br />
+              <span style="color:#9ece6a;">Detects block boundaries cheaply</span><br />
+              <span style="color:#9ece6a;">Weak — not suitable for integrity alone</span><br /><br />
+              <span style="color:#7dcfff;">Strong Checksum</span><br />
+              <span style="color:#e0af68;">O(n) — full pass over data</span><br />
+              <span style="color:#e0af68;">Cryptographically secure (SHA-256)</span><br />
+              <span style="color:#e0af68;">Used for download verification</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Checksums are essential for <strong>integrity verification</strong> (detecting corruption in transit) and <strong>deduplication</strong> (identifying identical files by their hash).</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Use Cases</div>
+          <pre><span class="c">// Integrity Verification</span>
+<span class="c">// Compare checksum before and after transfer</span>
+<span class="c">// if (md5(file1) == md5(file2)) → OK</span>
+
+<span class="c">// Deduplication</span>
+<span class="c">// Store only unique content-addressed blocks</span>
+<span class="c">// Git objects are SHA-1 keyed by content</span>
+<span class="c">// Backup tools skip files with matching hash</span>
+
+<span class="c">// Java: Compute MD5 Checksum</span>
+<span class="kn">import</span> java.security.MessageDigest;
+<span class="kn">import</span> java.io.FileInputStream;
+
+<span class="k">public class</span> ChecksumUtil {
+  <span class="k">public static</span> <span class="kt">byte</span>[] md5(<span class="kt">String</span> path)
+      <span class="k">throws</span> Exception {
+    MessageDigest md =
+        MessageDigest.getInstance(<span class="s">"MD5"</span>);
+    <span class="kt">FileInputStream</span> fis =
+        <span class="k">new</span> FileInputStream(path);
+    <span class="kt">byte</span>[] buf = <span class="k">new</span> <span class="kt">byte</span>[<span class="mi">8192</span>];
+    <span class="kt">int</span> n;
+    <span class="k">while</span> ((n = fis.read(buf)) != <span class="mi">-1</span>) {
+      md.update(buf, <span class="mi">0</span>, n);
+    }
+    fis.close();
+    <span class="k">return</span> md.digest();
+  }
+
+  <span class="k">public static</span> <span class="kt">String</span> toHex(<span class="kt">byte</span>[] bytes) {
+    StringBuilder sb = <span class="k">new</span> StringBuilder();
+    <span class="k">for</span> (<span class="kt">byte</span> b : bytes)
+      sb.append(String.format(<span class="s">"%02x"</span>, b));
+    <span class="k">return</span> sb.toString();
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">Integrity Verification</span><br />
+              <span style="color:#9ece6a;">download_file.zip → sha256: a3f2...</span><br />
+              <span style="color:#9ece6a;">publisher sha256: a3f2... → match ✓</span><br /><br />
+              <span style="color:#7dcfff;">Deduplication</span><br />
+              <span style="color:#e0af68;">file_a.jpg → sha256: 7b1c...</span><br />
+              <span style="color:#e0af68;">file_b.jpg → sha256: 7b1c...</span><br />
+              <span style="color:#e0af68;">→ same content, store once</span><br /><br />
+              <span style="color:#565f89;">Java output:</span><br />
+              <span style="color:#9ece6a;">toHex(md5("/tmp/data.bin"))</span><br />
+              <span style="color:#9ece6a;">→ "d41d8cd98f00b204e9800998ecf8427e"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hashing Algorithms -->
+    <section id="hashing">
+      <h2>Hashing Algorithms</h2>
+
+      <div class="block-desc">
+        <span>Common hash algorithms differ in output size, speed, and security — <code>MD5</code> and <code>SHA-1</code> are fast but vulnerable; <code>SHA-256</code> and <code>SHA-512</code> are secure for most use cases.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_hashing.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Algorithm Comparison</div>
+          <pre><span class="c">// MD5 — 128-bit (16 bytes)</span>
+<span class="c">// Speed: Fastest | Status: BROKEN</span>
+<span class="c">// Use: Non-crypto checksums only</span>
+
+<span class="c">// SHA-1 — 160-bit (20 bytes)</span>
+<span class="c">// Speed: Fast | Status: DEPRECATED</span>
+<span class="c">// Use: Legacy Git, TLS certs phasing out</span>
+
+<span class="c">// SHA-256 — 256-bit (32 bytes)</span>
+<span class="c">// Speed: Moderate | Status: SECURE</span>
+<span class="c">// Use: TLS, certificates, file verification</span>
+
+<span class="c">// SHA-512 — 512-bit (64 bytes)</span>
+<span class="c">// Speed: Slower on 32-bit CPUs | Status: SECURE</span>
+<span class="c">// Use: High-security applications</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.72rem;line-height:1.6;">
+              <table style="border-collapse:collapse;width:100%;">
+                <tr style="color:#7dcfff;border-bottom:1px solid #2d3149;">
+                  <th style="padding:0.1rem 0.35rem;text-align:left;">Algorithm</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:center;">Bits</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:center;">Hex Len</th>
+                  <th style="padding:0.1rem 0.35rem;text-align:center;">Status</th>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">MD5</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">128</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">32</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#f7768e;">Broken</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">SHA-1</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">160</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">40</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#e0af68;">Deprecated</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">SHA-256</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">256</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">64</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">Secure</td>
+                </tr>
+                <tr>
+                  <td style="padding:0.1rem 0.35rem;color:#e0af68;">SHA-512</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">512</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#a9b1d6;">128</td>
+                  <td style="padding:0.1rem 0.35rem;text-align:center;color:#9ece6a;">Secure</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Java's <code>MessageDigest</code> class provides a provider-agnostic API for computing hashes; call <code>getInstance("SHA-256")</code> and feed data via <code>update()</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/python/python_file_hashing.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Java MessageDigest</div>
+          <pre><span class="kn">import</span> java.security.MessageDigest;
+
+<span class="k">public class</span> HashDemo {
+  <span class="k">public static</span> <span class="kt">void</span> main(<span class="kt">String</span>[] args)
+      <span class="k">throws</span> Exception {
+    <span class="kt">String</span> data = <span class="s">"Hello, World!"</span>;
+
+    <span class="c">// MD5</span>
+    MessageDigest md5 =
+        MessageDigest.getInstance(<span class="s">"MD5"</span>);
+    <span class="kt">byte</span>[] hash5 = md5.digest(
+        data.getBytes());
+
+    <span class="c">// SHA-256</span>
+    MessageDigest sha256 =
+        MessageDigest.getInstance(<span class="s">"SHA-256"</span>);
+    <span class="kt">byte</span>[] hash256 = sha256.digest(
+        data.getBytes());
+
+    <span class="c">// SHA-512</span>
+    MessageDigest sha512 =
+        MessageDigest.getInstance(<span class="s">"SHA-512"</span>);
+    <span class="kt">byte</span>[] hash512 = sha512.digest(
+        data.getBytes());
+
+    System.out.println(toHex(hash5));
+    System.out.println(toHex(hash256));
+    System.out.println(toHex(hash512));
+  }
+
+  <span class="k">static</span> <span class="kt">String</span> toHex(<span class="kt">byte</span>[] bytes) {
+    StringBuilder sb = <span class="k">new</span> StringBuilder();
+    <span class="k">for</span> (<span class="kt">byte</span> b : bytes)
+      sb.append(String.format(<span class="s">"%02x"</span>, b));
+    <span class="k">return</span> sb.toString();
+  }
+}</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">Input: "Hello, World!"</span><br /><br />
+              <span style="color:#7dcfff;">MD5 (32 hex chars):</span><br />
+              <span style="color:#9ece6a;">65a8e27d8879283831b664bd8b7f0ad4</span><br /><br />
+              <span style="color:#7dcfff;">SHA-256 (64 hex chars):</span><br />
+              <span style="color:#9ece6a;">dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f</span><br /><br />
+              <span style="color:#7dcfff;">SHA-512 (128 hex chars):</span><br />
+              <span style="color:#e0af68;">861844d6704e8573fec34d967e20bcfef3d42...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rsync -->
+    <section id="rsync">
+      <h2>Rsync</h2>
+
+      <div class="block-desc">
+        <span><code>rsync</code> synchronizes files between locations using delta-transfer — only changed blocks are sent, making it efficient for local and remote sync.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Basic Commands</div>
+          <pre>$ <span class="sh-fn">rsync</span> <span class="sh-op">-avz</span> src/ dest/          <span class="sh-cm"># local sync</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avz</span> src/ user@host:dest/ <span class="sh-cm"># push to remote</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avz</span> user@host:src/ dest/ <span class="sh-cm"># pull from remote</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avzP</span> large.bin host:/tmp/ <span class="sh-cm"># resume + progress</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">Local sync (note trailing slash):</span><br />
+              <span style="color:#9ece6a;">rsync -avz src/ dest/</span><br />
+              <span style="color:#565f89;">src/ → contents of src go into dest/</span><br />
+              <span style="color:#565f89;">src  → src directory itself goes into dest/</span><br /><br />
+              <span style="color:#7dcfff;">Remote sync:</span><br />
+              <span style="color:#9ece6a;">rsync -avz src/ user@server:/data/</span><br />
+              <span style="color:#565f89;">Uses SSH by default (port 22)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Key rsync options: <code>-a</code> archive mode, <code>-v</code> verbose, <code>-z</code> compress, <code>--delete</code> remove extraneous files, <code>-P</code> progress + partial.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Options Reference</div>
+          <pre>$ <span class="sh-fn">rsync</span> <span class="sh-op">-a</span> src/ dest/     <span class="sh-cm"># archive: perms, symlinks, etc.</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-v</span> src/ dest/     <span class="sh-cm"># verbose output</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-z</span> src/ dest/     <span class="sh-cm"># compress during transfer</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">--delete</span> src/ dest/ <span class="sh-cm"># delete files not in src</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-P</span> src/ dest/     <span class="sh-cm"># --progress --partial</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-n</span> src/ dest/     <span class="sh-cm"># dry run (preview only)</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">--exclude</span> <span class="sh-str">"*.log"</span> src/ dest/
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-e</span> <span class="sh-str">"ssh -p 2222"</span> src/ host:dest/
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avz</span> <span class="sh-op">--progress</span> src/ dest/</pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">-a expands to:</span><br />
+              <span style="color:#9ece6a;">-rlptgoD</span><br />
+              <span style="color:#565f89;">r=recursive l=links p=perms</span><br />
+              <span style="color:#565f89;">t=times g=group o=owner D=devices</span><br /><br />
+              <span style="color:#7dcfff;">--delete behavior:</span><br />
+              <span style="color:#e0af68;">src has: a.txt b.txt</span><br />
+              <span style="color:#e0af68;">dest has: a.txt c.txt</span><br />
+              <span style="color:#e0af68;">→ dest becomes: a.txt b.txt</span><br />
+              <span style="color:#f7768e;">(c.txt removed!)</span><br /><br />
+              <span style="color:#565f89;">-n dry run shows what would change</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rsync Algorithm -->
+    <section id="rsync-algo">
+      <h2>Rsync Algorithm</h2>
+
+      <div class="block-desc">
+        <span>The rsync algorithm uses a <strong>rolling checksum</strong> (Adler-32 variant) to find matching blocks between old and new files, then transfers only the deltas.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Rolling Checksum (Adler-32 Variant)</div>
+          <pre><span class="c">// Adler-32: two 16-bit accumulators</span>
+<span class="c">// A = (1 + each byte) mod 65521</span>
+<span class="c">// B = (all A values summed) mod 65521</span>
+<span class="c">// checksum = (B &lt;&lt; 16) | A</span>
+
+<span class="c">// Rolling property:</span>
+<span class="c">// Remove leftmost byte, add rightmost byte</span>
+<span class="c">// O(1) update per window slide</span>
+
+<span class="c">// Used as a quick filter:</span>
+<span class="c">// if rolling checksum matches → verify with strong hash</span>
+<span class="c">// if rolling checksum differs → definitely no match</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">Window: [A B C D E] (size 5)</span><br />
+              <span style="color:#9ece6a;">Rolling step → [B C D E F]</span><br /><br />
+              <span style="color:#7dcfff;">Adler-32 Formula:</span><br />
+              <span style="color:#e0af68;">A = (A − old_byte + new_byte) % 65521</span><br />
+              <span style="color:#e0af68;">B = (B − block_size×old_byte + A) % 65521</span><br /><br />
+              <span style="color:#565f89;">Cost: O(1) per byte moved</span><br />
+              <span style="color:#565f89;">vs O(n) for full recomputation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>The block-level sync workflow: sender splits old file into blocks, receiver computes rolling checksums and sends back matching block indices, then only non-matching blocks are transferred.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Block-Level Sync Workflow</div>
+          <pre><span class="c">// Step 1: Sender splits OLD file into blocks</span>
+<span class="c">//   Block 0: [A B C D] → strong: sha_0</span>
+<span class="c">//   Block 1: [E F G H] → strong: sha_1</span>
+<span class="c">//   Block 2: [I J K L] → strong: sha_2</span>
+
+<span class="c">// Step 2: Receiver slides window over NEW file</span>
+<span class="c">//   computes rolling checksum at each offset</span>
+<span class="c">//   sends (offset, rolling_checksum) to sender</span>
+
+<span class="c">// Step 3: Sender matches rolling → strong hash</span>
+<span class="c">//   sends back: list of (offset, block_index)</span>
+<span class="c">//   or "no match" for unmatched blocks</span>
+
+<span class="c">// Step 4: Receiver reconstructs:</span>
+<span class="c">//   matched blocks → copy from old file</span>
+<span class="c">//   unmatched blocks → literal data from new</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.72rem;line-height:1.5;">
+              <span style="color:#7dcfff;font-weight:bold;">Delta Transfer Workflow</span><br /><br />
+              <span style="color:#bb9af7;">OLD file (sender):</span><br />
+              <span style="color:#9ece6a;">┌────────┬────────┬────────┐</span><br />
+              <span style="color:#9ece6a;">│ Block0 │ Block1 │ Block2 │</span><br />
+              <span style="color:#9ece6a;">│ ABCD   │ EFGH   │ IJKL   │</span><br />
+              <span style="color:#9ece6a;">└────────┴────────┴────────┘</span><br /><br />
+              <span style="color:#bb9af7;">NEW file (receiver):</span><br />
+              <span style="color:#e0af68;">┌────────┬────────┬────────┐</span><br />
+              <span style="color:#e0af68;">│ ABCD   │ EFXX   │ IJKL   │</span><br />
+              <span style="color:#e0af68;">│ match✓ │ Δdata  │ match✓ │</span><br />
+              <span style="color:#e0af68;">└────────┴────────┴────────┘</span><br /><br />
+              <span style="color:#7dcfff;">Transfer: only "XX" delta (Block 1)</span><br />
+              <span style="color:#565f89;">Saves bandwidth vs sending full file</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shell Commands -->
+    <section id="commands">
+      <h2>Shell Commands</h2>
+
+      <div class="block-desc">
+        <span>Core file integrity and comparison commands: <code>md5sum</code>, <code>sha256sum</code>, <code>rsync</code>, <code>diff</code>, and <code>cmp</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Checksum Commands</div>
+          <pre>$ <span class="sh-fn">md5sum</span> file.zip
+<span class="sh-str">3a7bd3e2360a3d29eea436fcfb7e44c7</span>  file.zip
+
+$ <span class="sh-fn">sha256sum</span> file.zip
+<span class="sh-str">a3f2b8c1d4e5f6a7b8c9d0e1f2a3b4c5</span>  file.zip
+
+<span class="sh-cm"># Verify against known checksum</span>
+$ <span class="sh-fn">sha256sum</span> <span class="sh-op">-c</span> checksums.txt
+file.zip: OK
+file.iso: FAILED
+
+<span class="sh-cm"># Checksum of a string</span>
+$ <span class="sh-fn">echo</span> <span class="sh-op">-n</span> <span class="sh-str">"hello"</span> | <span class="sh-fn">md5sum</span>
+<span class="sh-str">5d41402abc4b2a76b9719d911017c592</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">md5sum output format:</span><br />
+              <span style="color:#9ece6a;">&lt;32-char hex&gt;  &lt;filename&gt;</span><br /><br />
+              <span style="color:#7dcfff;">sha256sum output format:</span><br />
+              <span style="color:#9ece6a;">&lt;64-char hex&gt;  &lt;filename&gt;</span><br /><br />
+              <span style="color:#7dcfff;">-c (check mode):</span><br />
+              <span style="color:#e0af68;">Reads checksums.txt file</span><br />
+              <span style="color:#9ece6a;">OK → file matches</span><br />
+              <span style="color:#f7768e;">FAILED → file corrupted</span><br />
+              <span style="color:#f7768e;">FAILED open or read → missing</span><br /><br />
+              <span style="color:#565f89;">macOS: use shasum -a 256 instead</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Sync directories with <code>rsync</code>, compare files with <code>diff</code>, and do byte-level comparison with <code>cmp</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_commands.asp" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Sync &amp; Compare Commands</div>
+          <pre><span class="sh-cm"># Rsync — incremental file sync</span>
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avz</span> src/ dest/
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avz</span> <span class="sh-op">--delete</span> src/ dest/
+$ <span class="sh-fn">rsync</span> <span class="sh-op">-avzP</span> src/ host:backup/
+
+<span class="sh-cm"># Diff — line-by-line comparison</span>
+$ <span class="sh-fn">diff</span> file1.txt file2.txt
+$ <span class="sh-fn">diff</span> <span class="sh-op">-u</span> old.py new.py     <span class="sh-cm"># unified format</span>
+$ <span class="sh-fn">diff</span> <span class="sh-op">-r</span> dir1/ dir2/       <span class="sh-cm"># recursive</span>
+
+<span class="sh-cm"># Cmp — byte-by-byte comparison</span>
+$ <span class="sh-fn">cmp</span> file1.bin file2.bin
+$ <span class="sh-fn">cmp</span> <span class="sh-op">-l</span> file1.bin file2.bin <span class="sh-cm"># show all diffs</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#7dcfff;">diff output (unified):</span><br />
+              <span style="color:#f7768e;">--- old.py</span><br />
+              <span style="color:#9ece6a;">+++ new.py</span><br />
+              <span style="color:#e0af68;">@@ -1,3 +1,4 @@</span><br />
+              <span style="color:#f7768e;">-old line</span><br />
+              <span style="color:#9ece6a;">+new line</span><br /><br />
+              <span style="color:#7dcfff;">cmp output:</span><br />
+              <span style="color:#9ece6a;">files identical → no output (exit 0)</span><br />
+              <span style="color:#f7768e;">files differ → "differ at byte 42"</span><br /><br />
+              <span style="color:#565f89;">diff — text-level (line by line)</span><br />
+              <span style="color:#565f89;">cmp — binary-level (byte by byte)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<footer>File Tools Cheatsheet &mdash; file sync &amp; integrity reference</footer>
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

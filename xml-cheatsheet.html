@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XML &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .lk  { color: #bb9af7; }
+    .lc  { color: #7aa2f7; }
+    .ls  { color: #9ece6a; }
+    .lcm { color: #565f89; }
+    .lm  { color: #73daca; }
+    .ln  { color: #ff9e64; }
+    .lo  { color: #e0af68; }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('XML')</script>
+<script>renderSourceLink('XML')</script>
+
+<main>
+  <div class="page-header">
+    <h1>XML</h1>
+    <p class="subtitle">XML, DTD &amp; Schema quick reference</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#basics">Basics</a>
+      <a href="#dtd">DTD</a>
+      <a href="#dtd-elements">DTD Elements</a>
+      <a href="#dtd-attributes">DTD Attributes</a>
+      <a href="#schema">XSD Schema</a>
+      <a href="#parsing">Parsing</a>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════ BASICS ══════════════════════════ -->
+  <section id="basics">
+    <h2>XML Basics</h2>
+
+    <div class="block-desc">
+      <span>XML (eXtensible Markup Language) is a markup language for storing and transporting structured data. It is both human-readable and machine-readable.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Well-formed XML</div>
+        <pre><span class="lcm">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="lk">&lt;bookstore</span> <span class="lc">xmlns</span>=<span class="ls">"http://example.com/books"</span><span class="lk">&gt;</span>
+  <span class="lk">&lt;book</span> <span class="lc">category</span>=<span class="ls">"fiction"</span> <span class="lc">lang</span>=<span class="ls">"en"</span><span class="lk">&gt;</span>
+    <span class="lk">&lt;title&gt;</span>The Great Gatsby<span class="lk">&lt;/title&gt;</span>
+    <span class="lk">&lt;author&gt;</span>F. Scott Fitzgerald<span class="lk">&lt;/author&gt;</span>
+    <span class="lk">&lt;year&gt;</span><span class="ln">1925</span><span class="lk">&lt;/year&gt;</span>
+    <span class="lk">&lt;price&gt;</span><span class="ln">10.99</span><span class="lk">&lt;/price&gt;</span>
+  <span class="lk">&lt;/book&gt;</span>
+  <span class="lk">&lt;book</span> <span class="lc">category</span>=<span class="ls">"science"</span><span class="lk">&gt;</span>
+    <span class="lk">&lt;title&gt;</span>A Brief History of Time<span class="lk">&lt;/title&gt;</span>
+    <span class="lk">&lt;author&gt;</span>Stephen Hawking<span class="lk">&lt;/author&gt;</span>
+    <span class="lk">&lt;year&gt;</span><span class="ln">1988</span><span class="lk">&lt;/year&gt;</span>
+    <span class="lk">&lt;price&gt;</span><span class="ln">15.99</span><span class="lk">&lt;/price&gt;</span>
+  <span class="lk">&lt;/book&gt;</span>
+<span class="lk">&lt;/bookstore&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Well-formed Rules</div>
+        <div class="live-output">
+          <ul style="font-size:0.78rem; color:var(--text-muted); line-height:2; padding-left:1rem;">
+            <li>One root element required</li>
+            <li>Case-sensitive: <code>&lt;Tag&gt;</code> ≠ <code>&lt;tag&gt;</code></li>
+            <li>Every opening tag needs a closing tag (<code>&lt;tag&gt;...&lt;/tag&gt;</code> or <code>&lt;tag/&gt;</code>)</li>
+            <li>Attribute values must be in quotes</li>
+            <li>Tags must be properly nested</li>
+            <li>Special chars escaped: <code>&amp;lt;</code> <code>&amp;gt;</code> <code>&amp;amp;</code> <code>&amp;quot;</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>The <strong>prolog</strong> declares the XML version and encoding before the root element.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Prolog &amp; Declaration</div>
+        <pre><span class="lcm">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="lcm">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;</span>
+
+<span class="lcm">&lt;!-- Attributes: --&gt;</span>
+<span class="lcm">  version   — XML version (always "1.0" or "1.1")</span>
+<span class="lcm">  encoding  — Character encoding (UTF-8, ISO-8859-1, ...)</span>
+<span class="lcm">  standalone — "yes" if no external DTD referenced</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Notes</div>
+        <div class="live-output">
+          <ul style="font-size:0.78rem; color:var(--text-muted); line-height:2; padding-left:1rem;">
+            <li>Prolog is optional but recommended</li>
+            <li><code>standalone="yes"</code> means no external DTD</li>
+            <li>Default encoding is UTF-8</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Namespaces</strong> prevent element name conflicts by using a URI prefix.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Namespaces</div>
+        <pre><span class="lcm">&lt;!-- Default namespace (applies to all children) --&gt;</span>
+<span class="lk">&lt;root</span> <span class="lc">xmlns</span>=<span class="ls">"http://example.com/ns"</span><span class="lk">&gt;</span>
+  <span class="lk">&lt;child/&gt;</span>  <span class="lcm">&lt;!-- inherits namespace --&gt;</span>
+<span class="lk">&lt;/root&gt;</span>
+
+<span class="lcm">&lt;!-- Prefixed namespace --&gt;</span>
+<span class="lk">&lt;root</span> <span class="lc">xmlns:h</span>=<span class="ls">"http://www.w3.org/TR/html4/"</span>
+       <span class="lc">xmlns:f</span>=<span class="ls">"http://www.example.com/furniture"</span><span class="lk">&gt;</span>
+  <span class="lk">&lt;h:table&gt;</span>
+    <span class="lk">&lt;h:tr&gt;</span><span class="lk">&lt;h:td&gt;</span>HTML table<span class="lk">&lt;/h:td&gt;</span><span class="lk">&lt;/h:tr&gt;</span>
+  <span class="lk">&lt;/h:table&gt;</span>
+  <span class="lk">&lt;f:table&gt;</span>
+    <span class="lk">&lt;f:name&gt;</span>Coffee Table<span class="lk">&lt;/f:name&gt;</span>
+  <span class="lk">&lt;/f:table&gt;</span>
+<span class="lk">&lt;/root&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Namespace Rules</div>
+        <div class="live-output">
+          <ul style="font-size:0.78rem; color:var(--text-muted); line-height:2; padding-left:1rem;">
+            <li><code>xmlns:prefix="URI"</code> declares a namespace</li>
+            <li><code>xmlns="URI"</code> sets default (no prefix)</li>
+            <li>URI is a unique identifier, not fetched</li>
+            <li>Prefixes prevent name collisions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DTD ══════════════════════════ -->
+  <section id="dtd">
+    <h2>DTD (Document Type Definition)</h2>
+
+    <div class="block-desc">
+      <span>DTD defines the <strong>structure</strong> and rules of an XML document. It specifies allowed elements, attributes, and nesting.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_intro.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Internal DTD</div>
+        <pre><span class="lcm">&lt;?xml version="1.0"?&gt;</span>
+<span class="lk">&lt;!DOCTYPE <span class="lc">root</span> [</span>
+  <span class="lk">&lt;!ELEMENT</span> <span class="lc">root</span> (<span class="lc">child</span>+) <span class="lk">&gt;</span>
+  <span class="lk">&lt;!ELEMENT</span> <span class="lc">child</span> (<span class="ls">#PCDATA</span>) <span class="lk">&gt;</span>
+<span class="lk">]&gt;</span>
+<span class="lk">&lt;root&gt;</span>
+  <span class="lk">&lt;child&gt;</span>Hello World<span class="lk">&lt;/child&gt;</span>
+<span class="lk">&lt;/root&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Internal DTD</div>
+        <div class="live-output">
+          <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.8;">
+            Defined <strong>inside</strong> the XML file within <code>&lt;!DOCTYPE&gt;</code> brackets.<br><br>
+            <strong>Pros:</strong> Single file, no external dependency.<br>
+            <strong>Cons:</strong> Repeated across documents, not reusable.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>External DTDs are stored in a separate <code>.dtd</code> file and referenced from the XML.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">External DTD</div>
+        <pre><span class="lcm">teams.dtd:</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">teams</span> (<span class="lc">team</span>+) <span class="lk">&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">team</span> (<span class="lc">name</span>, <span class="lc">salary</span>) <span class="lk">&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">name</span> (<span class="ls">#PCDATA</span>) <span class="lk">&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">salary</span> (<span class="ls">#PCDATA</span>) <span class="lk">&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">team</span> <span class="lc">aid</span> <span class="ls">ID</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span>
+
+<span class="lcm">teams.xml:</span>
+<span class="lcm">&lt;?xml version="1.0"?&gt;</span>
+<span class="lk">&lt;!DOCTYPE</span> <span class="lc">teams</span> <span class="lo">SYSTEM</span> <span class="ls">"teams.dtd"</span><span class="lk">&gt;</span>
+<span class="lk">&lt;teams&gt;</span>
+  <span class="lk">&lt;team</span> <span class="lc">aid</span>=<span class="ls">"t1"</span><span class="lk">&gt;</span>
+    <span class="lk">&lt;name&gt;</span>Arun<span class="lk">&lt;/name&gt;</span>
+    <span class="lk">&lt;salary&gt;</span><span class="ln">50000</span><span class="lk">&lt;/salary&gt;</span>
+  <span class="lk">&lt;/team&gt;</span>
+<span class="lk">&lt;/teams&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ External DTD</div>
+        <div class="live-output">
+          <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.8;">
+            <code>SYSTEM</code> — private DTD (local file or URL)<br>
+            <code>PUBLIC</code> — public DTD (registered identifier)<br><br>
+            <strong>Pros:</strong> Reusable, single source of truth.<br>
+            <strong>Cons:</strong> Extra file to maintain.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>DTD syntax overview with all declaration types and symbols.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">DTD Syntax Reference</div>
+        <pre><span class="lcm">&lt;!-- Element declarations --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">name</span> (<span class="ls">content-model</span>) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Attribute declarations --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">element</span>
+  <span class="lc">attr-name</span>  <span class="ls">type</span>    <span class="lo">default</span>
+  <span class="lc">attr-name2</span> <span class="ls">type</span>    <span class="lo">default</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Entity declarations --&gt;</span>
+<span class="lk">&lt;!ENTITY</span> <span class="lc">logo</span> <span class="ls">"SYSTEM logo.png"</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Notation declarations --&gt;</span>
+<span class="lk">&lt;!NOTATION</span> <span class="lc">pdf</span> <span class="lo">SYSTEM</span> <span class="ls">"Acrobat"</span><span class="lk">&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ DTD Symbols</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:2px 6px;"><code>+</code></td><td style="padding:2px 6px;">1 or more</td></tr>
+            <tr><td style="padding:2px 6px;"><code>*</code></td><td style="padding:2px 6px;">0 or more</td></tr>
+            <tr><td style="padding:2px 6px;"><code>?</code></td><td style="padding:2px 6px;">0 or 1</td></tr>
+            <tr><td style="padding:2px 6px;"><code>|</code></td><td style="padding:2px 6px;">OR (choice)</td></tr>
+            <tr><td style="padding:2px 6px;"><code>,</code></td><td style="padding:2px 6px;">AND (sequence)</td></tr>
+            <tr><td style="padding:2px 6px;"><code>()</code></td><td style="padding:2px 6px;">Grouping</td></tr>
+            <tr><td style="padding:2px 6px;"><code>#PCDATA</code></td><td style="padding:2px 6px;">Parsed character data</td></tr>
+            <tr><td style="padding:2px 6px;"><code>EMPTY</code></td><td style="padding:2px 6px;">No content allowed</td></tr>
+            <tr><td style="padding:2px 6px;"><code>ANY</code></td><td style="padding:2px 6px;">Any content allowed</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DTD ELEMENTS ══════════════════════════ -->
+  <section id="dtd-elements">
+    <h2>DTD Element Declarations</h2>
+
+    <div class="block-desc">
+      <span>The <code>&lt;!ELEMENT&gt;</code> declaration defines what content an element can contain: text, child elements, or both.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_elements.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Content Models</div>
+        <pre><span class="lcm">&lt;!-- Text only --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">title</span> (<span class="ls">#PCDATA</span>) <span class="lk">&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">price</span> (<span class="ls">#PCDATA</span>) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Child elements (sequence) --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">book</span> (<span class="lc">title</span>, <span class="lc">author</span>, <span class="lc">year</span>) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Child elements (choice) --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">choice</span> (<span class="lc">option1</span> | <span class="lc">option2</span> | <span class="lc">option3</span>) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Mixed content --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">para</span> (<span class="ls">#PCDATA</span> | <span class="lc">b</span> | <span class="lc">i</span>)* <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Empty element --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">br</span> <span class="ls">EMPTY</span> <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Any content --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">wildcard</span> <span class="ls">ANY</span> <span class="lk">&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Content Types</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:2px 6px;"><code>#PCDATA</code></td><td style="padding:2px 6px;">Text content (parsed)</td></tr>
+            <tr><td style="padding:2px 6px;"><code>EMPTY</code></td><td style="padding:2px 6px;">No children/text</td></tr>
+            <tr><td style="padding:2px 6px;"><code>ANY</code></td><td style="padding:2px 6px;">Any content allowed</td></tr>
+            <tr><td style="padding:2px 6px;"><code>(a, b)</code></td><td style="padding:2px 6px;">Sequence: a then b</td></tr>
+            <tr><td style="padding:2px 6px;"><code>(a | b)</code></td><td style="padding:2px 6px;">Choice: a or b</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>Occurrence indicators</strong> control how many times an element may appear.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Occurrence Indicators</div>
+        <pre><span class="lcm">&lt;!-- + : one or more --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">teams</span> (<span class="lc">team</span>+) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- * : zero or more --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">list</span> (<span class="lc">item</span>*) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- ? : zero or one --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">book</span> (<span class="lc">title</span>, <span class="lc">author</span>, <span class="lc">year</span>?) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- No indicator : exactly one --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">person</span> (<span class="lc">name</span>, <span class="lc">age</span>) <span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Mixed with occurrence --&gt;</span>
+<span class="lk">&lt;!ELEMENT</span> <span class="lc">para</span> (<span class="ls">#PCDATA</span> | <span class="lc">b</span> | <span class="lc">i</span>)+ <span class="lk">&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Quick Reference</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:3px 6px;"><code>(a)</code></td><td style="padding:3px 6px;">exactly 1</td></tr>
+            <tr><td style="padding:3px 6px;"><code>(a+)</code></td><td style="padding:3px 6px;">1 or more</td></tr>
+            <tr><td style="padding:3px 6px;"><code>(a*)</code></td><td style="padding:3px 6px;">0 or more</td></tr>
+            <tr><td style="padding:3px 6px;"><code>(a?)</code></td><td style="padding:3px 6px;">0 or 1 (optional)</td></tr>
+          </table>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin-top:8px; line-height:1.6;">
+            <strong>Tip:</strong> Occurrence indicators can only appear on groups <code>()</code> or single elements.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DTD ATTRIBUTES ══════════════════════════ -->
+  <section id="dtd-attributes">
+    <h2>DTD Attribute Declarations</h2>
+
+    <div class="block-desc">
+      <span><code>&lt;!ATTLIST&gt;</code> declares attributes for an element, including type and default value.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_attributes.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">ATTLIST Declaration</div>
+        <pre><span class="lk">&lt;!ATTLIST</span> <span class="lc">element-name</span>
+  <span class="lc">attr-name1</span>  <span class="ls">type</span>  <span class="lo">default-value</span>
+  <span class="lc">attr-name2</span>  <span class="ls">type</span>  <span class="lo">default-value</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Example --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">book</span>
+  <span class="lc">id</span>         <span class="ls">ID</span>          <span class="lo">#REQUIRED</span>
+  <span class="lc">lang</span>       <span class="ls">CDATA</span>       <span class="lo">#IMPLIED</span>
+  <span class="lc">edition</span>    <span class="ls">CDATA</span>       <span class="lo">"1"</span>
+  <span class="lc">format</span>     <span class="ls">(paper|ebook)</span> <span class="lo">#FIXED</span> <span class="ls">"paper"</span><span class="lk">&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Default Values</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:3px 6px;"><code>#REQUIRED</code></td><td style="padding:3px 6px;">Must be present</td></tr>
+            <tr><td style="padding:3px 6px;"><code>#IMPLIED</code></td><td style="padding:3px 6px;">Optional</td></tr>
+            <tr><td style="padding:3px 6px;"><code>#FIXED "val"</code></td><td style="padding:3px 6px;">Fixed value, cannot change</td></tr>
+            <tr><td style="padding:3px 6px;"><code>"default"</code></td><td style="padding:3px 6px;">Default if omitted</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>Attribute types define what values are allowed: strings, unique IDs, references, or enumerated choices.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Attribute Types</div>
+        <pre><span class="lcm">&lt;!-- CDATA — character data (string) --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">img</span> <span class="lc">src</span> <span class="ls">CDATA</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- ID — unique identifier --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">person</span> <span class="lc">pid</span> <span class="ls">ID</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- IDREF — reference to an ID --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">ref</span> <span class="lc">personRef</span> <span class="ls">IDREF</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- IDREFS — space-separated list of IDREFs --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">group</span> <span class="lc">members</span> <span class="ls">IDREFS</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- Enumerated — choice from list --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">text</span> <span class="lc">align</span> <span class="ls">(left|center|right)</span> <span class="lo">"left"</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- NMTOKEN — valid XML name token --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">item</span> <span class="lc">code</span> <span class="ls">NMTOKEN</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- NMTOKENS — space-separated NMTOKENs --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">tag</span> <span class="lc">tokens</span> <span class="ls">NMTOKENS</span> <span class="lo">#IMPLIED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- ENTITY — parsed entity reference --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">doc</span> <span class="lc">logo</span> <span class="ls">ENTITY</span> <span class="lo">#IMPLIED</span><span class="lk">&gt;</span>
+
+<span class="lcm">&lt;!-- NOTATION — reference to notation --&gt;</span>
+<span class="lk">&lt;!ATTLIST</span> <span class="lc">file</span> <span class="lc">type</span> <span class="ls">NOTATION</span> <span class="lo">(pdf|gif)</span> <span class="lo">#REQUIRED</span><span class="lk">&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Type Summary</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:3px 6px;"><code>CDATA</code></td><td style="padding:3px 6px;">String (no entities)</td></tr>
+            <tr><td style="padding:3px 6px;"><code>ID</code></td><td style="padding:3px 6px;">Unique ID (XML name)</td></tr>
+            <tr><td style="padding:3px 6px;"><code>IDREF</code></td><td style="padding:3px 6px;">References an ID</td></tr>
+            <tr><td style="padding:3px 6px;"><code>IDREFS</code></td><td style="padding:3px 6px;">Multiple IDREFs</td></tr>
+            <tr><td style="padding:3px 6px;"><code>NMTOKEN</code></td><td style="padding:3px 6px;">Name token</td></tr>
+            <tr><td style="padding:3px 6px;"><code>ENTITY</code></td><td style="padding:3px 6px;">Parsed entity ref</td></tr>
+            <tr><td style="padding:3px 6px;"><code>(a|b|c)</code></td><td style="padding:3px 6px;">Enumerated choice</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ XSD SCHEMA ══════════════════════════ -->
+  <section id="schema">
+    <h2>XSD Schema</h2>
+
+    <div class="block-desc">
+      <span>XML Schema (XSD) provides richer validation than DTD: data types, namespaces, inheritance, and fine-grained constraints.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/schema_intro.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Schema: Simple &amp; Complex Types</div>
+        <pre><span class="lk">&lt;xs:schema</span> <span class="lc">xmlns:xs</span>=<span class="ls">"http://www.w3.org/2001/XMLSchema"</span><span class="lk">&gt;</span>
+
+  <span class="lcm">&lt;!-- Simple Type — restriction on base type --&gt;</span>
+  <span class="lk">&lt;xs:simpleType</span> <span class="lc">name</span>=<span class="ls">"salaryType"</span><span class="lk">&gt;</span>
+    <span class="lk">&lt;xs:restriction</span> <span class="lc">base</span>=<span class="ls">"xs:decimal"</span><span class="lk">&gt;</span>
+      <span class="lk">&lt;xs:minInclusive</span> <span class="lc">value</span>=<span class="ls">"0"</span><span class="lk">/&gt;</span>
+      <span class="lk">&lt;xs:maxInclusive</span> <span class="lc">value</span>=<span class="ls">"999999"</span><span class="lk">/&gt;</span>
+    <span class="lk">&lt;/xs:restriction&gt;</span>
+  <span class="lk">&lt;/xs:simpleType&gt;</span>
+
+  <span class="lcm">&lt;!-- Complex Type — elements + attributes --&gt;</span>
+  <span class="lk">&lt;xs:complexType</span> <span class="lc">name</span>=<span class="ls">"teamType"</span><span class="lk">&gt;</span>
+    <span class="lk">&lt;xs:sequence&gt;</span>
+      <span class="lk">&lt;xs:element</span> <span class="lc">name</span>=<span class="ls">"name"</span>   <span class="lc">type</span>=<span class="ls">"xs:string"</span><span class="lk">/&gt;</span>
+      <span class="lk">&lt;xs:element</span> <span class="lc">name</span>=<span class="ls">"salary"</span> <span class="lc">type</span>=<span class="ls">"salaryType"</span><span class="lk">/&gt;</span>
+    <span class="lk">&lt;/xs:sequence&gt;</span>
+    <span class="lk">&lt;xs:attribute</span> <span class="lc">name</span>=<span class="ls">"aid"</span> <span class="lc">type</span>=<span class="ls">"xs:ID"</span> <span class="lc">use</span>=<span class="ls">"required"</span><span class="lk">/&gt;</span>
+  <span class="lk">&lt;/xs:complexType&gt;</span>
+
+  <span class="lcm">&lt;!-- Root Element --&gt;</span>
+  <span class="lk">&lt;xs:element</span> <span class="lc">name</span>=<span class="ls">"teams"</span><span class="lk">&gt;</span>
+    <span class="lk">&lt;xs:complexType&gt;</span>
+      <span class="lk">&lt;xs:sequence&gt;</span>
+        <span class="lk">&lt;xs:element</span> <span class="lc">name</span>=<span class="ls">"team"</span> <span class="lc">type</span>=<span class="ls">"teamType"</span>
+                    <span class="lc">maxOccurs</span>=<span class="ls">"unbounded"</span><span class="lk">/&gt;</span>
+      <span class="lk">&lt;/xs:sequence&gt;</span>
+    <span class="lk">&lt;/xs:complexType&gt;</span>
+  <span class="lk">&lt;/xs:element&gt;</span>
+
+<span class="lk">&lt;/xs:schema&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Occurrence Attributes</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:3px 6px;"><code>minOccurs</code></td><td style="padding:3px 6px;">Min times (default 1)</td></tr>
+            <tr><td style="padding:3px 6px;"><code>maxOccurs</code></td><td style="padding:3px 6px;">Max times (default 1)</td></tr>
+            <tr><td style="padding:3px 6px;"><code>unbounded</code></td><td style="padding:3px 6px;">No upper limit</td></tr>
+          </table>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin-top:8px; line-height:1.6;">
+            <strong>Sequence:</strong> Ordered children.<br>
+            <strong>Choice:</strong> Only one child allowed.<br>
+            <strong>All:</strong> Any order, each once.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>A side-by-side comparison of DTD and XML Schema capabilities.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">DTD vs Schema</div>
+        <pre><span class="lcm">| Feature        | DTD                 | Schema (XSD)              |</span>
+<span class="lcm">|----------------|---------------------|---------------------------|</span>
+<span class="lcm">| Syntax         |</span> <span class="ls">Custom              </span> <span class="lcm">|</span> <span class="lo">XML-based               </span> <span class="lcm">|</span>
+<span class="lcm">| Data Types     |</span> <span class="ls">Limited (#PCDATA)   </span> <span class="lcm">|</span> <span class="lo">Rich (string, int, date) </span> <span class="lcm">|</span>
+<span class="lcm">| Namespaces     |</span> <span class="ls">No                  </span> <span class="lcm">|</span> <span class="lo">Full support              </span> <span class="lcm">|</span>
+<span class="lcm">| Inheritance    |</span> <span class="ls">No                  </span> <span class="lcm">|</span> <span class="lo">Complex type extension   </span> <span class="lcm">|</span>
+<span class="lcm">| Validation     |</span> <span class="ls">Structure only      </span> <span class="lcm">|</span> <span class="lo">Structure + Content      </span> <span class="lcm">|</span>
+<span class="lcm">| Constraints    |</span> <span class="ls">Basic (occurrence)  </span> <span class="lcm">|</span> <span class="lo">min/max, patterns, facets</span> <span class="lcm">|</span>
+<span class="lcm">| Self-describing|</span> <span class="ls">No                  </span> <span class="lcm">|</span> <span class="lo">Yes (XML format)         </span> <span class="lcm">|</span>
+<span class="lcm">| Editor support |</span> <span class="ls">Limited             </span> <span class="lcm">|</span> <span class="lo">Widely supported         </span> <span class="lcm">|</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ When to Use</div>
+        <div class="live-output">
+          <ul style="font-size:0.78rem; color:var(--text-muted); line-height:2; padding-left:1rem;">
+            <li><strong>DTD:</strong> Simple docs, legacy systems, DTD-based configs</li>
+            <li><strong>Schema:</strong> Data validation, typed content, modern apps</li>
+            <li><strong>Schema</strong> is the standard for new projects</li>
+          </ul>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin-top:6px; line-height:1.6;">
+            Common DTD configs: <code>web.xml</code>, <code>struts-config.xml</code><br>
+            Common Schema configs: <code>pom.xml</code>, <code>hibernate.cfg.xml</code>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ PARSING ══════════════════════════ -->
+  <section id="parsing">
+    <h2>XML Parsing</h2>
+
+    <div class="block-desc">
+      <span>Three main XML parsing APIs: <strong>DOM</strong> (tree), <strong>SAX</strong> (event), and <strong>StAX</strong> (streaming pull).</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/xml_parser.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">DOM vs SAX vs StAX</div>
+        <pre><span class="lcm">| Feature    | DOM                | SAX                | StAX              |</span>
+<span class="lcm">|------------|--------------------|--------------------|-------------------|</span>
+<span class="lcm">| Approach   |</span> <span class="lo">Tree (load all)   </span> <span class="lcm">|</span> <span class="ls">Event-driven       </span> <span class="lcm">|</span> <span class="ln">Pull (cursor)    </span> <span class="lcm">|</span>
+<span class="lcm">| Memory     |</span> <span class="lo">High (entire tree) </span> <span class="lcm">|</span> <span class="ls">Low (streaming)    </span> <span class="lcm">|</span> <span class="ln">Low (streaming)  </span> <span class="lcm">|</span>
+<span class="lcm">| Speed      |</span> <span class="lo">Fast reads        </span> <span class="lcm">|</span> <span class="ls">Fast parse         </span> <span class="lcm">|</span> <span class="ln">Fast parse       </span> <span class="lcm">|</span>
+<span class="lcm">| Navigation |</span> <span class="lo">Random access     </span> <span class="lcm">|</span> <span class="ls">Forward only       </span> <span class="lcm">|</span> <span class="ln">Forward only     </span> <span class="lcm">|</span>
+<span class="lcm">| Best for   |</span> <span class="lo">Small docs, R/W   </span> <span class="lcm">|</span> <span class="ls">Large docs, read   </span> <span class="lcm">|</span> <span class="ln">Large docs, R/W  </span> <span class="lcm">|</span>
+<span class="lcm">| Modify     |</span> <span class="lo">Yes                </span> <span class="lcm">|</span> <span class="ls">No                 </span> <span class="lcm">|</span> <span class="ln">No               </span> <span class="lcm">|</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ When to Use</div>
+        <div class="live-output">
+          <ul style="font-size:0.78rem; color:var(--text-muted); line-height:2; padding-left:1rem;">
+            <li><strong>DOM:</strong> Need to navigate/edit the whole tree</li>
+            <li><strong>SAX:</strong> Read-only, very large files, low memory</li>
+            <li><strong>StAX:</strong> Best balance — streaming + in control</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span>Java DOM parser reads the entire XML into a <code>Document</code> tree for random access.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Java DOM Parser</div>
+        <pre><span class="lk">import</span> javax.xml.parsers.*;
+<span class="lk">import</span> org.w3c.dom.*;
+<span class="lk">import</span> java.io.*;
+
+<span class="lc">DocumentBuilderFactory</span> <span class="lc">factory</span> = <span class="lc">DocumentBuilderFactory</span>.<span class="lm">newInstance</span>();
+<span class="lc">DocumentBuilder</span> <span class="lc">builder</span> = <span class="lc">factory</span>.<span class="lm">newDocumentBuilder</span>();
+<span class="lc">Document</span> <span class="lc">doc</span> = <span class="lc">builder</span>.<span class="lm">parse</span>(<span class="kw">new</span> <span class="lc">File</span>(<span class="ls">"teams.xml"</span>));
+
+<span class="lc">Element</span> <span class="lc">root</span> = <span class="lc">doc</span>.<span class="lm">getDocumentElement</span>();
+<span class="lc">NodeList</span> <span class="lc">teams</span> = <span class="lc">root</span>.<span class="lm">getElementsByTagName</span>(<span class="ls">"team"</span>);
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="ln">0</span>; i &lt; <span class="lc">teams</span>.<span class="lm">getLength</span>(); i++) {
+  <span class="lc">Element</span> <span class="lc">team</span> = (<span class="lc">Element</span>) <span class="lc">teams</span>.<span class="lm">item</span>(i);
+  <span class="lc">String</span> <span class="lc">aid</span>  = <span class="lc">team</span>.<span class="lm">getAttribute</span>(<span class="ls">"aid"</span>);
+  <span class="lc">String</span> <span class="lc">name</span> = <span class="lc">team</span>.<span class="lm">getElementsByTagName</span>(<span class="ls">"name"</span>)
+                  .<span class="lm">item</span>(<span class="ln">0</span>).<span class="lm">getTextContent</span>();
+  <span class="lc">String</span> <span class="lc">sal</span>  = <span class="lc">team</span>.<span class="lm">getElementsByTagName</span>(<span class="ls">"salary"</span>)
+                  .<span class="lm">item</span>(<span class="ln">0</span>).<span class="lm">getTextContent</span>();
+  System.out.<span class="lm">println</span>(<span class="ls">"Team: "</span> + <span class="lc">name</span> + <span class="ls">" ($"</span> + <span class="lc">sal</span> + <span class="ls">")"</span>);
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Output</div>
+        <div class="live-output" style="font-family:monospace; font-size:0.78rem; color:var(--code-text); background:var(--code-bg); padding:0.6rem; border-radius:4px; line-height:1.8;">
+          Team: Arun ($50000)
+        </div>
+      </div>
+    </div>
+
+    <div class="block-desc">
+      <span><strong>XPath</strong> is a query language for selecting nodes from an XML document.</span>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">XPath Expressions</div>
+        <pre><span class="lcm">&lt;!-- XPath syntax --&gt;</span>
+<span class="lo">/root/child</span>             <span class="lcm">→ absolute path</span>
+<span class="lo">//child</span>                 <span class="lcm">→ any child anywhere</span>
+<span class="lo">//team[@aid='t1']</span>       <span class="lcm">→ team with aid="t1"</span>
+<span class="lo">//team[salary &gt; 30000]</span>  <span class="lcm">→ team with salary &gt; 30000</span>
+<span class="lo">//team/name</span>             <span class="lcm">→ all name elements in team</span>
+<span class="lo">/teams/team[1]</span>          <span class="lcm">→ first team child</span>
+<span class="lo">/teams/team[last()]</span>     <span class="lcm">→ last team child</span>
+<span class="lo">/teams/team[position()&lt;3]</span> <span class="lcm">→ first 2 teams</span>
+<span class="lo">//name/text()</span>           <span class="lcm">→ text content of name</span>
+
+<span class="lcm">&lt;!-- Java XPath usage --&gt;</span>
+<span class="lc">XPathFactory</span> <span class="lc">xf</span> = <span class="lc">XPathFactory</span>.<span class="lm">newInstance</span>();
+<span class="lc">XPath</span> <span class="lc">xpath</span> = <span class="lc">xf</span>.<span class="lm">newXPath</span>();
+<span class="lc">String</span> <span class="lc">expr</span> = <span class="ls">"//team[@aid='t1']/name"</span>;
+<span class="lc">NodeList</span> <span class="lc">result</span> = (<span class="lc">NodeList</span>) <span class="lc">xpath</span>.<span class="lm">evaluate</span>(
+    <span class="lc">expr</span>, <span class="lc">doc</span>, <span class="lc">XPathConstants</span>.<span class="lo">NODESET</span>);</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ XPath Functions</div>
+        <div class="live-output">
+          <table style="font-size:0.78rem; color:var(--text-muted); border-collapse:collapse; width:100%;">
+            <tr><td style="padding:3px 6px;"><code>text()</code></td><td style="padding:3px 6px;">Node text content</td></tr>
+            <tr><td style="padding:3px 6px;"><code>@attr</code></td><td style="padding:3px 6px;">Attribute value</td></tr>
+            <tr><td style="padding:3px 6px;"><code>last()</code></td><td style="padding:3px 6px;">Last position</td></tr>
+            <tr><td style="padding:3px 6px;"><code>position()</code></td><td style="padding:3px 6px;">Current index</td></tr>
+            <tr><td style="padding:3px 6px;"><code>count()</code></td><td style="padding:3px 6px;">Node count</td></tr>
+            <tr><td style="padding:3px 6px;"><code>contains()</code></td><td style="padding:3px 6px;">String match</td></tr>
+            <tr><td style="padding:3px 6px;"><code>normalize-space()</code></td><td style="padding:3px 6px;">Trim whitespace</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>XML Cheatsheet &mdash; XML, DTD &amp; Schema reference</footer>
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

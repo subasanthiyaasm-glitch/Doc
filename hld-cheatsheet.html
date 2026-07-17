@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HLD &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .kw  { color: #bb9af7; }
+    .fn  { color: #7aa2f7; }
+    .str { color: #9ece6a; }
+    .cm  { color: #565f89; }
+    .op  { color: #e0af68; }
+    .num { color: #ff9e64; }
+    .tag { color: #f7768e; }
+
+    .badge {
+      display: inline-block; padding: 0.15rem 0.55rem; border-radius: 4px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.4px;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .b-basic   { background:#1e40af; color:#fff; }
+    .b-core    { background:#065f46; color:#fff; }
+    .b-inter   { background:#7c3aed; color:#fff; }
+    .b-adv     { background:#9a3412; color:#fff; }
+    .b-pattern { background:#374151; color:#fff; }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.6rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .concept-card {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+    .concept-card strong { color: var(--text); display: block; margin-bottom: 0.2rem; }
+    .concept-card span  { color: var(--text-muted); }
+
+    .tradeoff-table { width:100%; border-collapse:collapse; font-size:0.75rem; }
+    .tradeoff-table th {
+      background: var(--code-bg); color: var(--text-muted);
+      padding: 0.4rem 0.6rem; text-align:left; border-bottom: 1px solid var(--border);
+      font-weight:600; letter-spacing:0.3px; text-transform:uppercase; font-size:0.65rem;
+    }
+    .tradeoff-table td { padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align:top; }
+    .tradeoff-table tr:last-child td { border-bottom: none; }
+    .tradeoff-table .yes { color:#9ece6a; font-weight:600; }
+    .tradeoff-table .no  { color:#f7768e; font-weight:600; }
+    .tradeoff-table .mid { color:#e0af68; font-weight:600; }
+
+    .flow-box {
+      display:flex; align-items:center; flex-wrap:wrap; gap:0.3rem;
+      font-size:0.72rem; color:var(--text-muted); padding:0.5rem 0;
+    }
+    .flow-box .node {
+      background:var(--code-bg); border:1px solid var(--border);
+      border-radius:4px; padding:0.25rem 0.5rem; color:var(--text);
+      font-weight:600; white-space:nowrap;
+    }
+    .flow-box .arrow { color:var(--text-muted); font-weight:700; }
+
+    .tip-list { list-style:none; padding:0; margin:0; font-size:0.75rem; }
+    .tip-list li { padding:0.2rem 0; color:var(--text-muted); line-height:1.6; }
+    .tip-list li::before { content:"▸ "; color:#7aa2f7; font-weight:700; }
+    .tip-list li strong { color:var(--text); }
+
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:640px){ .two-col{ grid-template-columns:1fr; } }
+
+    .num-badge {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:1.2rem; height:1.2rem; border-radius:50%;
+      background:#7aa2f7; color:#1a1b26; font-size:0.6rem; font-weight:800;
+      margin-right:0.35rem; flex-shrink:0;
+    }
+    .step-row { display:flex; align-items:flex-start; margin-bottom:0.4rem; font-size:0.75rem; color:var(--text-muted); }
+    .step-row strong { color:var(--text); }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('HLD')</script>
+<script>renderSourceLink('HLD')</script>
+
+<main>
+  <div class="page-header">
+    <h1>HLD</h1>
+    <p class="subtitle">High-Level Design — Basic to Advanced</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#fundamentals">Fundamentals</a>
+      <a href="#scalability">Scalability</a>
+      <a href="#lb">Load Balancing</a>
+      <a href="#caching">Caching</a>
+      <a href="#databases">Databases</a>
+      <a href="#cap">CAP / PACELC</a>
+      <a href="#apis">APIs</a>
+      <a href="#queues">Queues</a>
+      <a href="#microservices">Microservices</a>
+      <a href="#patterns">Design Patterns</a>
+      <a href="#reliability">Reliability</a>
+      <a href="#security">Security</a>
+      <a href="#estimation">Estimation</a>
+      <a href="#interview">Interview Blueprint</a>
+    </nav>
+  </div>
+
+    <!-- ═══════════════════════════════════════════ FUNDAMENTALS ═══ -->
+    <section id="fundamentals">
+      <span class="badge b-basic">Basic</span>
+      <h2>Fundamentals — What is HLD?</h2>
+      <div class="block-desc">
+        <span>High-Level Design defines the <code>system architecture</code>: components, their responsibilities, and how they interact — without implementation detail.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">HLD vs LLD</div>
+          <pre><span class="cm">─────────────────────────────────────────────</span>
+<span class="kw">HLD</span> <span class="cm">(High-Level Design)</span>
+  • Architecture overview
+  • Component identification (DB, Cache, Queue…)
+  • Data flow between components
+  • Tech stack choices  (SQL vs NoSQL, REST vs gRPC)
+  • Scalability &amp; reliability strategy
+  • No code / pseudocode
+
+<span class="kw">LLD</span> <span class="cm">(Low-Level Design)</span>
+  • Class diagrams, method signatures
+  • DB schema (exact tables &amp; columns)
+  • Algorithms &amp; data structures
+  • Edge-case handling in code
+
+<span class="cm">─────────────────────────────────────────────
+Order:  Requirements → HLD → LLD → Code</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Key Goals of HLD</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Clarity</strong> — any engineer can understand the system without reading code</li>
+              <li><strong>Scalability</strong> — handles 10× growth with config/infra changes only</li>
+              <li><strong>Reliability</strong> — survives component failures gracefully</li>
+              <li><strong>Maintainability</strong> — components can evolve independently</li>
+              <li><strong>Latency</strong> — p99 SLAs are achievable with the chosen design</li>
+              <li><strong>Cost</strong> — resource usage is proportional to load</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Standard HLD Components</div>
+          <pre><span class="fn">Client</span>          <span class="cm"># Browser / Mobile / CLI</span>
+  ↓
+<span class="fn">DNS</span>             <span class="cm"># Resolves domain → IP</span>
+  ↓
+<span class="fn">CDN</span>             <span class="cm"># Edge cache for static assets</span>
+  ↓
+<span class="fn">Load Balancer</span>   <span class="cm"># Distributes traffic (L4 / L7)</span>
+  ↓
+<span class="fn">API Gateway</span>     <span class="cm"># Auth, rate-limit, routing</span>
+  ↓
+<span class="fn">Services</span>        <span class="cm"># Business logic (monolith or µservice)</span>
+  ↓
+<span class="fn">Cache</span>           <span class="cm"># Redis / Memcached (fast reads)</span>
+<span class="fn">Database</span>        <span class="cm"># Persistent storage (SQL / NoSQL)</span>
+<span class="fn">Message Queue</span>  <span class="cm"># Async work (Kafka / RabbitMQ)</span>
+<span class="fn">Object Store</span>   <span class="cm"># Files / media (S3)</span>
+<span class="fn">Search Index</span>   <span class="cm"># Full-text (Elasticsearch)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Requirements Checklist</div>
+          <div class="live-output">
+            <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.9;">
+              <div><strong style="color:var(--text)">Functional</strong></div>
+              <div>☐ What does the system do? (core features)</div>
+              <div>☐ Who are the users?</div>
+              <div>☐ What are the key APIs / user actions?</div>
+              <div style="margin-top:0.6rem;"><strong style="color:var(--text)">Non-Functional</strong></div>
+              <div>☐ Scale — DAU, QPS, data volume</div>
+              <div>☐ Latency — p50 / p99 targets</div>
+              <div>☐ Availability — 99.9% or 99.99%?</div>
+              <div>☐ Consistency — strong vs eventual</div>
+              <div>☐ Durability — zero data loss?</div>
+              <div>☐ Read/Write ratio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ SCALABILITY ════ -->
+    <section id="scalability">
+      <span class="badge b-basic">Basic</span>
+      <h2>Scalability</h2>
+      <div class="block-desc">
+        <span>Scalability is the ability to handle increased load by adding resources without redesigning the system.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Vertical vs Horizontal Scaling</div>
+          <pre><span class="kw">Vertical Scaling</span> <span class="cm">(Scale Up)</span>
+  Bigger machine: more CPU, RAM, SSD
+  • Simple — no code change needed
+  • Hard limit: largest available machine
+  • Single point of failure
+  • Example: RDS instance upgrade
+
+<span class="kw">Horizontal Scaling</span> <span class="cm">(Scale Out)</span>
+  More machines running same service
+  • Handles unlimited load (theoretically)
+  • Requires stateless services
+  • Needs load balancer in front
+  • Example: add EC2 instances behind ALB
+
+<span class="cm">──────────────────────────────────────────────
+Rule of thumb:
+  Start vertical → hit limits → go horizontal</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Stateless vs Stateful</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th></th><th>Stateless</th><th>Stateful</th></tr>
+              <tr><td>Session data</td><td class="yes">External store (Redis)</td><td class="no">In-process memory</td></tr>
+              <tr><td>Horizontal scale</td><td class="yes">Easy</td><td class="no">Hard</td></tr>
+              <tr><td>Rolling deploy</td><td class="yes">Safe</td><td class="no">Sticky sessions needed</td></tr>
+              <tr><td>Example</td><td>REST API server</td><td>WebSocket game server</td></tr>
+            </table>
+            <div style="margin-top:0.8rem;font-size:0.72rem;color:var(--text-muted);">
+              <strong style="color:var(--text)">Key insight:</strong> Move state to the edges (DB, cache) so all app servers are identical and interchangeable.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Scalability Patterns</div>
+          <pre><span class="kw">1. Replication</span>
+   Copy data to multiple nodes
+   → Primary handles writes; replicas handle reads
+
+<span class="kw">2. Partitioning / Sharding</span>
+   Split data across nodes by key
+   → shard_id = hash(user_id) % num_shards
+
+<span class="kw">3. Caching</span>
+   Store hot data in fast memory
+   → Redis, Memcached in front of DB
+
+<span class="kw">4. Async Processing</span>
+   Offload heavy work to queues
+   → Return 202 Accepted; process in background
+
+<span class="kw">5. CDN</span>
+   Serve static assets from edge nodes
+   → Reduces origin load + latency
+
+<span class="kw">6. Microservices</span>
+   Scale each service independently
+   → Checkout scales × 10 during flash sale</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">QPS Estimation</div>
+          <div class="live-output" style="font-size:0.74rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong style="color:var(--text)">Twitter-scale example</strong></div>
+            <div>300M DAU, 60% active daily</div>
+            <div>Avg 5 actions/day per user</div>
+            <div style="margin:0.4rem 0;padding:0.4rem;background:var(--code-bg);border-radius:4px;font-family:monospace;">
+              QPS = (300M × 0.6 × 5) / 86400<br/>
+              &nbsp;&nbsp;&nbsp;&nbsp;≈ <strong style="color:#9ece6a;">10,400 QPS</strong><br/>
+              Peak ≈ 3× avg = <strong style="color:#e0af68;">~30K QPS</strong>
+            </div>
+            <div><strong style="color:var(--text)">Storage example</strong></div>
+            <div>100M tweets/day × 280 chars × 2B</div>
+            <div style="margin-top:0.3rem;padding:0.4rem;background:var(--code-bg);border-radius:4px;font-family:monospace;">
+              = 56 GB/day<br/>
+              = <strong style="color:#9ece6a;">~20 TB/year</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ LOAD BALANCING ═ -->
+    <section id="lb">
+      <span class="badge b-basic">Basic</span>
+      <h2>Load Balancing</h2>
+      <div class="block-desc">
+        <span>A load balancer distributes incoming requests across multiple backend servers to maximize availability and throughput.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">LB Algorithms</div>
+          <pre><span class="kw">Round Robin</span>
+  req1→S1, req2→S2, req3→S3, req4→S1…
+  • Simple, equal distribution
+  • Bad if servers have unequal capacity
+
+<span class="kw">Weighted Round Robin</span>
+  S1 weight=3, S2 weight=1 → 75% to S1
+  • Use when servers differ in spec
+
+<span class="kw">Least Connections</span>
+  Route to server with fewest active conns
+  • Best for long-lived connections
+
+<span class="kw">IP Hash</span> <span class="cm">(Sticky sessions)</span>
+  hash(client_ip) % num_servers → always same
+  • Needed for stateful services
+
+<span class="kw">Random</span>
+  Pick a random server
+  • Simple; good under uniform load
+
+<span class="kw">Resource-Based</span>
+  Route based on server CPU/mem metrics
+  • Most accurate; requires health agent</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">L4 vs L7 Load Balancer</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th></th><th>L4 (Transport)</th><th>L7 (Application)</th></tr>
+              <tr><td>Works at</td><td>TCP/UDP layer</td><td>HTTP layer</td></tr>
+              <tr><td>Routing by</td><td>IP + port</td><td>URL, headers, cookies</td></tr>
+              <tr><td>Speed</td><td class="yes">Faster</td><td class="mid">Slightly slower</td></tr>
+              <tr><td>SSL termination</td><td class="no">No</td><td class="yes">Yes</td></tr>
+              <tr><td>Path routing</td><td class="no">No</td><td class="yes">Yes</td></tr>
+              <tr><td>Examples</td><td>AWS NLB, HAProxy</td><td>AWS ALB, Nginx, Envoy</td></tr>
+            </table>
+            <div style="margin-top:0.75rem;font-size:0.72rem;color:var(--text-muted);">
+              <strong style="color:var(--text)">Health checks:</strong> LB pings <code>/health</code> every N seconds. Remove unhealthy nodes automatically → no manual intervention needed.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">DNS Load Balancing</div>
+          <pre><span class="cm"># DNS returns multiple A records</span>
+<span class="fn">api.example.com</span> → <span class="num">1.2.3.4</span>, <span class="num">1.2.3.5</span>, <span class="num">1.2.3.6</span>
+
+<span class="cm"># Client picks one (usually first)</span>
+<span class="cm"># TTL controls how often client re-resolves</span>
+
+<span class="kw">Geo DNS</span>
+  US users  → us-east servers
+  EU users  → eu-west servers
+  APAC users→ ap-south servers
+
+<span class="cm"># Reduces cross-region latency by 100-200ms
+# Providers: Route53, Cloudflare, Akamai</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">LB Failure Modes</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Active-Passive:</strong> standby LB takes over if primary fails (failover ~30s)</li>
+              <li><strong>Active-Active:</strong> both LBs serve traffic, Anycast routes to nearest</li>
+              <li><strong>Hot standby:</strong> secondary receives health checks but no real traffic</li>
+              <li><strong>Connection draining:</strong> LB waits for in-flight requests before removing a node (deregistration delay)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ CACHING ════════ -->
+    <section id="caching">
+      <span class="badge b-core">Core</span>
+      <h2>Caching</h2>
+      <div class="block-desc">
+        <span>Caching stores expensive computation or data in fast memory so subsequent requests are served in microseconds instead of milliseconds.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Cache Strategies</div>
+          <pre><span class="kw">Cache-Aside</span> <span class="cm">(Lazy loading — most common)</span>
+  1. App checks cache → miss?
+  2. App reads DB → writes to cache
+  3. Next read hits cache
+
+<span class="kw">Write-Through</span>
+  App writes to cache AND DB atomically
+  • Cache always consistent with DB
+  • Write latency = DB latency (slower writes)
+
+<span class="kw">Write-Behind</span> <span class="cm">(Write-Back)</span>
+  App writes to cache; async flush to DB
+  • Fast writes; risk of data loss on crash
+
+<span class="kw">Read-Through</span>
+  Cache sits in front; fills itself from DB
+  • App never talks to DB directly
+  • Good for read-heavy workloads
+
+<span class="kw">Refresh-Ahead</span>
+  Cache proactively refreshes before TTL
+  • No cold-start; slightly stale data ok</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Cache Eviction Policies</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th>Policy</th><th>Evicts</th><th>Best For</th></tr>
+              <tr><td><strong>LRU</strong></td><td>Least Recently Used</td><td>General workloads</td></tr>
+              <tr><td><strong>LFU</strong></td><td>Least Frequently Used</td><td>Skewed access (hot keys)</td></tr>
+              <tr><td><strong>FIFO</strong></td><td>Oldest entry</td><td>Time-ordered data</td></tr>
+              <tr><td><strong>TTL</strong></td><td>Expired entries</td><td>Time-sensitive data</td></tr>
+              <tr><td><strong>Random</strong></td><td>Random entry</td><td>Simple; low overhead</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Cache Problems &amp; Fixes</div>
+          <pre><span class="tag">Cache Stampede</span> <span class="cm">(Thundering Herd)</span>
+  Problem: TTL expires → 1000 reqs hit DB simultaneously
+  Fix:
+    • Mutex lock: first miss acquires lock, others wait
+    • Probabilistic early refresh: refresh before TTL
+    • Background refresh thread
+
+<span class="tag">Cache Penetration</span>
+  Problem: request for non-existent key bypasses cache
+  Fix:
+    • Cache NULL values with short TTL
+    • Bloom filter: fast check "key exists in DB?"
+
+<span class="tag">Cache Avalanche</span>
+  Problem: many keys expire at same time → DB overload
+  Fix:
+    • Jitter: TTL = base + rand(0, base×0.2)
+    • Stagger expiry times on bulk loads
+
+<span class="tag">Hot Key</span>
+  Problem: one cache key gets 80% of reads → bottleneck
+  Fix:
+    • Local in-process cache (L1 cache)
+    • Shard hot key: key_1, key_2 … key_N</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Where to Cache</div>
+          <div class="live-output" style="font-size:0.73rem;line-height:1.75;color:var(--text-muted);">
+            <div class="flow-box" style="flex-direction:column;align-items:flex-start;gap:0.4rem;">
+              <div><span class="node">L1: Client-side</span> <span style="font-size:0.7rem;">Browser cache, service worker — 0ms</span></div>
+              <div><span class="node">L2: CDN Edge</span> <span style="font-size:0.7rem;">Cloudflare, Fastly — ~5ms (nearest PoP)</span></div>
+              <div><span class="node">L3: API Gateway</span> <span style="font-size:0.7rem;">Response cache for identical requests</span></div>
+              <div><span class="node">L4: App-level</span> <span style="font-size:0.7rem;">In-process cache (Guava, Caffeine) — ~0.1ms</span></div>
+              <div><span class="node">L5: Distributed</span> <span style="font-size:0.7rem;">Redis cluster — ~0.5ms</span></div>
+              <div><span class="node">L6: DB buffer</span> <span style="font-size:0.7rem;">Postgres shared_buffers, InnoDB pool</span></div>
+            </div>
+            <div style="margin-top:0.5rem;font-size:0.7rem;"><strong style="color:var(--text)">Hit rate goal:</strong> ≥ 90% at L5 to avoid DB bottleneck.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ DATABASES ══════ -->
+    <section id="databases">
+      <span class="badge b-core">Core</span>
+      <h2>Databases</h2>
+      <div class="block-desc">
+        <span>Database choice drives consistency, scalability, and query flexibility. Match the storage engine to the data model and access patterns.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">SQL vs NoSQL</div>
+          <pre><span class="kw">SQL</span> <span class="cm">(Relational — Postgres, MySQL)</span>
+  • ACID transactions (strong consistency)
+  • Structured schema — enforced at DB level
+  • Rich queries: JOINs, aggregations, subqueries
+  • Vertical scaling primary; horizontal via read replicas
+  • Use when: financial data, complex relationships,
+             reporting, strong consistency required
+
+<span class="kw">NoSQL</span> types:
+  <span class="fn">Document</span>  → MongoDB, Firestore
+    JSON documents; flexible schema; nested data
+  <span class="fn">Key-Value</span> → Redis, DynamoDB
+    Ultra-fast; simple get/set; no joins
+  <span class="fn">Wide-Col</span>  → Cassandra, HBase
+    Column families; massive write throughput
+  <span class="fn">Graph</span>     → Neo4j, Amazon Neptune
+    Nodes + edges; friend-of-friend queries
+  <span class="fn">Time-Series</span>→ InfluxDB, TimescaleDB
+    Optimized for timestamps + metrics</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">When to Use What</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th>Use Case</th><th>Choice</th></tr>
+              <tr><td>User accounts, orders</td><td>PostgreSQL</td></tr>
+              <tr><td>Session / token store</td><td>Redis</td></tr>
+              <tr><td>Product catalog</td><td>MongoDB</td></tr>
+              <tr><td>Activity feed / timeline</td><td>Cassandra</td></tr>
+              <tr><td>Social graph</td><td>Neo4j</td></tr>
+              <tr><td>Full-text search</td><td>Elasticsearch</td></tr>
+              <tr><td>Metrics / IoT data</td><td>InfluxDB</td></tr>
+              <tr><td>Files / blobs</td><td>S3 / GCS</td></tr>
+              <tr><td>Analytics / OLAP</td><td>Snowflake / BigQuery</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Replication</div>
+          <pre><span class="kw">Primary-Replica</span> <span class="cm">(Master-Slave)</span>
+  Primary: all writes
+  Replicas: read-only copies (async replication)
+  • Read scaling: distribute reads across replicas
+  • Failover: promote replica if primary dies
+  • Replication lag: replica may be slightly stale
+
+<span class="kw">Multi-Primary</span> <span class="cm">(Multi-Master)</span>
+  All nodes accept writes
+  • Higher write availability
+  • Conflict resolution required
+  • Example: CockroachDB, Galera
+
+<span class="kw">Synchronous Replication</span>
+  Write ack only after replica confirms
+  • Zero data loss; higher write latency
+
+<span class="kw">Asynchronous Replication</span>
+  Write ack immediately; replica updates eventually
+  • Low latency; possible data loss on crash</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Sharding (Partitioning)</div>
+          <div class="live-output" style="font-size:0.73rem;line-height:1.7;color:var(--text-muted);">
+            <div><strong style="color:var(--text)">Horizontal sharding</strong> — split rows across nodes</div>
+            <div style="margin:0.4rem 0;padding:0.4rem;background:var(--code-bg);border-radius:4px;font-family:monospace;font-size:0.7rem;">
+              shard = hash(user_id) % 4<br/>
+              0 → Shard A &nbsp; 1 → Shard B<br/>
+              2 → Shard C &nbsp; 3 → Shard D
+            </div>
+            <ul class="tip-list" style="margin-top:0.4rem;">
+              <li><strong>Range sharding:</strong> user_id 0–1M → Shard1; easy range queries</li>
+              <li><strong>Hash sharding:</strong> uniform distribution; no range queries</li>
+              <li><strong>Directory sharding:</strong> lookup table maps key → shard; flexible but single point</li>
+              <li><strong>Geo sharding:</strong> US → Shard-US; EU → Shard-EU</li>
+              <li><strong>Hotspot problem:</strong> celebrity user → one shard overloaded; add sub-sharding</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ACID vs BASE</div>
+          <pre><span class="kw">ACID</span> <span class="cm">(SQL databases)</span>
+  <span class="fn">A</span>tomicity    — all or nothing (no partial writes)
+  <span class="fn">C</span>onsistency  — DB always in valid state after txn
+  <span class="fn">I</span>solation    — concurrent txns don't interfere
+  <span class="fn">D</span>urability   — committed data survives crashes
+
+<span class="kw">BASE</span> <span class="cm">(most NoSQL databases)</span>
+  <span class="fn">B</span>asically Available — responds even under failure
+  <span class="fn">S</span>oft state          — state may change without input
+  <span class="fn">E</span>ventually Consistent— all nodes converge over time
+
+<span class="cm">──────────────────────────────────────────────
+ACID: Bank transfers, orders, inventory
+BASE: Social feeds, view counts, likes</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Indexing Essentials</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th>Index Type</th><th>Good For</th></tr>
+              <tr><td>B-Tree (default)</td><td>Range queries, ORDER BY, =, &lt;, &gt;</td></tr>
+              <tr><td>Hash</td><td>Exact equality lookups only</td></tr>
+              <tr><td>Composite</td><td>Multi-column WHERE; column order matters</td></tr>
+              <tr><td>Partial</td><td>Index subset of rows (WHERE active=true)</td></tr>
+              <tr><td>Covering</td><td>All query columns in index; no table scan</td></tr>
+              <tr><td>GIN / GiST</td><td>Full-text search, arrays, JSONB (Postgres)</td></tr>
+            </table>
+            <div style="margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted);">
+              <strong style="color:var(--text)">Rule:</strong> Index columns in WHERE, JOIN, ORDER BY. Avoid over-indexing — each index slows writes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ CAP / PACELC ═══ -->
+    <section id="cap">
+      <span class="badge b-inter">Intermediate</span>
+      <h2>CAP Theorem &amp; PACELC</h2>
+      <div class="block-desc">
+        <span>CAP states a distributed system can guarantee only 2 of 3 properties during a network partition. PACELC extends this to normal operation.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">CAP Theorem</div>
+          <pre><span class="kw">C</span>onsistency
+  Every read returns the most recent write
+  or an error. All nodes see same data.
+
+<span class="kw">A</span>vailability
+  Every request gets a non-error response.
+  (Not guaranteed to be the latest data)
+
+<span class="kw">P</span>artition Tolerance
+  System continues to function even when
+  network messages are dropped/delayed.
+
+<span class="cm">─────────────────────────────────────────────
+In practice: P is mandatory (networks fail).
+So the real trade-off is C vs A.
+
+CP: Consistent but may reject requests
+    → HBase, ZooKeeper, Etcd, MongoDB
+
+AP: Available but may return stale data
+    → Cassandra, CouchDB, DynamoDB
+
+CA: Only works if no network partition
+    → Single-node RDBMS (not distributed)</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">PACELC Model</div>
+          <div class="live-output" style="font-size:0.73rem;line-height:1.8;color:var(--text-muted);">
+            <div><strong style="color:var(--text)">Extends CAP to cover normal operation (no partition)</strong></div>
+            <div style="margin:0.5rem 0;padding:0.5rem;background:var(--code-bg);border-radius:4px;font-family:monospace;font-size:0.7rem;">
+              If <strong style="color:#f7768e;">P</strong>artition: choose <strong style="color:#bb9af7;">A</strong>vailability or <strong style="color:#7aa2f7;">C</strong>onsistency<br/>
+              <strong style="color:#e0af68;">E</strong>lse: choose <strong style="color:#9ece6a;">L</strong>atency or <strong style="color:#7aa2f7;">C</strong>onsistency
+            </div>
+            <table class="tradeoff-table">
+              <tr><th>System</th><th>Partition</th><th>Else</th></tr>
+              <tr><td>DynamoDB</td><td>PA</td><td>EL (low latency)</td></tr>
+              <tr><td>Cassandra</td><td>PA</td><td>EL</td></tr>
+              <tr><td>MongoDB</td><td>PC</td><td>EC</td></tr>
+              <tr><td>HBase</td><td>PC</td><td>EC</td></tr>
+              <tr><td>CockroachDB</td><td>PC</td><td>EC</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Consistency Models (strongest → weakest)</div>
+          <pre><span class="kw">Linearizability</span> <span class="cm">(Strict)</span>
+  Reads always see latest write. Like single machine.
+  Cost: high latency, hard to scale.
+
+<span class="kw">Sequential Consistency</span>
+  All operations appear in some total order.
+  Not necessarily real-time.
+
+<span class="kw">Causal Consistency</span>
+  Causally related operations seen in order.
+  "Alice posts, then Bob replies" always ordered.
+
+<span class="kw">Read-Your-Writes</span>
+  You always read what you just wrote.
+  Others may be stale. (most apps need this)
+
+<span class="kw">Monotonic Reads</span>
+  Once you read X, you never read older than X.
+
+<span class="kw">Eventual Consistency</span> <span class="cm">(weakest)</span>
+  If writes stop, all replicas will agree.
+  No guarantee on WHEN.
+  Example: DNS, social media likes</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Choosing Consistency Level</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Bank balance / inventory:</strong> Linearizability — must be exact</li>
+              <li><strong>User profile updates:</strong> Read-your-writes — you see your own change</li>
+              <li><strong>Social feed:</strong> Eventual — 200ms stale is fine</li>
+              <li><strong>Like counts:</strong> Eventual — approximate is acceptable</li>
+              <li><strong>Chat messages:</strong> Causal — replies must follow posts</li>
+              <li><strong>Distributed locks:</strong> Linearizability — correctness critical</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ APIs ═══════════ -->
+    <section id="apis">
+      <span class="badge b-core">Core</span>
+      <h2>API Design</h2>
+      <div class="block-desc">
+        <span>The API is the contract between clients and your system. Choose the protocol and style based on latency, coupling, and client diversity needs.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">REST vs GraphQL vs gRPC</div>
+          <pre><span class="kw">REST</span>
+  GET  /users/123          → get user
+  POST /users              → create user
+  PUT  /users/123          → replace user
+  PATCH /users/123         → partial update
+  DELETE /users/123        → delete user
+
+  • Cacheable (HTTP cache headers)
+  • Stateless; easy to reason about
+  • Over/under-fetching common
+
+<span class="kw">GraphQL</span>
+  POST /graphql
+  { user(id:"123") { name, email, posts { title } } }
+
+  • Client specifies exact fields needed
+  • Single endpoint; reduces round-trips
+  • Harder to cache; N+1 query risk
+
+<span class="kw">gRPC</span>
+  rpc GetUser (UserRequest) returns (User) {}
+
+  • Binary (Protobuf) — 5-10× smaller than JSON
+  • Bi-directional streaming
+  • Strong typing via .proto contract
+  • Best for internal service-to-service</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">API Comparison</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th></th><th>REST</th><th>GraphQL</th><th>gRPC</th></tr>
+              <tr><td>Transport</td><td>HTTP/1.1</td><td>HTTP/1.1</td><td>HTTP/2</td></tr>
+              <tr><td>Payload</td><td>JSON</td><td>JSON</td><td>Protobuf</td></tr>
+              <tr><td>Caching</td><td class="yes">Easy</td><td class="no">Hard</td><td class="no">Manual</td></tr>
+              <tr><td>Streaming</td><td class="no">No</td><td class="mid">Subs</td><td class="yes">Yes</td></tr>
+              <tr><td>Browser</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Limited</td></tr>
+              <tr><td>Best for</td><td>Public APIs</td><td>Mobile/BFF</td><td>Microservices</td></tr>
+            </table>
+            <div style="margin-top:0.6rem;font-size:0.7rem;color:var(--text-muted);">
+              <strong style="color:var(--text)">BFF pattern:</strong> Backend-for-Frontend — dedicated API layer per client type (iOS, web, Android) that aggregates microservice calls.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Rate Limiting Algorithms</div>
+          <pre><span class="kw">Token Bucket</span>
+  Bucket holds N tokens; refills at R/sec
+  Each request consumes 1 token
+  Allow bursts up to bucket size
+  → Most common; flexible burst handling
+
+<span class="kw">Leaky Bucket</span>
+  Requests enter queue; process at fixed rate
+  Queue full → drop request
+  → Smooth output; no burst allowed
+
+<span class="kw">Fixed Window Counter</span>
+  Count reqs in 1-minute window; reset at :00
+  Risk: 2× limit possible at window boundary
+
+<span class="kw">Sliding Window Log</span>
+  Store timestamp of each request
+  Count reqs in last 60s on each request
+  → Accurate but memory-heavy
+
+<span class="kw">Sliding Window Counter</span>
+  Hybrid: current + prev window weighted
+  → Good accuracy + low memory</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">API Gateway Responsibilities</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Authentication:</strong> validate JWT / API key before forwarding</li>
+              <li><strong>Rate limiting:</strong> per-user or per-IP request throttling</li>
+              <li><strong>SSL termination:</strong> decrypt TLS; forward plain HTTP internally</li>
+              <li><strong>Request routing:</strong> /users → user-service; /orders → order-service</li>
+              <li><strong>Request transformation:</strong> add headers, rename fields</li>
+              <li><strong>Response caching:</strong> cache identical GET responses at edge</li>
+              <li><strong>Observability:</strong> log, trace, and metric every request</li>
+            </ul>
+            <div style="margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted);">
+              Examples: Kong, AWS API Gateway, Nginx, Traefik, Envoy
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ QUEUES ═════════ -->
+    <section id="queues">
+      <span class="badge b-inter">Intermediate</span>
+      <h2>Message Queues &amp; Event Streaming</h2>
+      <div class="block-desc">
+        <span>Queues decouple producers from consumers, enabling async processing, load smoothing, and fault tolerance across services.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Queue vs Stream</div>
+          <pre><span class="kw">Message Queue</span> <span class="cm">(RabbitMQ, SQS, ActiveMQ)</span>
+  • Message consumed ONCE by ONE consumer
+  • Message deleted after processing
+  • Work distribution: job queue, task runner
+  • Use: email sending, image resize, payments
+
+<span class="kw">Event Stream</span> <span class="cm">(Kafka, Kinesis)</span>
+  • Message retained on disk (days/forever)
+  • Multiple consumer groups read independently
+  • Replay: reprocess historical events
+  • Use: analytics, audit log, event sourcing,
+         real-time pipelines, CDC
+
+<span class="cm">─────────────────────────────────────────────
+Queue:  "do this task once"
+Stream: "this event happened — anyone interested?"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Kafka Architecture</div>
+          <div class="live-output" style="font-size:0.73rem;line-height:1.7;color:var(--text-muted);">
+            <div style="margin-bottom:0.4rem;"><strong style="color:var(--text)">Core concepts</strong></div>
+            <ul class="tip-list">
+              <li><strong>Topic:</strong> named log of events (like a DB table)</li>
+              <li><strong>Partition:</strong> ordered sub-log; unit of parallelism</li>
+              <li><strong>Offset:</strong> position of a message in a partition</li>
+              <li><strong>Producer:</strong> writes events to a topic</li>
+              <li><strong>Consumer Group:</strong> set of consumers sharing work; each partition → one consumer per group</li>
+              <li><strong>Broker:</strong> Kafka server; stores partitions</li>
+              <li><strong>Retention:</strong> configurable (7 days default); not tied to consumption</li>
+            </ul>
+            <div style="margin-top:0.4rem;font-size:0.7rem;">Throughput: 10M+ msgs/sec; p99 &lt;10ms</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Delivery Guarantees</div>
+          <pre><span class="kw">At-most-once</span>
+  Send and forget. Never retry.
+  → May lose messages; lowest overhead
+
+<span class="kw">At-least-once</span>
+  Retry until acked. May duplicate.
+  → Default for most queues
+  → Consumer must be idempotent
+
+<span class="kw">Exactly-once</span>
+  Producer dedup + transactional commits
+  → Hardest; Kafka transactions support this
+  → Use for financial, inventory updates
+
+<span class="cm">─────────────────────────────────────────────
+Idempotency key pattern:
+  PUT /payments/{idempotency_key}
+  Same key → same result; no double charge</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Common Queue Use Cases</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th>Pattern</th><th>Example</th></tr>
+              <tr><td>Task queue</td><td>Video transcoding after upload</td></tr>
+              <tr><td>Fan-out</td><td>New tweet → notify all followers</td></tr>
+              <tr><td>Event sourcing</td><td>All state changes as immutable events</td></tr>
+              <tr><td>CQRS read model</td><td>Build search index from order events</td></tr>
+              <tr><td>CDC</td><td>Sync MySQL → Elasticsearch via Debezium</td></tr>
+              <tr><td>Rate smoothing</td><td>Queue email sends during traffic spike</td></tr>
+              <tr><td>Dead-letter</td><td>Failed msgs routed to DLQ for inspection</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ MICROSERVICES ══ -->
+    <section id="microservices">
+      <span class="badge b-inter">Intermediate</span>
+      <h2>Microservices</h2>
+      <div class="block-desc">
+        <span>Microservices decompose a system into small, independently deployable services, each owning its data and business capability.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Monolith vs Microservices</div>
+          <pre><span class="kw">Monolith</span>
+  Single deployable unit; shared DB
+  ✓ Simple dev, test, deploy
+  ✓ No network hops between modules
+  ✗ Scales as a unit (can't scale just checkout)
+  ✗ Tech stack locked in
+  ✗ Large teams clash in same codebase
+
+<span class="kw">Microservices</span>
+  Services: User, Order, Payment, Notification…
+  Each owns its own DB (polyglot persistence)
+  Communicate via REST / gRPC / events
+  ✓ Independent scale, deploy, tech stack
+  ✓ Team autonomy (Conway's Law)
+  ✗ Distributed system complexity
+  ✗ Network latency on every call
+  ✗ Distributed transactions are hard
+
+<span class="cm">Rule: Start monolith, extract services at seams
+      when a team or scaling boundary is clear.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Service Communication</div>
+          <div class="live-output">
+            <div style="font-size:0.73rem;color:var(--text-muted);line-height:1.7;">
+              <div><strong style="color:var(--text)">Synchronous (request-response)</strong></div>
+              <ul class="tip-list">
+                <li>REST / gRPC — caller blocks for result</li>
+                <li>Simple; tight coupling; cascade failures</li>
+                <li>Add circuit breaker + timeout</li>
+              </ul>
+              <div style="margin-top:0.5rem;"><strong style="color:var(--text)">Asynchronous (event-driven)</strong></div>
+              <ul class="tip-list">
+                <li>Publish event; consumer processes later</li>
+                <li>Loose coupling; harder to trace</li>
+                <li>Use for: notifications, analytics, side effects</li>
+              </ul>
+              <div style="margin-top:0.5rem;"><strong style="color:var(--text)">Service Discovery</strong></div>
+              <ul class="tip-list">
+                <li>Client-side: client queries registry (Eureka)</li>
+                <li>Server-side: LB queries registry (Consul + Nginx)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Circuit Breaker Pattern</div>
+          <pre><span class="kw">States:</span>
+  <span class="fn">CLOSED</span>  → Normal operation; calls pass through
+            Failure count tracked
+  <span class="fn">OPEN</span>    → Too many failures; reject immediately
+            Return fallback / error fast
+            Wait cooldown period (e.g. 30s)
+  <span class="fn">HALF-OPEN</span>→ Let one trial request through
+            Success → CLOSED
+            Failure → OPEN again
+
+<span class="cm">─────────────────────────────────────────────
+Why: Prevents cascade failure.
+If Payment Service is down, don't let
+10K requests pile up waiting → CPU/thread
+exhaustion takes down Order Service too.</span>
+
+<span class="kw">Libraries:</span> Hystrix (Netflix), Resilience4j,
+            Polly (.NET), Tokio (Rust)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Resilience Patterns</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Retry with backoff:</strong> retry after 1s, 2s, 4s… (exponential + jitter)</li>
+              <li><strong>Timeout:</strong> never wait forever; set deadline on every call</li>
+              <li><strong>Bulkhead:</strong> separate thread pools per dependency so one slow service can't exhaust all threads</li>
+              <li><strong>Fallback:</strong> return cached result / default on failure</li>
+              <li><strong>Idempotency:</strong> safe to retry; same result on repeated calls</li>
+              <li><strong>Health check:</strong> <code>/health</code> and <code>/ready</code> endpoints for LB + orchestrator</li>
+              <li><strong>Graceful degradation:</strong> recommendations fail → show popular items instead</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ DESIGN PATTERNS  -->
+    <section id="patterns">
+      <span class="badge b-adv">Advanced</span>
+      <h2>Advanced Design Patterns</h2>
+      <div class="block-desc">
+        <span>Architectural patterns for complex, large-scale systems. Each solves a specific class of problem — pick based on your constraints, not trends.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">CQRS — Command Query Responsibility Segregation</div>
+          <pre><span class="cm"># Separate read and write models</span>
+
+<span class="kw">Write Side</span> <span class="cm">(Commands)</span>
+  POST /orders { items, payment }
+  → Validate → apply business rules → save event
+  → Optimized for correctness
+
+<span class="kw">Read Side</span> <span class="cm">(Queries)</span>
+  GET /orders/dashboard
+  → Pre-built denormalized view (Redis / ES)
+  → Optimized for speed
+
+<span class="cm">─────────────────────────────────────────────
+Write DB: PostgreSQL (normalized, ACID)
+Read DB:  Elasticsearch (flat, fast queries)
+Sync:     Event stream (Kafka) rebuilds read views
+
+Why:
+  - Read traffic is 100× write traffic → scale separately
+  - Complex read queries are slow on normalized write model
+  - Enables multiple read projections for different clients</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Event Sourcing</div>
+          <div class="live-output" style="font-size:0.73rem;color:var(--text-muted);line-height:1.7;">
+            <div><strong style="color:var(--text)">Store events, not current state</strong></div>
+            <div style="margin:0.4rem 0;padding:0.5rem;background:var(--code-bg);border-radius:4px;font-family:monospace;font-size:0.68rem;">
+              [AccountOpened, $0]<br/>
+              [Deposited, $500]<br/>
+              [Withdrawn, $200]<br/>
+              [Deposited, $100]<br/>
+              → Replay → Balance: $400
+            </div>
+            <ul class="tip-list">
+              <li><strong>Audit log free:</strong> every change is recorded</li>
+              <li><strong>Time travel:</strong> rebuild state at any point in time</li>
+              <li><strong>Event replay:</strong> rebuild projections after bugs</li>
+              <li><strong>Snapshots:</strong> periodic state snapshot to avoid replaying all events</li>
+              <li><strong>Complexity:</strong> harder to query current state; use projections</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Saga Pattern — Distributed Transactions</div>
+          <pre><span class="cm"># Problem: No 2PC across microservices</span>
+<span class="cm"># Solution: sequence of local txns + compensations</span>
+
+<span class="kw">Order Saga</span> <span class="cm">(Choreography)</span>
+  OrderService  → OrderCreated event
+  PaymentService→ PaymentProcessed event
+  InventoryService→ StockReserved event
+  ShippingService → ShipmentCreated event
+
+  On failure:
+  PaymentFailed → CancelOrder (compensation)
+
+<span class="kw">Orchestration Saga</span>
+  SagaOrchestrator calls each service
+  Knows the full flow; handles failures
+  → Easier to monitor; single point of control
+
+<span class="cm">─────────────────────────────────────────────
+vs 2PC (Two-Phase Commit):
+  2PC: distributed lock → blocks; doesn't scale
+  Saga: eventual consistency; compensations handle rollback</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Other Advanced Patterns</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Outbox Pattern:</strong> write event to DB in same transaction as data; relay process publishes to queue — ensures exactly-once delivery</li>
+              <li><strong>Strangler Fig:</strong> gradually replace monolith by routing features to new microservices; old code shrinks over time</li>
+              <li><strong>Sidecar:</strong> attach proxy container (Envoy) to each service pod for observability, mTLS, retries — no app code change</li>
+              <li><strong>Anti-Corruption Layer:</strong> translate between legacy and new domain model so legacy doesn't pollute new design</li>
+              <li><strong>Backends for Frontends:</strong> per-client API gateway aggregates services for mobile, web, TV separately</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ RELIABILITY ════ -->
+    <section id="reliability">
+      <span class="badge b-adv">Advanced</span>
+      <h2>Reliability &amp; Availability</h2>
+      <div class="block-desc">
+        <span>Reliability engineering ensures systems meet SLAs under failure conditions through redundancy, observability, and operational discipline.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Availability Nines</div>
+          <pre><span class="kw">SLA</span>       <span class="kw">Downtime/year</span>  <span class="kw">Downtime/month</span>
+<span class="num">99%</span>       3.65 days       7.3 hours
+<span class="num">99.9%</span>     8.7 hours       43.8 minutes
+<span class="num">99.99%</span>    52 minutes      4.4 minutes
+<span class="num">99.999%</span>   5.3 minutes     26 seconds
+
+<span class="cm">─────────────────────────────────────────────
+Composite availability:
+  Two services each at 99.9% in series:
+  0.999 × 0.999 = 99.8%  ← worse!
+
+  Two services each at 99% in parallel (either works):
+  1 - (0.01 × 0.01) = 99.99%  ← much better
+
+Redundancy improves availability.
+Dependencies degrade availability.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">SLI / SLO / SLA</div>
+          <div class="live-output" style="font-size:0.73rem;color:var(--text-muted);line-height:1.8;">
+            <div><strong style="color:var(--text)">SLI</strong> — Service Level Indicator</div>
+            <div>Measured metric: request latency, error rate, availability</div>
+            <div style="margin-top:0.5rem;"><strong style="color:var(--text)">SLO</strong> — Service Level Objective</div>
+            <div>Target: p99 latency &lt; 200ms; error rate &lt; 0.1%</div>
+            <div style="margin-top:0.5rem;"><strong style="color:var(--text)">SLA</strong> — Service Level Agreement</div>
+            <div>Legal contract with customer: 99.9% uptime or refund</div>
+            <div style="margin-top:0.5rem;"><strong style="color:var(--text)">Error Budget</strong></div>
+            <div>SLO=99.9% → 43min/month allowed downtime. Burn too fast → freeze deployments.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Disaster Recovery</div>
+          <pre><span class="kw">RPO</span> <span class="cm">(Recovery Point Objective)</span>
+  Max acceptable data loss
+  RPO = 1hr → restore from 1hr-old backup at worst
+
+<span class="kw">RTO</span> <span class="cm">(Recovery Time Objective)</span>
+  Max acceptable downtime
+  RTO = 30min → system back up within 30 minutes
+
+<span class="kw">DR Strategies</span> <span class="cm">(cheapest → costliest)</span>
+  <span class="fn">Backup &amp; Restore</span>
+    Restore from S3 snapshots. Hours of RTO.
+  <span class="fn">Pilot Light</span>
+    Core systems run minimal in DR region.
+    Scale up on disaster. 10-30 min RTO.
+  <span class="fn">Warm Standby</span>
+    DR runs at reduced capacity, ready to scale.
+    Minutes of RTO.
+  <span class="fn">Active-Active Multi-Region</span>
+    All regions serve traffic simultaneously.
+    Near-zero RTO &amp; RPO. Most expensive.</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Observability — 3 Pillars</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Metrics:</strong> numeric measurements over time (QPS, latency, error rate, CPU) — Prometheus + Grafana. Alert on these.</li>
+              <li><strong>Logs:</strong> structured timestamped event records (JSON). Centralize with ELK / Loki. Search when debugging.</li>
+              <li><strong>Traces:</strong> end-to-end request path across services. Spans show time in each service. Use Jaeger / Zipkin / Tempo.</li>
+            </ul>
+            <div style="margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted);">
+              <strong style="color:var(--text)">Golden signals (Google SRE):</strong> Latency, Traffic, Errors, Saturation (L-T-E-S). Monitor these for every service.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ SECURITY ═══════ -->
+    <section id="security">
+      <span class="badge b-inter">Intermediate</span>
+      <h2>Security in System Design</h2>
+      <div class="block-desc">
+        <span>Security must be designed in, not bolted on. Address authentication, authorization, encryption, and input validation at the architecture level.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Auth Patterns</div>
+          <pre><span class="kw">Session-based Auth</span>
+  Login → server creates session in DB/Redis
+  Cookie stores session_id
+  Server validates session on each request
+  • Stateful: easy revoke; hard to scale
+
+<span class="kw">JWT (JSON Web Token)</span>
+  Login → server signs token (secret/RSA key)
+  Client sends Bearer token in header
+  Server validates signature — no DB lookup
+  • Stateless; fast; hard to revoke before expiry
+  • Short TTL (15min) + refresh token pattern
+
+<span class="kw">OAuth 2.0 + OIDC</span>
+  Delegate auth to identity provider
+  (Google, GitHub, Okta)
+  Access token for APIs; ID token for identity
+  • Best for third-party integrations &amp; SSO
+
+<span class="kw">API Key</span>
+  Static key in header (X-API-Key)
+  Good for server-to-server; easy to rotate
+  • Must be stored hashed on server side</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Security Layers</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>TLS everywhere:</strong> HTTPS externally; mTLS between internal services</li>
+              <li><strong>Encrypt at rest:</strong> DB encryption, S3 SSE — protects stolen disks</li>
+              <li><strong>Input validation:</strong> validate/sanitize at every boundary; never trust client input</li>
+              <li><strong>Principle of least privilege:</strong> services only have access they need; scoped IAM roles</li>
+              <li><strong>Secrets management:</strong> Vault, AWS Secrets Manager — never hardcode in code or env files</li>
+              <li><strong>DDoS protection:</strong> rate limiting, Cloudflare WAF, auto-scaling capacity</li>
+              <li><strong>Audit logging:</strong> who did what, when, from where — immutable append-only log</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ ESTIMATION ═════ -->
+    <section id="estimation">
+      <span class="badge b-core">Core</span>
+      <h2>Back-of-Envelope Estimation</h2>
+      <div class="block-desc">
+        <span>Quick estimation validates whether a design can meet scale requirements before committing to an architecture.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Power of 2 &amp; Latency Numbers</div>
+          <pre><span class="kw">Data sizes</span>
+  1 KB  = 10³ bytes     1 MB  = 10⁶ bytes
+  1 GB  = 10⁹ bytes     1 TB  = 10¹² bytes
+
+<span class="kw">Latency numbers (2024 reference)</span>
+  L1 cache ref        0.5  ns
+  L2 cache ref        7    ns
+  RAM access          100  ns    ← ~100ns
+  SSD random read     150  µs    ← ~0.15ms
+  HDD random read     10   ms
+  Network: same DC    0.5  ms
+  Network: cross DC   30   ms
+  Network: cross cont 150  ms
+
+<span class="kw">Throughput reference</span>
+  Gigabit network     100 MB/s
+  SSD sequential      500 MB/s
+  RAM read            10  GB/s
+
+<span class="kw">Time constants</span>
+  1 day  = 86,400 s   ≈ 10⁵ s
+  1 year ≈ 3 × 10⁷ s</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Estimation Template</div>
+          <div class="live-output" style="font-size:0.73rem;color:var(--text-muted);line-height:1.8;">
+            <div><strong style="color:var(--text)">Step 1 — Assumptions</strong></div>
+            <div>State your numbers clearly: DAU, actions/user/day</div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--text)">Step 2 — QPS</strong></div>
+            <div style="font-family:monospace;font-size:0.7rem;padding:0.3rem;background:var(--code-bg);border-radius:4px;">
+              QPS = (DAU × actions) / 86400<br/>
+              Peak QPS ≈ 2–3× avg QPS
+            </div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--text)">Step 3 — Storage</strong></div>
+            <div style="font-family:monospace;font-size:0.7rem;padding:0.3rem;background:var(--code-bg);border-radius:4px;">
+              daily = records/day × record_size<br/>
+              5yr   = daily × 365 × 5
+            </div>
+            <div style="margin-top:0.4rem;"><strong style="color:var(--text)">Step 4 — Bandwidth</strong></div>
+            <div style="font-family:monospace;font-size:0.7rem;padding:0.3rem;background:var(--code-bg);border-radius:4px;">
+              bandwidth = QPS × avg_response_size
+            </div>
+            <div style="margin-top:0.4rem;font-size:0.7rem;">Round aggressively. Estimate within 10× — exact precision is not the goal.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ INTERVIEW ══════ -->
+    <section id="interview">
+      <span class="badge b-pattern">Blueprint</span>
+      <h2>System Design Interview Blueprint</h2>
+      <div class="block-desc">
+        <span>A repeatable framework for any system design interview. Spend time proportionally: requirements and estimation upfront, core design in the middle, deep-dives at the end.</span>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">45-Minute Framework</div>
+          <pre><span class="cm">──────────────────────────────────────────────
+[0-5 min]  Clarify Requirements</span>
+  • Functional: what does it do?
+  • Non-functional: scale, latency, availability
+  • Out of scope: what are you NOT building?
+  • Ask: read-heavy or write-heavy?
+
+<span class="cm">[5-10 min]  Capacity Estimation</span>
+  • DAU, QPS, peak QPS
+  • Storage (5-year horizon)
+  • Bandwidth
+
+<span class="cm">[10-15 min]  High-Level Design</span>
+  • Draw: client → LB → servers → DB/cache
+  • Identify core components
+  • Describe data flow for main use case
+
+<span class="cm">[15-35 min]  Deep Dive</span>
+  • Scale each component
+  • DB choice and schema sketch
+  • Cache strategy
+  • Handle failure cases
+
+<span class="cm">[35-45 min]  Identify Bottlenecks</span>
+  • Single points of failure
+  • What breaks at 10× load?
+  • Cost / operational complexity trade-offs</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Common System Designs</div>
+          <div class="live-output">
+            <table class="tradeoff-table">
+              <tr><th>System</th><th>Key Components</th></tr>
+              <tr><td>URL Shortener</td><td>Hash → KV store; redirect 301 vs 302; analytics via async queue</td></tr>
+              <tr><td>Twitter/Feed</td><td>Fan-out on write; Redis sorted sets for feed; Kafka for events</td></tr>
+              <tr><td>WhatsApp</td><td>WebSocket servers; message queue; end-to-end encryption</td></tr>
+              <tr><td>YouTube</td><td>Object store (S3); CDN; async transcoding; metadata DB</td></tr>
+              <tr><td>Uber</td><td>Geo-spatial index (QuadTree); WebSocket for driver tracking; surge pricing</td></tr>
+              <tr><td>Google Drive</td><td>Block storage; chunked upload; sync via delta; conflict resolution</td></tr>
+              <tr><td>Rate Limiter</td><td>Redis + sliding window; distributed counter; per-user keys</td></tr>
+              <tr><td>Notification Sys</td><td>Fan-out; push (FCM/APNs); fallback to SMS; retry DLQ</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Design Principles to State Aloud</div>
+          <pre><span class="kw">Start simple</span>
+  "I'll start with a monolith and extract services
+   as we identify clear scaling boundaries."
+
+<span class="kw">State trade-offs explicitly</span>
+  "SQL gives us ACID but harder to shard;
+   Cassandra gives us write scalability
+   but eventual consistency. Given the
+   requirements, I'll choose…"
+
+<span class="kw">Evolve incrementally</span>
+  V1: single DB + cache
+  V2: read replicas
+  V3: sharding
+  V4: separate read/write models (CQRS)
+
+<span class="kw">Quantify everything</span>
+  "With 10K QPS and 1KB avg response,
+   that's 10 MB/s bandwidth — well within
+   a single 1Gbps link."</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Red Flags to Avoid</div>
+          <div class="live-output">
+            <ul class="tip-list">
+              <li><strong>Jumping to solution:</strong> always clarify requirements first — the interviewer may redirect you</li>
+              <li><strong>Ignoring non-functional reqs:</strong> scale, latency, consistency matter as much as features</li>
+              <li><strong>Single points of failure:</strong> every component should have redundancy or graceful degradation</li>
+              <li><strong>No estimation:</strong> validate that your design can handle stated load</li>
+              <li><strong>Over-engineering:</strong> don't add Kafka to a system with 100 QPS</li>
+              <li><strong>Vague data model:</strong> sketch key tables/documents even at HLD stage</li>
+              <li><strong>No trade-off discussion:</strong> every choice has a cost — say it</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

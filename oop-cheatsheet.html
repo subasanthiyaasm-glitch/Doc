@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OOP &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">📚 Cheatsheets</div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search..." />
+    <kbd class="shortcut-hint">/</kbd>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+  </div>
+</aside>
+<button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+<script src="js/header.js"></script>
+<script>renderHeader('OOP')</script>
+<script>renderSourceLink('OOP')</script>
+
+<main>
+  <div class="page-header">
+    <h1>OOP</h1>
+    <p class="subtitle">Object-Oriented Programming principles &amp; patterns</p>
+    <span id="source-link"></span>
+    <nav class="toc">
+      <a href="#pillars">Four Pillars</a>
+      <a href="#encapsulation">Encapsulation</a>
+      <a href="#inheritance">Inheritance</a>
+      <a href="#polymorphism">Polymorphism</a>
+      <a href="#abstraction">Abstraction</a>
+      <a href="#interfaces">Interfaces</a>
+      <a href="#composition">Composition</a>
+      <a href="#solid">SOLID</a>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ FOUR PILLARS ═══ -->
+  <section id="pillars">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Four Pillars of OOP</h2>
+
+    <div class="block-desc">
+      <span>The four pillars: <strong>Encapsulation</strong> (data hiding), <strong>Inheritance</strong> (code reuse), <strong>Polymorphism</strong> (flexible behavior), and <strong>Abstraction</strong> (hiding complexity). Core to Java design.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_oop_concepts.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Pillars Overview</div>
+        <pre><span class="lcm">// 1. ENCAPSULATION — data hiding with getters/setters</span>
+<span class="kw">class</span> <span class="lc">BankAccount</span> {
+  <span class="kw">private double</span> balance;
+
+  <span class="kw">public double</span> <span class="lm">getBalance</span>() { <span class="kw">return</span> balance; }
+  <span class="kw">public void</span> <span class="lm">deposit</span>(<span class="kw">double</span> amt) {
+    <span class="kw">if</span> (amt &gt; <span class="ln">0</span>) balance += amt;
+  }
+}
+
+<span class="lcm">// 2. INHERITANCE — code reuse via extends</span>
+<span class="kw">class</span> <span class="lc">Animal</span> {
+  <span class="kw">void</span> <span class="lm">eat</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Eating"</span>); }
+}
+<span class="kw">class</span> <span class="lc">Dog</span> <span class="kw">extends</span> <span class="lc">Animal</span> {
+  <span class="kw">void</span> <span class="lm">bark</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Barking"</span>); }
+}
+
+<span class="lcm">// 3. POLYMORPHISM — same method, different behavior</span>
+<span class="lcm">// Overloading (compile-time)</span>
+<span class="kw">int</span> <span class="lm">add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) { <span class="kw">return</span> a + b; }
+<span class="kw">double</span> <span class="lm">add</span>(<span class="kw">double</span> a, <span class="kw">double</span> b) { <span class="kw">return</span> a + b; }
+
+<span class="lcm">// Overriding (runtime)</span>
+<span class="kw">class</span> <span class="lc">Parent</span> {
+  <span class="kw">void</span> <span class="lm">sound</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Generic"</span>); }
+}
+<span class="kw">class</span> <span class="lc">Child</span> <span class="kw">extends</span> <span class="lc">Parent</span> {
+  <span class="lc">@Override</span>
+  <span class="kw">void</span> <span class="lm">sound</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Specific"</span>); }
+}
+
+<span class="lcm">// 4. ABSTRACTION — hide complexity</span>
+<span class="kw">abstract class</span> <span class="lc">Shape</span> {
+  <span class="kw">abstract double</span> <span class="lm">area</span>();
+  <span class="kw">void</span> <span class="lm">display</span>() { } <span class="lcm">// concrete OK</span>
+}
+<span class="kw">class</span> <span class="lc">Circle</span> <span class="kw">extends</span> <span class="lc">Shape</span> {
+  <span class="kw">double</span> radius;
+  <span class="kw">double</span> <span class="lm">area</span>() { <span class="kw">return</span> Math.PI * radius * radius; }
+}
+
+<span class="lcm">// Interface — full abstraction</span>
+<span class="kw">interface</span> <span class="lc">Drawable</span> {
+  <span class="kw">void</span> <span class="lm">draw</span>();
+  <span class="kw">default void</span> <span class="lm">print</span>() { }  <span class="lcm">// Java 8+</span>
+}
+
+<span class="kw">class</span> <span class="lc">Rect</span> <span class="kw">implements</span> <span class="lc">Drawable</span> {
+  <span class="kw">public void</span> <span class="lm">draw</span>() { }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Four Pillars</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:#9ece6a;">Encapsulation</strong></div>
+          <div>Private fields + public getters/setters</div>
+          <div>Protects internal state</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#7aa2f7;">Inheritance</strong></div>
+          <div>extends (class), implements (interface)</div>
+          <div>super() calls parent constructor</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#bb9af7;">Polymorphism</strong></div>
+          <div>Overloading (compile-time, same name)</div>
+          <div>Overriding (runtime, @Override)</div>
+          <div>JVM dispatches on object type</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#e0af68;">Abstraction</strong></div>
+          <div>abstract class — partial implementation</div>
+          <div>interface — full contract</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ ENCAPSULATION ═══ -->
+  <section id="encapsulation">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Encapsulation</h2>
+
+    <div class="block-desc">
+      <span>Wrap data and methods into a single unit (class), restricting direct access. Use <code>private</code> fields with <code>public</code> getters/setters to control access and validate input.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_encapsulation.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">BankAccount.java</div>
+        <pre><span class="kw">class</span> <span class="lc">BankAccount</span> {
+  <span class="kw">private double</span> balance;  <span class="lcm">// hidden from outside</span>
+  <span class="kw">private final</span> <span class="lc">String</span> owner;
+
+  <span class="lc">BankAccount</span>(<span class="lc">String</span> owner, <span class="kw">double</span> initial) {
+    <span class="kw">this</span>.owner = owner;
+    <span class="kw">this</span>.balance = Math.<span class="lm">max</span>(<span class="ln">0</span>, initial);
+  }
+
+  <span class="kw">public double</span> <span class="lm">getBalance</span>() { <span class="kw">return</span> balance; }
+  <span class="kw">public</span> <span class="lc">String</span> <span class="lm">getOwner</span>() { <span class="kw">return</span> owner; }
+
+  <span class="kw">public void</span> <span class="lm">deposit</span>(<span class="kw">double</span> amount) {
+    <span class="kw">if</span> (amount &lt;= <span class="ln">0</span>) <span class="kw">throw new</span> <span class="lc">IllegalArgumentException</span>(
+      <span class="ls">"Amount must be positive"</span>);
+    balance += amount;
+  }
+
+  <span class="kw">public boolean</span> <span class="lm">withdraw</span>(<span class="kw">double</span> amount) {
+    <span class="kw">if</span> (amount &gt; balance || amount &lt;= <span class="ln">0</span>) <span class="kw">return false</span>;
+    balance -= amount;
+    <span class="kw">return true</span>;
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Access Modifiers</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Modifier Visibility</strong></div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.7rem;">
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:2px 6px;color:var(--text);">Modifier</th>
+              <th style="text-align:center;padding:2px 4px;color:var(--text);">Class</th>
+              <th style="text-align:center;padding:2px 4px;color:var(--text);">Pkg</th>
+              <th style="text-align:center;padding:2px 4px;color:var(--text);">Sub</th>
+              <th style="text-align:center;padding:2px 4px;color:var(--text);">World</th>
+            </tr>
+            <tr><td style="padding:2px 6px;color:#f7768e;">private</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10007;</td><td style="text-align:center;">&#10007;</td><td style="text-align:center;">&#10007;</td></tr>
+            <tr><td style="padding:2px 6px;color:#e0af68;">default</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10007;</td><td style="text-align:center;">&#10007;</td></tr>
+            <tr><td style="padding:2px 6px;color:#7aa2f7;">protected</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10007;</td></tr>
+            <tr><td style="padding:2px 6px;color:#9ece6a;">public</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10003;</td><td style="text-align:center;">&#10003;</td></tr>
+          </table>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Benefits</strong></div>
+          <div>Data validation at write time</div>
+          <div>Internal representation can change freely</div>
+          <div>Read-only fields: getter without setter</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ INHERITANCE ═══ -->
+  <section id="inheritance">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Inheritance</h2>
+
+    <div class="block-desc">
+      <span><strong>IS-A</strong> relationship — subclass reuses and extends superclass behavior. Use <code>extends</code> for classes, <code>implements</code> for interfaces. Java supports single class inheritance only.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_inheritance.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Inheritance.java</div>
+        <pre><span class="lcm">// Single Inheritance</span>
+<span class="kw">class</span> <span class="lc">Animal</span> {
+  <span class="lc">String</span> name;
+  <span class="lc">Animal</span>() { <span class="kw">this</span>(<span class="ls">"Unknown"</span>); }
+  <span class="lc">Animal</span>(<span class="lc">String</span> name) { <span class="kw">this</span>.name = name; }
+  <span class="kw">void</span> <span class="lm">eat</span>() { System.out.<span class="lm">println</span>(name + <span class="ls">" eats"</span>); }
+}
+
+<span class="kw">class</span> <span class="lc">Dog</span> <span class="kw">extends</span> <span class="lc">Animal</span> {
+  <span class="lc">Dog</span>(<span class="lc">String</span> name) { <span class="kw">super</span>(name); }  <span class="lcm">// must be first line</span>
+  <span class="kw">void</span> <span class="lm">bark</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Woof!"</span>); }
+}
+
+<span class="lcm">// Multilevel Inheritance</span>
+<span class="kw">class</span> <span class="lc">Animal</span> { }
+<span class="kw">class</span> <span class="lc">Mammal</span> <span class="kw">extends</span> <span class="lc">Animal</span> { }
+<span class="kw">class</span> <span class="lc">Dog</span> <span class="kw">extends</span> <span class="lc">Mammal</span> { }
+
+<span class="lcm">// Multiple Inheritance via Interfaces</span>
+<span class="kw">interface</span> <span class="lc">Flyable</span> {
+  <span class="kw">void</span> <span class="lm">fly</span>();
+}
+<span class="kw">interface</span> <span class="lc">Swimmable</span> {
+  <span class="kw">void</span> <span class="lm">swim</span>();
+}
+<span class="kw">class</span> <span class="lc">Duck</span> <span class="kw">extends</span> <span class="lc">Animal</span> <span class="kw">implements</span> <span class="lc">Flyable</span>, <span class="lc">Swimmable</span> {
+  <span class="kw">public void</span> <span class="lm">fly</span>()  { System.out.<span class="lm">println</span>(<span class="ls">"Flying"</span>); }
+  <span class="kw">public void</span> <span class="lm">swim</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Swimming"</span>); }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Inheritance Types</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Types</strong></div>
+          <div><span style="color:#9ece6a;">Single</span> — A → B</div>
+          <div><span style="color:#7aa2f7;">Multilevel</span> — A → B → C</div>
+          <div><span style="color:#bb9af7;">Hierarchical</span> — A → B, A → C</div>
+          <div><span style="color:#e0af68;">Multiple</span> — via interfaces only</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">super Keyword</strong></div>
+          <div><code>super()</code> — call parent constructor</div>
+          <div><code>super.method()</code> — call parent method</div>
+          <div><code>super.field</code> — access parent field</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Rules</strong></div>
+          <div>No multiple class inheritance (diamond problem)</div>
+          <div>All constructors call super() implicitly</div>
+          <div>Object is root of all class hierarchies</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ POLYMORPHISM ═══ -->
+  <section id="polymorphism">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Polymorphism</h2>
+
+    <div class="block-desc">
+      <span><strong>Same interface, different behavior.</strong> Compile-time (method overloading) resolved at compile time. Runtime (method overriding) resolved via dynamic dispatch at runtime.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_polymorphism.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Polymorphism.java</div>
+        <pre><span class="lcm">// ── Compile-time: Method Overloading ──</span>
+<span class="lcm">// Same method name, different parameter lists</span>
+<span class="kw">class</span> <span class="lc">Calculator</span> {
+  <span class="kw">int</span> <span class="lm">add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b)       { <span class="kw">return</span> a + b; }
+  <span class="kw">double</span> <span class="lm">add</span>(<span class="kw">double</span> a, <span class="kw">double</span> b) { <span class="kw">return</span> a + b; }
+  <span class="kw">int</span> <span class="lm">add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c)  { <span class="kw">return</span> a + b + c; }
+}
+
+<span class="lcm">// ── Runtime: Method Overriding ──</span>
+<span class="kw">class</span> <span class="lc">Animal</span> {
+  <span class="kw">void</span> <span class="lm">sound</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Generic sound"</span>);
+  }
+}
+
+<span class="kw">class</span> <span class="lc">Dog</span> <span class="kw">extends</span> <span class="lc">Animal</span> {
+  <span class="lc">@Override</span>
+  <span class="kw">void</span> <span class="lm">sound</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Bark"</span>);
+  }
+}
+
+<span class="kw">class</span> <span class="lc">Cat</span> <span class="kw">extends</span> <span class="lc">Animal</span> {
+  <span class="lc">@Override</span>
+  <span class="kw">void</span> <span class="lm">sound</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Meow"</span>);
+  }
+}
+
+<span class="lcm">// Dynamic Method Dispatch</span>
+<span class="lc">Animal</span> a = <span class="kw">new</span> <span class="lc">Dog</span>();   <span class="lcm">// reference = Animal, object = Dog</span>
+a.<span class="lm">sound</span>();              <span class="lcm">// prints "Bark" — JVM resolves at runtime</span>
+
+<span class="lc">Animal</span>[] pets = {
+  <span class="kw">new</span> <span class="lc">Dog</span>(), <span class="kw">new</span> <span class="lc">Cat</span>(), <span class="kw">new</span> <span class="lc">Dog</span>()
+};
+<span class="kw">for</span> (<span class="lc">Animal</span> p : pets) {
+  p.<span class="lm">sound</span>();  <span class="lcm">// each calls its own overridden version</span>
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Dynamic Dispatch</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:#bb9af7;">Overloading (compile-time)</strong></div>
+          <div>Same name, different params</div>
+          <div>Resolved at compile time</div>
+          <div>Can have different return types</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#7aa2f7;">Overriding (runtime)</strong></div>
+          <div>Same name, same params</div>
+          <div>Resolved at runtime (JVM)</div>
+          <div>Return type must be covariant</div>
+          <div>@Override annotation recommended</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Key Rule</strong></div>
+          <div>JVM dispatches on <em>object type</em>,</div>
+          <div>not reference type</div>
+          <div><code>Animal a = new Dog();</code></div>
+          <div><code>a.sound()</code> → "Bark" (not "Generic")</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ ABSTRACTION ═══ -->
+  <section id="abstraction">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Abstraction</h2>
+
+    <div class="block-desc">
+      <span><strong>Abstract classes</strong> provide partial implementation (can have state). <strong>Interfaces</strong> define a full contract (no state since Java 8 default methods). Use abstract class for "how partially", interface for "what".</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_abstract.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Abstraction.java</div>
+        <pre><span class="lcm">// Abstract Class — partial implementation</span>
+<span class="kw">abstract class</span> <span class="lc">Shape</span> {
+  <span class="lc">String</span> color;
+
+  <span class="lc">Shape</span>(<span class="lc">String</span> color) { <span class="kw">this</span>.color = color; }
+
+  <span class="kw">abstract double</span> <span class="lm">area</span>();  <span class="lcm">// must override</span>
+
+  <span class="kw">void</span> <span class="lm">display</span>() {         <span class="lcm">// concrete method OK</span>
+    System.out.<span class="lm">println</span>(color + <span class="ls">" shape, area="</span> + <span class="lm">area</span>());
+  }
+}
+
+<span class="kw">class</span> <span class="lc">Circle</span> <span class="kw">extends</span> <span class="lc">Shape</span> {
+  <span class="kw">double</span> radius;
+  <span class="lc">Circle</span>(<span class="lc">String</span> c, <span class="kw">double</span> r) { <span class="kw">super</span>(c); radius = r; }
+  <span class="kw">double</span> <span class="lm">area</span>() { <span class="kw">return</span> Math.PI * radius * radius; }
+}
+
+<span class="kw">class</span> <span class="lc">Rectangle</span> <span class="kw">extends</span> <span class="lc">Shape</span> {
+  <span class="kw">double</span> w, h;
+  <span class="lc">Rectangle</span>(<span class="lc">String</span> c, <span class="kw">double</span> w, <span class="kw">double</span> h) {
+    <span class="kw">super</span>(c); <span class="kw">this</span>.w = w; <span class="kw">this</span>.h = h;
+  }
+  <span class="kw">double</span> <span class="lm">area</span>() { <span class="kw">return</span> w * h; }
+}
+
+<span class="lcm">// Cannot instantiate abstract class:</span>
+<span class="lcm">// Shape s = new Shape("red"); // COMPILE ERROR</span>
+
+<span class="lcm">// Interface — full abstraction</span>
+<span class="kw">interface</span> <span class="lc">Drawable</span> {
+  <span class="kw">void</span> <span class="lm">draw</span>();  <span class="lcm">// abstract by default</span>
+}
+
+<span class="kw">interface</span> <span class="lc">Resizable</span> {
+  <span class="kw">void</span> <span class="lm">resize</span>(<span class="kw">double</span> factor);
+}
+
+<span class="kw">class</span> <span class="lc">Canvas</span> <span class="kw">extends</span> <span class="lc">Shape</span> <span class="kw">implements</span> <span class="lc">Drawable</span>, <span class="lc">Resizable</span> {
+  <span class="lc">Canvas</span>(<span class="lc">String</span> c) { <span class="kw">super</span>(c); }
+  <span class="kw">double</span> <span class="lm">area</span>() { <span class="kw">return</span> <span class="ln">0</span>; }
+  <span class="kw">public void</span> <span class="lm">draw</span>() { }
+  <span class="kw">public void</span> <span class="lm">resize</span>(<span class="kw">double</span> f) { }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Abstract vs Interface</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Abstract Class</strong></div>
+          <div>Can have constructors</div>
+          <div>Can have instance fields (state)</div>
+          <div>Can have concrete methods</div>
+          <div>Single inheritance only</div>
+          <div>Use when classes share common state</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Interface</strong></div>
+          <div>No constructors</div>
+          <div>Constants only (<code>public static final</code>)</div>
+          <div>Default methods since Java 8</div>
+          <div>Multiple interfaces allowed</div>
+          <div>Use when defining a capability</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ INTERFACES ═══ -->
+  <section id="interfaces">
+    <span class="badge b-comp">Fundamentals</span>
+    <h2>Interfaces</h2>
+
+    <div class="block-desc">
+      <span>An <code>interface</code> defines a contract that classes must fulfill. Supports <code>default</code> methods (Java 8+), <code>static</code> methods, and functional interfaces for lambdas.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_interface.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Interfaces.java</div>
+        <pre><span class="lcm">// Basic interface</span>
+<span class="kw">interface</span> <span class="lc">Vehicle</span> {
+  <span class="kw">void</span> <span class="lm">start</span>();   <span class="lcm">// abstract by default</span>
+  <span class="kw">int</span> MAX_SPEED = <span class="ln">200</span>;  <span class="lcm">// public static final</span>
+}
+
+<span class="lcm">// Default method (Java 8+)</span>
+<span class="kw">interface</span> <span class="lc">Printable</span> {
+  <span class="kw">void</span> <span class="lm">print</span>();
+
+  <span class="kw">default void</span> <span class="lm">prettyPrint</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"=== "</span> + <span class="lm">toString</span>() + <span class="ls">" ==="</span>);
+  }
+}
+
+<span class="lcm">// Functional interface (one abstract method → lambda)</span>
+<span class="kw">@FunctionalInterface</span>
+<span class="kw">interface</span> <span class="lc">Transformer</span>&lt;<span class="lc">T</span>&gt; {
+  <span class="lc">T</span> <span class="lm">transform</span>(<span class="lc">T</span> input);
+}
+
+<span class="lcm">// Implementing multiple interfaces</span>
+<span class="kw">class</span> <span class="lc">Car</span> <span class="kw">implements</span> <span class="lc">Vehicle</span>, <span class="lc">Printable</span> {
+  <span class="kw">public void</span> <span class="lm">start</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Car started"</span>);
+  }
+  <span class="kw">public void</span> <span class="lm">print</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Car"</span>);
+  }
+}
+
+<span class="lcm">// Lambda with functional interface</span>
+<span class="lc">Transformer</span>&lt;<span class="lc">String</span>&gt; upper =
+  s -&gt; s.<span class="lm">toUpperCase</span>();
+upper.<span class="lm">transform</span>(<span class="ls">"hello"</span>);  <span class="lcm">// "HELLO"</span>
+
+<span class="lcm">// Diamond problem resolution</span>
+<span class="kw">interface</span> <span class="lc">A</span> {
+  <span class="kw">default void</span> <span class="lm">greet</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Hello from A"</span>);
+  }
+}
+<span class="kw">interface</span> <span class="lc">B</span> {
+  <span class="kw">default void</span> <span class="lm">greet</span>() {
+    System.out.<span class="lm">println</span>(<span class="ls">"Hello from B"</span>);
+  }
+}
+<span class="kw">class</span> <span class="lc">C</span> <span class="kw">implements</span> <span class="lc">A</span>, <span class="lc">B</span> {
+  <span class="kw">public void</span> <span class="lm">greet</span>() {
+    <span class="lc">A</span>.<span class="kw">super</span>.<span class="lm">greet</span>();  <span class="lcm">// must resolve explicitly</span>
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Interface Features</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Java 8+ Additions</strong></div>
+          <div><code>default</code> methods — provide body</div>
+          <div><code>static</code> methods — utility functions</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Java 9+ Additions</strong></div>
+          <div><code>private</code> methods — helper for defaults</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Key Rules</strong></div>
+          <div>All methods are public by default</div>
+          <div>Fields are <code>public static final</code></div>
+          <div>No constructors, no instance state</div>
+          <div>Class can implement multiple interfaces</div>
+          <div>Diamond conflict: must override explicitly</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ COMPOSITION ═══ -->
+  <section id="composition">
+    <span class="badge b-comp">Design</span>
+    <h2>Composition</h2>
+
+    <div class="block-desc">
+      <span><strong>HAS-A</strong> relationship — build complex objects by composing simpler ones. <strong>Favor composition over inheritance</strong> for greater flexibility and avoid tight coupling.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_inheritance.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Composition.java</div>
+        <pre><span class="lcm">// Composition: Car HAS-A Engine</span>
+<span class="kw">class</span> <span class="lc">Engine</span> {
+  <span class="kw">private</span> <span class="kw">int</span> horsepower;
+
+  <span class="lc">Engine</span>(<span class="kw">int</span> hp) { <span class="kw">this</span>.horsepower = hp; }
+
+  <span class="kw">void</span> <span class="lm">start</span>() {
+    System.out.<span class="lm">println</span>(horsepower + <span class="ls">"hp engine started"</span>);
+  }
+
+  <span class="kw">int</span> <span class="lm">getHorsepower</span>() { <span class="kw">return</span> horsepower; }
+}
+
+<span class="kw">class</span> <span class="lc">Car</span> {
+  <span class="kw">private final</span> <span class="lc">Engine</span> engine;  <span class="lcm">// HAS-A</span>
+  <span class="kw">private</span> <span class="lc">String</span> model;
+
+  <span class="lc">Car</span>(<span class="lc">String</span> model, <span class="kw">int</span> hp) {
+    <span class="kw">this</span>.model = model;
+    <span class="kw">this</span>.engine = <span class="kw">new</span> <span class="lc">Engine</span>(hp);  <span class="lcm">// owns engine</span>
+  }
+
+  <span class="kw">void</span> <span class="lm">start</span>() {
+    System.out.<span class="lm">println</span>(model + <span class="ls">": "</span>);
+    engine.<span class="lm">start</span>();  <span class="lcm">// delegate to composed object</span>
+  }
+
+  <span class="lcm">// Delegation pattern</span>
+  <span class="kw">int</span> <span class="lm">getPower</span>() { <span class="kw">return</span> engine.<span class="lm">getHorsepower</span>(); }
+}
+
+<span class="lcm">// Composition vs Inheritance</span>
+<span class="lcm">// ── Inheritance (IS-A): rigid ──</span>
+<span class="kw">class</span> <span class="lc">Stack</span> <span class="kw">extends</span> <span class="lc">ArrayList</span>&lt;<span class="lc">Object</span>&gt; {
+  <span class="kw">public</span> <span class="kw">void</span> <span class="lm">push</span>(<span class="lc">Object</span> item) { <span class="lm">add</span>(item); }
+  <span class="kw">public</span> <span class="lc">Object</span> <span class="lm">pop</span>() {
+    <span class="kw">return</span> <span class="lm">remove</span>(<span class="lm">size</span>() - <span class="ln">1</span>);
+  }
+}
+<span class="lcm">// Problem: inherits get(), indexOf(), etc.</span>
+<span class="lcm">// Violates Stack contract</span>
+
+<span class="lcm">// ── Composition (HAS-A): flexible ──</span>
+<span class="kw">class</span> <span class="lc">BetterStack</span>&lt;<span class="lc">T</span>&gt; {
+  <span class="kw">private</span> <span class="lc">List</span>&lt;<span class="lc">T</span>&gt; list = <span class="kw">new</span> <span class="lc">ArrayList</span>&lt;&gt;();
+
+  <span class="kw">public void</span> <span class="lm">push</span>(<span class="lc">T</span> item) { list.<span class="lm">add</span>(item); }
+  <span class="kw">public</span> <span class="lc">T</span> <span class="lm">pop</span>() {
+    <span class="kw">return</span> list.<span class="lm">remove</span>(list.<span class="lm">size</span>() - <span class="ln">1</span>);
+  }
+  <span class="kw">public int</span> <span class="lm">size</span>() { <span class="kw">return</span> list.<span class="lm">size</span>(); }
+}
+<span class="lcm">// Only exposes stack operations</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Composition vs Inheritance</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:var(--accent);">Inheritance (IS-A)</strong></div>
+          <div>Compile-time binding</div>
+          <div>Tight coupling to parent</div>
+          <div>Exposes full parent API</div>
+          <div>Fragile: parent changes break child</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Composition (HAS-A)</strong></div>
+          <div>Runtime binding (swap implementations)</div>
+          <div>Loose coupling via interfaces</div>
+          <div>Only exposes chosen methods</div>
+          <div>Robust: internal changes don't propagate</div>
+          <div style="margin-top:0.5rem;"><strong style="color:#9ece6a;">Rule of Thumb</strong></div>
+          <div>Use inheritance for true IS-A</div>
+          <div>Use composition for HAS-A or "uses"</div>
+          <div>When in doubt, choose composition</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ SOLID ═══ -->
+  <section id="solid">
+    <span class="badge b-comp">Design</span>
+    <h2>SOLID Principles</h2>
+
+    <div class="block-desc">
+      <span>Five design principles for maintainable, scalable OOP code. <strong>S</strong>ingle Responsibility, <strong>O</strong>pen/Closed, <strong>L</strong>iskov Substitution, <strong>I</strong>nterface Segregation, <strong>D</strong>ependency Inversion.</span>
+      <a class="w3-link" href="https://www.w3schools.com/java/java_oop_solid.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">SOLID.java</div>
+        <pre><span class="lcm">// S — Single Responsibility Principle</span>
+<span class="lcm">// A class should have only ONE reason to change</span>
+<span class="kw">class</span> <span class="lc">User</span> {
+  <span class="lc">String</span> name, email;
+}
+
+<span class="kw">class</span> <span class="lc">UserRepository</span> {         <span class="lcm">// persistence</span>
+  <span class="kw">void</span> <span class="lm">save</span>(<span class="lc">User</span> u) { }
+}
+
+<span class="kw">class</span> <span class="lc">EmailService</span> {           <span class="lcm">// notification</span>
+  <span class="kw">void</span> <span class="lm">send</span>(<span class="lc">User</span> u, <span class="lc">String</span> msg) { }
+}
+
+<span class="lcm">// O — Open/Closed Principle</span>
+<span class="lcm">// Open for extension, closed for modification</span>
+<span class="kw">interface</span> <span class="lc">Discount</span> {
+  <span class="kw">double</span> <span class="lm">apply</span>(<span class="kw">double</span> price);
+}
+<span class="kw">class</span> <span class="lc">NoDiscount</span> <span class="kw">implements</span> <span class="lc">Discount</span> {
+  <span class="kw">public double</span> <span class="lm">apply</span>(<span class="kw">double</span> p) { <span class="kw">return</span> p; }
+}
+<span class="kw">class</span> <span class="lc">PercentDiscount</span> <span class="kw">implements</span> <span class="lc">Discount</span> {
+  <span class="kw">double</span> pct;
+  <span class="lc">PercentDiscount</span>(<span class="kw">double</span> p) { pct = p; }
+  <span class="kw">public double</span> <span class="lm">apply</span>(<span class="kw">double</span> price) {
+    <span class="kw">return</span> price * (<span class="ln">1</span> - pct);
+  }
+}
+<span class="lcm">// Add new discount by adding a class — no changes to existing code</span>
+
+<span class="lcm">// L — Liskov Substitution Principle</span>
+<span class="lcm">// Subtypes must be substitutable for base types</span>
+<span class="kw">class</span> <span class="lc">Bird</span> {
+  <span class="kw">void</span> <span class="lm">fly</span>() { System.out.<span class="lm">println</span>(<span class="ls">"Flying"</span>); }
+}
+<span class="kw">class</span> <span class="lc">Penguin</span> <span class="kw">extends</span> <span class="lc">Bird</span> {
+  <span class="lc">@Override</span>
+  <span class="kw">void</span> <span class="lm">fly</span>() {
+    <span class="kw">throw new</span> <span class="lc">UnsupportedOperationException</span>();
+    <span class="lcm">// Violates LSP! Penguin breaks client expectations</span>
+  }
+}
+<span class="lcm">// Fix: separate Flyable interface from non-flying birds</span>
+
+<span class="lcm">// I — Interface Segregation Principle</span>
+<span class="lcm">// Clients shouldn't depend on methods they don't use</span>
+<span class="kw">interface</span> <span class="lc">Workable</span> {
+  <span class="kw">void</span> <span class="lm">work</span>();
+}
+<span class="kw">interface</span> <span class="lc">Feedable</span> {
+  <span class="kw">void</span> <span class="lm">eat</span>();
+}
+<span class="kw">class</span> <span class="lc">Robot</span> <span class="kw">implements</span> <span class="lc">Workable</span> {
+  <span class="kw">public void</span> <span class="lm">work</span>() { }
+}
+<span class="kw">class</span> <span class="lc">Human</span> <span class="kw">implements</span> <span class="lc">Workable</span>, <span class="lc">Feedable</span> {
+  <span class="kw">public void</span> <span class="lm">work</span>() { }
+  <span class="kw">public void</span> <span class="lm">eat</span>()  { }
+}
+
+<span class="lcm">// D — Dependency Inversion Principle</span>
+<span class="lcm">// Depend on abstractions, not concretions</span>
+<span class="kw">interface</span> <span class="lc">Database</span> {
+  <span class="kw">void</span> <span class="lm">query</span>(<span class="lc">String</span> sql);
+}
+<span class="kw">class</span> <span class="lc">MySQL</span> <span class="kw">implements</span> <span class="lc">Database</span> {
+  <span class="kw">public void</span> <span class="lm">query</span>(<span class="lc">String</span> sql) { }
+}
+<span class="kw">class</span> <span class="lc">Service</span> {
+  <span class="kw">private final</span> <span class="lc">Database</span> db;  <span class="lcm">// depends on interface</span>
+  <span class="lc">Service</span>(<span class="lc">Database</span> db) { <span class="kw">this</span>.db = db; }
+}
+<span class="lcm">// Swap MySQL for Postgres — Service unchanged</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ SOLID Summary</div>
+        <div class="live-output" style="font-size:0.72rem;line-height:1.8;color:var(--text-muted);">
+          <div><strong style="color:#f7768e;">S — Single Responsibility</strong></div>
+          <div>One class → one job</div>
+          <div style="margin-top:0.3rem;"><strong style="color:#e0af68;">O — Open/Closed</strong></div>
+          <div>Extend via interfaces, don't modify</div>
+          <div style="margin-top:0.3rem;"><strong style="color:#9ece6a;">L — Liskov Substitution</strong></div>
+          <div>Subclasses must honor parent contract</div>
+          <div style="margin-top:0.3rem;"><strong style="color:#7aa2f7;">I — Interface Segregation</strong></div>
+          <div>Many small interfaces > one fat one</div>
+          <div style="margin-top:0.3rem;"><strong style="color:#bb9af7;">D — Dependency Inversion</strong></div>
+          <div>Depend on abstractions, inject deps</div>
+          <div style="margin-top:0.5rem;"><strong style="color:var(--accent);">Memory Trick</strong></div>
+          <div><strong>S</strong>ome <strong>L</strong>ove <strong>I</strong>nterfaces</div>
+          <div><strong>O</strong>nly <strong>D</strong>uring Lunch</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>OOP Cheatsheet &mdash; Object-Oriented Programming reference</footer>
+<script src="js/script.js"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>
