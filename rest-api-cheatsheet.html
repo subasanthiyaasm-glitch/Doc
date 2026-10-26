@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>REST API &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .rk  { color: #bb9af7; }   /* keyword */
     .rh  { color: #7aa2f7; }   /* http method / header name */
@@ -75,6 +75,255 @@
     .h-name { font-family:'JetBrains Mono',monospace; color:#7aa2f7; font-size:0.74rem; font-weight:600; }
     .h-desc { font-size:0.71rem; color:var(--text-muted); }
   </style>
+  <style>
+    /* ══ apix2: compact per-section concept animations (every class prefixed apix2-) ══ */
+    .apix2-anim { margin-top:0.8rem; padding:0.55rem 0.7rem 0.65rem; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); }
+    .apix2-cap { display:flex; align-items:center; gap:0.4rem; font-family:var(--display); font-size:0.6rem; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.4rem; }
+    .apix2-cap::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); flex:none; animation:apix2-blink 2.6s ease-in-out infinite both; }
+    .apix2-anim svg { display:block; width:100%; max-width:440px; height:auto; overflow:visible; }
+    .apix2-note { font-size:0.64rem; color:var(--text-muted); line-height:1.5; margin:0.45rem 0 0; }
+    .apix2-note b { color:var(--text); }
+    /* svg text + shape helpers (fonts only; colour via fill classes or fixed accents) */
+    .apix2-t   { font-family:var(--display); font-size:8.5px; font-weight:600; }
+    .apix2-tm  { font-family:var(--display); font-size:7.5px; }
+    .apix2-m   { font-family:'JetBrains Mono',monospace; font-size:7.5px; }
+    .apix2-mm  { font-family:'JetBrains Mono',monospace; font-size:6.8px; }
+    .apix2-big { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; }
+    .apix2-brace { font-family:'JetBrains Mono',monospace; font-size:26px; fill:var(--text-muted); }
+    .apix2-fg  { fill:var(--text); }
+    .apix2-fgm { fill:var(--text-muted); }
+    .apix2-fgc { fill:var(--code-text); }
+    .apix2-fgd { fill:#0b1113; }
+    .apix2-acc { fill:var(--accent); }
+    .apix2-box  { fill:var(--surface); stroke:var(--border-strong); stroke-width:1; }
+    .apix2-code { fill:var(--code-bg); stroke:var(--border); stroke-width:1; }
+    .apix2-lane { fill:none; stroke:var(--border-strong); stroke-width:1.2; stroke-dasharray:3 3; }
+    .apix2-anim svg g, .apix2-anim svg rect, .apix2-anim svg circle, .apix2-anim svg text, .apix2-anim svg path, .apix2-anim svg line { transform-box:fill-box; transform-origin:center; }
+    @keyframes apix2-blink { 0%,100%{opacity:.35} 50%{opacity:1} }
+
+    /* 1. Stateless — each request carries its own token */
+    .apix2-st-r { animation:apix2-st-fly 9s ease-in-out infinite both; }
+    .apix2-st-r2 { animation-delay:3s; } .apix2-st-r3 { animation-delay:6s; }
+    .apix2-st-r1 { transform:translateX(61px); } .apix2-st-r2, .apix2-st-r3 { opacity:0; }
+    .apix2-st-ack { animation:apix2-st-ackf 9s ease-in-out infinite both; }
+    .apix2-st-ack2 { animation-delay:3s; } .apix2-st-ack3 { animation-delay:6s; }
+    .apix2-st-ack2, .apix2-st-ack3 { opacity:0; }
+    @keyframes apix2-st-fly { 0%{transform:translateX(0);opacity:0} 3%{opacity:1} 25%{transform:translateX(122px);opacity:1} 29%,100%{transform:translateX(122px);opacity:0} }
+    @keyframes apix2-st-ackf { 0%,25%{opacity:0} 28%,34%{opacity:1} 38%,100%{opacity:0} }
+
+    /* 2. Idempotency — PUT ×3 vs POST ×3 */
+    .apix2-id-d { opacity:0; animation:apix2-id-fly 8s ease-in-out infinite both; }
+    .apix2-id-d2 { animation-delay:2s; } .apix2-id-d3 { animation-delay:4s; }
+    .apix2-id-d4 { animation-delay:1s; } .apix2-id-d5 { animation-delay:3s; } .apix2-id-d6 { animation-delay:5s; }
+    .apix2-id-put { animation:apix2-id-pulse 8s ease-in-out infinite both; }
+    .apix2-id-b1 { animation:apix2-id-b1 8s ease-out infinite both; }
+    .apix2-id-b2 { animation:apix2-id-b2 8s ease-out infinite both; }
+    .apix2-id-b3 { animation:apix2-id-b3 8s ease-out infinite both; }
+    @keyframes apix2-id-fly { 0%{transform:translateX(0);opacity:0} 1%{opacity:1} 9%{transform:translateX(124px);opacity:1} 10%,100%{transform:translateX(124px);opacity:0} }
+    @keyframes apix2-id-pulse { 0%,9%,14%,34%,39%,59%,64%,100%{filter:none;stroke-width:1.4} 11%,36%,61%{filter:drop-shadow(0 0 4px #9ece6a);stroke-width:2.6} }
+    @keyframes apix2-id-b1 { 0%,22%{opacity:0;transform:scale(.5)} 25%,93%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1)} }
+    @keyframes apix2-id-b2 { 0%,47%{opacity:0;transform:scale(.5)} 50%,93%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1)} }
+    @keyframes apix2-id-b3 { 0%,72%{opacity:0;transform:scale(.5)} 75%,93%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1)} }
+
+    /* 3. Status code classes — one at a time */
+    .apix2-sc-l { opacity:0; animation:apix2-sc-show 10s ease-in-out infinite both; }
+    .apix2-sc-s { opacity:.3; animation:apix2-sc-seg 10s ease-in-out infinite both; }
+    .apix2-sc-l2, .apix2-sc-s2 { opacity:1; animation-delay:2s; }
+    .apix2-sc-l3, .apix2-sc-s3 { animation-delay:4s; }
+    .apix2-sc-l4, .apix2-sc-s4 { animation-delay:6s; }
+    .apix2-sc-l5, .apix2-sc-s5 { animation-delay:8s; }
+    .apix2-sc-ind { transform:translateX(60px); animation:apix2-sc-ind 10s ease-in-out infinite both; }
+    @keyframes apix2-sc-show { 0%{opacity:0;transform:translateY(4px)} 3%,17%{opacity:1;transform:translateY(0)} 20%,100%{opacity:0;transform:translateY(-4px)} }
+    @keyframes apix2-sc-seg { 0%{opacity:.3} 3%,17%{opacity:1} 20%,100%{opacity:.3} }
+    @keyframes apix2-sc-ind { 0%,17%{transform:translateX(0)} 20%,37%{transform:translateX(60px)} 40%,57%{transform:translateX(120px)} 60%,77%{transform:translateX(180px)} 80%,97%{transform:translateX(240px)} 100%{transform:translateX(0)} }
+
+    /* 4. Endpoint naming — verb URL becomes noun + method */
+    .apix2-ep-bad { opacity:.25; animation:apix2-ep-bad 8s ease-in-out infinite both; }
+    .apix2-ep-strike { stroke-dasharray:100; stroke-dashoffset:0; opacity:.25; animation:apix2-ep-strike 8s ease-in-out infinite both; }
+    .apix2-ep-badl { opacity:.25; animation:apix2-ep-badl 8s ease-in-out infinite both; }
+    .apix2-ep-pill { animation:apix2-ep-in 8s ease-out infinite both; }
+    .apix2-ep-s1 { animation:apix2-ep-in1 8s ease-out infinite both; }
+    .apix2-ep-s2 { animation:apix2-ep-in2 8s ease-out infinite both; }
+    .apix2-ep-ok { animation:apix2-ep-in3 8s ease-out infinite both; }
+    @keyframes apix2-ep-bad { 0%{opacity:0} 4%,30%{opacity:1} 38%,96%{opacity:.25} 100%{opacity:0} }
+    @keyframes apix2-ep-strike { 0%,10%{stroke-dashoffset:100;opacity:1} 24%,30%{stroke-dashoffset:0;opacity:1} 38%,96%{stroke-dashoffset:0;opacity:.25} 100%{stroke-dashoffset:0;opacity:0} }
+    @keyframes apix2-ep-badl { 0%,18%{opacity:0} 24%,30%{opacity:1} 38%,96%{opacity:.25} 100%{opacity:0} }
+    @keyframes apix2-ep-in  { 0%,36%{opacity:0;transform:translateY(5px)} 42%,94%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-ep-in1 { 0%,48%{opacity:0;transform:translateY(5px)} 54%,94%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-ep-in2 { 0%,60%{opacity:0;transform:translateY(5px)} 66%,94%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-ep-in3 { 0%,72%{opacity:0;transform:scale(.6)} 78%,94%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1)} }
+
+    /* 5. Request — four places to put data */
+    .apix2-rq-h { opacity:0; animation:apix2-rq-hl 8s ease-in-out infinite both; }
+    .apix2-rq-l { opacity:.4; animation:apix2-rq-lab 8s ease-in-out infinite both; }
+    .apix2-rq-h1, .apix2-rq-l1 { opacity:1; }
+    .apix2-rq-h2, .apix2-rq-l2 { animation-delay:2s; } .apix2-rq-h3, .apix2-rq-l3 { animation-delay:4s; } .apix2-rq-h4, .apix2-rq-l4 { animation-delay:6s; }
+    @keyframes apix2-rq-hl  { 0%{opacity:0} 4%,22%{opacity:1} 25%,100%{opacity:0} }
+    @keyframes apix2-rq-lab { 0%{opacity:.4} 4%,22%{opacity:1} 25%,100%{opacity:.4} }
+
+    /* 6. Response envelope — data, meta, links slide in */
+    .apix2-rs-b1 { animation:apix2-rs-b1 8s ease-out infinite both; }
+    .apix2-rs-b2 { animation:apix2-rs-b2 8s ease-out infinite both; }
+    .apix2-rs-b3 { animation:apix2-rs-b3 8s ease-out infinite both; }
+    @keyframes apix2-rs-b1 { 0%,5%{opacity:0;transform:translateX(16px)} 14%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-rs-b2 { 0%,30%{opacity:0;transform:translateX(16px)} 39%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-rs-b3 { 0%,55%{opacity:0;transform:translateX(16px)} 64%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+
+    /* 7. AuthN / AuthZ — two gates */
+    .apix2-au-p1 { transform:translateX(188px); animation:apix2-au-p1 10s ease-in-out infinite both; }
+    .apix2-au-p2 { opacity:0; animation:apix2-au-p2 10s ease-in-out infinite both; }
+    .apix2-au-p3 { opacity:0; animation:apix2-au-p3 10s ease-in-out infinite both; }
+    .apix2-au-aok  { animation:apix2-au-aok 10s ease-in-out infinite both; }
+    .apix2-au-abad { opacity:0; animation:apix2-au-abad 10s ease-in-out infinite both; }
+    .apix2-au-bok  { animation:apix2-au-bok 10s ease-in-out infinite both; }
+    .apix2-au-bbad { opacity:0; animation:apix2-au-bbad 10s ease-in-out infinite both; }
+    .apix2-au-200 { animation:apix2-au-200 10s ease-in-out infinite both; }
+    .apix2-au-403 { opacity:0; animation:apix2-au-403 10s ease-in-out infinite both; }
+    .apix2-au-401 { opacity:0; animation:apix2-au-401 10s ease-in-out infinite both; }
+    @keyframes apix2-au-p1 { 0%{transform:translateX(0);opacity:0} 2%{opacity:1} 9%,12%{transform:translateX(70px);opacity:1} 19%,22%{transform:translateX(154px);opacity:1} 29%{transform:translateX(188px);opacity:1} 32%,100%{transform:translateX(188px);opacity:0} }
+    @keyframes apix2-au-p2 { 0%,34%{transform:translateX(0);opacity:0} 36%{opacity:1} 43%,46%{transform:translateX(70px);opacity:1} 53%{transform:translateX(154px);opacity:1} 55%{transform:translateX(146px)} 57%{transform:translateX(154px)} 59%{transform:translateX(146px)} 61%{transform:translateX(148px);opacity:1} 64%,100%{transform:translateX(148px);opacity:0} }
+    @keyframes apix2-au-p3 { 0%,66%{transform:translateX(0);opacity:0} 68%{opacity:1} 75%{transform:translateX(70px);opacity:1} 77%{transform:translateX(62px)} 79%{transform:translateX(70px)} 81%{transform:translateX(62px);opacity:1} 84%,100%{transform:translateX(62px);opacity:0} }
+    @keyframes apix2-au-aok  { 0%,8%{opacity:0} 10%,14%{opacity:1} 17%,42%{opacity:0} 44%,48%{opacity:1} 51%,100%{opacity:0} }
+    @keyframes apix2-au-abad { 0%,74%{opacity:0} 76%,84%{opacity:1} 87%,100%{opacity:0} }
+    @keyframes apix2-au-bok  { 0%,18%{opacity:0} 20%,24%{opacity:1} 27%,100%{opacity:0} }
+    @keyframes apix2-au-bbad { 0%,52%{opacity:0} 54%,62%{opacity:1} 65%,100%{opacity:0} }
+    @keyframes apix2-au-200 { 0%,27%{opacity:0} 29%,36%{opacity:1} 39%,100%{opacity:0} }
+    @keyframes apix2-au-403 { 0%,53%{opacity:0} 55%,64%{opacity:1} 67%,100%{opacity:0} }
+    @keyframes apix2-au-401 { 0%,75%{opacity:0} 77%,86%{opacity:1} 89%,100%{opacity:0} }
+
+    /* 8. Pagination — a row is inserted; offset drifts, cursor holds */
+    .apix2-pg-rows { transform:translateY(11px); animation:apix2-pg-shift 9s ease-in-out infinite both; }
+    .apix2-pg-new { animation:apix2-pg-new 9s ease-out infinite both; }
+    .apix2-pg-dup { fill:rgba(232,128,143,.45); animation:apix2-pg-dup 9s ease-in-out infinite both; }
+    .apix2-pg-lab { animation:apix2-pg-lab 9s ease-in-out infinite both; }
+    @keyframes apix2-pg-shift { 0%,30%{transform:translateY(0)} 42%,90%{transform:translateY(11px)} 97%,100%{transform:translateY(0)} }
+    @keyframes apix2-pg-new { 0%,28%{opacity:0;transform:translateY(-8px)} 42%,90%{opacity:1;transform:translateY(0)} 96%,100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-pg-dup { 0%,42%{fill:var(--surface)} 50%,90%{fill:rgba(232,128,143,.45)} 97%,100%{fill:var(--surface)} }
+    @keyframes apix2-pg-lab { 0%,46%{opacity:0} 52%,90%{opacity:1} 96%,100%{opacity:0} }
+
+    /* 9. Filter → sort → limit */
+    .apix2-fl-c { animation:apix2-fl-c1 9s ease-out infinite both; }
+    .apix2-fl-c2 { animation-name:apix2-fl-c2; } .apix2-fl-c3 { animation-name:apix2-fl-c3; }
+    .apix2-fl-out { opacity:.12; animation:apix2-fl-out 9s ease-in-out infinite both; }
+    .apix2-fl-g2 { opacity:.12; transform:translateX(84px); animation:apix2-fl-g2 9s ease-in-out infinite both; }
+    .apix2-fl-g4 { transform:translateX(-84px); animation:apix2-fl-g4 9s ease-in-out infinite both; }
+    .apix2-fl-res { animation:apix2-fl-res 9s ease-in-out infinite both; }
+    @keyframes apix2-fl-c1 { 0%,4%{opacity:0;transform:translateY(-4px)} 9%,93%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-fl-c2 { 0%,34%{opacity:0;transform:translateY(-4px)} 39%,93%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-fl-c3 { 0%,64%{opacity:0;transform:translateY(-4px)} 69%,93%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    @keyframes apix2-fl-out { 0%,12%{opacity:1} 20%,93%{opacity:.12} 100%{opacity:1} }
+    @keyframes apix2-fl-g2 { 0%,42%{transform:translateX(0);opacity:1} 52%,74%{transform:translateX(84px);opacity:1} 80%,93%{transform:translateX(84px);opacity:.12} 100%{transform:translateX(0);opacity:1} }
+    @keyframes apix2-fl-g4 { 0%,42%{transform:translateX(0)} 52%,93%{transform:translateX(-84px)} 100%{transform:translateX(0)} }
+    @keyframes apix2-fl-res { 0%,80%{opacity:0} 86%,93%{opacity:1} 100%{opacity:0} }
+
+    /* 10. Versioning — clients migrate v1 → v2, then sunset */
+    .apix2-vs-c { transform:translateY(-34px); }
+    .apix2-vs-c1 { animation:apix2-vs-c1 10s ease-in-out infinite both; }
+    .apix2-vs-c2 { animation:apix2-vs-c2 10s ease-in-out infinite both; }
+    .apix2-vs-c3 { animation:apix2-vs-c3 10s ease-in-out infinite both; }
+    .apix2-vs-c4 { animation:apix2-vs-c4 10s ease-in-out infinite both; }
+    .apix2-vs-dep { animation:apix2-vs-dep 10s ease-in-out infinite both; }
+    .apix2-vs-sun { animation:apix2-vs-sun 10s ease-in-out infinite both; }
+    .apix2-vs-v1 { opacity:.3; animation:apix2-vs-v1 10s ease-in-out infinite both; }
+    @keyframes apix2-vs-c1 { 0%,10%{transform:translateY(0)} 18%,94%{transform:translateY(-34px)} 100%{transform:translateY(0)} }
+    @keyframes apix2-vs-c2 { 0%,28%{transform:translateY(0)} 36%,94%{transform:translateY(-34px)} 100%{transform:translateY(0)} }
+    @keyframes apix2-vs-c3 { 0%,46%{transform:translateY(0)} 54%,94%{transform:translateY(-34px)} 100%{transform:translateY(0)} }
+    @keyframes apix2-vs-c4 { 0%,64%{transform:translateY(0)} 72%,94%{transform:translateY(-34px)} 100%{transform:translateY(0)} }
+    @keyframes apix2-vs-dep { 0%,6%{opacity:0} 12%,94%{opacity:1} 100%{opacity:0} }
+    @keyframes apix2-vs-sun { 0%,76%{opacity:0;transform:translateX(-4px)} 82%,94%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-vs-v1 { 0%,76%{opacity:1} 84%,94%{opacity:.3} 100%{opacity:1} }
+
+    /* 11. Problem Details — error body assembles field by field */
+    .apix2-er-chip { animation:apix2-er-chip 9s ease-out infinite both; }
+    .apix2-er-l { animation:apix2-er-l1 9s ease-out infinite both; }
+    .apix2-er-l2 { animation-name:apix2-er-l2; } .apix2-er-l3 { animation-name:apix2-er-l3; } .apix2-er-l4 { animation-name:apix2-er-l4; } .apix2-er-l5 { animation-name:apix2-er-l5; }
+    @keyframes apix2-er-chip { 0%{opacity:0} 5%,93%{opacity:1} 100%{opacity:0} }
+    @keyframes apix2-er-l1 { 0%,13%{opacity:0;transform:translateX(-6px)} 19%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-er-l2 { 0%,26%{opacity:0;transform:translateX(-6px)} 32%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-er-l3 { 0%,39%{opacity:0;transform:translateX(-6px)} 45%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-er-l4 { 0%,52%{opacity:0;transform:translateX(-6px)} 58%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-er-l5 { 0%,65%{opacity:0;transform:translateX(-6px)} 71%,93%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+
+    /* 12. Caching — miss, hit, revalidate (304) */
+    .apix2-ca-e { opacity:0; animation-duration:12s; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-fill-mode:both; }
+    .apix2-ca-r1 { animation-name:apix2-ca-r1; } .apix2-ca-s1 { animation-name:apix2-ca-s1; }
+    .apix2-ca-r2 { animation-name:apix2-ca-r2; } .apix2-ca-s2 { animation-name:apix2-ca-s2; opacity:1; transform:translateX(30px); }
+    .apix2-ca-r3 { animation-name:apix2-ca-r3; } .apix2-ca-s3 { animation-name:apix2-ca-s3; }
+    .apix2-ca-store { animation-name:apix2-ca-store; opacity:1; }
+    .apix2-ca-miss { animation-name:apix2-ca-miss; } .apix2-ca-hit { animation-name:apix2-ca-hit; opacity:1; }
+    .apix2-ca-exp { animation-name:apix2-ca-exp; } .apix2-ca-304 { animation-name:apix2-ca-304; }
+    @keyframes apix2-ca-r1 { 0%{transform:translateX(0);opacity:0} 1%{opacity:1} 7%,9%{transform:translateX(80px);opacity:1} 15%{transform:translateX(216px);opacity:1} 16%,100%{transform:translateX(216px);opacity:0} }
+    @keyframes apix2-ca-miss { 0%,7%{opacity:0} 9%,15%{opacity:1} 17%,100%{opacity:0} }
+    @keyframes apix2-ca-s1 { 0%,16%{transform:translateX(194px);opacity:0} 17%{opacity:1} 23%,25%{transform:translateX(61px);opacity:1} 31%{transform:translateX(0);opacity:1} 32%,100%{transform:translateX(0);opacity:0} }
+    @keyframes apix2-ca-store { 0%,22%{opacity:0;transform:scale(.5)} 25%,96%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1)} }
+    @keyframes apix2-ca-r2 { 0%,38%{transform:translateX(0);opacity:0} 39%{opacity:1} 45%{transform:translateX(80px);opacity:1} 46%,100%{transform:translateX(80px);opacity:0} }
+    @keyframes apix2-ca-hit { 0%,45%{opacity:0} 47%,54%{opacity:1} 56%,100%{opacity:0} }
+    @keyframes apix2-ca-s2 { 0%,46%{transform:translateX(61px);opacity:0} 47%{opacity:1} 53%{transform:translateX(0);opacity:1} 54%,100%{transform:translateX(0);opacity:0} }
+    @keyframes apix2-ca-exp { 0%,60%{opacity:0} 62%,68%{opacity:1} 70%,100%{opacity:0} }
+    @keyframes apix2-ca-r3 { 0%,66%{transform:translateX(0);opacity:0} 67%{opacity:1} 73%,75%{transform:translateX(80px);opacity:1} 81%{transform:translateX(216px);opacity:1} 82%,100%{transform:translateX(216px);opacity:0} }
+    @keyframes apix2-ca-s3 { 0%,82%{transform:translateX(194px);opacity:0} 83%{opacity:1} 89%,91%{transform:translateX(61px);opacity:1} 97%{transform:translateX(0);opacity:1} 98%,100%{transform:translateX(0);opacity:0} }
+    @keyframes apix2-ca-304 { 0%,89%{opacity:0} 91%,98%{opacity:1} 100%{opacity:0} }
+
+    /* 13. Rate limiting — token bucket */
+    .apix2-rl-t { animation-duration:12s; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-fill-mode:both; }
+    .apix2-rl-t1 { animation-name:apix2-rl-t1; } .apix2-rl-t2 { animation-name:apix2-rl-t2; } .apix2-rl-t3 { animation-name:apix2-rl-t3; } .apix2-rl-t4 { animation-name:apix2-rl-t4; }
+    .apix2-rl-q { opacity:0; animation:apix2-rl-pass 12s ease-in-out infinite both; }
+    .apix2-rl-q1 { animation-delay:.4s; } .apix2-rl-q2 { animation-delay:1.9s; } .apix2-rl-q3 { animation-delay:3.4s; } .apix2-rl-q4 { animation-delay:4.9s; }
+    .apix2-rl-q5 { animation-name:apix2-rl-bounce; animation-delay:6.4s; }
+    .apix2-rl-drip { opacity:0; animation:apix2-rl-drip 12s ease-in infinite both; }
+    .apix2-rl-drip1 { animation-delay:8.4s; } .apix2-rl-drip2 { animation-delay:9.1s; } .apix2-rl-drip3 { animation-delay:9.8s; } .apix2-rl-drip4 { animation-delay:10.5s; }
+    .apix2-rl-429 { opacity:0; animation:apix2-rl-429 12s ease-in-out infinite both; }
+    @keyframes apix2-rl-t4 { 0%,7%{opacity:1;transform:scale(1)} 9%,90%{opacity:0;transform:scale(.3)} 92%,100%{opacity:1;transform:scale(1)} }
+    @keyframes apix2-rl-t3 { 0%,20%{opacity:1;transform:scale(1)} 22%,84%{opacity:0;transform:scale(.3)} 86%,100%{opacity:1;transform:scale(1)} }
+    @keyframes apix2-rl-t2 { 0%,32%{opacity:1;transform:scale(1)} 34%,78%{opacity:0;transform:scale(.3)} 80%,100%{opacity:1;transform:scale(1)} }
+    @keyframes apix2-rl-t1 { 0%,45%{opacity:1;transform:scale(1)} 47%,72%{opacity:0;transform:scale(.3)} 74%,100%{opacity:1;transform:scale(1)} }
+    @keyframes apix2-rl-pass { 0%{transform:translateX(0);opacity:0;fill:#7aa2f7} 1%{opacity:1} 5%{transform:translateX(135px);fill:#7aa2f7} 6%{transform:translateX(135px);fill:#9ece6a} 11%{transform:translateX(276px);opacity:1;fill:#9ece6a} 12%,100%{transform:translateX(276px);opacity:0;fill:#9ece6a} }
+    @keyframes apix2-rl-bounce { 0%{transform:translateX(0);opacity:0;fill:#7aa2f7} 1%{opacity:1} 5%{transform:translateX(135px);fill:#7aa2f7} 6%{transform:translateX(127px);fill:#e8808f} 7%{transform:translateX(135px)} 8%{transform:translateX(127px)} 10%{transform:translateX(118px);opacity:1;fill:#e8808f} 11%,100%{transform:translateX(118px);opacity:0;fill:#e8808f} }
+    @keyframes apix2-rl-drip { 0%{transform:translateY(0);opacity:0} 1%{opacity:1} 3%{transform:translateY(16px);opacity:1} 4%,100%{transform:translateY(16px);opacity:0} }
+    @keyframes apix2-rl-429 { 0%,58%{opacity:0} 60%,70%{opacity:1} 72%,100%{opacity:0} }
+
+    /* 14. HATEOAS — links change when state changes */
+    .apix2-ha-pend { opacity:0; animation:apix2-ha-pend 8s ease-in-out infinite both; }
+    .apix2-ha-ship { animation:apix2-ha-ship 8s ease-in-out infinite both; }
+    .apix2-ha-cancel { opacity:.25; animation:apix2-ha-cancel 8s ease-in-out infinite both; }
+    .apix2-ha-strike { animation:apix2-ha-strike 8s ease-in-out infinite both; }
+    .apix2-ha-track { animation:apix2-ha-track 8s ease-out infinite both; }
+    .apix2-ha-ev { animation:apix2-ha-ev 8s ease-out infinite both; }
+    .apix2-ha-ev2 { animation-name:apix2-ha-ev2; } .apix2-ha-ev3 { animation-name:apix2-ha-ev3; }
+    @keyframes apix2-ha-pend { 0%,38%{opacity:1} 44%,96%{opacity:0} 100%{opacity:1} }
+    @keyframes apix2-ha-ship { 0%,38%{opacity:0} 44%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes apix2-ha-cancel { 0%,42%{opacity:1} 50%,96%{opacity:.25} 100%{opacity:1} }
+    @keyframes apix2-ha-strike { 0%,42%{opacity:0} 50%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes apix2-ha-track { 0%,54%{opacity:0;transform:translateX(-6px)} 62%,96%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(0)} }
+    @keyframes apix2-ha-ev  { 0%,40%{opacity:0} 46%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes apix2-ha-ev2 { 0%,48%{opacity:0} 54%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes apix2-ha-ev3 { 0%,60%{opacity:0} 66%,96%{opacity:1} 100%{opacity:0} }
+
+    /* 15. Content negotiation — Accept header picks the shape */
+    .apix2-cn-v { opacity:0; animation:apix2-cn-show 10s ease-in-out infinite both; }
+    .apix2-cn-v1 { opacity:1; }
+    .apix2-cn-v2 { animation-delay:2.5s; } .apix2-cn-v3 { animation-delay:5s; } .apix2-cn-v4 { animation-delay:7.5s; }
+    @keyframes apix2-cn-show { 0%{opacity:0;transform:translateY(4px)} 4%,22%{opacity:1;transform:translateY(0)} 25%,100%{opacity:0;transform:translateY(-4px)} }
+
+    /* 16. REST vs GraphQL vs gRPC — fetch shapes */
+    .apix2-cp-q { opacity:0; animation:apix2-cp-req 12s ease-in-out infinite both; }
+    .apix2-cp-q1 { animation-delay:.3s; } .apix2-cp-q2 { animation-delay:1.9s; } .apix2-cp-q3 { animation-delay:3.5s; } .apix2-cp-q4 { animation-delay:5.8s; } .apix2-cp-q5 { animation-delay:8.3s; }
+    .apix2-cp-r { opacity:0; animation:apix2-cp-res 12s ease-in-out infinite both; }
+    .apix2-cp-r1 { animation-delay:1s; } .apix2-cp-r2 { animation-delay:2.6s; } .apix2-cp-r3 { animation-delay:4.2s; }
+    .apix2-cp-r4 { animation-name:apix2-cp-res-s; animation-delay:6.5s; }
+    .apix2-cp-f { opacity:0; animation:apix2-cp-res-t 12s ease-in-out infinite both; }
+    .apix2-cp-f1 { animation-delay:9s; } .apix2-cp-f2 { animation-delay:9.35s; } .apix2-cp-f3 { animation-delay:9.7s; } .apix2-cp-f4 { animation-delay:10.05s; }
+    .apix2-cp-still { opacity:1; transform:translateX(70px); }
+    @keyframes apix2-cp-req { 0%{transform:translateX(0);opacity:0} 1%{opacity:1} 5%{transform:translateX(168px);opacity:1} 6%,100%{transform:translateX(168px);opacity:0} }
+    @keyframes apix2-cp-res { 0%{transform:translateX(128px);opacity:0} 1%{opacity:1} 6%{transform:translateX(0);opacity:1} 7%,100%{transform:translateX(0);opacity:0} }
+    @keyframes apix2-cp-res-s { 0%{transform:translateX(154px);opacity:0} 1%{opacity:1} 6%{transform:translateX(0);opacity:1} 7%,100%{transform:translateX(0);opacity:0} }
+    @keyframes apix2-cp-res-t { 0%{transform:translateX(162px);opacity:0} 1%{opacity:1} 6%{transform:translateX(0);opacity:1} 7%,100%{transform:translateX(0);opacity:0} }
+
+    /* Reduced motion: freeze every apix2 animation on its still frame */
+    @media (prefers-reduced-motion: reduce) {
+      .apix2-anim *, .apix2-anim *::before, .apix2-cap::before { animation:none !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -93,16 +342,17 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=7"></script>
 <script>renderHeader('REST API')</script>
 <script>renderSourceLink('REST API')</script>
 
 <main>
   <div class="page-header">
     <h1>REST API</h1>
-    <p class="subtitle">Complete reference — design, HTTP, auth, pagination &amp; more</p>
+    <p class="subtitle">A plain-English guide to how apps ask each other for data over the web.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#explainer">Start here</a>
       <a href="#basics">Basics</a>
       <a href="#methods">HTTP Methods</a>
       <a href="#status">Status Codes</a>
@@ -121,13 +371,192 @@
     </nav>
   </div>
 
+  <!-- ══════════════════════════ ANIMATED EXPLAINER (beginner) ══════════════════════════ -->
+  <section id="explainer">
+    <style>
+      /* All classes prefixed apix- to avoid collisions with shared styles */
+      .apix-wrap { margin: 0.4rem 0 1.5rem; }
+      .apix-lead { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; margin: 0.2rem 0 1rem; max-width: 60ch; }
+      .apix-lead strong { color: var(--text); }
+
+      /* ── Animated request/response stage ── */
+      .apix-stage {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem 1.1rem;
+        overflow: hidden;
+      }
+      .apix-node { display: flex; flex-direction: column; align-items: center; gap: 0.45rem; width: 96px; text-align: center; z-index: 2; }
+      .apix-node svg { width: 46px; height: 46px; color: var(--accent); transition: filter .3s ease; }
+      .apix-node-label { font-size: 0.72rem; font-weight: 700; color: var(--text); font-family: var(--display); }
+      .apix-node-sub { font-size: 0.6rem; color: var(--text-muted); line-height: 1.35; }
+      .apix-server { animation: apix-think 6s ease-in-out infinite; }
+      .apix-client { animation: apix-receive 6s ease-in-out infinite; }
+
+      .apix-track { position: relative; height: 104px; min-width: 0; }
+      .apix-line { position: absolute; left: 4%; right: 4%; top: 50%; border-top: 2px dashed var(--border-strong); }
+      .apix-lane-label { position: absolute; font-size: 0.58rem; letter-spacing: .3px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+      .apix-lane-req { top: 2px; left: 50%; transform: translateX(-50%); }
+      .apix-lane-res { bottom: 2px; left: 50%; transform: translateX(-50%); }
+
+      .apix-packet {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        display: inline-flex; align-items: center; gap: 0.3rem;
+        padding: 0.26rem 0.6rem;
+        border-radius: 999px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.64rem; font-weight: 700; white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+        z-index: 3;
+      }
+      .apix-req { top: 30%; left: 12%; background: var(--accent); color: var(--bg); animation: apix-req-move 6s ease-in-out infinite; }
+      .apix-res { top: 70%; left: 88%; background: var(--surface-2); color: var(--text); border: 1px solid var(--accent-2); animation: apix-res-move 6s ease-in-out infinite; }
+      .apix-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .85; }
+
+      @keyframes apix-req-move {
+        0%   { left: 12%; opacity: 0; }
+        7%   { left: 12%; opacity: 1; }
+        40%  { left: 88%; opacity: 1; }
+        47%  { left: 88%; opacity: 0; }
+        100% { left: 12%; opacity: 0; }
+      }
+      @keyframes apix-res-move {
+        0%, 50% { left: 88%; opacity: 0; }
+        57%     { left: 88%; opacity: 1; }
+        90%     { left: 12%; opacity: 1; }
+        97%     { left: 12%; opacity: 0; }
+        100%    { left: 88%; opacity: 0; }
+      }
+      @keyframes apix-think {
+        0%, 44% { filter: none; }
+        50%     { filter: drop-shadow(0 0 7px var(--accent-2)); }
+        58%, 100% { filter: none; }
+      }
+      @keyframes apix-receive {
+        0%, 86% { filter: none; }
+        93%     { filter: drop-shadow(0 0 7px var(--accent-2)); }
+        100%    { filter: none; }
+      }
+
+      /* ── Concept cards ── */
+      .apix-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem; }
+      @media (max-width: 760px) { .apix-cards { grid-template-columns: 1fr; } }
+      .apix-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.85rem 1rem; }
+      .apix-card h4 { margin: 0 0 0.55rem; font-size: 0.78rem; color: var(--accent); font-family: var(--display); }
+      .apix-note { font-size: 0.66rem; color: var(--text-muted); line-height: 1.5; margin: 0.55rem 0 0; }
+
+      .apix-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.28rem 0; font-size: 0.72rem; color: var(--text); }
+      .apix-pill { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.62rem; padding: 0.12rem 0.45rem; border-radius: 3px; white-space: nowrap; }
+      .apix-arrow { color: var(--text-subtle); }
+      .apix-crud { font-weight: 600; }
+
+      .apix-status { display: flex; align-items: baseline; gap: 0.5rem; padding: 0.28rem 0; font-size: 0.72rem; color: var(--text); }
+      .apix-status b { font-family: 'JetBrains Mono', monospace; min-width: 2.4rem; display: inline-block; }
+      .apix-status span { color: var(--text-muted); font-size: 0.68rem; }
+
+      .apix-url { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; background: var(--code-bg); color: var(--code-text); padding: 0.6rem 0.7rem; border-radius: var(--radius-xs); line-height: 1.6; word-break: break-all; }
+      .apix-u-scheme { color: #7aa2f7; }
+      .apix-u-host   { color: #73daca; }
+      .apix-u-path   { color: #9ece6a; }
+      .apix-u-id     { color: #ff9e64; }
+      .apix-u-query  { color: #e0af68; }
+      .apix-legend { font-size: 0.6rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem; }
+      .apix-legend b { color: var(--text); font-weight: 700; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .apix-req, .apix-res, .apix-server, .apix-client { animation: none !important; }
+        .apix-req { left: 34%; opacity: 1; }
+        .apix-res { left: 66%; opacity: 1; }
+        .apix-server, .apix-client { filter: none; }
+      }
+    </style>
+
+    <span class="badge b-basic">Start here</span>
+    <h2>How a REST API works</h2>
+
+    <div class="apix-wrap">
+      <p class="apix-lead">A REST API is how one program <strong>asks another for data</strong> over the internet. Your app (the <strong>client</strong>) sends a <strong>request</strong>; a <strong>server</strong> sends back a <strong>response</strong>. Watch one round trip below.</p>
+
+      <div class="apix-stage" aria-label="Animation of a client sending an HTTP request to a server and receiving a JSON response">
+        <!-- Client -->
+        <div class="apix-node apix-client">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+            <path d="M8 21h8M12 17v4"></path>
+          </svg>
+          <div class="apix-node-label">Client</div>
+          <div class="apix-node-sub">your app<br/>or browser</div>
+        </div>
+
+        <!-- Track with travelling packets -->
+        <div class="apix-track">
+          <div class="apix-line"></div>
+          <div class="apix-lane-label apix-lane-req">request &rarr;</div>
+          <div class="apix-lane-label apix-lane-res">&larr; response</div>
+          <div class="apix-packet apix-req"><span class="apix-dot"></span>GET /users</div>
+          <div class="apix-packet apix-res"><span class="apix-dot"></span>200 OK &middot; JSON</div>
+        </div>
+
+        <!-- Server -->
+        <div class="apix-node apix-server">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="7" rx="1.5"></rect>
+            <rect x="3" y="14" width="18" height="7" rx="1.5"></rect>
+            <path d="M7 6.5h.01M7 17.5h.01"></path>
+          </svg>
+          <div class="apix-node-label">Server</div>
+          <div class="apix-node-sub">holds the<br/>data</div>
+        </div>
+      </div>
+
+      <div class="apix-cards">
+        <!-- CRUD / verbs -->
+        <div class="apix-card">
+          <h4>The verbs (what to do)</h4>
+          <div class="apix-row"><span class="apix-pill m-get">GET</span><span class="apix-arrow">&rarr;</span><span class="apix-crud">Read</span></div>
+          <div class="apix-row"><span class="apix-pill m-post">POST</span><span class="apix-arrow">&rarr;</span><span class="apix-crud">Create</span></div>
+          <div class="apix-row"><span class="apix-pill m-put">PUT</span><span class="apix-pill m-patch">PATCH</span><span class="apix-arrow">&rarr;</span><span class="apix-crud">Update</span></div>
+          <div class="apix-row"><span class="apix-pill m-delete">DELETE</span><span class="apix-arrow">&rarr;</span><span class="apix-crud">Delete</span></div>
+          <p class="apix-note">The method tells the server the action. These four map to CRUD: Create, Read, Update, Delete.</p>
+        </div>
+
+        <!-- Status codes -->
+        <div class="apix-card">
+          <h4>The reply (status code)</h4>
+          <div class="apix-status"><b class="s2xx">2xx</b><span><strong>Success</strong> &mdash; e.g. 200 OK</span></div>
+          <div class="apix-status"><b class="s3xx">3xx</b><span><strong>Redirect</strong> &mdash; e.g. 304 Not Modified</span></div>
+          <div class="apix-status"><b class="s4xx">4xx</b><span><strong>You erred</strong> &mdash; e.g. 404 Not Found</span></div>
+          <div class="apix-status"><b class="s5xx">5xx</b><span><strong>Server erred</strong> &mdash; e.g. 500 Error</span></div>
+          <p class="apix-note">Every response carries a 3-digit code. The first digit tells you if it worked at a glance.</p>
+        </div>
+
+        <!-- Endpoint URL shape -->
+        <div class="apix-card">
+          <h4>The address (endpoint)</h4>
+          <div class="apix-url"><span class="apix-u-scheme">https://</span><span class="apix-u-host">api.example.com</span><span class="apix-u-path">/v1/users/</span><span class="apix-u-id">42</span><span class="apix-u-query">?active=true</span></div>
+          <div class="apix-legend">
+            <b>host</b> where the API lives &middot; <b>/v1/users</b> the thing you want &middot; <b>/42</b> which one &middot; <b>?...</b> extra options
+          </div>
+          <p class="apix-note">An endpoint is the URL you call. It names a resource; the verb above says what to do with it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════════════════════ BASICS ══════════════════════════ -->
   <section id="basics">
     <span class="badge b-basic">Basic</span>
     <h2>REST Fundamentals</h2>
 
     <div class="block-desc">
-      <span><strong>REST</strong> (Representational State Transfer) is an architectural style for distributed systems built on 6 constraints.</span>
+      <span><strong>REST</strong> is a simple set of rules for how apps ask each other for data over the web. It is built on 6 core ideas (constraints), and REST stands for Representational State Transfer.</span>
       <a class="w3-link" href="https://www.w3schools.com/whatis/whatis_rest.asp" target="_blank">W3Schools →</a>
     </div>
     <div class="cheat-block">
@@ -169,6 +598,43 @@
             <li><strong>Stateless</strong> — server never stores client state between requests</li>
             <li><strong>HATEOAS</strong> — response includes links to next valid actions</li>
           </ul>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: three separate requests each carry their own token to the server, which keeps no session between them">
+          <div class="apix2-cap">Stateless — every request stands alone</div>
+          <svg viewBox="0 0 320 92" aria-hidden="true">
+            <rect class="apix2-box" x="6" y="28" width="52" height="36" rx="6"/>
+            <text class="apix2-t apix2-fg" x="32" y="50" text-anchor="middle">Client</text>
+            <rect class="apix2-box" x="262" y="20" width="52" height="52" rx="6"/>
+            <text class="apix2-t apix2-fg" x="288" y="33" text-anchor="middle">Server</text>
+            <rect x="270" y="40" width="36" height="24" rx="3" fill="none" stroke="var(--text-subtle)" stroke-dasharray="2 2"/>
+            <text class="apix2-mm apix2-fgm" x="288" y="50" text-anchor="middle">session</text>
+            <text class="apix2-m" x="288" y="60" text-anchor="middle" fill="#e8808f">none</text>
+            <line class="apix2-lane" x1="62" y1="46" x2="258" y2="46"/>
+            <g transform="translate(66,38)">
+              <g class="apix2-st-r apix2-st-r1">
+                <rect width="70" height="16" rx="8" fill="#7aa2f7"/>
+                <text class="apix2-m apix2-fgd" x="7" y="11">GET /me</text>
+                <circle cx="57" cy="8" r="3" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+                <path d="M60 8h5.5M63.5 8v2.5" stroke="#e0b366" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              </g>
+              <g class="apix2-st-r apix2-st-r2">
+                <rect width="70" height="16" rx="8" fill="#bb9af7"/>
+                <text class="apix2-m apix2-fgd" x="7" y="11">GET /orders</text>
+                <circle cx="57" cy="8" r="3" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+                <path d="M60 8h5.5M63.5 8v2.5" stroke="#e0b366" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              </g>
+              <g class="apix2-st-r apix2-st-r3">
+                <rect width="70" height="16" rx="8" fill="#9ece6a"/>
+                <text class="apix2-m apix2-fgd" x="7" y="11">POST /cart</text>
+                <circle cx="57" cy="8" r="3" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+                <path d="M60 8h5.5M63.5 8v2.5" stroke="#e0b366" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+            <text class="apix2-m apix2-st-ack apix2-st-ack1" x="288" y="14" text-anchor="middle" fill="#9ece6a">✓ token OK</text>
+            <text class="apix2-m apix2-st-ack apix2-st-ack2" x="288" y="14" text-anchor="middle" fill="#9ece6a">✓ token OK</text>
+            <text class="apix2-m apix2-st-ack apix2-st-ack3" x="288" y="14" text-anchor="middle" fill="#9ece6a">✓ token OK</text>
+          </svg>
+          <p class="apix2-note">Each request brings its own <b>token</b> (amber key). The server checks it and answers — it stores <b>no session</b>, so any server in the pool can handle the next call.</p>
         </div>
       </div>
     </div>
@@ -252,6 +718,52 @@
             </tbody>
           </table>
           <div style="font-size:0.65rem;color:var(--text-muted);margin-top:0.4rem;">* PATCH can be idempotent if designed to be</div>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: PUT sent three times leaves one resource; POST sent three times creates three rows">
+          <div class="apix2-cap">Idempotent or not — repeat the call 3×</div>
+          <svg viewBox="0 0 320 84" aria-hidden="true">
+            <rect x="4" y="12" width="54" height="18" rx="4" fill="#e0b366"/>
+            <text class="apix2-m apix2-fgd" x="31" y="24" text-anchor="middle">PUT ×3</text>
+            <rect x="4" y="48" width="54" height="18" rx="4" fill="#7aa2f7"/>
+            <text class="apix2-m apix2-fgd" x="31" y="60" text-anchor="middle">POST ×3</text>
+            <line class="apix2-lane" x1="62" y1="21" x2="190" y2="21"/>
+            <line class="apix2-lane" x1="62" y1="57" x2="190" y2="57"/>
+            <g transform="translate(64,21)">
+              <circle class="apix2-id-d apix2-id-d1" r="4" fill="#e0b366"/>
+              <circle class="apix2-id-d apix2-id-d2" r="4" fill="#e0b366"/>
+              <circle class="apix2-id-d apix2-id-d3" r="4" fill="#e0b366"/>
+            </g>
+            <g transform="translate(64,57)">
+              <circle class="apix2-id-d apix2-id-d4" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-id-d apix2-id-d5" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-id-d apix2-id-d6" r="4" fill="#7aa2f7"/>
+            </g>
+            <g transform="translate(196,10)">
+              <rect class="apix2-id-put" width="34" height="22" rx="4" fill="none" stroke="#9ece6a" stroke-width="1.4"/>
+              <text class="apix2-m" x="17" y="14.5" text-anchor="middle" fill="#9ece6a">#42</text>
+            </g>
+            <text class="apix2-tm" x="238" y="24" fill="#9ece6a">still one ✓</text>
+            <g transform="translate(196,46)">
+              <g class="apix2-id-b1">
+                <rect width="26" height="22" rx="4" fill="#9ece6a" fill-opacity=".2" stroke="#9ece6a"/>
+                <text class="apix2-m" x="13" y="14.5" text-anchor="middle" fill="#9ece6a">#1</text>
+              </g>
+              <g transform="translate(30,0)">
+                <g class="apix2-id-b2">
+                  <rect width="26" height="22" rx="4" fill="#e8808f" fill-opacity=".2" stroke="#e8808f"/>
+                  <text class="apix2-m" x="13" y="14.5" text-anchor="middle" fill="#e8808f">#2</text>
+                </g>
+              </g>
+              <g transform="translate(60,0)">
+                <g class="apix2-id-b3">
+                  <rect width="26" height="22" rx="4" fill="#e8808f" fill-opacity=".2" stroke="#e8808f"/>
+                  <text class="apix2-m" x="13" y="14.5" text-anchor="middle" fill="#e8808f">#3</text>
+                </g>
+              </g>
+            </g>
+            <text class="apix2-tm" x="196" y="80" fill="#e8808f">three rows created ✗</text>
+          </svg>
+          <p class="apix2-note"><b>PUT /users/42</b> repeated still leaves exactly one user 42 (idempotent). <b>POST /users</b> repeated creates a new row every time — guard retries with an <b>Idempotency-Key</b>.</p>
         </div>
       </div>
     </div>
@@ -359,6 +871,33 @@
             <li><strong>503 + Retry-After</strong> — tell clients when to retry during planned downtime.</li>
           </ul>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: a pointer steps through the five status code classes, showing an example code for each">
+          <div class="apix2-cap">Read the first digit</div>
+          <svg viewBox="0 0 320 72" aria-hidden="true">
+            <text class="apix2-big apix2-sc-l apix2-sc-l1" x="160" y="22" text-anchor="middle" fill="#7aa2f7">100 Continue</text>
+            <text class="apix2-big apix2-sc-l apix2-sc-l2" x="160" y="22" text-anchor="middle" fill="#9ece6a">200 OK</text>
+            <text class="apix2-big apix2-sc-l apix2-sc-l3" x="160" y="22" text-anchor="middle" fill="#e0b366">304 Not Modified</text>
+            <text class="apix2-big apix2-sc-l apix2-sc-l4" x="160" y="22" text-anchor="middle" fill="#e8808f">404 Not Found</text>
+            <text class="apix2-big apix2-sc-l apix2-sc-l5" x="160" y="22" text-anchor="middle" fill="#bb9af7">500 Internal Error</text>
+            <text class="apix2-tm apix2-fgm apix2-sc-l apix2-sc-l1" x="160" y="34" text-anchor="middle">informational — keep going</text>
+            <text class="apix2-tm apix2-fgm apix2-sc-l apix2-sc-l2" x="160" y="34" text-anchor="middle">success — it worked</text>
+            <text class="apix2-tm apix2-fgm apix2-sc-l apix2-sc-l3" x="160" y="34" text-anchor="middle">redirect — look elsewhere / use cache</text>
+            <text class="apix2-tm apix2-fgm apix2-sc-l apix2-sc-l4" x="160" y="34" text-anchor="middle">client error — fix the request</text>
+            <text class="apix2-tm apix2-fgm apix2-sc-l apix2-sc-l5" x="160" y="34" text-anchor="middle">server error — not your fault</text>
+            <g transform="translate(39,42)"><path class="apix2-fg apix2-sc-ind" d="M0 0 L-4 -5 L4 -5 Z"/></g>
+            <rect class="apix2-sc-s apix2-sc-s1" x="10" y="44" width="58" height="10" rx="3" fill="#7aa2f7"/>
+            <rect class="apix2-sc-s apix2-sc-s2" x="70" y="44" width="58" height="10" rx="3" fill="#9ece6a"/>
+            <rect class="apix2-sc-s apix2-sc-s3" x="130" y="44" width="58" height="10" rx="3" fill="#e0b366"/>
+            <rect class="apix2-sc-s apix2-sc-s4" x="190" y="44" width="58" height="10" rx="3" fill="#e8808f"/>
+            <rect class="apix2-sc-s apix2-sc-s5" x="250" y="44" width="58" height="10" rx="3" fill="#bb9af7"/>
+            <text class="apix2-mm apix2-fgm" x="39" y="66" text-anchor="middle">1xx</text>
+            <text class="apix2-mm apix2-fgm" x="99" y="66" text-anchor="middle">2xx</text>
+            <text class="apix2-mm apix2-fgm" x="159" y="66" text-anchor="middle">3xx</text>
+            <text class="apix2-mm apix2-fgm" x="219" y="66" text-anchor="middle">4xx</text>
+            <text class="apix2-mm apix2-fgm" x="279" y="66" text-anchor="middle">5xx</text>
+          </svg>
+          <p class="apix2-note">The <b>first digit</b> is the headline: 2 = fine, 3 = go elsewhere, 4 = <b>you</b> sent something wrong, 5 = the <b>server</b> broke. The last two digits add detail.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -408,6 +947,22 @@
             <li><strong>Max 2 levels of nesting</strong> — deeper = use query params instead</li>
             <li><strong>Actions on resources</strong> — <code>POST /orders/7/cancel</code> for state changes</li>
           </ul>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: a verb-style URL is struck out and rebuilt as an HTTP method plus a noun path">
+          <div class="apix2-cap">Move the verb out of the URL</div>
+          <svg viewBox="0 0 320 68" aria-hidden="true">
+            <text class="apix2-m apix2-ep-bad" x="8" y="20" fill="#e8808f">POST /deleteProduct/5</text>
+            <line class="apix2-ep-strike" x1="8" y1="17" x2="106" y2="17" stroke="#e8808f" stroke-width="1.4"/>
+            <text class="apix2-tm apix2-ep-badl" x="118" y="20" fill="#e8808f">✗ verb hidden in the path</text>
+            <g class="apix2-ep-pill">
+              <rect x="8" y="38" width="44" height="16" rx="4" fill="#bb9af7"/>
+              <text class="apix2-mm apix2-fgd" x="30" y="49" text-anchor="middle">DELETE</text>
+            </g>
+            <text class="apix2-m apix2-ep-s1" x="58" y="49" fill="#9ece6a">/products</text>
+            <text class="apix2-m apix2-ep-s2" x="102" y="49" fill="#e0b366">/5</text>
+            <text class="apix2-tm apix2-ep-ok" x="118" y="49" fill="#9ece6a">✓ method = verb · path = noun + id</text>
+          </svg>
+          <p class="apix2-note">The <b>method</b> (violet) says what to do, the <b>collection</b> (green) says to what, the <b>id</b> (amber) says which one. No verbs, plural nouns, lowercase.</p>
         </div>
       </div>
     </div>
@@ -503,6 +1058,43 @@
             <li><strong>Idempotency-Key</strong> — client-generated UUID; lets server detect and deduplicate retried POSTs.</li>
           </ul>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: a highlight moves through the four parts of a request — path parameter, query parameter, headers and body">
+          <div class="apix2-cap">Four places to put data</div>
+          <svg viewBox="0 0 320 96" aria-hidden="true">
+            <rect class="apix2-code" x="4" y="4" width="200" height="88" rx="5"/>
+            <rect class="apix2-rq-h apix2-rq-h1" x="59" y="10" width="13" height="11" rx="2" fill="#9ece6a" fill-opacity=".22" stroke="#9ece6a" stroke-width=".8"/>
+            <rect class="apix2-rq-h apix2-rq-h2" x="70" y="10" width="34" height="11" rx="2" fill="#e0b366" fill-opacity=".22" stroke="#e0b366" stroke-width=".8"/>
+            <rect class="apix2-rq-h apix2-rq-h3" x="8" y="25" width="192" height="22" rx="2" fill="#7aa2f7" fill-opacity=".18" stroke="#7aa2f7" stroke-width=".8"/>
+            <rect class="apix2-rq-h apix2-rq-h4" x="8" y="52" width="192" height="36" rx="2" fill="#bb9af7" fill-opacity=".18" stroke="#bb9af7" stroke-width=".8"/>
+            <text class="apix2-m apix2-fgc" x="12" y="18">GET /users/<tspan fill="#9ece6a">42</tspan><tspan fill="#e0b366">?page=2</tspan></text>
+            <text class="apix2-m apix2-fgc" x="12" y="34"><tspan fill="#7aa2f7">Authorization:</tspan> Bearer eyJhb…</text>
+            <text class="apix2-m apix2-fgc" x="12" y="44"><tspan fill="#7aa2f7">Accept:</tspan> application/json</text>
+            <text class="apix2-m" x="12" y="63" fill="#bb9af7">{</text>
+            <text class="apix2-m" x="20" y="73" fill="#bb9af7">"name": "Alice"</text>
+            <text class="apix2-m" x="12" y="83" fill="#bb9af7">}</text>
+            <g class="apix2-rq-l apix2-rq-l1">
+              <circle cx="216" cy="15" r="3" fill="#9ece6a"/>
+              <text class="apix2-t apix2-fg" x="224" y="18">path param</text>
+              <text class="apix2-tm apix2-fgm" x="224" y="27">which resource</text>
+            </g>
+            <g class="apix2-rq-l apix2-rq-l2">
+              <circle cx="216" cy="35" r="3" fill="#e0b366"/>
+              <text class="apix2-t apix2-fg" x="224" y="38">query param</text>
+              <text class="apix2-tm apix2-fgm" x="224" y="47">optional options</text>
+            </g>
+            <g class="apix2-rq-l apix2-rq-l3">
+              <circle cx="216" cy="55" r="3" fill="#7aa2f7"/>
+              <text class="apix2-t apix2-fg" x="224" y="58">headers</text>
+              <text class="apix2-tm apix2-fgm" x="224" y="67">auth, format, tracing</text>
+            </g>
+            <g class="apix2-rq-l apix2-rq-l4">
+              <circle cx="216" cy="75" r="3" fill="#bb9af7"/>
+              <text class="apix2-t apix2-fg" x="224" y="78">body</text>
+              <text class="apix2-tm apix2-fgm" x="224" y="87">the data itself</text>
+            </g>
+          </svg>
+          <p class="apix2-note"><b>Path</b> identifies, <b>query</b> refines, <b>headers</b> describe, <b>body</b> carries. Only POST / PUT / PATCH send a body.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -566,6 +1158,30 @@
             <li><strong>Omit internal IDs from public APIs</strong> — use opaque slugs or UUIDs</li>
           </ul>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: data, meta and links blocks slide into a JSON envelope one after another">
+          <div class="apix2-cap">One envelope, three slots</div>
+          <svg viewBox="0 0 320 92" aria-hidden="true">
+            <text class="apix2-brace" x="8" y="34">{</text>
+            <text class="apix2-brace" x="8" y="90">}</text>
+            <text class="apix2-mm apix2-fgm" x="30" y="13">200 OK · Content-Type: application/json</text>
+            <g class="apix2-rs-b1">
+              <rect x="30" y="20" width="156" height="17" rx="4" fill="#9ece6a" fill-opacity=".18" stroke="#9ece6a"/>
+              <text class="apix2-m" x="37" y="31.5" fill="#9ece6a">"data":  [ {…}, {…} ]</text>
+              <text class="apix2-tm apix2-fgm" x="196" y="31.5">the payload</text>
+            </g>
+            <g class="apix2-rs-b2">
+              <rect x="30" y="42" width="156" height="17" rx="4" fill="#e0b366" fill-opacity=".18" stroke="#e0b366"/>
+              <text class="apix2-m" x="37" y="53.5" fill="#e0b366">"meta":  { total, page }</text>
+              <text class="apix2-tm apix2-fgm" x="196" y="53.5">counts &amp; paging</text>
+            </g>
+            <g class="apix2-rs-b3">
+              <rect x="30" y="64" width="156" height="17" rx="4" fill="#7aa2f7" fill-opacity=".18" stroke="#7aa2f7"/>
+              <text class="apix2-m" x="37" y="75.5" fill="#7aa2f7">"links": { next, last }</text>
+              <text class="apix2-tm apix2-fgm" x="196" y="75.5">where to go next</text>
+            </g>
+          </svg>
+          <p class="apix2-note">Wrapping the result in <b>data</b> leaves room for <b>meta</b> and <b>links</b> later — clients that only read <code>data</code> never break.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -628,6 +1244,40 @@ GET https://auth.example.com/oauth/authorize
           <div>Client Credentials — machine-to-machine</div>
           <div>Device Code — TV / IoT</div>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: an admin request passes the authentication and authorization gates; a guest passes the first and is stopped at the second with 403; a request without a token is stopped at the first with 401">
+          <div class="apix2-cap">Two gates — who are you, then what may you do</div>
+          <svg viewBox="0 0 320 96" aria-hidden="true">
+            <line class="apix2-lane" x1="8" y1="50" x2="312" y2="50"/>
+            <rect x="104" y="30" width="16" height="40" rx="3" fill="#7aa2f7" fill-opacity=".25" stroke="#7aa2f7"/>
+            <text class="apix2-t" x="112" y="22" text-anchor="middle" fill="#7aa2f7">AuthN</text>
+            <rect x="188" y="30" width="16" height="40" rx="3" fill="#bb9af7" fill-opacity=".25" stroke="#bb9af7"/>
+            <text class="apix2-t" x="196" y="22" text-anchor="middle" fill="#bb9af7">AuthZ</text>
+            <rect class="apix2-box" x="262" y="36" width="50" height="28" rx="5"/>
+            <text class="apix2-m apix2-fg" x="287" y="54" text-anchor="middle">/admin</text>
+            <text class="apix2-au-aok" x="124" y="46" font-size="10" fill="#9ece6a">✓</text>
+            <text class="apix2-au-abad" x="124" y="46" font-size="10" fill="#e8808f">✗</text>
+            <text class="apix2-au-bok" x="208" y="46" font-size="10" fill="#9ece6a">✓</text>
+            <text class="apix2-au-bbad" x="208" y="46" font-size="10" fill="#e8808f">✗</text>
+            <text class="apix2-m apix2-au-401" x="112" y="86" text-anchor="middle" fill="#e8808f">401 Unauthorized</text>
+            <text class="apix2-m apix2-au-403" x="196" y="86" text-anchor="middle" fill="#e8808f">403 Forbidden</text>
+            <text class="apix2-m apix2-au-200" x="287" y="86" text-anchor="middle" fill="#9ece6a">200 OK</text>
+            <g transform="translate(14,42)">
+              <g class="apix2-au-p1">
+                <rect width="56" height="16" rx="8" fill="#9ece6a"/>
+                <text class="apix2-m apix2-fgd" x="28" y="11" text-anchor="middle">admin·key</text>
+              </g>
+              <g class="apix2-au-p2">
+                <rect width="56" height="16" rx="8" fill="#e0b366"/>
+                <text class="apix2-m apix2-fgd" x="28" y="11" text-anchor="middle">guest·key</text>
+              </g>
+              <g class="apix2-au-p3">
+                <rect width="56" height="16" rx="8" fill="#e8808f"/>
+                <text class="apix2-m apix2-fgd" x="28" y="11" text-anchor="middle">no key</text>
+              </g>
+            </g>
+          </svg>
+          <p class="apix2-note"><b>AuthN</b> (blue) checks the token is valid — fail here is <b>401</b>. <b>AuthZ</b> (violet) checks that identity may do this — fail here is <b>403</b>. Enforce both on every request.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -686,6 +1336,48 @@ is loaded → row 6 appears on BOTH pages</span>
 <span style="color:#f7768e;">INSERT row at position 3 →</span>
 <span style="color:#f7768e;">page 2 now starts at old row 5 (shifted)</span>
           </div>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: a new row is inserted at the top of a list; the offset page window now repeats a row while the cursor window stays anchored to the same rows">
+          <div class="apix2-cap">Insert a row — offset drifts, cursor holds</div>
+          <svg viewBox="0 0 320 120" aria-hidden="true">
+            <text class="apix2-mm" x="10" y="11" fill="#e0b366">Offset · page=2&amp;limit=3</text>
+            <text class="apix2-mm" x="170" y="11" fill="#7aa2f7">Cursor · after_id=3&amp;limit=3</text>
+            <!-- offset column: bracket is fixed in place -->
+            <g class="apix2-pg-rows">
+              <rect class="apix2-box" x="10" y="20" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="26.8">id 1</text>
+              <rect class="apix2-box" x="10" y="31" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="37.8">id 2</text>
+              <rect class="apix2-box apix2-pg-dup" x="10" y="42" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="48.8">id 3</text>
+              <rect class="apix2-box" x="10" y="53" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="59.8">id 4</text>
+              <rect class="apix2-box" x="10" y="64" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="70.8">id 5</text>
+              <rect class="apix2-box" x="10" y="75" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="81.8">id 6</text>
+              <rect class="apix2-box" x="10" y="86" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="92.8">id 7</text>
+              <rect class="apix2-box" x="10" y="97" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="14" y="103.8">id 8</text>
+            </g>
+            <rect x="7" y="51" width="94" height="35" rx="3" fill="none" stroke="#e0b366" stroke-width="1.4"/>
+            <g class="apix2-pg-new">
+              <rect x="10" y="20" width="88" height="9" rx="2" fill="#e0b366" fill-opacity=".35" stroke="#e0b366"/>
+              <text class="apix2-mm" x="14" y="26.8" fill="#e0b366">NEW row</text>
+            </g>
+            <text class="apix2-mm apix2-pg-lab" x="104" y="71" fill="#e8808f">id 3 again ✗</text>
+            <!-- cursor column: bracket travels with the rows -->
+            <g class="apix2-pg-rows">
+              <rect class="apix2-box" x="170" y="20" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="26.8">id 1</text>
+              <rect class="apix2-box" x="170" y="31" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="37.8">id 2</text>
+              <rect class="apix2-box" x="170" y="42" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="48.8">id 3</text>
+              <rect class="apix2-box" x="170" y="53" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="59.8">id 4</text>
+              <rect class="apix2-box" x="170" y="64" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="70.8">id 5</text>
+              <rect class="apix2-box" x="170" y="75" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="81.8">id 6</text>
+              <rect class="apix2-box" x="170" y="86" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="92.8">id 7</text>
+              <rect class="apix2-box" x="170" y="97" width="88" height="9" rx="2"/><text class="apix2-mm apix2-fgm" x="174" y="103.8">id 8</text>
+              <rect x="167" y="51" width="94" height="35" rx="3" fill="none" stroke="#7aa2f7" stroke-width="1.4"/>
+            </g>
+            <g class="apix2-pg-new">
+              <rect x="170" y="20" width="88" height="9" rx="2" fill="#e0b366" fill-opacity=".35" stroke="#e0b366"/>
+              <text class="apix2-mm" x="174" y="26.8" fill="#e0b366">NEW row</text>
+            </g>
+            <text class="apix2-mm apix2-pg-lab" x="264" y="71" fill="#9ece6a">still 4·5·6 ✓</text>
+          </svg>
+          <p class="apix2-note">The <b>offset</b> window (amber) is a fixed position, so when a row lands above it everything shifts and <b>id 3</b> shows up on page 2 as well. The <b>cursor</b> window (blue) is pinned to "after id 3", so it moves with the data.</p>
         </div>
       </div>
     </div>
@@ -843,6 +1535,31 @@ Bookmarkable URL   ✓           ✗          ✓
           <div style="margin-top:0.5rem;"><strong>Always index</strong> filter columns in the DB</div>
           <div><strong>Limit filter combinations</strong> to prevent full-table scans</div>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: six products are filtered to the blue ones, sorted by price descending, then limited to one result">
+          <div class="apix2-cap">Query params narrow a collection</div>
+          <svg viewBox="0 0 320 84" aria-hidden="true">
+            <g class="apix2-fl-c apix2-fl-c1">
+              <rect x="6" y="6" width="64" height="14" rx="7" fill="#7aa2f7"/>
+              <text class="apix2-mm apix2-fgd" x="38" y="15.6" text-anchor="middle">?color=blue</text>
+            </g>
+            <g class="apix2-fl-c apix2-fl-c2">
+              <rect x="76" y="6" width="70" height="14" rx="7" fill="#e0b366"/>
+              <text class="apix2-mm apix2-fgd" x="111" y="15.6" text-anchor="middle">&amp;sort=-price</text>
+            </g>
+            <g class="apix2-fl-c apix2-fl-c3">
+              <rect x="152" y="6" width="52" height="14" rx="7" fill="#9ece6a"/>
+              <text class="apix2-mm apix2-fgd" x="178" y="15.6" text-anchor="middle">&amp;limit=1</text>
+            </g>
+            <g class="apix2-fl-out"><circle cx="24" cy="50" r="9" fill="#e8808f"/><text class="apix2-mm apix2-fgm" x="24" y="72" text-anchor="middle">$40</text></g>
+            <g class="apix2-fl-g2"><circle cx="66" cy="50" r="9" fill="#7aa2f7"/><text class="apix2-mm apix2-fgm" x="66" y="72" text-anchor="middle">$80</text></g>
+            <g class="apix2-fl-out"><circle cx="108" cy="50" r="9" fill="#9ece6a"/><text class="apix2-mm apix2-fgm" x="108" y="72" text-anchor="middle">$60</text></g>
+            <g class="apix2-fl-g4"><circle cx="150" cy="50" r="9" fill="#7aa2f7"/><text class="apix2-mm apix2-fgm" x="150" y="72" text-anchor="middle">$120</text></g>
+            <g class="apix2-fl-out"><circle cx="192" cy="50" r="9" fill="#e0b366"/><text class="apix2-mm apix2-fgm" x="192" y="72" text-anchor="middle">$95</text></g>
+            <g class="apix2-fl-out"><circle cx="234" cy="50" r="9" fill="#bb9af7"/><text class="apix2-mm apix2-fgm" x="234" y="72" text-anchor="middle">$30</text></g>
+            <text class="apix2-m apix2-fl-res" x="258" y="53" fill="#9ece6a">→ 1 result</text>
+          </svg>
+          <p class="apix2-note">Same endpoint, same data — each param is one more step: <b>filter</b> keeps the blue ones, <b>sort</b> puts the pricier first, <b>limit</b> trims the page.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -906,6 +1623,25 @@ Use header versioning for internal APIs</span></pre>
             Link: &lt;/api/v2/users&gt;; rel="successor-version"
           </div>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: clients hop one by one from the v1 lane to the v2 lane; a Deprecation header appears, then a Sunset header and the v1 lane fades">
+          <div class="apix2-cap">Migrate, then sunset</div>
+          <svg viewBox="0 0 320 84" aria-hidden="true">
+            <rect x="40" y="18" width="196" height="14" rx="7" fill="#9ece6a" fill-opacity=".2" stroke="#9ece6a"/>
+            <text class="apix2-m" x="10" y="28" fill="#9ece6a">/v2</text>
+            <text class="apix2-tm" x="244" y="28" fill="#9ece6a">✓ successor</text>
+            <g class="apix2-vs-v1">
+              <rect x="40" y="52" width="196" height="14" rx="7" fill="#e0b366" fill-opacity=".2" stroke="#e0b366"/>
+              <text class="apix2-m" x="10" y="62" fill="#e0b366">/v1</text>
+            </g>
+            <g transform="translate(70,59)"><circle class="apix2-vs-c apix2-vs-c1" r="5" fill="#7aa2f7"/></g>
+            <g transform="translate(110,59)"><circle class="apix2-vs-c apix2-vs-c2" r="5" fill="#bb9af7"/></g>
+            <g transform="translate(150,59)"><circle class="apix2-vs-c apix2-vs-c3" r="5" fill="#e8808f"/></g>
+            <g transform="translate(190,59)"><circle class="apix2-acc apix2-vs-c apix2-vs-c4" r="5"/></g>
+            <text class="apix2-mm apix2-vs-dep" x="244" y="57" fill="#e0b366">Deprecation: …</text>
+            <text class="apix2-mm apix2-vs-sun" x="244" y="67" fill="#e8808f">Sunset → gone</text>
+          </svg>
+          <p class="apix2-note">Ship <b>/v2</b> beside <b>/v1</b>, announce with a <b>Deprecation</b> header, give clients months to hop over, then send <b>Sunset</b> and switch v1 off.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -964,6 +1700,38 @@ Use header versioning for internal APIs</span></pre>
             <li><strong>Consistent structure</strong> — same shape for every error in the API</li>
             <li><strong>Use Problem Details (RFC 9457)</strong> — it's an IETF standard; tools understand it</li>
           </ul>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: a 422 status chip appears, then a Problem Details body builds up one field at a time — type, title, status, detail, errors">
+          <div class="apix2-cap">A Problem Details body, field by field</div>
+          <svg viewBox="0 0 320 98" aria-hidden="true">
+            <g class="apix2-er-chip">
+              <rect x="6" y="5" width="118" height="15" rx="4" fill="#e8808f" fill-opacity=".2" stroke="#e8808f"/>
+              <text class="apix2-m" x="65" y="15.5" text-anchor="middle" fill="#e8808f">422 Unprocessable</text>
+              <text class="apix2-mm apix2-fgm" x="130" y="15.5">Content-Type: application/problem+json</text>
+            </g>
+            <rect class="apix2-code" x="6" y="26" width="308" height="68" rx="5"/>
+            <g class="apix2-er-l apix2-er-l1">
+              <text class="apix2-m apix2-fgc" x="14" y="39"><tspan fill="#7aa2f7">"type"</tspan>:   "…/errors/validation"</text>
+              <text class="apix2-mm apix2-fgm" x="206" y="39">machine-readable URI</text>
+            </g>
+            <g class="apix2-er-l apix2-er-l2">
+              <text class="apix2-m apix2-fgc" x="14" y="50"><tspan fill="#bb9af7">"title"</tspan>:  "Validation Failed"</text>
+              <text class="apix2-mm apix2-fgm" x="206" y="50">short human summary</text>
+            </g>
+            <g class="apix2-er-l apix2-er-l3">
+              <text class="apix2-m apix2-fgc" x="14" y="61"><tspan fill="#e8808f">"status"</tspan>: 422</text>
+              <text class="apix2-mm apix2-fgm" x="206" y="61">matches the HTTP code</text>
+            </g>
+            <g class="apix2-er-l apix2-er-l4">
+              <text class="apix2-m apix2-fgc" x="14" y="72"><tspan fill="#e0b366">"detail"</tspan>: "2 invalid fields"</text>
+              <text class="apix2-mm apix2-fgm" x="206" y="72">what went wrong here</text>
+            </g>
+            <g class="apix2-er-l apix2-er-l5">
+              <text class="apix2-m apix2-fgc" x="14" y="83"><tspan fill="#9ece6a">"errors"</tspan>: [ { "field": "email", … } ]</text>
+              <text class="apix2-mm apix2-fgm" x="206" y="83">field-level list</text>
+            </g>
+          </svg>
+          <p class="apix2-note">Status in the <b>header</b>, the same status in the <b>body</b>, a stable <b>type</b> clients can switch on, and a per-field <b>errors</b> list — the same shape for every error.</p>
         </div>
       </div>
     </div>
@@ -1029,6 +1797,52 @@ or 200 + new ETag if changed</span>
           <div style="margin-top:0.6rem;"><strong>ETag vs Last-Modified:</strong></div>
           <div>ETag is stronger — handles sub-second changes and content-based identity</div>
           <div style="margin-top:0.3rem;"><strong>304 Not Modified</strong> saves full body transfer — critical for large responses</div>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: first request misses the cache and goes to the server; second request is a cache hit; after max-age expires the third request revalidates and the server answers 304 with no body">
+          <div class="apix2-cap">Miss · hit · revalidate</div>
+          <svg viewBox="0 0 320 92" aria-hidden="true">
+            <text class="apix2-m apix2-ca-e apix2-ca-miss" x="162" y="14" text-anchor="middle" fill="#e8808f">MISS → ask the server</text>
+            <text class="apix2-m apix2-ca-e apix2-ca-hit" x="162" y="14" text-anchor="middle" fill="#9ece6a">HIT → served from cache</text>
+            <text class="apix2-m apix2-ca-e apix2-ca-exp" x="162" y="14" text-anchor="middle" fill="#e0b366">expired → If-None-Match</text>
+            <text class="apix2-m apix2-ca-e apix2-ca-304" x="162" y="14" text-anchor="middle" fill="#e0b366">304 Not Modified · no body</text>
+            <rect class="apix2-box" x="4" y="30" width="46" height="30" rx="5"/>
+            <text class="apix2-t apix2-fg" x="27" y="49" text-anchor="middle">Client</text>
+            <rect x="137" y="22" width="50" height="46" rx="5" fill="#e0b366" fill-opacity=".12" stroke="#e0b366"/>
+            <text class="apix2-t" x="162" y="34" text-anchor="middle" fill="#e0b366">Cache</text>
+            <g class="apix2-ca-e apix2-ca-store">
+              <rect x="149" y="41" width="26" height="20" rx="2" fill="#e0b366" fill-opacity=".85"/>
+              <text class="apix2-mm apix2-fgd" x="162" y="49" text-anchor="middle">ETag</text>
+              <text class="apix2-mm apix2-fgd" x="162" y="57" text-anchor="middle">"33a6"</text>
+            </g>
+            <rect class="apix2-box" x="270" y="30" width="46" height="30" rx="5"/>
+            <text class="apix2-t apix2-fg" x="293" y="49" text-anchor="middle">Server</text>
+            <line class="apix2-lane" x1="50" y1="40" x2="137" y2="40"/>
+            <line class="apix2-lane" x1="187" y1="40" x2="270" y2="40"/>
+            <line class="apix2-lane" x1="50" y1="58" x2="137" y2="58"/>
+            <line class="apix2-lane" x1="187" y1="58" x2="270" y2="58"/>
+            <text class="apix2-mm apix2-fgm" x="93" y="35" text-anchor="middle">request →</text>
+            <text class="apix2-mm apix2-fgm" x="93" y="68" text-anchor="middle">← response</text>
+            <g transform="translate(54,40)">
+              <circle class="apix2-ca-e apix2-ca-r1" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-ca-e apix2-ca-r2" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-ca-e apix2-ca-r3" r="4" fill="#e0b366"/>
+            </g>
+            <g transform="translate(50,53)">
+              <g class="apix2-ca-e apix2-ca-s1">
+                <rect width="26" height="10" rx="3" fill="#7aa2f7"/>
+                <text class="apix2-mm apix2-fgd" x="13" y="7.4" text-anchor="middle">200</text>
+              </g>
+              <g class="apix2-ca-e apix2-ca-s2">
+                <rect width="26" height="10" rx="3" fill="#9ece6a"/>
+                <text class="apix2-mm apix2-fgd" x="13" y="7.4" text-anchor="middle">200</text>
+              </g>
+              <g class="apix2-ca-e apix2-ca-s3">
+                <rect width="26" height="10" rx="3" fill="#e0b366"/>
+                <text class="apix2-mm apix2-fgd" x="13" y="7.4" text-anchor="middle">304</text>
+              </g>
+            </g>
+          </svg>
+          <p class="apix2-note">First call: <b>miss</b>, full 200 travels back and the cache keeps a copy with its <b>ETag</b>. Second call: <b>hit</b>, no server trip. After <b>max-age</b>: a tiny revalidation, and the server replies <b>304</b> — no body to download.</p>
         </div>
       </div>
     </div>
@@ -1098,6 +1912,37 @@ or 200 + new ETag if changed</span>
           <div>Exponential backoff with jitter on 429</div>
           <div>Honour Retry-After header</div>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: requests each take a token from a bucket and pass; when the bucket is empty a request is rejected with 429; tokens then refill one by one">
+          <div class="apix2-cap">Token bucket — spend, then refill</div>
+          <svg viewBox="0 0 320 96" aria-hidden="true">
+            <g transform="translate(145,4)">
+              <circle class="apix2-rl-drip apix2-rl-drip1" r="2.5" fill="#e0b366"/>
+              <circle class="apix2-rl-drip apix2-rl-drip2" r="2.5" fill="#e0b366"/>
+              <circle class="apix2-rl-drip apix2-rl-drip3" r="2.5" fill="#e0b366"/>
+              <circle class="apix2-rl-drip apix2-rl-drip4" r="2.5" fill="#e0b366"/>
+            </g>
+            <text class="apix2-mm" x="152" y="12" fill="#e0b366">refill at rate R</text>
+            <path d="M122 24 v40 a8 8 0 0 0 8 8 h30 a8 8 0 0 0 8 -8 v-40" class="apix2-box" style="stroke:var(--text-muted);stroke-width:1.4"/>
+            <circle class="apix2-rl-t apix2-rl-t1" cx="145" cy="64" r="5" fill="#e0b366"/>
+            <circle class="apix2-rl-t apix2-rl-t2" cx="145" cy="53" r="5" fill="#e0b366"/>
+            <circle class="apix2-rl-t apix2-rl-t3" cx="145" cy="42" r="5" fill="#e0b366"/>
+            <circle class="apix2-rl-t apix2-rl-t4" cx="145" cy="31" r="5" fill="#e0b366"/>
+            <text class="apix2-tm apix2-fgm" x="145" y="93" text-anchor="middle">bucket · 4 tokens</text>
+            <text class="apix2-mm apix2-fgm" x="10" y="70">requests</text>
+            <line class="apix2-lane" x1="14" y1="78" x2="286" y2="78"/>
+            <g transform="translate(10,78)">
+              <circle class="apix2-rl-q apix2-rl-q1" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-rl-q apix2-rl-q2" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-rl-q apix2-rl-q3" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-rl-q apix2-rl-q4" r="4" fill="#7aa2f7"/>
+              <circle class="apix2-rl-q apix2-rl-q5" r="4" fill="#7aa2f7"/>
+            </g>
+            <text class="apix2-m apix2-rl-429" x="182" y="71" fill="#e8808f">429 · Retry-After: 2</text>
+            <rect class="apix2-box" x="286" y="70" width="28" height="16" rx="3"/>
+            <text class="apix2-mm apix2-fgm" x="300" y="81" text-anchor="middle">API</text>
+          </svg>
+          <p class="apix2-note">Every accepted request (turns <b>green</b>) spends one <b>token</b>. An empty bucket means <b>429</b> (rose) with a <b>Retry-After</b> hint. Tokens drip back at a steady rate, so short bursts are fine but sustained floods are not.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1161,6 +2006,27 @@ or 200 + new ETag if changed</span>
             { "event": "report.done", "reportId": "xyz" }
           </div>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: an order's status changes from pending to shipped; the cancel link disappears and a track link appears">
+          <div class="apix2-cap">HATEOAS — links follow the state</div>
+          <svg viewBox="0 0 320 92" aria-hidden="true">
+            <rect class="apix2-code" x="6" y="6" width="204" height="80" rx="5"/>
+            <text class="apix2-m apix2-fgc" x="12" y="19">"id": 7,  "status":</text>
+            <text class="apix2-m apix2-ha-pend" x="100" y="19" fill="#e0b366">"pending"</text>
+            <text class="apix2-m apix2-ha-ship" x="100" y="19" fill="#9ece6a">"shipped"</text>
+            <text class="apix2-m apix2-fgc" x="12" y="31">"_links": {</text>
+            <text class="apix2-m apix2-fgc" x="20" y="43"><tspan fill="#7aa2f7">"self"</tspan>:     "/orders/7"</text>
+            <text class="apix2-m apix2-fgc apix2-ha-cancel" x="20" y="55"><tspan fill="#e8808f">"cancel"</tspan>:   "/orders/7/cancel"</text>
+            <line class="apix2-ha-strike" x1="20" y1="52.5" x2="150" y2="52.5" stroke="#e8808f" stroke-width="1.2"/>
+            <text class="apix2-m apix2-fgc" x="20" y="67"><tspan fill="#bb9af7">"payment"</tspan>:  "/orders/7/payment"</text>
+            <text class="apix2-m apix2-fgc apix2-ha-track" x="20" y="79"><tspan fill="#9ece6a">"track"</tspan>:    "/shipments/55"</text>
+            <text class="apix2-tm apix2-fgm" x="220" y="19">server knows the rules</text>
+            <text class="apix2-m apix2-ha-ev" x="220" y="38" fill="#9ece6a">status → shipped</text>
+            <text class="apix2-m apix2-ha-ev apix2-ha-ev2" x="220" y="52" fill="#e8808f">✗ cancel link gone</text>
+            <text class="apix2-m apix2-ha-ev apix2-ha-ev3" x="220" y="66" fill="#9ece6a">✓ track link added</text>
+            <text class="apix2-tm apix2-fgm" x="220" y="82">client follows the links</text>
+          </svg>
+          <p class="apix2-note">The client never hard-codes "can I cancel?". If the <b>cancel</b> link is there, it can; once the order ships the server drops it and offers <b>track</b> instead.</p>
+        </div>
       </div>
     </div>
 
@@ -1219,6 +2085,44 @@ or 200 + new ETag if changed</span>
             Access-Control-Allow-Headers: Authorization,Content-Type<br/>
             Access-Control-Max-Age: 86400
           </div>
+        </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: the Accept header cycles through JSON, CSV, PDF and an unsupported type; the response document changes shape, and the unsupported type gets 406">
+          <div class="apix2-cap">Content negotiation — same data, your format</div>
+          <svg viewBox="0 0 320 70" aria-hidden="true">
+            <text class="apix2-m" x="8" y="36" fill="#7aa2f7">Accept:</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v1" x="48" y="36" fill="#9ece6a">application/json</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v2" x="48" y="36" fill="#e0b366">text/csv</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v3" x="48" y="36" fill="#e8808f">application/pdf</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v4" x="48" y="36" fill="#bb9af7">image/png</text>
+            <path d="M134 33 h18 m-4 -4 l4 4 l-4 4" fill="none" stroke="var(--text-muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <g transform="translate(166,14)">
+              <g class="apix2-cn-v apix2-cn-v1">
+                <rect width="36" height="40" rx="4" fill="#9ece6a" fill-opacity=".18" stroke="#9ece6a"/>
+                <text class="apix2-big" x="18" y="25" text-anchor="middle" fill="#9ece6a">{ }</text>
+              </g>
+              <g class="apix2-cn-v apix2-cn-v2">
+                <rect width="36" height="40" rx="4" fill="#e0b366" fill-opacity=".18" stroke="#e0b366"/>
+                <text class="apix2-big" x="18" y="25" text-anchor="middle" fill="#e0b366">a,b</text>
+              </g>
+              <g class="apix2-cn-v apix2-cn-v3">
+                <rect width="36" height="40" rx="4" fill="#e8808f" fill-opacity=".18" stroke="#e8808f"/>
+                <text class="apix2-big" x="18" y="25" text-anchor="middle" fill="#e8808f">PDF</text>
+              </g>
+              <g class="apix2-cn-v apix2-cn-v4">
+                <rect width="36" height="40" rx="4" fill="#bb9af7" fill-opacity=".18" stroke="#bb9af7" stroke-dasharray="3 2"/>
+                <text class="apix2-big" x="18" y="25" text-anchor="middle" fill="#bb9af7">406</text>
+              </g>
+            </g>
+            <text class="apix2-m apix2-cn-v apix2-cn-v1" x="212" y="30" fill="#9ece6a">200 OK · JSON</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v2" x="212" y="30" fill="#e0b366">200 OK · CSV</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v3" x="212" y="30" fill="#e8808f">200 OK · PDF</text>
+            <text class="apix2-m apix2-cn-v apix2-cn-v4" x="212" y="30" fill="#bb9af7">406 Not Acceptable</text>
+            <text class="apix2-tm apix2-fgm apix2-cn-v apix2-cn-v1" x="212" y="42">same resource, new shape</text>
+            <text class="apix2-tm apix2-fgm apix2-cn-v apix2-cn-v2" x="212" y="42">same resource, new shape</text>
+            <text class="apix2-tm apix2-fgm apix2-cn-v apix2-cn-v3" x="212" y="42">same resource, new shape</text>
+            <text class="apix2-tm apix2-fgm apix2-cn-v apix2-cn-v4" x="212" y="42">server can't produce it</text>
+          </svg>
+          <p class="apix2-note">One URL, many representations: the <b>Accept</b> header asks, the server picks the closest match or answers <b>406</b> when it has nothing suitable.</p>
         </div>
       </div>
     </div>
@@ -1281,6 +2185,61 @@ Best for        Public APIs Flex UI     Microservices</pre>
             </ul>
           </div>
         </div>
+        <div class="apix2-anim" role="img" aria-label="Animation: REST makes three round trips returning large payloads; GraphQL makes one query returning exactly what was asked; gRPC streams small binary frames">
+          <div class="apix2-cap">How each one fetches</div>
+          <svg viewBox="0 0 340 96" aria-hidden="true">
+            <text class="apix2-m" x="8" y="23" fill="#7aa2f7">REST</text>
+            <text class="apix2-m" x="8" y="53" fill="#bb9af7">GraphQL</text>
+            <text class="apix2-m" x="8" y="83" fill="#9ece6a">gRPC</text>
+            <line class="apix2-lane" x1="58" y1="20" x2="230" y2="20"/>
+            <line class="apix2-lane" x1="58" y1="50" x2="230" y2="50"/>
+            <line class="apix2-lane" x1="58" y1="80" x2="230" y2="80"/>
+            <rect x="230" y="6" width="5" height="84" rx="2.5" fill="var(--text-subtle)"/>
+            <text class="apix2-tm apix2-fg" x="244" y="18">3 round trips</text>
+            <text class="apix2-tm apix2-fgm" x="244" y="27">over-fetches each time</text>
+            <text class="apix2-tm apix2-fg" x="244" y="48">1 query</text>
+            <text class="apix2-tm apix2-fgm" x="244" y="57">exactly the fields asked</text>
+            <text class="apix2-tm apix2-fg" x="244" y="78">1 stream · HTTP/2</text>
+            <text class="apix2-tm apix2-fgm" x="244" y="87">small binary frames</text>
+            <g transform="translate(60,20)">
+              <circle class="apix2-cp-q apix2-cp-q1" r="3.5" fill="#7aa2f7"/>
+              <circle class="apix2-cp-q apix2-cp-q2" r="3.5" fill="#7aa2f7"/>
+              <circle class="apix2-cp-q apix2-cp-q3" r="3.5" fill="#7aa2f7"/>
+            </g>
+            <g transform="translate(60,14)">
+              <g class="apix2-cp-r apix2-cp-r1 apix2-cp-still">
+                <rect width="40" height="12" rx="3" fill="#7aa2f7" fill-opacity=".35" stroke="#7aa2f7"/>
+                <rect x="3" y="3" width="10" height="6" rx="1.5" fill="#9ece6a"/>
+              </g>
+              <g class="apix2-cp-r apix2-cp-r2">
+                <rect width="40" height="12" rx="3" fill="#7aa2f7" fill-opacity=".35" stroke="#7aa2f7"/>
+                <rect x="3" y="3" width="10" height="6" rx="1.5" fill="#9ece6a"/>
+              </g>
+              <g class="apix2-cp-r apix2-cp-r3">
+                <rect width="40" height="12" rx="3" fill="#7aa2f7" fill-opacity=".35" stroke="#7aa2f7"/>
+                <rect x="3" y="3" width="10" height="6" rx="1.5" fill="#9ece6a"/>
+              </g>
+            </g>
+            <g transform="translate(60,50)">
+              <circle class="apix2-cp-q apix2-cp-q4" r="3.5" fill="#bb9af7"/>
+            </g>
+            <g transform="translate(60,44)">
+              <g class="apix2-cp-r apix2-cp-r4 apix2-cp-still">
+                <rect width="14" height="12" rx="3" fill="#9ece6a" stroke="#bb9af7"/>
+              </g>
+            </g>
+            <g transform="translate(60,80)">
+              <circle class="apix2-cp-q apix2-cp-q5" r="3.5" fill="#9ece6a"/>
+            </g>
+            <g transform="translate(60,77)">
+              <rect class="apix2-cp-f apix2-cp-f1 apix2-cp-still" width="6" height="6" rx="1" fill="#9ece6a"/>
+              <rect class="apix2-cp-f apix2-cp-f2" width="6" height="6" rx="1" fill="#9ece6a"/>
+              <rect class="apix2-cp-f apix2-cp-f3" width="6" height="6" rx="1" fill="#9ece6a"/>
+              <rect class="apix2-cp-f apix2-cp-f4" width="6" height="6" rx="1" fill="#9ece6a"/>
+            </g>
+          </svg>
+          <p class="apix2-note"><b>REST</b> (blue) needs a trip per resource and each blob carries more than the green bit you wanted. <b>GraphQL</b> (violet) asks once and gets exactly that. <b>gRPC</b> (green) streams compact binary frames over one HTTP/2 connection.</p>
+        </div>
       </div>
     </div>
 
@@ -1335,7 +2294,7 @@ Best for        Public APIs Flex UI     Microservices</pre>
 
 </main>
 
-<script src="js/script.js"></script>
+<script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

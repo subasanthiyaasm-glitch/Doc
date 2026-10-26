@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>XML &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     .lk  { color: #bb9af7; }
     .lc  { color: #7aa2f7; }
@@ -13,6 +13,110 @@
     .lm  { color: #73daca; }
     .ln  { color: #ff9e64; }
     .lo  { color: #e0af68; }
+  </style>
+  <style>
+    /* ═══ xmlx2: compact, multi-colour, per-concept inline animations ═══
+       Prefix "xmlx2-" is distinct from the top explainer's "xmlx-" prefix.
+       Surfaces/text use theme variables; moving graphics use a fixed,
+       colourful accent set so every concept reads distinct in both themes. */
+    .xmlx2-fig{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem .85rem;
+      margin:.6rem 0 .15rem;padding:.5rem .7rem;background:var(--surface-2);
+      border:1px solid var(--border);border-radius:var(--radius-sm);}
+    .xmlx2-fig svg{flex:0 0 auto;display:block;overflow:visible;height:auto;}
+    .xmlx2-cap{flex:1 1 150px;min-width:140px;font-size:.7rem;line-height:1.5;color:var(--text-muted);}
+    .xmlx2-cap b{color:var(--accent);font-weight:600;}
+    .xmlx2-cap code{font-size:.92em;}
+    .xmlx2-fig text{font-family:'JetBrains Mono','SFMono-Regular',ui-monospace,monospace;}
+    /* fixed multi-colour accents (fills) */
+    .xmlx2-fa{fill:#e0b366}.xmlx2-fr{fill:#e8808f}.xmlx2-fb{fill:#7aa2f7}.xmlx2-fg{fill:#9ece6a}.xmlx2-fv{fill:#bb9af7}.xmlx2-fac{fill:var(--accent)}
+    /* fixed multi-colour accents (strokes) */
+    .xmlx2-sa{stroke:#e0b366}.xmlx2-sr{stroke:#e8808f}.xmlx2-sb{stroke:#7aa2f7}.xmlx2-sg{stroke:#9ece6a}.xmlx2-sv{stroke:#bb9af7}.xmlx2-sac{stroke:var(--accent)}
+    /* theme-driven surfaces/text */
+    .xmlx2-surf{fill:var(--surface)}.xmlx2-surf2{fill:var(--surface-2)}
+    .xmlx2-brd{stroke:var(--border-strong)}.xmlx2-txt{fill:var(--text)}.xmlx2-muted{fill:var(--text-muted)}
+
+    /* F1 — well-formed: a mark travels from open tag to its close */
+    .xmlx2-f1 .xmlx2-d{animation:xmlx2-k1 3.6s ease-in-out infinite}
+    @keyframes xmlx2-k1{0%{transform:translateX(0);opacity:0}12%{opacity:1}86%{opacity:1}100%{transform:translateX(92px);opacity:0}}
+
+    /* F2 — prolog drops onto the top of the document */
+    .xmlx2-f2 .xmlx2-pro{transform-box:fill-box;animation:xmlx2-k2 4s ease-in-out infinite}
+    @keyframes xmlx2-k2{0%{transform:translateY(-15px);opacity:0}22%{transform:translateY(0);opacity:1}82%{transform:translateY(0);opacity:1}100%{transform:translateY(-15px);opacity:0}}
+
+    /* F3 — namespaces: the two prefixes light alternately */
+    .xmlx2-f3 .xmlx2-p1{animation:xmlx2-k3a 3.8s ease-in-out infinite}
+    .xmlx2-f3 .xmlx2-p2{animation:xmlx2-k3b 3.8s ease-in-out infinite}
+    @keyframes xmlx2-k3a{0%,100%{opacity:.3}22%{opacity:1}48%{opacity:.3}}
+    @keyframes xmlx2-k3b{0%,52%{opacity:.3}72%{opacity:1}98%{opacity:.3}}
+
+    /* F4 — internal DTD: rules pulse inside the doc */
+    .xmlx2-f4 .xmlx2-inner{transform-box:fill-box;transform-origin:center;animation:xmlx2-k4 3.4s ease-in-out infinite}
+    @keyframes xmlx2-k4{0%,100%{opacity:.45}50%{opacity:1}}
+
+    /* F5 — external DTD: link flows between the two files */
+    .xmlx2-f5 .xmlx2-link{stroke-dasharray:62;animation:xmlx2-k5 3.6s ease-in-out infinite}
+    @keyframes xmlx2-k5{0%{stroke-dashoffset:62}48%{stroke-dashoffset:0}78%{stroke-dashoffset:0}100%{stroke-dashoffset:-62}}
+
+    /* F6 — DTD declarations highlight one keyword at a time */
+    .xmlx2-f6 .xmlx2-kw1{animation:xmlx2-k6a 4.2s ease-in-out infinite}
+    .xmlx2-f6 .xmlx2-kw2{animation:xmlx2-k6b 4.2s ease-in-out infinite}
+    .xmlx2-f6 .xmlx2-kw3{animation:xmlx2-k6c 4.2s ease-in-out infinite}
+    @keyframes xmlx2-k6a{0%,100%{opacity:.35}8%{opacity:1}25%{opacity:.35}}
+    @keyframes xmlx2-k6b{0%,33%{opacity:.35}41%{opacity:1}58%{opacity:.35}100%{opacity:.35}}
+    @keyframes xmlx2-k6c{0%,66%{opacity:.35}74%{opacity:1}91%{opacity:.35}100%{opacity:.35}}
+
+    /* F7 — content model: highlight travels element → child → text */
+    .xmlx2-f7 .xmlx2-g1{animation:xmlx2-k7a 4.2s ease-in-out infinite}
+    .xmlx2-f7 .xmlx2-g2{animation:xmlx2-k7b 4.2s ease-in-out infinite}
+    .xmlx2-f7 .xmlx2-g3{animation:xmlx2-k7c 4.2s ease-in-out infinite}
+    @keyframes xmlx2-k7a{0%,100%{opacity:0}10%{opacity:1}30%{opacity:0}}
+    @keyframes xmlx2-k7b{0%,36%{opacity:0}46%{opacity:1}66%{opacity:0}100%{opacity:0}}
+    @keyframes xmlx2-k7c{0%,72%{opacity:0}82%{opacity:1}96%{opacity:0}100%{opacity:0}}
+
+    /* F8 — occurrence: boxes appear one after another */
+    .xmlx2-f8 .xmlx2-b2{transform-box:fill-box;transform-origin:center;animation:xmlx2-k8b 3.8s ease-in-out infinite}
+    .xmlx2-f8 .xmlx2-b3{transform-box:fill-box;transform-origin:center;animation:xmlx2-k8c 3.8s ease-in-out infinite}
+    @keyframes xmlx2-k8b{0%,12%{opacity:0;transform:scale(.5)}26%,82%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.5)}}
+    @keyframes xmlx2-k8c{0%,30%{opacity:0;transform:scale(.5)}44%,82%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.5)}}
+
+    /* F9 — ATTLIST: default value settles into the slot */
+    .xmlx2-f9 .xmlx2-val{transform-box:fill-box;animation:xmlx2-k9 3.8s ease-in-out infinite}
+    @keyframes xmlx2-k9{0%{transform:translateX(14px);opacity:0}30%{transform:translateX(0);opacity:1}86%{transform:translateX(0);opacity:1}100%{opacity:0}}
+
+    /* F10 — IDREF: reference arrow draws to the matching ID */
+    .xmlx2-f10 .xmlx2-link{stroke-dasharray:66;animation:xmlx2-k10 3.6s ease-in-out infinite}
+    @keyframes xmlx2-k10{0%{stroke-dashoffset:66}45%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+    .xmlx2-f10 .xmlx2-tgt{transform-box:fill-box;transform-origin:center;animation:xmlx2-k10b 3.6s ease-in-out infinite}
+    @keyframes xmlx2-k10b{0%,45%{opacity:.45}60%{opacity:1}78%{opacity:.45}100%{opacity:.45}}
+
+    /* F11 — simpleType: value oscillates within min..max */
+    .xmlx2-f11 .xmlx2-needle{transform-box:fill-box;animation:xmlx2-k11 4.4s ease-in-out infinite}
+    @keyframes xmlx2-k11{0%,100%{transform:translateX(0)}50%{transform:translateX(92px)}}
+
+    /* F12 — DTD vs Schema: the schema bar grows richer */
+    .xmlx2-f12 .xmlx2-sch{transform-box:fill-box;transform-origin:bottom;animation:xmlx2-k12 4s ease-in-out infinite}
+    @keyframes xmlx2-k12{0%{transform:scaleY(.4)}50%{transform:scaleY(1)}100%{transform:scaleY(.4)}}
+
+    /* F13 — DOM tree vs SAX/StAX streaming events */
+    .xmlx2-f13 .xmlx2-ev{animation:xmlx2-k13 2.8s linear infinite}
+    .xmlx2-f13 .xmlx2-e2{animation-delay:.9s}
+    .xmlx2-f13 .xmlx2-e3{animation-delay:1.8s}
+    @keyframes xmlx2-k13{0%{transform:translateX(0);opacity:0}18%{opacity:1}82%{opacity:1}100%{transform:translateX(42px);opacity:0}}
+
+    /* F14 — DOM parser: a cursor walks root → children */
+    .xmlx2-f14 .xmlx2-ring{transform-box:fill-box;animation:xmlx2-k14 4.4s ease-in-out infinite}
+    @keyframes xmlx2-k14{0%,100%{transform:translate(0,0)}33%{transform:translate(-36px,26px)}66%{transform:translate(36px,26px)}}
+
+    /* F15 — XPath: selector travels down the path, target glows */
+    .xmlx2-f15 .xmlx2-trav{animation:xmlx2-k15 4.2s ease-in-out infinite}
+    @keyframes xmlx2-k15{0%{transform:translateY(0);opacity:0}12%{opacity:1}50%{transform:translateY(30px);opacity:1}62%{opacity:0}100%{opacity:0}}
+    .xmlx2-f15 .xmlx2-tgt{transform-box:fill-box;transform-origin:center;animation:xmlx2-k15b 4.2s ease-in-out infinite}
+    @keyframes xmlx2-k15b{0%,45%{opacity:.4}55%{opacity:1}78%{opacity:.4}100%{opacity:.4}}
+
+    /* Respect reduced-motion: hold a sensible static frame, no motion */
+    @media (prefers-reduced-motion: reduce){
+      .xmlx2-fig *{animation:none !important}
+    }
   </style>
 </head>
 <body>
@@ -32,16 +136,17 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=8"></script>
 <script>renderHeader('XML')</script>
 <script>renderSourceLink('XML')</script>
 
 <main>
   <div class="page-header">
     <h1>XML</h1>
-    <p class="subtitle">XML, DTD &amp; Schema quick reference</p>
+    <p class="subtitle">A simple, tag-based way to store and share data &mdash; start with the animation below.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#how-xml-works">How It Works</a>
       <a href="#basics">Basics</a>
       <a href="#dtd">DTD</a>
       <a href="#dtd-elements">DTD Elements</a>
@@ -51,13 +156,196 @@
     </nav>
   </div>
 
+  <!-- ══════════════════════════ HOW XML WORKS (animated explainer) ══════════════════════════ -->
+  <section id="how-xml-works">
+    <style>
+      /* Scoped, collision-safe styles for the animated XML-tree explainer. */
+      .xmlx-stage { display:flex; flex-direction:column; gap:.85rem; align-items:center; }
+      .xmlx-svg { width:100%; max-width:470px; height:auto; display:block; }
+
+      /* Tree node + leaf boxes */
+      .xmlx-node, .xmlx-leaf { transform-box: fill-box; transform-origin: 50% 50%; }
+      .xmlx-box { stroke-width: 1.6; }
+      .xmlx-box-root  { fill: var(--accent-subtle-2); stroke: var(--accent); }
+      .xmlx-box-child { fill: var(--accent-subtle);   stroke: var(--accent-2); }
+      .xmlx-box-leaf  { fill: var(--surface-2); stroke: var(--border-strong); stroke-dasharray: 3 3; stroke-width: 1.4; }
+
+      /* Text inside nodes */
+      .xmlx-t { font-family: 'JetBrains Mono', 'SFMono-Regular', ui-monospace, monospace; font-size: 13.5px; }
+      .xmlx-t-leaf { font-family: var(--display); font-style: italic; font-size: 12.5px; fill: var(--text-muted); }
+      .xmlx-el   { fill: var(--accent);   font-weight: 600; }
+      .xmlx-attr { fill: var(--accent-2); font-weight: 600; }
+      .xmlx-val  { fill: var(--text-muted); }
+
+      /* Connector lines (pathLength=1 lets one keyframe fit every length) */
+      .xmlx-link { fill: none; stroke: var(--accent-2); stroke-width: 2; stroke-linecap: round; opacity: .55; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+      /* Caption / legend / controls */
+      .xmlx-tiers { font-size: .72rem; color: var(--text-subtle); text-align: center; letter-spacing: .02em; }
+      .xmlx-tiers b { color: var(--accent); font-weight: 600; }
+      .xmlx-legend { display:flex; gap:.9rem; flex-wrap:wrap; justify-content:center; font-size:.72rem; color: var(--text-muted); }
+      .xmlx-legend span { display:inline-flex; align-items:center; gap:.35rem; }
+      .xmlx-dot { width:.7rem; height:.7rem; border-radius:3px; display:inline-block; }
+      .xmlx-dot-el   { background: var(--accent); }
+      .xmlx-dot-attr { background: var(--accent-2); }
+      .xmlx-dot-text { background: var(--text-muted); }
+      .xmlx-replay { font: inherit; font-size:.72rem; cursor:pointer; color: var(--text); background: var(--surface-2);
+                     border:1px solid var(--border-strong); padding:.3rem .75rem; border-radius: var(--radius-sm);
+                     transition: border-color .2s, color .2s; }
+      .xmlx-replay:hover { border-color: var(--accent-2); color: var(--accent); }
+      .xmlx-note { font-size:.8rem; color: var(--text-muted); line-height:1.6; text-align:center; margin:.1rem 0 0; }
+
+      /* Reveal animation — runs only once the stage has .xmlx-play */
+      .xmlx-play .xmlx-node { animation: xmlx-pop  .55s ease both; animation-delay: var(--d, 0s); }
+      .xmlx-play .xmlx-leaf { animation: xmlx-rise .5s  ease both; animation-delay: var(--d, 0s); }
+      .xmlx-play .xmlx-link { animation: xmlx-draw .55s ease both; animation-delay: var(--d, 0s); }
+
+      @keyframes xmlx-pop  { from { opacity:0; transform: translateY(-7px) scale(.9); } to { opacity:1; transform: translateY(0) scale(1); } }
+      @keyframes xmlx-rise { from { opacity:0; transform: translateY(7px); }           to { opacity:1; transform: translateY(0); } }
+      @keyframes xmlx-draw { from { stroke-dashoffset: 1; }                            to { stroke-dashoffset: 0; } }
+
+      /* Respect users who prefer no motion: show the finished tree, no animation */
+      @media (prefers-reduced-motion: reduce) {
+        .xmlx-play .xmlx-node,
+        .xmlx-play .xmlx-leaf,
+        .xmlx-play .xmlx-link { animation: none !important; }
+        .xmlx-node, .xmlx-leaf { opacity: 1 !important; transform: none !important; }
+        .xmlx-link { stroke-dashoffset: 0 !important; }
+        .xmlx-replay { display: none; }
+      }
+    </style>
+
+    <h2>How XML Works</h2>
+
+    <div class="block-desc">
+      <span>Think of XML as a <strong>tree</strong>: one <em>root</em> element wraps nested <em>child</em> elements, each element can carry <em>attributes</em>, and the actual text sits at the tips. Watch the tree below build itself from the code.</span>
+      <a class="w3-link" href="https://www.w3schools.com/xml/xml_tree.asp" target="_blank">Docs →</a>
+    </div>
+
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">note.xml</div>
+        <pre><span class="lcm">&lt;?xml version="1.0"?&gt;</span>
+<span class="lk">&lt;note</span> <span class="lc">id</span>=<span class="ls">"1"</span><span class="lk">&gt;</span>            <span class="lcm">&lt;!-- root element + attribute --&gt;</span>
+  <span class="lk">&lt;to&gt;</span>Tove<span class="lk">&lt;/to&gt;</span>         <span class="lcm">&lt;!-- child element + text --&gt;</span>
+  <span class="lk">&lt;from&gt;</span>Jani<span class="lk">&lt;/from&gt;</span>
+  <span class="lk">&lt;body&gt;</span>Remember me<span class="lk">&lt;/body&gt;</span>
+<span class="lk">&lt;/note&gt;</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ The tree (animated)</div>
+        <div class="live-output">
+          <div class="xmlx-stage">
+            <svg class="xmlx-svg" viewBox="0 0 470 284" role="img"
+                 aria-label="An XML document drawn as a tree: the root note element with an id attribute branches to the to, from and body child elements, each holding text.">
+
+              <!-- connectors: root to children -->
+              <line class="xmlx-link" pathLength="1" style="--d:.65s" x1="235" y1="60"  x2="80"  y2="135"/>
+              <line class="xmlx-link" pathLength="1" style="--d:.70s" x1="235" y1="60"  x2="235" y2="135"/>
+              <line class="xmlx-link" pathLength="1" style="--d:.75s" x1="235" y1="60"  x2="390" y2="135"/>
+              <!-- connectors: children to text -->
+              <line class="xmlx-link" pathLength="1" style="--d:1.40s" x1="80"  y1="169" x2="80"  y2="232"/>
+              <line class="xmlx-link" pathLength="1" style="--d:1.45s" x1="235" y1="169" x2="235" y2="232"/>
+              <line class="xmlx-link" pathLength="1" style="--d:1.50s" x1="390" y1="169" x2="390" y2="232"/>
+
+              <!-- root element -->
+              <g class="xmlx-node" style="--d:.1s">
+                <rect class="xmlx-box xmlx-box-root" x="160" y="22" width="150" height="38" rx="9"/>
+                <text class="xmlx-t" x="235" y="41" text-anchor="middle" dominant-baseline="central"><tspan class="xmlx-el">&lt;note </tspan><tspan class="xmlx-attr">id</tspan><tspan class="xmlx-val">="1"</tspan><tspan class="xmlx-el">&gt;</tspan></text>
+              </g>
+
+              <!-- child elements -->
+              <g class="xmlx-node" style="--d:.85s">
+                <rect class="xmlx-box xmlx-box-child" x="35" y="135" width="90" height="34" rx="9"/>
+                <text class="xmlx-t" x="80" y="152" text-anchor="middle" dominant-baseline="central"><tspan class="xmlx-el">&lt;to&gt;</tspan></text>
+              </g>
+              <g class="xmlx-node" style="--d:.95s">
+                <rect class="xmlx-box xmlx-box-child" x="190" y="135" width="90" height="34" rx="9"/>
+                <text class="xmlx-t" x="235" y="152" text-anchor="middle" dominant-baseline="central"><tspan class="xmlx-el">&lt;from&gt;</tspan></text>
+              </g>
+              <g class="xmlx-node" style="--d:1.05s">
+                <rect class="xmlx-box xmlx-box-child" x="343" y="135" width="94" height="34" rx="9"/>
+                <text class="xmlx-t" x="390" y="152" text-anchor="middle" dominant-baseline="central"><tspan class="xmlx-el">&lt;body&gt;</tspan></text>
+              </g>
+
+              <!-- text leaves -->
+              <g class="xmlx-leaf" style="--d:1.60s">
+                <rect class="xmlx-box xmlx-box-leaf" x="44" y="232" width="72" height="30" rx="9"/>
+                <text class="xmlx-t xmlx-t-leaf" x="80" y="247" text-anchor="middle" dominant-baseline="central">Tove</text>
+              </g>
+              <g class="xmlx-leaf" style="--d:1.70s">
+                <rect class="xmlx-box xmlx-box-leaf" x="199" y="232" width="72" height="30" rx="9"/>
+                <text class="xmlx-t xmlx-t-leaf" x="235" y="247" text-anchor="middle" dominant-baseline="central">Jani</text>
+              </g>
+              <g class="xmlx-leaf" style="--d:1.80s">
+                <rect class="xmlx-box xmlx-box-leaf" x="336" y="232" width="108" height="30" rx="9"/>
+                <text class="xmlx-t xmlx-t-leaf" x="390" y="247" text-anchor="middle" dominant-baseline="central">Remember me</text>
+              </g>
+            </svg>
+
+            <p class="xmlx-tiers">Reveals in order: <b>root</b> &rarr; <b>child elements</b> &rarr; <b>text</b></p>
+
+            <div class="xmlx-legend">
+              <span><i class="xmlx-dot xmlx-dot-el"></i> element</span>
+              <span><i class="xmlx-dot xmlx-dot-attr"></i> attribute</span>
+              <span><i class="xmlx-dot xmlx-dot-text"></i> text</span>
+            </div>
+
+            <button type="button" class="xmlx-replay">↻ Replay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="xmlx-note">
+      In short: <strong>elements</strong> are the tags, <strong>attributes</strong> add extra info inside a tag,
+      <strong>nesting</strong> places elements inside one another, and with exactly one root and every tag closed it is <strong>well-formed</strong>.
+    </p>
+
+    <script>
+      (function () {
+        var sec = document.getElementById('how-xml-works');
+        if (!sec) return;
+        var stage = sec.querySelector('.xmlx-stage');
+        var btn   = sec.querySelector('.xmlx-replay');
+        if (!stage) return;
+        function play() {
+          stage.classList.remove('xmlx-play');
+          void stage.offsetWidth; // force reflow so the animation restarts
+          stage.classList.add('xmlx-play');
+        }
+        if (btn) btn.addEventListener('click', play);
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { play(); io.disconnect(); }
+            });
+          }, { threshold: 0.35 });
+          io.observe(stage);
+        } else {
+          play();
+        }
+      })();
+    </script>
+  </section>
+
   <!-- ══════════════════════════ BASICS ══════════════════════════ -->
   <section id="basics">
     <h2>XML Basics</h2>
 
     <div class="block-desc">
-      <span>XML (eXtensible Markup Language) is a markup language for storing and transporting structured data. It is both human-readable and machine-readable.</span>
+      <span>XML (eXtensible Markup Language) stores data inside tags you name yourself, so both people and programs can read it. The data is plain text arranged as a tree.</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/" target="_blank">W3Schools →</a>
+    </div>
+    <div class="xmlx2-fig xmlx2-f1">
+      <svg width="150" height="54" viewBox="0 0 150 54" role="img" aria-label="A mark travels from an opening tag to its matching closing tag.">
+        <line x1="22" y1="30" x2="128" y2="30" class="xmlx2-brd" stroke-width="1.5"/>
+        <text x="4" y="20" class="xmlx2-fb" font-weight="600" style="font-size:10px">&lt;note&gt;</text>
+        <text x="92" y="20" class="xmlx2-fg" font-weight="600" style="font-size:10px">&lt;/note&gt;</text>
+        <circle class="xmlx2-d xmlx2-fa" cx="26" cy="30" r="4"/>
+        <path d="M58 44 l5 5 l9 -12" class="xmlx2-sg" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="xmlx2-cap">Every <b>&lt;open&gt;</b> tag has one matching <b>&lt;/close&gt;</b> — that is <b>well-formed</b>.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -96,6 +384,16 @@
     <div class="block-desc">
       <span>The <strong>prolog</strong> declares the XML version and encoding before the root element.</span>
     </div>
+    <div class="xmlx2-fig xmlx2-f2">
+      <svg width="150" height="56" viewBox="0 0 150 56" role="img" aria-label="An XML prolog line drops onto the top of the document.">
+        <rect x="44" y="6" width="80" height="44" rx="5" class="xmlx2-surf xmlx2-brd" stroke-width="1.4"/>
+        <rect class="xmlx2-pro xmlx2-fv" x="50" y="11" width="68" height="9" rx="2"/>
+        <rect x="50" y="27" width="52" height="4" rx="2" class="xmlx2-muted" opacity=".55"/>
+        <rect x="50" y="35" width="60" height="4" rx="2" class="xmlx2-muted" opacity=".45"/>
+        <rect x="50" y="43" width="40" height="4" rx="2" class="xmlx2-muted" opacity=".35"/>
+      </svg>
+      <span class="xmlx2-cap">The <b>prolog</b> <code>&lt;?xml …?&gt;</code> sits on top, before the root element.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Prolog &amp; Declaration</div>
@@ -121,6 +419,15 @@
 
     <div class="block-desc">
       <span><strong>Namespaces</strong> prevent element name conflicts by using a URI prefix.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f3">
+      <svg width="120" height="54" viewBox="0 0 120 54" role="img" aria-label="Two tags share the name table but use different prefixes that light up in turn.">
+        <rect x="6" y="6" width="84" height="19" rx="5" fill="none" class="xmlx2-sb" stroke-width="1.4"/>
+        <text x="13" y="19" style="font-size:10px"><tspan class="xmlx2-p1 xmlx2-fb" font-weight="700">h:</tspan><tspan class="xmlx2-txt">table</tspan></text>
+        <rect x="6" y="29" width="84" height="19" rx="5" fill="none" class="xmlx2-sr" stroke-width="1.4"/>
+        <text x="13" y="42" style="font-size:10px"><tspan class="xmlx2-p2 xmlx2-fr" font-weight="700">f:</tspan><tspan class="xmlx2-txt">table</tspan></text>
+      </svg>
+      <span class="xmlx2-cap">Same local name, different <b>prefixes</b>: <b>h:table</b> and <b>f:table</b> never collide.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -163,6 +470,16 @@
       <span>DTD defines the <strong>structure</strong> and rules of an XML document. It specifies allowed elements, attributes, and nesting.</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_intro.asp" target="_blank">W3Schools →</a>
     </div>
+    <div class="xmlx2-fig xmlx2-f4">
+      <svg width="140" height="54" viewBox="0 0 140 54" role="img" aria-label="DTD rules shown nested inside the XML document.">
+        <rect x="28" y="4" width="104" height="46" rx="6" class="xmlx2-surf xmlx2-brd" stroke-width="1.4"/>
+        <text x="34" y="15" class="xmlx2-muted" style="font-size:8px">&lt;!DOCTYPE root [</text>
+        <rect class="xmlx2-inner xmlx2-sv" x="38" y="19" width="84" height="15" rx="3" fill="none" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <text class="xmlx2-inner xmlx2-fv" x="44" y="30" style="font-size:8px">&lt;!ELEMENT …&gt;</text>
+        <text x="34" y="46" class="xmlx2-muted" style="font-size:8px">]&gt;</text>
+      </svg>
+      <span class="xmlx2-cap">An <b>internal DTD</b> keeps the rules <b>inside</b> the document's <code>&lt;!DOCTYPE&gt;</code>.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Internal DTD</div>
@@ -189,6 +506,17 @@
 
     <div class="block-desc">
       <span>External DTDs are stored in a separate <code>.dtd</code> file and referenced from the XML.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f5">
+      <svg width="150" height="54" viewBox="0 0 150 54" role="img" aria-label="An XML file links out to a separate DTD file.">
+        <rect x="6" y="12" width="40" height="30" rx="4" class="xmlx2-surf xmlx2-brd" stroke-width="1.4"/>
+        <text x="13" y="31" class="xmlx2-fa" font-weight="600" style="font-size:9px">.xml</text>
+        <rect x="104" y="12" width="40" height="30" rx="4" class="xmlx2-surf xmlx2-brd" stroke-width="1.4"/>
+        <text x="111" y="31" class="xmlx2-fv" font-weight="600" style="font-size:9px">.dtd</text>
+        <path class="xmlx2-link xmlx2-sac" d="M48 27 H100" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M95 22 l7 5 l-7 5" class="xmlx2-sac" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="xmlx2-cap">An <b>external DTD</b> lives in its own <code>.dtd</code> file, linked from the XML.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -225,6 +553,14 @@
 
     <div class="block-desc">
       <span>DTD syntax overview with all declaration types and symbols.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f6">
+      <svg width="124" height="56" viewBox="0 0 124 56" role="img" aria-label="DTD declaration keywords ELEMENT, ATTLIST and ENTITY highlight in turn.">
+        <g class="xmlx2-kw1"><rect x="6" y="4" width="112" height="14" rx="4" fill="none" class="xmlx2-sb" stroke-width="1.3"/><text x="12" y="14" class="xmlx2-fb" font-weight="600" style="font-size:9px">&lt;!ELEMENT&gt;</text></g>
+        <g class="xmlx2-kw2"><rect x="6" y="21" width="112" height="14" rx="4" fill="none" class="xmlx2-sg" stroke-width="1.3"/><text x="12" y="31" class="xmlx2-fg" font-weight="600" style="font-size:9px">&lt;!ATTLIST&gt;</text></g>
+        <g class="xmlx2-kw3"><rect x="6" y="38" width="112" height="14" rx="4" fill="none" class="xmlx2-sr" stroke-width="1.3"/><text x="12" y="48" class="xmlx2-fr" font-weight="600" style="font-size:9px">&lt;!ENTITY&gt;</text></g>
+      </svg>
+      <span class="xmlx2-cap">A DTD declares structure with <b>!ELEMENT</b>, <b>!ATTLIST</b> and <b>!ENTITY</b>.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -270,6 +606,19 @@
       <span>The <code>&lt;!ELEMENT&gt;</code> declaration defines what content an element can contain: text, child elements, or both.</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_elements.asp" target="_blank">W3Schools →</a>
     </div>
+    <div class="xmlx2-fig xmlx2-f7">
+      <svg width="140" height="56" viewBox="0 0 140 56" role="img" aria-label="An element contains a child element which in turn contains text.">
+        <rect x="6" y="6" width="128" height="44" rx="6" fill="none" class="xmlx2-sb" stroke-width="1.4"/>
+        <text x="12" y="16" class="xmlx2-fb" style="font-size:8px">&lt;book&gt;</text>
+        <rect x="20" y="20" width="104" height="24" rx="5" fill="none" class="xmlx2-sg" stroke-width="1.4"/>
+        <text x="26" y="30" class="xmlx2-fg" style="font-size:8px">&lt;title&gt;</text>
+        <rect x="34" y="33" width="76" height="8" rx="2" class="xmlx2-fa"/>
+        <rect class="xmlx2-g1 xmlx2-sb" x="6" y="6" width="128" height="44" rx="6" fill="none" stroke-width="2.6" opacity="0"/>
+        <rect class="xmlx2-g2 xmlx2-sg" x="20" y="20" width="104" height="24" rx="5" fill="none" stroke-width="2.6" opacity="0"/>
+        <rect class="xmlx2-g3 xmlx2-sa" x="34" y="33" width="76" height="8" rx="2" fill="none" stroke-width="2.6" opacity="0"/>
+      </svg>
+      <span class="xmlx2-cap">A content model nests <b>elements</b> and bottoms out in <b>text</b>: book → title → text.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Content Models</div>
@@ -308,6 +657,16 @@
 
     <div class="block-desc">
       <span><strong>Occurrence indicators</strong> control how many times an element may appear.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f8">
+      <svg width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Boxes appear one after another to show one-or-more occurrences.">
+        <text x="6" y="16" class="xmlx2-muted" style="font-size:9px">item</text>
+        <rect x="6" y="22" width="22" height="20" rx="4" class="xmlx2-fa"/>
+        <rect class="xmlx2-b2 xmlx2-fg" x="34" y="22" width="22" height="20" rx="4"/>
+        <rect class="xmlx2-b3 xmlx2-fb" x="62" y="22" width="22" height="20" rx="4"/>
+        <text x="94" y="38" class="xmlx2-fac" font-weight="700" style="font-size:16px">+</text>
+      </svg>
+      <span class="xmlx2-cap"><b>+</b> one-or-more · <b>*</b> zero-or-more · <b>?</b> optional (zero-or-one).</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -352,6 +711,16 @@
       <span><code>&lt;!ATTLIST&gt;</code> declares attributes for an element, including type and default value.</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/xml_dtd_attributes.asp" target="_blank">W3Schools →</a>
     </div>
+    <div class="xmlx2-fig xmlx2-f9">
+      <svg width="150" height="48" viewBox="0 0 150 48" role="img" aria-label="A default value settles into an empty attribute slot.">
+        <text x="4" y="29" class="xmlx2-fb" font-weight="600" style="font-size:9px">&lt;book</text>
+        <text x="36" y="29" class="xmlx2-fg" style="font-size:9px">edition=</text>
+        <rect x="80" y="18" width="26" height="16" rx="3" fill="none" class="xmlx2-sa" stroke-width="1.3" stroke-dasharray="3 3"/>
+        <text class="xmlx2-val xmlx2-fa" x="86" y="30" font-weight="700" style="font-size:10px">"1"</text>
+        <text x="112" y="29" class="xmlx2-fb" font-weight="600" style="font-size:9px">&gt;</text>
+      </svg>
+      <span class="xmlx2-cap">An omitted attribute takes its <b>default value</b> from <code>&lt;!ATTLIST&gt;</code>.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">ATTLIST Declaration</div>
@@ -381,6 +750,19 @@
 
     <div class="block-desc">
       <span>Attribute types define what values are allowed: strings, unique IDs, references, or enumerated choices.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f10">
+      <svg width="150" height="52" viewBox="0 0 150 52" role="img" aria-label="An IDREF attribute points to the element with the matching ID.">
+        <rect x="4" y="14" width="48" height="24" rx="5" fill="none" class="xmlx2-sr" stroke-width="1.4"/>
+        <text x="10" y="24" class="xmlx2-fr" style="font-size:8px">&lt;ref&gt;</text>
+        <text x="10" y="34" class="xmlx2-muted" style="font-size:7.5px">IDREF p1</text>
+        <rect class="xmlx2-tgt xmlx2-sg" x="98" y="14" width="48" height="24" rx="5" fill="none" stroke-width="1.6"/>
+        <text x="104" y="24" class="xmlx2-fg" style="font-size:8px">person</text>
+        <text x="104" y="34" class="xmlx2-muted" style="font-size:7.5px">id="p1"</text>
+        <path class="xmlx2-link xmlx2-sac" d="M54 26 H94" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M89 21 l7 5 l-7 5" class="xmlx2-sac" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="xmlx2-cap"><b>IDREF</b> points to the element whose <b>ID</b> matches: <code>p1 → p1</code>.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -437,6 +819,17 @@
       <span>XML Schema (XSD) provides richer validation than DTD: data types, namespaces, inheritance, and fine-grained constraints.</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/schema_intro.asp" target="_blank">W3Schools →</a>
     </div>
+    <div class="xmlx2-fig xmlx2-f11">
+      <svg width="150" height="48" viewBox="0 0 150 48" role="img" aria-label="A value moves within the allowed minimum and maximum range.">
+        <line x1="18" y1="30" x2="138" y2="30" class="xmlx2-brd" stroke-width="3" stroke-linecap="round"/>
+        <line x1="18" y1="22" x2="18" y2="38" class="xmlx2-sg" stroke-width="2.4" stroke-linecap="round"/>
+        <text x="6" y="16" class="xmlx2-fg" style="font-size:8px">min</text>
+        <line x1="138" y1="22" x2="138" y2="38" class="xmlx2-sr" stroke-width="2.4" stroke-linecap="round"/>
+        <text x="122" y="16" class="xmlx2-fr" style="font-size:8px">max</text>
+        <g class="xmlx2-needle"><line x1="22" y1="20" x2="22" y2="40" class="xmlx2-sa" stroke-width="2.4" stroke-linecap="round"/><circle cx="22" cy="30" r="4.5" class="xmlx2-fa"/></g>
+      </svg>
+      <span class="xmlx2-cap">A <b>simpleType</b> limits a value between <b>minInclusive</b> and <b>maxInclusive</b>.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Schema: Simple &amp; Complex Types</div>
@@ -491,6 +884,17 @@
     <div class="block-desc">
       <span>A side-by-side comparison of DTD and XML Schema capabilities.</span>
     </div>
+    <div class="xmlx2-fig xmlx2-f12">
+      <svg width="140" height="56" viewBox="0 0 140 56" role="img" aria-label="Schema offers richer validation than DTD.">
+        <line x1="10" y1="46" x2="130" y2="46" class="xmlx2-brd" stroke-width="1.4"/>
+        <rect x="26" y="28" width="28" height="18" rx="3" class="xmlx2-fa"/>
+        <text x="30" y="55" class="xmlx2-muted" style="font-size:8px">DTD</text>
+        <rect class="xmlx2-sch xmlx2-fb" x="86" y="8" width="28" height="38" rx="3"/>
+        <text x="88" y="55" class="xmlx2-fb" font-weight="600" style="font-size:8px">XSD</text>
+        <text x="118" y="16" class="xmlx2-fg" font-weight="700" style="font-size:11px">+</text>
+      </svg>
+      <span class="xmlx2-cap"><b>XSD</b> adds <b>data types</b>, <b>namespaces</b> and finer constraints that DTD lacks.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">DTD vs Schema</div>
@@ -530,6 +934,22 @@
       <span>Three main XML parsing APIs: <strong>DOM</strong> (tree), <strong>SAX</strong> (event), and <strong>StAX</strong> (streaming pull).</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/xml_parser.asp" target="_blank">W3Schools →</a>
     </div>
+    <div class="xmlx2-fig xmlx2-f13">
+      <svg width="150" height="50" viewBox="0 0 150 50" role="img" aria-label="DOM loads the whole tree while SAX and StAX stream events.">
+        <line x1="18" y1="14" x2="9" y2="30" class="xmlx2-brd" stroke-width="1.3"/>
+        <line x1="18" y1="14" x2="27" y2="30" class="xmlx2-brd" stroke-width="1.3"/>
+        <circle cx="18" cy="12" r="4" class="xmlx2-fv"/>
+        <circle cx="9" cy="32" r="4" class="xmlx2-fb"/>
+        <circle cx="27" cy="32" r="4" class="xmlx2-fg"/>
+        <text x="4" y="47" class="xmlx2-muted" style="font-size:7.5px">DOM</text>
+        <rect x="68" y="18" width="74" height="14" rx="7" fill="none" class="xmlx2-brd" stroke-width="1.2"/>
+        <circle class="xmlx2-ev xmlx2-fg" cx="76" cy="25" r="3.5"/>
+        <circle class="xmlx2-ev xmlx2-e2 xmlx2-fb" cx="76" cy="25" r="3.5"/>
+        <circle class="xmlx2-ev xmlx2-e3 xmlx2-fr" cx="76" cy="25" r="3.5"/>
+        <text x="92" y="47" class="xmlx2-muted" style="font-size:7.5px">SAX / StAX</text>
+      </svg>
+      <span class="xmlx2-cap"><b>DOM</b> loads the whole tree; <b>SAX</b> &amp; <b>StAX</b> stream it piece by piece.</span>
+    </div>
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">DOM vs SAX vs StAX</div>
@@ -556,6 +976,17 @@
 
     <div class="block-desc">
       <span>Java DOM parser reads the entire XML into a <code>Document</code> tree for random access.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f14">
+      <svg width="150" height="52" viewBox="0 0 150 52" role="img" aria-label="A cursor walks from the root node to each child node.">
+        <line x1="75" y1="14" x2="39" y2="36" class="xmlx2-brd" stroke-width="1.4"/>
+        <line x1="75" y1="14" x2="111" y2="36" class="xmlx2-brd" stroke-width="1.4"/>
+        <circle cx="75" cy="12" r="7" class="xmlx2-fv"/>
+        <circle cx="39" cy="38" r="7" class="xmlx2-fb"/>
+        <circle cx="111" cy="38" r="7" class="xmlx2-fg"/>
+        <circle class="xmlx2-ring xmlx2-sac" cx="75" cy="12" r="10" fill="none" stroke-width="2.4"/>
+      </svg>
+      <span class="xmlx2-cap"><b>DOM</b> loads the tree into memory, then your code <b>walks</b> each node.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -591,6 +1022,17 @@
 
     <div class="block-desc">
       <span><strong>XPath</strong> is a query language for selecting nodes from an XML document.</span>
+    </div>
+    <div class="xmlx2-fig xmlx2-f15">
+      <svg width="150" height="56" viewBox="0 0 150 56" role="img" aria-label="XPath travels down the path to select the target node.">
+        <line x1="16" y1="12" x2="16" y2="44" class="xmlx2-brd" stroke-width="1.4"/>
+        <circle cx="16" cy="10" r="5" class="xmlx2-fv"/><text x="28" y="13" class="xmlx2-muted" style="font-size:8px">teams</text>
+        <circle cx="16" cy="27" r="5" class="xmlx2-fb"/><text x="28" y="30" class="xmlx2-muted" style="font-size:8px">team</text>
+        <circle cx="16" cy="44" r="5" class="xmlx2-fg"/><text x="28" y="47" class="xmlx2-fg" style="font-size:8px">name</text>
+        <circle class="xmlx2-tgt xmlx2-sg" cx="16" cy="44" r="8.5" fill="none" stroke-width="2.4"/>
+        <circle class="xmlx2-trav xmlx2-fac" cx="16" cy="12" r="3.5"/>
+      </svg>
+      <span class="xmlx2-cap"><b>XPath</b> navigates straight to a node: <code>//team/name</code>.</span>
     </div>
     <div class="cheat-block">
       <div class="code-panel">
@@ -633,7 +1075,7 @@
 </main>
 
 <footer>XML Cheatsheet &mdash; XML, DTD &amp; Schema reference</footer>
-<script src="js/script.js"></script>
+<script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

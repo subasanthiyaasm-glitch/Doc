@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mac &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .mc-kw { color:#bb9af7; }
     .mc-fn { color:#7aa2f7; }
@@ -12,6 +12,218 @@
     .mc-cm { color:#565f89; }
     .mc-op { color:#e0af68; }
     kbd { display:inline-block; padding:0.1rem 0.35rem; font-size:0.7rem; font-family:inherit; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:3px; }
+  </style>
+  <style>
+      /* ===== Mac animated explainer + per-section figures (macx-) =====
+         Containers/text use theme variables so light & dark both work.
+         Moving parts use fixed accents: amber #e0b366, rose #e8808f,
+         blue #7aa2f7, green #9ece6a, violet #bb9af7. */
+      .macx-stage{
+        background:var(--surface);
+        border:1px solid var(--border);
+        border-radius:var(--radius);
+        padding:1.25rem 1.25rem 1.5rem;
+        margin-top:0.5rem;
+      }
+      .macx-flow{ display:flex; align-items:stretch; flex-wrap:wrap; gap:0.6rem; }
+      .macx-card{
+        flex:1 1 180px; min-width:160px;
+        background:var(--surface-2); border:1px solid var(--border);
+        border-radius:var(--radius-sm); padding:0.75rem;
+      }
+      .macx-card--press { animation:macx-glow 6s ease-in-out 0s infinite; }
+      .macx-card--os    { animation:macx-glow 6s ease-in-out 2s infinite; }
+      .macx-card--effect{ animation:macx-glow 6s ease-in-out 4s infinite; }
+      .macx-card-tag{
+        font-size:0.68rem; letter-spacing:0.04em; text-transform:uppercase;
+        color:var(--text-muted); margin-bottom:0.55rem; font-weight:600;
+        display:flex; align-items:center;
+      }
+      .macx-card-tag b{
+        display:inline-flex; align-items:center; justify-content:center;
+        min-width:1.2rem; height:1.2rem; margin-right:0.4rem; border-radius:50%;
+        color:#15161f; font-size:0.72rem;
+      }
+      .macx-card--press  .macx-card-tag b{ background:#7aa2f7; }
+      .macx-card--os     .macx-card-tag b{ background:#e0b366; }
+      .macx-card--effect .macx-card-tag b{ background:#9ece6a; }
+
+      .macx-combo{ display:flex; align-items:center; gap:0.4rem; min-height:2.6rem; }
+      .macx-key{
+        display:inline-flex; align-items:center; justify-content:center;
+        min-width:2rem; height:2rem; padding:0 0.55rem; border-radius:var(--radius-xs);
+        font-family:ui-monospace,Menlo,monospace; font-weight:700; font-size:0.9rem;
+        color:#15161f; box-shadow:0 2px 0 rgba(0,0,0,0.28);
+      }
+      .macx-key--cmd  { background:#bb9af7; }
+      .macx-key--space{ background:#7aa2f7; animation:macx-press 6s ease-in-out infinite; }
+      .macx-plus{ color:var(--text-muted); font-weight:700; }
+
+      .macx-os{ display:flex; align-items:center; gap:0.4rem; min-height:2.6rem; color:var(--text); font-size:0.85rem; }
+      .macx-gear{ display:inline-block; color:#e0b366; font-size:1.15rem; animation:macx-spin 6s linear infinite; }
+      .macx-effect{ display:flex; align-items:center; min-height:2.6rem; }
+      .macx-spot{
+        background:var(--code-bg); color:#9ece6a; border-radius:var(--radius-xs);
+        padding:0.45rem 0.6rem; font-size:0.82rem; font-family:ui-monospace,Menlo,monospace;
+        animation:macx-fade 6s ease-in-out 2.2s infinite;
+      }
+
+      .macx-link{ position:relative; flex:0 0 42px; display:flex; align-items:center; justify-content:center; color:var(--text-subtle); }
+      .macx-arrow{ font-size:1.3rem; }
+      .macx-dot{
+        position:absolute; top:50%; left:4px; width:9px; height:9px; margin-top:-4.5px;
+        border-radius:50%; background:#e8808f; box-shadow:0 0 7px #e8808f; opacity:0;
+        animation:macx-travel 6s ease-in-out infinite;
+      }
+      .macx-dot--2{ background:#9ece6a; box-shadow:0 0 7px #9ece6a; animation-delay:2s; }
+
+      .macx-note{ color:var(--text-muted); font-size:0.86rem; margin:0.9rem 0 0; line-height:1.55; }
+      .macx-note code, .macx-inline{
+        background:var(--surface-2); border:1px solid var(--border);
+        border-radius:var(--radius-xs); padding:0.05rem 0.3rem; font-size:0.82em;
+      }
+
+      .macx-mini{ margin-top:1.1rem; padding-top:1rem; border-top:1px dashed var(--border); }
+      .macx-mini-head{ font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:0.7rem; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+      .macx-badge{
+        display:inline-flex; align-items:center; justify-content:center;
+        padding:0 0.45rem; height:1.5rem; border-radius:var(--radius-xs);
+        font-family:ui-monospace,Menlo,monospace; font-weight:700; font-size:0.75rem; color:#15161f;
+      }
+      .macx-badge--tab { background:#7aa2f7; }
+      .macx-badge--copy{ background:#e0b366; }
+      .macx-badge--term{ background:#9ece6a; }
+      .macx-row{ display:flex; align-items:center; flex-wrap:wrap; gap:0.5rem; }
+      .macx-eq{ color:var(--text-subtle); font-size:1.1rem; }
+
+      .macx-apps{ display:flex; gap:0.5rem; }
+      .macx-app{
+        width:2.4rem; height:2.4rem; display:flex; align-items:center; justify-content:center;
+        border-radius:var(--radius-sm); background:var(--surface-2); border:1px solid var(--border);
+        color:var(--text-muted); font-weight:700; font-family:var(--display);
+        animation:macx-hl 5.2s ease-in-out infinite;
+      }
+      .macx-app--1{ --macx-c:#7aa2f7; animation-delay:0s; }
+      .macx-app--2{ --macx-c:#e0b366; animation-delay:1.3s; }
+      .macx-app--3{ --macx-c:#e8808f; animation-delay:2.6s; }
+      .macx-app--4{ --macx-c:#9ece6a; animation-delay:3.9s; }
+
+      .macx-doc{ background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:0.4rem 0.6rem; border-radius:var(--radius-xs); font-size:0.82rem; }
+      .macx-sel{ background:#e0b366; color:#15161f; border-radius:3px; padding:0 3px; animation:macx-selpulse 6s ease-in-out infinite; }
+      .macx-clip{ background:var(--code-bg); color:#e8808f; padding:0.4rem 0.6rem; border-radius:var(--radius-xs); font-size:0.8rem; font-family:ui-monospace,Menlo,monospace; animation:macx-clipglow 6s ease-in-out 1.8s infinite; }
+      .macx-paste{ color:#9ece6a; font-weight:600; animation:macx-pastein 6s ease-in-out 3.4s infinite; }
+
+      .macx-chip{ background:var(--code-bg); color:var(--code-text); padding:0.4rem 0.6rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-size:0.8rem; white-space:nowrap; }
+      .macx-prompt{ color:#9ece6a; font-weight:700; }
+      .macx-typed2{ display:inline-block; overflow:hidden; white-space:nowrap; vertical-align:bottom; width:6ch; animation:macx-type6 1.8s steps(6) 0.5s both; }
+      .macx-caret{ display:inline-block; width:0.5ch; height:1em; vertical-align:bottom; background:#7aa2f7; margin-left:1px; animation:macx-blink 1.1s step-end infinite; }
+      .macx-file{ background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:0.4rem 0.6rem; border-radius:var(--radius-xs); font-size:0.82rem; white-space:nowrap; animation:macx-fade 6s ease-in-out 1s infinite; }
+
+      /* ---- per-section mini figures ---- */
+      .macx-fig{
+        margin-top:1rem; background:var(--surface); border:1px solid var(--border);
+        border-radius:var(--radius-sm); padding:0.8rem 1rem;
+        display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+      }
+      .macx-fig__cap{ font-size:0.78rem; color:var(--text-muted); flex:1 1 160px; min-width:150px; line-height:1.5; }
+      .macx-fig__art{ display:flex; align-items:center; gap:0.5rem; }
+
+      .macx-k{
+        display:inline-flex; align-items:center; justify-content:center;
+        min-width:2.6rem; height:2rem; padding:0 0.4rem; border:1px solid var(--border);
+        border-radius:var(--radius-xs); background:var(--surface-2); color:var(--text-muted);
+        font-family:ui-monospace,Menlo,monospace; font-weight:700; font-size:0.82rem;
+        animation:macx-hl 5.2s ease-in-out infinite;
+      }
+      .macx-k--1{ --macx-c:#7aa2f7; animation-delay:0s; }
+      .macx-k--2{ --macx-c:#9ece6a; animation-delay:1.3s; }
+      .macx-k--3{ --macx-c:#e0b366; animation-delay:2.6s; }
+      .macx-k--4{ --macx-c:#e8808f; animation-delay:3.9s; }
+
+      .macx-emoji{ font-size:1.5rem; line-height:1; }
+      .macx-track{ position:relative; width:70px; height:14px; }
+      .macx-track::before{ content:""; position:absolute; top:50%; left:0; right:8px; height:2px; margin-top:-1px; background:var(--border-strong); }
+      .macx-track::after{ content:"\25B8"; position:absolute; right:-3px; top:50%; transform:translateY(-50%); color:#9ece6a; font-size:0.85rem; line-height:1; }
+      .macx-movedot{ position:absolute; top:50%; left:0; width:9px; height:9px; margin-top:-4.5px; border-radius:50%; background:#7aa2f7; box-shadow:0 0 7px #7aa2f7; opacity:0; animation:macx-run 3.4s ease-in-out infinite; }
+      .macx-folder{ animation:macx-pop 3.4s ease-in-out infinite; }
+
+      .macx-screen{ position:relative; width:90px; height:56px; border-radius:var(--radius-xs); background:var(--code-bg); border:1px solid var(--border); overflow:hidden; }
+      .macx-marquee{ position:absolute; left:14px; top:12px; width:10px; height:8px; border:2px dashed #e0b366; border-radius:3px; background:rgba(224,179,102,0.12); animation:macx-drag 4s ease-in-out infinite; }
+    .macx-snap{ animation:macx-pop 4s ease-in-out infinite; }
+    .macx-fig .macx-chip{ animation:none; }
+
+      .macx-bar{ width:80px; height:8px; border-radius:6px; overflow:hidden; background:var(--surface-2); border:1px solid var(--border); }
+      .macx-bar__fill{ display:block; height:100%; width:0; background:linear-gradient(90deg,#7aa2f7,#9ece6a); animation:macx-fill 3.6s ease-in-out infinite; }
+      .macx-pkg{ animation:macx-pop 3.6s ease-in-out 0.2s infinite; }
+
+      .macx-pad{ position:relative; width:96px; height:56px; border-radius:8px; background:var(--surface-2); border:1px solid var(--border-strong); }
+      .macx-finger{ position:absolute; width:12px; height:12px; margin-top:-6px; border-radius:50%; animation:macx-swipe 4s ease-in-out infinite; }
+      .macx-finger--a{ background:#7aa2f7; box-shadow:0 0 6px #7aa2f7; top:38%; }
+      .macx-finger--b{ background:#bb9af7; box-shadow:0 0 6px #bb9af7; top:62%; }
+
+      .macx-spaces{ gap:0.4rem; }
+      .macx-space{ width:34px; height:24px; border-radius:var(--radius-xs); background:var(--surface-2); border:1px solid var(--border); animation:macx-hl 3.9s ease-in-out infinite; }
+      .macx-space--1{ --macx-c:#7aa2f7; animation-delay:0s; }
+      .macx-space--2{ --macx-c:#bb9af7; animation-delay:1.3s; }
+      .macx-space--3{ --macx-c:#9ece6a; animation-delay:2.6s; }
+
+      .macx-text{ font-size:0.9rem; color:var(--text); }
+      .macx-word{ border-radius:3px; padding:0 2px; animation:macx-wordhl 4.5s ease-in-out infinite; }
+      .macx-word--1{ --macx-c:#7aa2f7; animation-delay:0s; }
+      .macx-word--2{ --macx-c:#e0b366; animation-delay:1.5s; }
+      .macx-word--3{ --macx-c:#e8808f; animation-delay:3s; }
+
+      .macx-steps{ flex-wrap:wrap; gap:0.4rem; }
+      .macx-step{ padding:0.3rem 0.55rem; border-radius:var(--radius-xs); background:var(--surface-2); border:1px solid var(--border); color:var(--text-muted); font-family:ui-monospace,Menlo,monospace; font-size:0.75rem; font-weight:600; animation:macx-hl 5.2s ease-in-out infinite; }
+      .macx-step--1{ --macx-c:#e0b366; animation-delay:0s; }
+      .macx-step--2{ --macx-c:#7aa2f7; animation-delay:1.3s; }
+      .macx-step--3{ --macx-c:#9ece6a; animation-delay:2.6s; }
+      .macx-step--4{ --macx-c:#bb9af7; animation-delay:3.9s; }
+
+      /* ---- keyframes ---- */
+      @keyframes macx-spin{ to{ transform:rotate(360deg); } }
+      @keyframes macx-blink{ 0%,45%{ opacity:1; } 55%,100%{ opacity:0; } }
+      @keyframes macx-type6{ from{ width:0; } to{ width:6ch; } }
+      @keyframes macx-glow{ 0%,100%{ box-shadow:0 0 0 0 transparent; } 10%,20%{ box-shadow:0 0 0 3px var(--accent-subtle); } 30%{ box-shadow:0 0 0 0 transparent; } }
+      @keyframes macx-press{ 0%,8%{ transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28); } 12%{ transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28); } 20%,100%{ transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28); } }
+      @keyframes macx-fade{ 0%,40%{ opacity:0.25; } 55%,82%{ opacity:1; } 100%{ opacity:0.25; } }
+      @keyframes macx-travel{ 0%,18%{ left:2px; opacity:0; } 22%{ opacity:1; } 36%{ left:calc(100% - 11px); opacity:1; } 40%,100%{ left:calc(100% - 11px); opacity:0; } }
+      @keyframes macx-selpulse{ 0%,15%{ box-shadow:0 0 0 0 rgba(224,179,102,0); } 25%{ box-shadow:0 0 0 4px rgba(224,179,102,0.35); } 40%,100%{ box-shadow:0 0 0 0 rgba(224,179,102,0); } }
+      @keyframes macx-clipglow{ 0%,30%{ box-shadow:0 0 0 0 rgba(232,128,143,0); } 45%{ box-shadow:0 0 0 4px rgba(232,128,143,0.3); } 60%,100%{ box-shadow:0 0 0 0 rgba(232,128,143,0); } }
+      @keyframes macx-pastein{ 0%,50%{ opacity:0.15; } 62%,85%{ opacity:1; } 100%{ opacity:0.15; } }
+      @keyframes macx-hl{ 0%,4%,30%,100%{ background:var(--surface-2); color:var(--text-muted); border-color:var(--border); transform:none; } 8%,24%{ background:var(--macx-c); color:#15161f; border-color:var(--macx-c); transform:translateY(-3px); } }
+      @keyframes macx-wordhl{ 0%,6%,36%,100%{ background:transparent; color:var(--text); } 12%,28%{ background:var(--macx-c); color:#15161f; } }
+      @keyframes macx-run{ 0%,10%{ left:0; opacity:0; } 18%{ opacity:1; } 60%{ left:calc(100% - 9px); opacity:1; } 66%,100%{ left:calc(100% - 9px); opacity:0; } }
+      @keyframes macx-pop{ 0%,60%,100%{ transform:none; } 70%{ transform:scale(1.25); } 80%{ transform:scale(1); } }
+      @keyframes macx-drag{ 0%,8%{ width:10px; height:8px; opacity:0.3; } 20%{ opacity:1; } 55%{ width:60px; height:34px; opacity:1; } 70%{ width:60px; height:34px; opacity:1; background:rgba(122,162,247,0.25); border-color:#7aa2f7; } 74%{ opacity:0.25; } 100%{ width:10px; height:8px; opacity:0.3; } }
+      @keyframes macx-fill{ 0%,8%{ width:0; } 60%,80%{ width:100%; } 100%{ width:0; } }
+      @keyframes macx-swipe{ 0%,10%{ left:8px; opacity:0; } 18%{ opacity:1; } 70%{ left:calc(100% - 20px); opacity:1; } 80%,100%{ left:calc(100% - 20px); opacity:0; } }
+
+      @media (max-width:620px){
+        .macx-flow{ flex-direction:column; }
+        .macx-link{ flex-basis:auto; height:30px; }
+        .macx-arrow{ transform:rotate(90deg); }
+        .macx-dot, .macx-dot--2{ display:none; }
+      }
+
+      @media (prefers-reduced-motion:reduce){
+        .macx-card--press, .macx-card--os, .macx-card--effect,
+        .macx-key--space, .macx-gear, .macx-spot, .macx-dot, .macx-dot--2,
+        .macx-sel, .macx-clip, .macx-paste, .macx-typed2, .macx-caret,
+        .macx-file, .macx-k, .macx-app, .macx-movedot, .macx-folder,
+        .macx-marquee, .macx-snap, .macx-bar__fill, .macx-pkg, .macx-finger,
+        .macx-space, .macx-word, .macx-step{
+          animation:none !important;
+        }
+        .macx-typed2{ width:auto; }
+        .macx-caret{ opacity:1; }
+        .macx-dot, .macx-dot--2, .macx-movedot, .macx-finger{ opacity:0; }
+        .macx-spot, .macx-file, .macx-paste{ opacity:1; }
+        .macx-bar__fill{ width:70%; }
+        .macx-marquee{ width:60px; height:34px; opacity:1; }
+        .macx-k--1, .macx-app--1, .macx-space--1, .macx-step--1{ background:var(--macx-c); color:#15161f; border-color:var(--macx-c); }
+        .macx-word--1{ background:var(--macx-c); color:#15161f; }
+      }
   </style>
 </head>
 <body>
@@ -31,30 +243,112 @@
     </div>
   </aside>
   <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-  <script src="js/header.js"></script>
+  <script src="js/header.js?v=7"></script>
   <script>renderHeader('Mac')</script>
   <script>renderSourceLink('Mac')</script>
   <main>
 
     <div class="page-header">
       <h1>Mac</h1>
-      <p class="subtitle">macOS shortcuts &amp; terminal commands</p>
+      <p class="subtitle">A beginner-friendly, visual guide to Mac shortcuts, Finder &amp; the terminal.</p>
       <span id="source-link"></span>
       <nav class="toc">
+        <a href="#how-it-works">How It Works</a>
         <a href="#general">General</a>
         <a href="#finder">Finder</a>
         <a href="#screenshots">Screenshots</a>
         <a href="#terminal">Terminal</a>
         <a href="#dev">Dev Tools</a>
+        <a href="#config">Mac Setup</a>
         <a href="#trackpad">Trackpad</a>
         <a href="#mission-control">Mission Control</a>
         <a href="#text-editing">Text Editing</a>
       </nav>
     </div>
 
+    <!-- How It Works (animated explainer) -->
+    <section id="how-it-works">
+      <h2>How Shortcuts &amp; the Terminal Help</h2>
+
+      <div class="block-desc">
+        <span>New to Mac? The big idea: you press a <strong>key combo</strong> (or type a short command) and the Mac does a whole task for you &mdash; no clicking around. Here it is in one picture.</span>
+      </div>
+
+      <div class="macx-stage">
+        <!-- Three-step flow: press -> macOS reacts -> effect -->
+        <div class="macx-flow">
+          <div class="macx-card macx-card--press">
+            <div class="macx-card-tag"><b>1</b>You press</div>
+            <div class="macx-combo">
+              <kbd class="macx-key macx-key--cmd">&#8984;</kbd>
+              <span class="macx-plus">+</span>
+              <kbd class="macx-key macx-key--space">Space</kbd>
+            </div>
+          </div>
+          <div class="macx-link"><span class="macx-arrow">&rarr;</span><span class="macx-dot"></span></div>
+          <div class="macx-card macx-card--os">
+            <div class="macx-card-tag"><b>2</b>macOS reacts</div>
+            <div class="macx-os"><span class="macx-gear">&#9881;</span>&nbsp;handling the shortcut&hellip;</div>
+          </div>
+          <div class="macx-link"><span class="macx-arrow">&rarr;</span><span class="macx-dot macx-dot--2"></span></div>
+          <div class="macx-card macx-card--effect">
+            <div class="macx-card-tag"><b>3</b>Something happens</div>
+            <div class="macx-effect"><span class="macx-spot">&#128269; Spotlight opens</span></div>
+          </div>
+        </div>
+        <p class="macx-note">A shortcut replaces a whole mouse journey. <code>&#8984; + Space</code> opens <strong>Spotlight</strong> &mdash; start typing to launch apps, do maths, or find files instantly.</p>
+
+        <!-- Mini: Cmd+Tab switch apps -->
+        <div class="macx-mini">
+          <div class="macx-mini-head"><span class="macx-badge macx-badge--tab">&#8984; Tab</span> Switch apps &mdash; hold Command, tap Tab</div>
+          <div class="macx-row macx-apps">
+            <span class="macx-app macx-app--1">A</span>
+            <span class="macx-app macx-app--2">B</span>
+            <span class="macx-app macx-app--3">C</span>
+            <span class="macx-app macx-app--4">D</span>
+          </div>
+          <p class="macx-note">The app switcher highlights each open app in turn; let go of <code class="macx-inline">&#8984;</code> to jump to the one you want.</p>
+        </div>
+
+        <!-- Mini: copy / paste -->
+        <div class="macx-mini">
+          <div class="macx-mini-head"><span class="macx-badge macx-badge--copy">&#8984;C &#8984;V</span> Copy &amp; paste &mdash; grab once, drop anywhere</div>
+          <div class="macx-row">
+            <span class="macx-doc">Hello <span class="macx-sel">world</span></span>
+            <span class="macx-eq">&rarr;</span>
+            <span class="macx-clip">&#128203; clipboard</span>
+            <span class="macx-eq">&rarr;</span>
+            <span class="macx-doc"><span class="macx-paste">world</span></span>
+          </div>
+          <p class="macx-note"><code class="macx-inline">&#8984;C</code> copies the selection to the clipboard; <code class="macx-inline">&#8984;V</code> pastes it wherever your cursor is.</p>
+        </div>
+
+        <!-- Mini: the terminal -->
+        <div class="macx-mini">
+          <div class="macx-mini-head"><span class="macx-badge macx-badge--term">&gt;_ terminal</span> The terminal &mdash; type a command, get a result</div>
+          <div class="macx-row">
+            <code class="macx-chip"><span class="macx-prompt">$</span>&nbsp;<span class="macx-typed2">open .</span><span class="macx-caret"></span></code>
+            <span class="macx-eq">&rarr;</span>
+            <span class="macx-file">&#128451;&#65039; Finder opens here</span>
+          </div>
+          <p class="macx-note">Type a command after the <code class="macx-inline">$</code> prompt and press Return; here <code class="macx-inline">open .</code> opens the current folder in Finder.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- General -->
     <section id="general">
       <h2>General macOS Shortcuts</h2>
+
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <span class="macx-k macx-k--1">&#8984;Z</span>
+          <span class="macx-k macx-k--2">&#8984;C</span>
+          <span class="macx-k macx-k--3">&#8984;V</span>
+          <span class="macx-k macx-k--4">&#8984;Q</span>
+        </div>
+        <div class="macx-fig__cap">One combo lights up at a time: <strong>undo, copy, paste, quit</strong>. Hold <code class="macx-inline">&#8984;</code> (Command) and tap the letter &mdash; it works the same in every app.</div>
+      </div>
 
       <div class="block-desc">
         <span>Essential system-wide keyboard shortcuts every Mac user should know.</span>
@@ -98,6 +392,15 @@
     <section id="finder">
       <h2>Finder &amp; File Management</h2>
 
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <span class="macx-emoji">&#128196;</span>
+          <span class="macx-track"><span class="macx-movedot"></span></span>
+          <span class="macx-emoji macx-folder">&#128193;</span>
+        </div>
+        <div class="macx-fig__cap">Finder is where your files live. Watch a file travel into a folder: <code class="macx-inline">&#8984;C</code> on the file, then <code class="macx-inline">&#8984;&#8997;V</code> inside the folder <strong>moves</strong> it there.</div>
+      </div>
+
       <div class="block-desc">
         <span>Navigate, organize, and manage files efficiently in Finder.</span>
       </div>
@@ -133,6 +436,15 @@
     <section id="screenshots">
       <h2>Screenshots &amp; Screen Recording</h2>
 
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <span class="macx-screen"><span class="macx-marquee"></span></span>
+          <span class="macx-eq">&rarr;</span>
+          <span class="macx-emoji macx-snap">&#128247;</span>
+        </div>
+        <div class="macx-fig__cap">Press <code class="macx-inline">&#8984;&#8679;4</code>, then drag a box over the part of the screen you want &mdash; the moment you let go, a picture is saved to the Desktop.</div>
+      </div>
+
       <div class="block-desc">
         <span>Capture screen content using built-in macOS screenshot tools.</span>
       </div>
@@ -160,6 +472,15 @@
     <!-- Terminal -->
     <section id="terminal">
       <h2>Terminal &amp; Shell</h2>
+
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <code class="macx-chip"><span class="macx-prompt">$</span>&nbsp;<span class="macx-typed2">ls -la</span><span class="macx-caret"></span></code>
+          <span class="macx-eq">&rarr;</span>
+          <span class="macx-file">&#128196; notes.txt &nbsp;&#128193; src</span>
+        </div>
+        <div class="macx-fig__cap">The terminal is a text window for talking to your Mac. Type <code class="macx-inline">ls -la</code>, press Return, and it lists every file in the current folder &mdash; hidden ones too.</div>
+      </div>
 
       <div class="block-desc">
         <span>macOS-specific terminal commands and shortcuts for power users.</span>
@@ -197,6 +518,15 @@
     <section id="dev">
       <h2>Developer Tools</h2>
 
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <code class="macx-chip"><span class="macx-prompt">$</span>&nbsp;brew install git</code>
+          <span class="macx-bar"><span class="macx-bar__fill"></span></span>
+          <span class="macx-emoji macx-pkg">&#128230;</span>
+        </div>
+        <div class="macx-fig__cap"><strong>Homebrew</strong> is like an app store for the terminal. One command downloads a tool (the bar fills) and installs it (the package lands).</div>
+      </div>
+
       <div class="block-desc">
         <span>Essential macOS developer utilities and package managers.</span>
       </div>
@@ -228,9 +558,178 @@
       </div>
     </section>
 
+    <!-- Mac Configuration -->
+    <section id="config">
+      <h2>Mac Configuration (Dev Machine Setup)</h2>
+
+      <div class="macx-fig">
+        <div class="macx-fig__art macx-steps">
+          <span class="macx-step macx-step--1">1 brew</span>
+          <span class="macx-step macx-step--2">2 defaults</span>
+          <span class="macx-step macx-step--3">3 ~/.zshrc</span>
+          <span class="macx-step macx-step--4">4 ssh-keygen</span>
+        </div>
+        <div class="macx-fig__cap">A fresh Mac becomes a dev machine in four short steps, done once: install tools, tweak settings, tune the shell, create keys for GitHub.</div>
+      </div>
+
+      <div class="block-desc">
+        <span><strong>1. Install Homebrew</strong> &mdash; the package manager for macOS. Paste one line into Terminal, then use <code>brew install</code> for command-line tools and <code>brew install --cask</code> for regular apps.</span>
+        <a class="w3-link" href="https://brew.sh" target="_blank">brew.sh →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Terminal</div>
+          <pre><span class="mc-cm"># 1. Install Homebrew (one line, from brew.sh)</span>
+<span class="mc-kw">/bin/bash</span> <span class="mc-fn">-c</span> <span class="mc-str">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span>
+
+<span class="mc-cm"># 2. Apple Silicon Macs: put brew on your PATH (the installer prints this)</span>
+<span class="mc-kw">echo</span> <span class="mc-str">'eval "$(/opt/homebrew/bin/brew shellenv)"'</span> <span class="mc-op">&gt;&gt;</span> ~/.zprofile
+<span class="mc-kw">eval</span> <span class="mc-str">"$(/opt/homebrew/bin/brew shellenv)"</span>
+
+<span class="mc-cm"># 3. Install command-line tools</span>
+<span class="mc-kw">brew install</span> git node python wget
+
+<span class="mc-cm"># 4. Install regular apps (casks)</span>
+<span class="mc-kw">brew install</span> <span class="mc-fn">--cask</span> visual-studio-code iterm2 google-chrome
+
+<span class="mc-cm"># 5. Check everything is healthy</span>
+<span class="mc-kw">brew doctor</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">What you get</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>🍺 <code>brew install git</code> → <code>git --version</code> works in any new terminal window</div>
+            <div>📦 Formula = command-line tool · Cask = app that lands in /Applications</div>
+            <div>🔍 Not sure of a name? <code>brew search node</code></div>
+            <div>⬆️ Keep things fresh: <code>brew update &amp;&amp; brew upgrade</code></div>
+            <div>🗑️ Remove: <code>brew uninstall wget</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><strong>2. Tweak System Settings</strong> &mdash; most options live in Apple menu &rarr; System Settings. Hidden ones can be flipped from the terminal with <code>defaults write</code>, then restarting the app that owns them.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">defaults write</div>
+          <pre><span class="mc-cm"># Finder: show hidden files and all file extensions</span>
+<span class="mc-kw">defaults write</span> com.apple.finder AppleShowAllFiles <span class="mc-fn">-bool</span> <span class="mc-str">true</span>
+<span class="mc-kw">defaults write</span> NSGlobalDomain AppleShowAllExtensions <span class="mc-fn">-bool</span> <span class="mc-str">true</span>
+
+<span class="mc-cm"># Keyboard: faster key repeat (lower = faster)</span>
+<span class="mc-kw">defaults write</span> NSGlobalDomain KeyRepeat <span class="mc-fn">-int</span> <span class="mc-str">2</span>
+<span class="mc-kw">defaults write</span> NSGlobalDomain InitialKeyRepeat <span class="mc-fn">-int</span> <span class="mc-str">15</span>
+
+<span class="mc-cm"># Dock: auto-hide and smaller icons</span>
+<span class="mc-kw">defaults write</span> com.apple.dock autohide <span class="mc-fn">-bool</span> <span class="mc-str">true</span>
+<span class="mc-kw">defaults write</span> com.apple.dock tilesize <span class="mc-fn">-int</span> <span class="mc-str">40</span>
+
+<span class="mc-cm"># Screenshots: save to ~/Screenshots instead of the Desktop</span>
+<span class="mc-kw">mkdir</span> <span class="mc-fn">-p</span> ~/Screenshots
+<span class="mc-kw">defaults write</span> com.apple.screencapture location ~/Screenshots
+
+<span class="mc-cm"># Apply: restart the apps that own those settings</span>
+<span class="mc-kw">killall</span> Finder; <span class="mc-kw">killall</span> Dock; <span class="mc-kw">killall</span> SystemUIServer</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Settings app vs. terminal</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>⚙️ GUI: Apple menu → <strong>System Settings</strong> → Keyboard → <em>Key repeat rate</em></div>
+            <div>⌨️ The terminal does the same thing, and you can script it for your next Mac</div>
+            <div>👀 Check a value: <code>defaults read com.apple.dock autohide</code></div>
+            <div>↩️ Undo a tweak: <code>defaults delete com.apple.dock autohide</code></div>
+            <div>⚠️ Keyboard changes need a log out / log in to take effect</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><strong>3. Set up the terminal</strong> &mdash; macOS already uses <code>zsh</code>. Everything you add to <code>~/.zshrc</code> (a plain text file in your home folder) runs each time a terminal opens: aliases, PATH, editor.</span>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">~/.zshrc</div>
+          <pre><span class="mc-cm"># Which shell am I using? (should print /bin/zsh)</span>
+<span class="mc-kw">echo</span> $SHELL
+
+<span class="mc-cm"># Open your config in a text editor (creates it if missing)</span>
+<span class="mc-kw">open -e</span> ~/.zshrc        <span class="mc-cm"># TextEdit</span>
+<span class="mc-kw">nano</span> ~/.zshrc           <span class="mc-cm"># or inside the terminal</span>
+
+<span class="mc-cm"># ---- paste into ~/.zshrc ----</span>
+<span class="mc-kw">export</span> PATH=<span class="mc-str">"$HOME/bin:$PATH"</span>      <span class="mc-cm"># find your own scripts</span>
+<span class="mc-kw">export</span> EDITOR=<span class="mc-str">"code --wait"</span>        <span class="mc-cm"># git opens VS Code</span>
+<span class="mc-kw">alias</span> ll=<span class="mc-str">'ls -la'</span>
+<span class="mc-kw">alias</span> gs=<span class="mc-str">'git status'</span>
+<span class="mc-kw">alias</span> ..=<span class="mc-str">'cd ..'</span>
+<span class="mc-kw">autoload</span> <span class="mc-fn">-Uz</span> compinit <span class="mc-op">&amp;&amp;</span> compinit    <span class="mc-cm"># tab completion</span>
+
+<span class="mc-cm"># Reload without opening a new window</span>
+<span class="mc-kw">source</span> ~/.zshrc</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">Dotfiles explained</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>📄 Files starting with <code>.</code> are hidden — <code>ls -la</code> shows them</div>
+            <div>🏠 <code>~</code> is your home folder, so <code>~/.zshrc</code> = <code>/Users/you/.zshrc</code></div>
+            <div>⚡ Type <code>ll</code> and zsh runs <code>ls -la</code> for you</div>
+            <div>🎨 Optional extras: <a href="https://ohmyz.sh" target="_blank" style="color:var(--accent);">Oh My Zsh</a> (themes &amp; plugins), <code>brew install --cask iterm2</code></div>
+            <div>💾 Keep a copy of <code>~/.zshrc</code> in a git repo to reuse on your next Mac</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span><strong>4. Create SSH keys for GitHub</strong> &mdash; an SSH key pair lets you <code>git push</code> without typing a password. The private key stays on your Mac; the public key (<code>.pub</code>) goes to GitHub.</span>
+        <a class="w3-link" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh" target="_blank">GitHub Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">ssh-keygen</div>
+          <pre><span class="mc-cm"># 1. Make a key pair (press Return for the default path, pick a passphrase)</span>
+<span class="mc-kw">ssh-keygen</span> <span class="mc-fn">-t</span> ed25519 <span class="mc-fn">-C</span> <span class="mc-str">"you@example.com"</span>
+
+<span class="mc-cm"># 2. Start the agent and remember the key in Keychain</span>
+<span class="mc-kw">eval</span> <span class="mc-str">"$(ssh-agent -s)"</span>
+<span class="mc-kw">ssh-add</span> <span class="mc-fn">--apple-use-keychain</span> ~/.ssh/id_ed25519
+
+<span class="mc-cm"># 3. Tell SSH to use it for GitHub  (put this in ~/.ssh/config)</span>
+Host github.com
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+
+<span class="mc-cm"># 4. Copy the PUBLIC key, then paste it on GitHub</span>
+<span class="mc-kw">pbcopy</span> <span class="mc-op">&lt;</span> ~/.ssh/id_ed25519.pub
+
+<span class="mc-cm"># 5. Test the connection</span>
+<span class="mc-kw">ssh</span> <span class="mc-fn">-T</span> git@github.com</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">On GitHub</div>
+          <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+            <div>🌐 github.com → profile photo → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <em>New SSH key</em> → paste</div>
+            <div>✅ Success looks like: <code>Hi you! You've successfully authenticated...</code></div>
+            <div>🔐 <code>id_ed25519</code> = private (never share) · <code>id_ed25519.pub</code> = public (safe to paste)</div>
+            <div>🔗 Clone with SSH: <code>git clone git@github.com:user/repo.git</code></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Trackpad -->
     <section id="trackpad">
       <h2>Trackpad Gestures</h2>
+
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <span class="macx-pad"><span class="macx-finger macx-finger--a"></span><span class="macx-finger macx-finger--b"></span></span>
+          <span class="macx-eq">&rarr;</span>
+          <span class="macx-emoji">&#128444;&#65039;</span>
+        </div>
+        <div class="macx-fig__cap">Gestures are shortcuts for your fingers. Two fingers sliding across the pad scroll a page; three fingers swipe to the next desktop.</div>
+      </div>
 
       <div class="block-desc">
         <span>Multi-touch trackpad gestures for navigation and productivity.</span>
@@ -264,6 +763,15 @@
     <section id="mission-control">
       <h2>Mission Control &amp; Spaces</h2>
 
+      <div class="macx-fig">
+        <div class="macx-fig__art macx-spaces">
+          <span class="macx-space macx-space--1"></span>
+          <span class="macx-space macx-space--2"></span>
+          <span class="macx-space macx-space--3"></span>
+        </div>
+        <div class="macx-fig__cap"><strong>Spaces</strong> are extra desktops sitting side by side. <code class="macx-inline">Ctrl+&rarr;</code> slides to the next one; the highlight shows which desktop you are on.</div>
+      </div>
+
       <div class="block-desc">
         <span>Manage multiple desktops (Spaces) and full-screen apps efficiently.</span>
       </div>
@@ -293,6 +801,13 @@
     <!-- Text Editing -->
     <section id="text-editing">
       <h2>Text Editing Shortcuts</h2>
+
+      <div class="macx-fig">
+        <div class="macx-fig__art">
+          <span class="macx-text"><span class="macx-word macx-word--1">Option</span> <span class="macx-word macx-word--2">hops</span> <span class="macx-word macx-word--3">words</span></span>
+        </div>
+        <div class="macx-fig__cap"><code class="macx-inline">&#8997;&rarr;</code> (Option + arrow) jumps the cursor one whole word at a time; hold <code class="macx-inline">&#8679;</code> (Shift) too and it selects as it goes.</div>
+      </div>
 
       <div class="block-desc">
         <span>Text navigation and editing shortcuts that work in most macOS apps.</span>
@@ -333,7 +848,7 @@
     <p>Mac Cheatsheet — macOS shortcuts &amp; commands</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

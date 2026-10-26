@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Java Web &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     .lk  { color: #bb9af7; }
     .lc  { color: #7aa2f7; }
@@ -25,6 +25,143 @@
     .cmp-table th { background:var(--accent); color:#fff; padding:0.45rem 0.7rem; text-align:left; font-weight:600; }
     .cmp-table td { padding:0.4rem 0.7rem; border-bottom:1px solid var(--border); color:var(--text-muted); }
     .cmp-table tr:hover td { background:var(--surface); }
+
+    /* ═══ jwx: beginner "how it works" explainer + per-section mini animations ═══ */
+    /* Surfaces/text ride theme variables (light + dark); the moving graphic parts
+       use a small fixed multi-colour accent set:
+       blue #7aa2f7 · violet #bb9af7 · amber #e0b366 · green #9ece6a · rose #e8808f */
+    .jwx-explainer{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:1.05rem 1.25rem 1.2rem;
+      margin:0 0 1.9rem;
+      box-shadow:var(--shadow-sm);
+    }
+    .jwx-head{ margin-bottom:0.3rem; }
+    .jwx-badge{
+      display:inline-block; font-family:var(--display);
+      font-size:0.6rem; font-weight:700; letter-spacing:0.6px; text-transform:uppercase;
+      color:var(--accent); background:var(--accent-subtle);
+      padding:0.22rem 0.62rem; border-radius:999px; margin-bottom:0.55rem;
+    }
+    .jwx-title{
+      font-family:var(--display); font-size:1.18rem; font-weight:700;
+      color:var(--text); margin:0 0 0.35rem; padding:0; border:0; letter-spacing:-0.2px;
+    }
+    .jwx-lead{ font-size:0.84rem; color:var(--text-muted); margin:0; max-width:64ch; }
+
+    .jwx-stage{ margin:0.95rem 0 0.2rem; }
+    .jwx-stage svg{ width:100%; height:auto; display:block; }
+    .jwx-stage .jwx-boxlabel{ fill:var(--text); font-weight:700; }
+    .jwx-stage .jwx-boxsub{ fill:var(--text-muted); }
+    .jwx-stage .jwx-lane{ fill:var(--text-subtle); font-weight:600; letter-spacing:0.3px; }
+    .jwx-flowline{ stroke:var(--border-strong); stroke-width:2; fill:none; }
+
+    .jwx-legend{
+      display:flex; flex-wrap:wrap; gap:0.35rem 0.95rem;
+      margin-top:0.55rem; font-size:0.72rem; color:var(--text-muted);
+    }
+    .jwx-chip{ display:inline-flex; align-items:center; gap:0.38rem; }
+    .jwx-chip .jwx-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+
+    /* explainer tokens: request flows out (top), response returns (bottom) — one at a time */
+    @keyframes jwx-req{
+      0%   { transform:translateX(0);     opacity:0; }
+      6%   { transform:translateX(0);     opacity:0; }
+      11%  { transform:translateX(60px);  opacity:1; }
+      44%  { transform:translateX(640px); opacity:1; }
+      49%  { transform:translateX(670px); opacity:0; }
+      100% { transform:translateX(670px); opacity:0; }
+    }
+    @keyframes jwx-resp{
+      0%   { transform:translateX(0);      opacity:0; }
+      52%  { transform:translateX(0);      opacity:0; }
+      57%  { transform:translateX(-60px);  opacity:1; }
+      92%  { transform:translateX(-640px); opacity:1; }
+      97%  { transform:translateX(-670px); opacity:0; }
+      100% { transform:translateX(-670px); opacity:0; }
+    }
+    .jwx-req-dot{  animation:jwx-req  9.5s ease-in-out infinite; }
+    .jwx-resp-dot{ animation:jwx-resp 9.5s ease-in-out infinite; }
+
+    /* ── compact per-section animations ── */
+    .jwx-mini{
+      display:flex; align-items:center; flex-wrap:wrap; gap:0.55rem 0.85rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius-sm); padding:0.5rem 0.8rem; margin:0.5rem 0 1.15rem;
+    }
+    .jwx-mini svg{ width:200px; height:44px; flex:0 0 auto; display:block; }
+    .jwx-mini text{ fill:var(--text-muted); font-family:'Inter',system-ui,sans-serif; }
+    .jwx-mini-cap{ flex:1 1 190px; font-size:0.76rem; color:var(--text-muted); line-height:1.45; }
+    .jwx-mini-cap strong{ color:var(--text); font-weight:600; }
+
+    @keyframes jwx-srvreq{
+      0%{ transform:translateX(0); opacity:0; }
+      6%{ opacity:1; }
+      42%{ transform:translateX(68px); opacity:1; }
+      47%,100%{ transform:translateX(68px); opacity:0; }
+    }
+    @keyframes jwx-srvresp{
+      0%,50%{ transform:translateX(0); opacity:0; }
+      56%{ opacity:1; }
+      92%{ transform:translateX(-68px); opacity:1; }
+      97%,100%{ transform:translateX(-68px); opacity:0; }
+    }
+    .jwx-m-srv-req{  animation:jwx-srvreq  7s ease-in-out infinite; }
+    .jwx-m-srv-resp{ animation:jwx-srvresp 7s ease-in-out infinite; }
+
+    @keyframes jwx-jsp{
+      0%{ transform:translateX(0); opacity:0; fill:#bb9af7; }
+      8%{ opacity:1; }
+      14%{ transform:translateX(6px); fill:#bb9af7; }
+      58%{ transform:translateX(68px); fill:#e0b366; opacity:1; }
+      64%,100%{ transform:translateX(68px); fill:#e0b366; opacity:0; }
+    }
+    .jwx-m-jsp{ animation:jwx-jsp 7s ease-in-out infinite; }
+
+    @keyframes jwx-struts{
+      0%{ transform:translateX(0); opacity:0; }
+      7%{ opacity:1; }
+      14%{ transform:translateX(8px); }
+      60%{ transform:translateX(160px); opacity:1; }
+      66%,100%{ transform:translateX(160px); opacity:0; }
+    }
+    .jwx-m-struts{ animation:jwx-struts 6.8s ease-in-out infinite; }
+
+    @keyframes jwx-xml{
+      0%{ transform:translateY(0); opacity:0; }
+      10%{ opacity:0.9; }
+      52%{ transform:translateY(18px); opacity:0.9; }
+      60%{ transform:translateY(18px); opacity:0; }
+      100%{ transform:translateY(18px); opacity:0; }
+    }
+    .jwx-m-xml{ animation:jwx-xml 5.6s ease-in-out infinite; }
+
+    @keyframes jwx-xsd{
+      0%{ transform:translateX(0); opacity:0; }
+      9%{ opacity:1; }
+      48%{ transform:translateX(125px); opacity:1; }
+      80%{ transform:translateX(125px); opacity:1; }
+      90%{ transform:translateX(125px); opacity:0; }
+      100%{ transform:translateX(125px); opacity:0; }
+    }
+    .jwx-m-xsd{ animation:jwx-xsd 6.6s ease-in-out infinite; }
+
+    /* Respect reduced-motion: freeze every jwx animation, keep a readable resting state */
+    @media (prefers-reduced-motion: reduce){
+      .jwx-req-dot,.jwx-resp-dot,
+      .jwx-m-srv-req,.jwx-m-srv-resp,.jwx-m-jsp,
+      .jwx-m-struts,.jwx-m-xml,.jwx-m-xsd{ animation:none !important; }
+      .jwx-req-dot,.jwx-resp-dot,
+      .jwx-m-srv-req,.jwx-m-srv-resp,.jwx-m-jsp,
+      .jwx-m-struts,.jwx-m-xsd{ opacity:1; }
+      .jwx-m-xml{ opacity:0.9; }
+    }
+
+    @media (max-width:640px){
+      .jwx-mini svg{ width:170px; height:38px; }
+    }
   </style>
 </head>
 <body>
@@ -44,14 +181,14 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=8"></script>
 <script>renderHeader('Java Web')</script>
 <script>renderSourceLink('Java Web')</script>
 
 <main>
   <div class="page-header">
     <h1>Java Web</h1>
-    <p class="subtitle">Servlet, JSP, Struts &amp; XML quick reference</p>
+    <p class="subtitle">How Java builds web pages &mdash; the browser asks, the server answers. Covers Servlet, JSP, Struts &amp; XML.</p>
     <span id="source-link"></span>
     <nav class="toc">
       <a href="#servlet">Servlet</a>
@@ -62,10 +199,101 @@
     </nav>
   </div>
 
+  <!-- ═══════════════════════════════ HOW IT WORKS (beginner explainer) ═══ -->
+  <section class="jwx-explainer" aria-label="How a Java web request flows">
+    <div class="jwx-head">
+      <span class="jwx-badge">Start here &middot; how it works</span>
+      <h2 class="jwx-title">How a Java web request flows</h2>
+      <p class="jwx-lead">Your browser sends a <strong>request</strong>. The server picks the right Java code to run, that code reads or saves data in the <strong>database</strong>, and a <strong>response</strong> travels all the way back to your screen. Watch one request make the round trip:</p>
+    </div>
+
+    <div class="jwx-stage">
+      <svg viewBox="0 0 860 226" role="img" aria-label="Diagram: the browser sends an HTTP request to the server, where a Servlet or Spring DispatcherServlet routes it to a controller, which calls service or business logic, which reads the database. An HTML or JSON response then returns to the browser.">
+        <defs>
+          <marker id="jwx-arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--border-strong)"/>
+          </marker>
+        </defs>
+
+        <!-- lane labels -->
+        <text class="jwx-lane" x="419" y="15" text-anchor="middle" font-size="12">HTTP request &nbsp;&rarr;</text>
+        <text class="jwx-lane" x="419" y="220" text-anchor="middle" font-size="12">&larr;&nbsp; response (HTML / JSON)</text>
+
+        <!-- request lane (top) &amp; response lane (bottom) -->
+        <line class="jwx-flowline" x1="84"  y1="32"  x2="754" y2="32"  marker-end="url(#jwx-arr)"/>
+        <line class="jwx-flowline" x1="754" y1="194" x2="84"  y2="194" marker-end="url(#jwx-arr)"/>
+
+        <!-- loop connectors (browser out, db in / db out, browser in) -->
+        <line class="jwx-flowline" x1="84"  y1="58"  x2="84"  y2="32"/>
+        <line class="jwx-flowline" x1="754" y1="32"  x2="754" y2="58"/>
+        <line class="jwx-flowline" x1="754" y1="130" x2="754" y2="194"/>
+        <line class="jwx-flowline" x1="84"  y1="194" x2="84"  y2="130"/>
+
+        <!-- pipeline arrows between stages -->
+        <line class="jwx-flowline" x1="150" y1="94" x2="200" y2="94" marker-end="url(#jwx-arr)"/>
+        <line class="jwx-flowline" x1="436" y1="94" x2="488" y2="94" marker-end="url(#jwx-arr)"/>
+        <line class="jwx-flowline" x1="630" y1="94" x2="688" y2="94" marker-end="url(#jwx-arr)"/>
+
+        <!-- Browser (blue) -->
+        <rect x="24" y="58" width="120" height="72" rx="9" fill="#7aa2f7" fill-opacity="0.14" stroke="#7aa2f7" stroke-width="1.6"/>
+        <text class="jwx-boxlabel" x="84" y="91"  text-anchor="middle" font-size="13">Browser</text>
+        <text class="jwx-boxsub"   x="84" y="108" text-anchor="middle" font-size="10.5">the client</text>
+
+        <!-- Server (violet) -->
+        <rect x="206" y="58" width="224" height="72" rx="9" fill="#bb9af7" fill-opacity="0.14" stroke="#bb9af7" stroke-width="1.6"/>
+        <text class="jwx-boxlabel" x="318" y="82"  text-anchor="middle" font-size="13">Server</text>
+        <text class="jwx-boxsub"   x="318" y="99"  text-anchor="middle" font-size="10.5">Servlet / DispatcherServlet</text>
+        <text class="jwx-boxsub"   x="318" y="114" text-anchor="middle" font-size="10.5">routes to a Controller</text>
+
+        <!-- Service (amber) -->
+        <rect x="494" y="58" width="130" height="72" rx="9" fill="#e0b366" fill-opacity="0.16" stroke="#e0b366" stroke-width="1.6"/>
+        <text class="jwx-boxlabel" x="559" y="91"  text-anchor="middle" font-size="13">Service</text>
+        <text class="jwx-boxsub"   x="559" y="108" text-anchor="middle" font-size="10.5">business logic</text>
+
+        <!-- Database (green cylinder) -->
+        <path d="M696 66 L696 122 Q754 134 812 122 L812 66 Z" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.6"/>
+        <ellipse cx="754" cy="66" rx="58" ry="9" fill="#9ece6a" fill-opacity="0.24" stroke="#9ece6a" stroke-width="1.6"/>
+        <text class="jwx-boxlabel" x="754" y="101" text-anchor="middle" font-size="13">Database</text>
+
+        <!-- request token (blue) rides the top lane, left to right -->
+        <g class="jwx-req-dot">
+          <circle cx="84" cy="32" r="10" fill="#7aa2f7" fill-opacity="0.22"/>
+          <circle cx="84" cy="32" r="5"  fill="#7aa2f7"/>
+        </g>
+        <!-- response token (rose) rides the bottom lane, right to left -->
+        <g class="jwx-resp-dot">
+          <circle cx="754" cy="194" r="10" fill="#e8808f" fill-opacity="0.22"/>
+          <circle cx="754" cy="194" r="5"  fill="#e8808f"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="jwx-legend">
+      <span class="jwx-chip"><span class="jwx-dot" style="background:#7aa2f7"></span>Browser</span>
+      <span class="jwx-chip"><span class="jwx-dot" style="background:#bb9af7"></span>Server &middot; routing</span>
+      <span class="jwx-chip"><span class="jwx-dot" style="background:#e0b366"></span>Service</span>
+      <span class="jwx-chip"><span class="jwx-dot" style="background:#9ece6a"></span>Database</span>
+      <span class="jwx-chip"><span class="jwx-dot" style="background:#e8808f"></span>Response</span>
+    </div>
+  </section>
+
   <!-- ═══════════════════════════════════════════ SERVLET ═══ -->
   <section id="servlet">
     <span class="badge b-srv">Server-Side</span>
     <h2>Servlet</h2>
+
+    <div class="jwx-mini">
+      <svg viewBox="0 0 200 44" role="img" aria-label="A request travels from the client to the server, then a response returns.">
+        <rect x="6" y="10" width="54" height="24" rx="6" fill="#7aa2f7" fill-opacity="0.14" stroke="#7aa2f7" stroke-width="1.3"/>
+        <text x="33" y="25" text-anchor="middle" font-size="9.5">Client</text>
+        <rect x="140" y="10" width="54" height="24" rx="6" fill="#9ece6a" fill-opacity="0.14" stroke="#9ece6a" stroke-width="1.3"/>
+        <text x="167" y="25" text-anchor="middle" font-size="9.5">Server</text>
+        <line x1="60" y1="22" x2="140" y2="22" stroke="var(--border-strong)" stroke-width="1.4"/>
+        <circle class="jwx-m-srv-req"  cx="66"  cy="22" r="4.5" fill="#7aa2f7"/>
+        <circle class="jwx-m-srv-resp" cx="134" cy="22" r="4.5" fill="#9ece6a"/>
+      </svg>
+      <span class="jwx-mini-cap">A <strong>request</strong> hits the server (doGet / doPost); a <strong>response</strong> goes back.</span>
+    </div>
 
     <div class="block-desc">
       <span><strong>HttpServletRequest / HttpServletResponse</strong> &mdash; Tomcat creates these objects automatically. Client sends request, server returns response.</span>
@@ -331,6 +559,18 @@ resp.<span class="lm">addCookie</span>(cookie);
     <span class="badge b-jsp">View Layer</span>
     <h2>JSP</h2>
 
+    <div class="jwx-mini">
+      <svg viewBox="0 0 200 44" role="img" aria-label="A JSP page is translated into HTML.">
+        <rect x="6" y="10" width="54" height="24" rx="6" fill="#bb9af7" fill-opacity="0.14" stroke="#bb9af7" stroke-width="1.3"/>
+        <text x="33" y="25" text-anchor="middle" font-size="9.5">.jsp</text>
+        <rect x="140" y="10" width="54" height="24" rx="6" fill="#e0b366" fill-opacity="0.16" stroke="#e0b366" stroke-width="1.3"/>
+        <text x="167" y="25" text-anchor="middle" font-size="9.5">HTML</text>
+        <line x1="60" y1="22" x2="140" y2="22" stroke="var(--border-strong)" stroke-width="1.4"/>
+        <circle class="jwx-m-jsp" cx="66" cy="22" r="4.5" fill="#bb9af7"/>
+      </svg>
+      <span class="jwx-mini-cap">A JSP is <strong>translated</strong> into a servlet that writes <strong>HTML</strong>.</span>
+    </div>
+
     <div class="block-desc">
       <span><strong>Scripting Elements</strong> &mdash; Scriptlet <code>&lt;% %&gt;</code>, Declaration <code>&lt;%! %&gt;</code>, Expression <code>&lt;%= %&gt;</code> for embedding Java in HTML.</span>
       <a class="w3-link" href="https://www.w3schools.com/java/java_jsp.asp" target="_blank">W3Schools &rarr;</a>
@@ -468,6 +708,19 @@ Current Count: &lt;<span class="lo">%=</span> <span class="lm">getCount</span>()
   <section id="struts">
     <span class="badge b-str">Framework</span>
     <h2>Struts 1</h2>
+
+    <div class="jwx-mini">
+      <svg viewBox="0 0 200 44" role="img" aria-label="The ActionServlet routes a request to the right JSP.">
+        <polygon points="100,5 125,22 100,39 75,22" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.3"/>
+        <text x="100" y="25" text-anchor="middle" font-size="8">Action</text>
+        <rect x="150" y="10" width="44" height="24" rx="6" fill="#9ece6a" fill-opacity="0.14" stroke="#9ece6a" stroke-width="1.3"/>
+        <text x="172" y="25" text-anchor="middle" font-size="9.5">JSP</text>
+        <line x1="34" y1="22" x2="75"  y2="22" stroke="var(--border-strong)" stroke-width="1.4"/>
+        <line x1="125" y1="22" x2="150" y2="22" stroke="var(--border-strong)" stroke-width="1.4"/>
+        <circle class="jwx-m-struts" cx="12" cy="22" r="4.5" fill="#e8808f"/>
+      </svg>
+      <span class="jwx-mini-cap">The <strong>ActionServlet</strong> reads the config and <strong>routes</strong> to a JSP.</span>
+    </div>
 
     <div class="block-desc">
       <span><strong>Struts 1 Flow</strong> &mdash; Request &rarr; ActionServlet &rarr; struts-config.xml &rarr; JSP. Uses MVC pattern with XML-based configuration.</span>
@@ -627,6 +880,19 @@ Current Count: &lt;<span class="lo">%=</span> <span class="lm">getCount</span>()
     <span class="badge b-xml">Markup</span>
     <h2>XML &amp; DTD</h2>
 
+    <div class="jwx-mini">
+      <svg viewBox="0 0 200 44" role="img" aria-label="A DTD checks the document structure; valid content is marked ok.">
+        <rect x="10" y="6" width="120" height="32" rx="5" fill="#e0b366" fill-opacity="0.14" stroke="#e0b366" stroke-width="1.3"/>
+        <line x1="20" y1="15" x2="110" y2="15" stroke="#e0b366" stroke-opacity="0.7" stroke-width="2"/>
+        <line x1="20" y1="22" x2="110" y2="22" stroke="#e0b366" stroke-opacity="0.7" stroke-width="2"/>
+        <line x1="20" y1="29" x2="88"  y2="29" stroke="#e0b366" stroke-opacity="0.7" stroke-width="2"/>
+        <rect class="jwx-m-xml" x="12" y="11" width="116" height="3" rx="1.5" fill="#9ece6a"/>
+        <path d="M150 15 l5 6 l9 -12" fill="none" stroke="#9ece6a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="178" y="26" text-anchor="middle" font-size="9" fill="#9ece6a">ok</text>
+      </svg>
+      <span class="jwx-mini-cap">A <strong>DTD</strong> checks the document's <strong>structure</strong> is valid.</span>
+    </div>
+
     <div class="block-desc">
       <span><strong>XML Rules</strong> &mdash; well-formed XML requires one root element, case sensitivity, proper closing tags, and quoted attributes.</span>
       <a class="w3-link" href="https://www.w3schools.com/xml/" target="_blank">W3Schools &rarr;</a>
@@ -767,6 +1033,18 @@ Current Count: &lt;<span class="lo">%=</span> <span class="lm">getCount</span>()
   <section id="schema">
     <span class="badge b-xsd">Validation</span>
     <h2>XSD Schema</h2>
+
+    <div class="jwx-mini">
+      <svg viewBox="0 0 200 44" role="img" aria-label="A schema checks a value matches its declared type, such as integer.">
+        <rect x="132" y="8" width="58" height="28" rx="7" fill="none" stroke="#bb9af7" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="161" y="26" text-anchor="middle" font-size="9.5" fill="#bb9af7">int</text>
+        <g class="jwx-m-xsd">
+          <rect x="8" y="12" width="40" height="20" rx="6" fill="#9ece6a" fill-opacity="0.18" stroke="#9ece6a" stroke-width="1.3"/>
+          <text x="28" y="26" text-anchor="middle" font-size="10" fill="var(--text)">42</text>
+        </g>
+      </svg>
+      <span class="jwx-mini-cap">A <strong>schema (XSD)</strong> also checks the <strong>data type</strong> &mdash; e.g. integer.</span>
+    </div>
 
     <div class="block-desc">
       <span><strong>XML Schema (XSD)</strong> &mdash; more powerful than DTD. Supports data types, namespaces, inheritance, and content + structure validation.</span>
@@ -917,7 +1195,7 @@ Current Count: &lt;<span class="lo">%=</span> <span class="lm">getCount</span>()
 </main>
 
 <footer>Java Web Cheatsheet &mdash; Servlet, JSP, Struts &amp; XML reference</footer>
-<script src="js/script.js"></script>
+<script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

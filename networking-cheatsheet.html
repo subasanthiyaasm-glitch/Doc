@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Networking &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     .attr-table td:first-child {
       font-family: 'JetBrains Mono', 'SF Mono', monospace;
@@ -93,6 +93,166 @@
     }
     .flow-arrow { color: #484f58; font-size: 0.9rem; }
   </style>
+
+  <style>
+    /* ══ netx2- : one calm, compact inline animation per major section ══
+       Themeable via CSS variables; a few fixed green/red accents inside
+       the SVGs mark "allowed" vs "blocked". No libraries, no network. */
+
+    .netx2-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem 1.15rem;
+      box-shadow: var(--shadow-sm);
+      margin: 0 0 1.35rem;
+    }
+    .netx2-cap {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0 0 0.7rem;
+      text-align: center;
+    }
+    .netx2-cap strong { color: var(--text); }
+    .netx2-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .netx2-t    { font-family: var(--display); }
+    .netx2-mono { font-family: 'JetBrains Mono', 'SF Mono', monospace; }
+
+    /* ── OSI layers: a highlight travels down the 7-layer stack ── */
+    .netx2-osi-row { fill: var(--surface-2); animation: netx2k-osi 8.4s ease-in-out infinite; }
+    @keyframes netx2k-osi {
+      0%   { fill: var(--surface-2); }
+      5%   { fill: var(--accent-subtle-2); }
+      12%  { fill: var(--accent-subtle-2); }
+      19%  { fill: var(--surface-2); }
+      100% { fill: var(--surface-2); }
+    }
+
+    /* ── TCP vs UDP ── */
+    .netx2-tcp-syn { opacity: 0; animation: netx2k-tcp-syn 11s ease-in-out infinite; }
+    .netx2-tcp-sa  { opacity: 0; animation: netx2k-tcp-sa  11s ease-in-out infinite; }
+    .netx2-tcp-ack { opacity: 0; animation: netx2k-tcp-ack 11s ease-in-out infinite; }
+    .netx2-tcp-ok  { opacity: 0; animation: netx2k-tcp-ok  11s ease-in-out infinite; }
+    .netx2-udp1    { opacity: 0; animation: netx2k-udp1    11s ease-in-out infinite; }
+    .netx2-udp2    { opacity: 0; animation: netx2k-udp2    11s ease-in-out infinite; }
+    .netx2-udp3    { opacity: 0; animation: netx2k-udp3    11s ease-in-out infinite; }
+    @keyframes netx2k-tcp-syn { 0%,4%{opacity:0;transform:translateX(0);} 6%{opacity:1;transform:translateX(0);} 15%{opacity:1;transform:translateX(344px);} 17%,100%{opacity:0;transform:translateX(344px);} }
+    @keyframes netx2k-tcp-sa  { 0%,18%{opacity:0;transform:translateX(344px);} 20%{opacity:1;transform:translateX(344px);} 30%{opacity:1;transform:translateX(0);} 32%,100%{opacity:0;transform:translateX(0);} }
+    @keyframes netx2k-tcp-ack { 0%,33%{opacity:0;transform:translateX(0);} 35%{opacity:1;transform:translateX(0);} 45%{opacity:1;transform:translateX(344px);} 47%,100%{opacity:0;transform:translateX(344px);} }
+    @keyframes netx2k-tcp-ok  { 0%,47%{opacity:0;} 51%{opacity:1;} 54%{opacity:1;} 57%,100%{opacity:0;} }
+    @keyframes netx2k-udp1 { 0%,55%{opacity:0;transform:translateX(0);} 57%{opacity:1;transform:translateX(0);} 66%{opacity:1;transform:translateX(344px);} 68%,100%{opacity:0;transform:translateX(344px);} }
+    @keyframes netx2k-udp2 { 0%,66%{opacity:0;transform:translateX(0);} 68%{opacity:1;transform:translateX(0);} 73%{opacity:1;transform:translateX(150px);} 75%{opacity:0;transform:translateX(165px);} 100%{opacity:0;transform:translateX(165px);} }
+    @keyframes netx2k-udp3 { 0%,78%{opacity:0;transform:translateX(0);} 80%{opacity:1;transform:translateX(0);} 90%{opacity:1;transform:translateX(344px);} 92%,100%{opacity:0;transform:translateX(344px);} }
+
+    /* ── DNS lookup ── */
+    .netx2-dns-q     { opacity: 0; animation: netx2k-dns-q     9s ease-in-out infinite; }
+    .netx2-dns-r     { opacity: 0; animation: netx2k-dns-r     9s ease-in-out infinite; }
+    .netx2-dns-ok    { opacity: 0; animation: netx2k-dns-ok    9s ease-in-out infinite; }
+    .netx2-dns-pulse { opacity: 0; animation: netx2k-dns-pulse 9s ease-in-out infinite; }
+    @keyframes netx2k-dns-q  { 0%{opacity:0;transform:translateX(0);} 4%{opacity:1;transform:translateX(0);} 38%{opacity:1;transform:translateX(276px);} 42%,100%{opacity:0;transform:translateX(276px);} }
+    @keyframes netx2k-dns-r  { 0%,44%{opacity:0;transform:translateX(276px);} 48%{opacity:1;transform:translateX(276px);} 82%{opacity:1;transform:translateX(0);} 86%,100%{opacity:0;transform:translateX(0);} }
+    @keyframes netx2k-dns-ok { 0%,86%{opacity:0;} 91%{opacity:1;} 100%{opacity:1;} }
+    @keyframes netx2k-dns-pulse { 0%,38%{opacity:0;} 42%{opacity:1;} 47%{opacity:0;} 100%{opacity:0;} }
+
+    /* ── VPN: key exchange → encrypted channel → plaintext to ciphertext ── */
+    .netx2-vpn-kl   { opacity: 0; animation: netx2k-vpn-kl   12s ease-in-out infinite; }
+    .netx2-vpn-kr   { opacity: 0; animation: netx2k-vpn-kr   12s ease-in-out infinite; }
+    .netx2-vpn-lock { opacity: 0; transform-box: fill-box; transform-origin: center; animation: netx2k-vpn-lock 12s ease-in-out infinite; }
+    .netx2-vpn-enc  { opacity: 0; animation: netx2k-vpn-enc  12s ease-in-out infinite; }
+    .netx2-vpn-pt   { opacity: 0; animation: netx2k-vpn-pt   12s ease-in-out infinite; }
+    .netx2-vpn-ct   { opacity: 0; animation: netx2k-vpn-ct   12s ease-in-out infinite; }
+    @keyframes netx2k-vpn-kl { 0%{opacity:0;transform:translateX(-42px);} 6%{opacity:1;} 18%{opacity:1;transform:translateX(0);} 24%,100%{opacity:0;transform:translateX(0);} }
+    @keyframes netx2k-vpn-kr { 0%{opacity:0;transform:translateX(42px);} 6%{opacity:1;} 18%{opacity:1;transform:translateX(0);} 24%,100%{opacity:0;transform:translateX(0);} }
+    @keyframes netx2k-vpn-lock { 0%,20%{opacity:0;transform:scale(0.6);} 27%{opacity:1;transform:scale(1);} 100%{opacity:1;transform:scale(1);} }
+    @keyframes netx2k-vpn-enc  { 0%,30%{opacity:0;} 44%{opacity:1;} 100%{opacity:1;} }
+    @keyframes netx2k-vpn-pt   { 0%,48%{opacity:0;} 52%{opacity:1;} 58%{opacity:1;} 62%,100%{opacity:0;} }
+    @keyframes netx2k-vpn-ct   { 0%,60%{opacity:0;transform:translateX(0);} 64%{opacity:1;transform:translateX(0);} 70%{opacity:1;transform:translateX(0);} 90%{opacity:1;transform:translateX(226px);} 94%,100%{opacity:0;transform:translateX(226px);} }
+
+    /* ── NAT / IP addressing: private IP → public IP ── */
+    .netx2-nat-a     { opacity: 0; animation: netx2k-nat-a     8.5s ease-in-out infinite; }
+    .netx2-nat-b     { opacity: 0; animation: netx2k-nat-b     8.5s ease-in-out infinite; }
+    .netx2-nat-pulse { opacity: 0; animation: netx2k-nat-pulse 8.5s ease-in-out infinite; }
+    @keyframes netx2k-nat-a { 0%{opacity:0;transform:translateX(0);} 5%{opacity:1;transform:translateX(0);} 37%{opacity:1;transform:translateX(133px);} 41%,100%{opacity:0;transform:translateX(133px);} }
+    @keyframes netx2k-nat-b { 0%,41%{opacity:0;transform:translateX(133px);} 46%{opacity:1;transform:translateX(133px);} 80%{opacity:1;transform:translateX(324px);} 84%,100%{opacity:0;transform:translateX(324px);} }
+    @keyframes netx2k-nat-pulse { 0%,37%{opacity:0;} 42%{opacity:1;} 48%{opacity:0;} 100%{opacity:0;} }
+
+    /* ── Proxy: HTTP request → response ── */
+    .netx2-http-get   { opacity: 0; animation: netx2k-http-get   9s ease-in-out infinite; }
+    .netx2-http-res   { opacity: 0; animation: netx2k-http-res   9s ease-in-out infinite; }
+    .netx2-http-pulse { opacity: 0; animation: netx2k-http-pulse 9s ease-in-out infinite; }
+    @keyframes netx2k-http-get { 0%{opacity:0;transform:translateX(0);} 4%{opacity:1;transform:translateX(0);} 44%{opacity:1;transform:translateX(300px);} 48%,100%{opacity:0;transform:translateX(300px);} }
+    @keyframes netx2k-http-res { 0%,49%{opacity:0;transform:translateX(300px);} 53%{opacity:1;transform:translateX(300px);} 91%{opacity:1;transform:translateX(0);} 95%,100%{opacity:0;transform:translateX(0);} }
+    @keyframes netx2k-http-pulse { 0%,22%{opacity:0;} 26%{opacity:1;} 32%{opacity:0;} 69%{opacity:0;} 73%{opacity:1;} 79%{opacity:0;} 100%{opacity:0;} }
+
+    /* ── Firewall: allowed packets pass, blocked packets stop at the wall ── */
+    .netx2-fw-ok1 { opacity: 0; animation: netx2k-fw-ok1 9s ease-in-out infinite; }
+    .netx2-fw-bad { opacity: 0; animation: netx2k-fw-bad 9s ease-in-out infinite; }
+    .netx2-fw-x   { opacity: 0; animation: netx2k-fw-x   9s ease-in-out infinite; }
+    .netx2-fw-ok3 { opacity: 0; animation: netx2k-fw-ok3 9s ease-in-out infinite; }
+    @keyframes netx2k-fw-ok1 { 0%{opacity:0;transform:translateX(0);} 4%{opacity:1;transform:translateX(0);} 27%{opacity:1;transform:translateX(420px);} 30%,100%{opacity:0;transform:translateX(420px);} }
+    @keyframes netx2k-fw-bad { 0%,30%{opacity:0;transform:translateX(0);} 34%{opacity:1;transform:translateX(0);} 48%{opacity:1;transform:translateX(212px);} 55%{opacity:1;transform:translateX(212px);} 58%,100%{opacity:0;transform:translateX(212px);} }
+    @keyframes netx2k-fw-x   { 0%,48%{opacity:0;} 51%{opacity:1;} 55%{opacity:1;} 58%,100%{opacity:0;} }
+    @keyframes netx2k-fw-ok3 { 0%,57%{opacity:0;transform:translateX(0);} 61%{opacity:1;transform:translateX(0);} 84%{opacity:1;transform:translateX(420px);} 87%,100%{opacity:0;transform:translateX(420px);} }
+
+    /* ── IDS/IPS: inline sensor passes clean traffic, drops a detected threat ── */
+    .netx2-ips-c1    { opacity: 0; animation: netx2k-ips-c1    10s ease-in-out infinite; }
+    .netx2-ips-mal   { opacity: 0; animation: netx2k-ips-mal   10s ease-in-out infinite; }
+    .netx2-ips-alert { opacity: 0; animation: netx2k-ips-alert 10s ease-in-out infinite; }
+    .netx2-ips-c2    { opacity: 0; animation: netx2k-ips-c2    10s ease-in-out infinite; }
+    @keyframes netx2k-ips-c1  { 0%{opacity:0;transform:translateX(0);} 4%{opacity:1;transform:translateX(0);} 28%{opacity:1;transform:translateX(430px);} 31%,100%{opacity:0;transform:translateX(430px);} }
+    @keyframes netx2k-ips-mal { 0%,32%{opacity:0;transform:translateX(0);} 36%{opacity:1;transform:translateX(0);} 48%{opacity:1;transform:translateX(220px);} 56%{opacity:1;transform:translateX(220px);} 59%,100%{opacity:0;transform:translateX(220px);} }
+    @keyframes netx2k-ips-alert { 0%,48%{opacity:0;} 52%{opacity:1;} 57%{opacity:1;} 61%,100%{opacity:0;} }
+    @keyframes netx2k-ips-c2  { 0%,64%{opacity:0;transform:translateX(0);} 68%{opacity:1;transform:translateX(0);} 90%{opacity:1;transform:translateX(430px);} 93%,100%{opacity:0;transform:translateX(430px);} }
+
+    /* ── Load balancer: requests fanned out across the server pool ── */
+    .netx2-lb-r1 { opacity: 0; animation: netx2k-lb-r1 11s ease-in-out infinite; }
+    .netx2-lb-r2 { opacity: 0; animation: netx2k-lb-r2 11s ease-in-out infinite; }
+    .netx2-lb-r3 { opacity: 0; animation: netx2k-lb-r3 11s ease-in-out infinite; }
+    @keyframes netx2k-lb-r1 { 0%,2%{opacity:0;transform:translate(0,0);} 5%{opacity:1;transform:translate(0,0);} 14%{transform:translate(154px,0);} 28%{opacity:1;transform:translate(371px,-68px);} 31%,100%{opacity:0;transform:translate(371px,-68px);} }
+    @keyframes netx2k-lb-r2 { 0%,35%{opacity:0;transform:translate(0,0);} 38%{opacity:1;transform:translate(0,0);} 47%{transform:translate(154px,0);} 61%{opacity:1;transform:translate(371px,-4px);} 64%,100%{opacity:0;transform:translate(371px,-4px);} }
+    @keyframes netx2k-lb-r3 { 0%,68%{opacity:0;transform:translate(0,0);} 71%{opacity:1;transform:translate(0,0);} 80%{transform:translate(154px,0);} 94%{opacity:1;transform:translate(371px,60px);} 97%,100%{opacity:0;transform:translate(371px,60px);} }
+
+    /* ── WAF: clean request passes, malicious request blocked (403) ── */
+    .netx2-waf-ok1 { opacity: 0; animation: netx2k-waf-ok1 10s ease-in-out infinite; }
+    .netx2-waf-bad { opacity: 0; animation: netx2k-waf-bad 10s ease-in-out infinite; }
+    .netx2-waf-403 { opacity: 0; animation: netx2k-waf-403 10s ease-in-out infinite; }
+    .netx2-waf-ok2 { opacity: 0; animation: netx2k-waf-ok2 10s ease-in-out infinite; }
+    @keyframes netx2k-waf-ok1 { 0%{opacity:0;transform:translateX(0);} 4%{opacity:1;transform:translateX(0);} 30%{opacity:1;transform:translateX(308px);} 33%,100%{opacity:0;transform:translateX(308px);} }
+    @keyframes netx2k-waf-bad { 0%,34%{opacity:0;transform:translateX(0);} 38%{opacity:1;transform:translateX(0);} 52%{opacity:1;transform:translateX(150px);} 58%{opacity:1;transform:translateX(150px);} 61%,100%{opacity:0;transform:translateX(150px);} }
+    @keyframes netx2k-waf-403 { 0%,52%{opacity:0;} 56%{opacity:1;} 60%{opacity:1;} 63%,100%{opacity:0;} }
+    @keyframes netx2k-waf-ok2 { 0%,64%{opacity:0;transform:translateX(0);} 68%{opacity:1;transform:translateX(0);} 94%{opacity:1;transform:translateX(308px);} 97%,100%{opacity:0;transform:translateX(308px);} }
+
+    /* ── Respect reduced-motion: stop all motion, show a calm, readable frame ── */
+    @media (prefers-reduced-motion: reduce) {
+      .netx2-wrap [class^="netx2-"] { animation: none !important; }
+      .netx2-osi-row { fill: var(--accent-subtle) !important; }
+      .netx2-tcp-ok,  .netx2-dns-ok  { opacity: 1 !important; }
+      .netx2-dns-r  { opacity: 1 !important; transform: translateX(0) !important; }
+      .netx2-vpn-lock { opacity: 1 !important; transform: scale(1) !important; }
+      .netx2-vpn-enc  { opacity: 1 !important; }
+      .netx2-vpn-ct   { opacity: 1 !important; transform: translateX(226px) !important; }
+      .netx2-nat-b    { opacity: 1 !important; transform: translateX(324px) !important; }
+      .netx2-http-res { opacity: 1 !important; transform: translateX(0) !important; }
+      .netx2-fw-ok1   { opacity: 1 !important; transform: translateX(420px) !important; }
+      .netx2-fw-bad   { opacity: 1 !important; transform: translateX(212px) !important; }
+      .netx2-fw-x     { opacity: 1 !important; }
+      .netx2-ips-c2    { opacity: 1 !important; transform: translateX(430px) !important; }
+      .netx2-ips-alert { opacity: 1 !important; }
+      .netx2-lb-r1 { opacity: 1 !important; transform: translate(371px,-68px) !important; }
+      .netx2-lb-r2 { opacity: 1 !important; transform: translate(371px,-4px) !important; }
+      .netx2-lb-r3 { opacity: 1 !important; transform: translate(371px,60px) !important; }
+      .netx2-waf-ok1 { opacity: 1 !important; transform: translateX(308px) !important; }
+      .netx2-waf-bad { opacity: 1 !important; transform: translateX(150px) !important; }
+      .netx2-waf-403 { opacity: 1 !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -111,16 +271,17 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=8"></script>
 <script>renderHeader('Networking')</script>
 <script>renderSourceLink('Networking')</script>
 
 <main>
   <div class="page-header">
     <h1>Networking &amp; Security</h1>
-    <p class="subtitle">Network infrastructure &amp; security quick reference</p>
+    <p class="subtitle">A friendly, plain-English intro to how computers talk to each other over the internet.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#website-journey">Opening a Website</a>
       <a href="#osi">OSI Model</a>
       <a href="#tcpip">TCP/IP Deep Dive</a>
       <a href="#dns">DNS</a>
@@ -135,9 +296,262 @@
   </div>
 
 
+  <!-- ══ OPENING A WEBSITE (BEGINNER ANIMATED EXPLAINER) ═══════════════ -->
+  <section id="website-journey">
+    <style>
+      /* All classes prefixed netx- to avoid collisions with shared CSS */
+      .netx-wrap {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.2rem 1.25rem 1.4rem;
+        box-shadow: var(--shadow-sm);
+      }
+      .netx-lead {
+        font-size: 0.84rem;
+        color: var(--text-muted);
+        line-height: 1.65;
+        margin: 0 0 1rem;
+        max-width: 56ch;
+      }
+      .netx-lead strong { color: var(--text); }
+      .netx-svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .netx-label { font-family: var(--display); }
+
+      /* ── The data path & the two travelling packets ── */
+      .netx-dns     { animation: netx-dns-pulse 10s ease-in-out infinite; }
+      .netx-connect { animation: netx-tcp 10s ease-in-out infinite; opacity: 0; }
+      .netx-req     { animation: netx-req-move 10s ease-in-out infinite; opacity: 0; }
+      .netx-res     { animation: netx-res-move 10s ease-in-out infinite; opacity: 0; }
+      .netx-render  { animation: netx-render 10s ease-in-out infinite; opacity: 0; }
+
+      @keyframes netx-dns-pulse {
+        0%   { opacity: 0.35; }
+        6%   { opacity: 1; }
+        18%  { opacity: 1; }
+        22%  { opacity: 0.35; }
+        100% { opacity: 0.35; }
+      }
+      @keyframes netx-tcp {
+        0%, 20%   { opacity: 0; }
+        25%       { opacity: 1; }
+        36%       { opacity: 1; }
+        40%, 100% { opacity: 0; }
+      }
+      @keyframes netx-req-move {
+        0%, 40%   { opacity: 0; transform: translateX(0); }
+        44%       { opacity: 1; transform: translateX(4px); }
+        57%       { opacity: 1; transform: translateX(284px); }
+        60%, 100% { opacity: 0; transform: translateX(288px); }
+      }
+      @keyframes netx-res-move {
+        0%, 60%   { opacity: 0; transform: translateX(288px); }
+        64%       { opacity: 1; transform: translateX(284px); }
+        77%       { opacity: 1; transform: translateX(4px); }
+        80%, 100% { opacity: 0; transform: translateX(0); }
+      }
+      @keyframes netx-render {
+        0%, 80% { opacity: 0; }
+        90%     { opacity: 1; }
+        100%    { opacity: 1; }
+      }
+
+      /* ── Plain-language step chips, lit in sequence ── */
+      .netx-steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1.1rem;
+      }
+      .netx-step {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.7rem 0.45rem 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface-2);
+        color: var(--text-muted);
+        font-size: 0.73rem;
+        line-height: 1.2;
+        animation: netx-lit 10s linear infinite;
+      }
+      .netx-step .netx-num {
+        width: 1.35rem;
+        height: 1.35rem;
+        line-height: 1.35rem;
+        text-align: center;
+        border-radius: 50%;
+        background: var(--accent-subtle);
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 0.68rem;
+        flex-shrink: 0;
+      }
+      .netx-step:nth-child(1) { animation-delay: 0s; }
+      .netx-step:nth-child(2) { animation-delay: -2s; }
+      .netx-step:nth-child(3) { animation-delay: -4s; }
+      .netx-step:nth-child(4) { animation-delay: -6s; }
+      .netx-step:nth-child(5) { animation-delay: -8s; }
+      @keyframes netx-lit {
+        0%   { border-color: var(--accent); background: var(--accent-subtle); color: var(--text); }
+        18%  { border-color: var(--accent); background: var(--accent-subtle); color: var(--text); }
+        20%  { border-color: var(--border); background: var(--surface-2); color: var(--text-muted); }
+        100% { border-color: var(--border); background: var(--surface-2); color: var(--text-muted); }
+      }
+
+      .netx-foot {
+        font-size: 0.74rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+        margin: 1rem 0 0;
+        text-align: center;
+      }
+
+      /* ── Respect users who prefer no motion: show a calm static state ── */
+      @media (prefers-reduced-motion: reduce) {
+        .netx-dns, .netx-connect, .netx-req, .netx-res, .netx-render, .netx-step {
+          animation: none !important;
+        }
+        .netx-dns     { opacity: 1; }
+        .netx-connect { opacity: 1; }
+        .netx-req     { opacity: 1; transform: translateX(80px); }
+        .netx-res     { opacity: 1; transform: translateX(200px); }
+        .netx-render  { opacity: 1; }
+        .netx-step    { border-color: var(--border); background: var(--surface-2); color: var(--text-muted); }
+      }
+    </style>
+
+    <h2>What Happens When You Open a Website?</h2>
+
+    <div class="block-desc">
+      <span>Type an address and hit Enter, and your browser quietly does a few steps to fetch the page. Watch the request travel out and the reply come back.</span>
+      <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/How_does_the_Internet_work" target="_blank">Docs →</a>
+    </div>
+
+    <div class="netx-wrap">
+      <p class="netx-lead">
+        Think of it like posting a letter. First you <strong>look up the address</strong>, then you
+        <strong>knock to say hello</strong>, then you <strong>ask for what you want</strong> and
+        <strong>wait for the reply</strong>. The animation below shows one round trip, step by step.
+      </p>
+
+      <svg class="netx-svg" viewBox="0 0 600 210" role="img"
+           aria-label="A request packet travels from your browser to a website server and a reply travels back, passing through a DNS address lookup and a connection step.">
+
+        <!-- base connection line -->
+        <line x1="150" y1="112" x2="452" y2="112" stroke="var(--border)" stroke-width="3" stroke-linecap="round"/>
+        <!-- TCP connect highlight (phase 2) -->
+        <line class="netx-connect" x1="150" y1="112" x2="452" y2="112"
+              stroke="var(--accent-2)" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/>
+
+        <!-- DNS address lookup (phase 1) -->
+        <g class="netx-dns">
+          <line x1="300" y1="56" x2="300" y2="106" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <rect x="266" y="28" width="68" height="28" rx="14" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text class="netx-label" x="300" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent)">DNS</text>
+          <text class="netx-label" x="300" y="74" text-anchor="middle" font-size="9.5" fill="var(--text-muted)">find the address</text>
+        </g>
+
+        <!-- Browser (left) -->
+        <g>
+          <rect x="46" y="66" width="104" height="72" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+          <rect x="54" y="74" width="88" height="48" rx="5" fill="var(--code-bg)"/>
+          <!-- page content that fills in when the browser renders (phase 5) -->
+          <g class="netx-render">
+            <rect x="62" y="83" width="62" height="6" rx="3" fill="var(--accent-2)"/>
+            <rect x="62" y="95" width="72" height="6" rx="3" fill="var(--code-text)"/>
+            <rect x="62" y="107" width="46" height="6" rx="3" fill="var(--accent-2)"/>
+          </g>
+          <rect x="78" y="144" width="40" height="5" rx="2.5" fill="var(--accent)"/>
+          <text class="netx-label" x="98" y="172" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text)">Your browser</text>
+          <text class="netx-label" x="98" y="187" text-anchor="middle" font-size="9" fill="var(--text-muted)">(your device)</text>
+        </g>
+
+        <!-- Server (right) -->
+        <g>
+          <rect x="452" y="58" width="84" height="92" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+          <rect x="462" y="68" width="64" height="18" rx="4" fill="var(--surface-2)"/>
+          <circle cx="472" cy="77" r="3" fill="var(--accent-2)"/>
+          <rect x="462" y="91" width="64" height="18" rx="4" fill="var(--surface-2)"/>
+          <circle cx="472" cy="100" r="3" fill="var(--accent-2)"/>
+          <rect x="462" y="114" width="64" height="18" rx="4" fill="var(--surface-2)"/>
+          <circle cx="472" cy="123" r="3" fill="var(--accent-2)"/>
+          <text class="netx-label" x="494" y="172" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text)">Website server</text>
+          <text class="netx-label" x="494" y="187" text-anchor="middle" font-size="9" fill="var(--text-muted)">(holds the page)</text>
+        </g>
+
+        <!-- request packet: browser -> server (phase 3) -->
+        <g class="netx-req">
+          <text class="netx-label" x="160" y="98" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--accent)">request</text>
+          <circle cx="160" cy="112" r="8" fill="var(--accent)"/>
+        </g>
+
+        <!-- reply packet: server -> browser (phase 4) -->
+        <g class="netx-res">
+          <circle cx="160" cy="112" r="8" fill="var(--accent-2)"/>
+          <text class="netx-label" x="160" y="134" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--accent-2)">reply</text>
+        </g>
+      </svg>
+
+      <div class="netx-steps">
+        <div class="netx-step"><span class="netx-num">1</span>Find the address (DNS)</div>
+        <div class="netx-step"><span class="netx-num">2</span>Connect &amp; say hello</div>
+        <div class="netx-step"><span class="netx-num">3</span>Ask for the page</div>
+        <div class="netx-step"><span class="netx-num">4</span>Server sends it back</div>
+        <div class="netx-step"><span class="netx-num">5</span>Browser shows it</div>
+      </div>
+
+      <p class="netx-foot">
+        Under the hood these steps ride on a few network layers (like TCP/IP) &mdash; but as a beginner,
+        this simple back-and-forth is the whole idea.
+      </p>
+    </div>
+  </section>
+
+
   <!-- ══ OSI MODEL ════════════════════════════════════════════════════ -->
   <section id="osi">
     <h2>OSI Model — 7 Layers</h2>
+
+    <div class="netx2-wrap">
+      <p class="netx2-cap">Data is wrapped layer by layer on the way down the stack &mdash; watch each <strong>OSI layer</strong> light up in turn.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 214" role="img"
+           aria-label="The seven OSI layers highlight one after another from Application down to Physical, showing data travelling down the stack.">
+        <line x1="30" y1="22" x2="30" y2="184" stroke="var(--border)" stroke-width="2"/>
+        <path d="M24 178 L30 190 L36 178 Z" fill="var(--accent)"/>
+        <text class="netx2-t" x="30" y="208" text-anchor="middle" font-size="8.5" fill="var(--text-muted)">down</text>
+
+        <g><rect class="netx2-osi-row" style="animation-delay:0s"   x="60" y="14"  width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="30"  font-size="11"  font-weight="700" fill="var(--text)">L7 · Application</text>
+           <text class="netx2-mono" x="448" y="30"  text-anchor="end" font-size="9.5" fill="var(--text-muted)">HTTP · DNS</text></g>
+        <g><rect class="netx2-osi-row" style="animation-delay:1.2s" x="60" y="41"  width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="57"  font-size="11"  font-weight="700" fill="var(--text)">L6 · Presentation</text>
+           <text class="netx2-mono" x="448" y="57"  text-anchor="end" font-size="9.5" fill="var(--text-muted)">TLS · SSL</text></g>
+        <g><rect class="netx2-osi-row" style="animation-delay:2.4s" x="60" y="68"  width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="84"  font-size="11"  font-weight="700" fill="var(--text)">L5 · Session</text>
+           <text class="netx2-mono" x="448" y="84"  text-anchor="end" font-size="9.5" fill="var(--text-muted)">RPC · sockets</text></g>
+        <g><rect class="netx2-osi-row" style="animation-delay:3.6s" x="60" y="95"  width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="111" font-size="11"  font-weight="700" fill="var(--text)">L4 · Transport</text>
+           <text class="netx2-mono" x="448" y="111" text-anchor="end" font-size="9.5" fill="var(--text-muted)">TCP · UDP</text></g>
+        <g><rect class="netx2-osi-row" style="animation-delay:4.8s" x="60" y="122" width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="138" font-size="11"  font-weight="700" fill="var(--text)">L3 · Network</text>
+           <text class="netx2-mono" x="448" y="138" text-anchor="end" font-size="9.5" fill="var(--text-muted)">IP · ICMP</text></g>
+        <g><rect class="netx2-osi-row" style="animation-delay:6s"   x="60" y="149" width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="165" font-size="11"  font-weight="700" fill="var(--text)">L2 · Data Link</text>
+           <text class="netx2-mono" x="448" y="165" text-anchor="end" font-size="9.5" fill="var(--text-muted)">Ethernet</text></g>
+        <g><rect class="netx2-osi-row" style="animation-delay:7.2s" x="60" y="176" width="400" height="24" rx="7" stroke="var(--border)" stroke-width="1"/>
+           <text class="netx2-t"    x="72"  y="192" font-size="11"  font-weight="700" fill="var(--text)">L1 · Physical</text>
+           <text class="netx2-mono" x="448" y="192" text-anchor="end" font-size="9.5" fill="var(--text-muted)">cables · radio</text></g>
+      </svg>
+    </div>
 
     <div class="block-desc">
       <span>The Open Systems Interconnection model defines how data flows across a network, from physical signals to application logic.</span>
@@ -271,6 +685,46 @@ Cables (Cat5/6), Fibre, Hubs, NICs, Bluetooth
   <!-- ══ TCP/IP DEEP DIVE ════════════════════════════════════════════ -->
   <section id="tcpip">
     <h2>TCP/IP — Deep Dive</h2>
+
+    <div class="netx2-wrap">
+      <p class="netx2-cap"><strong>TCP</strong> shakes hands first for reliable, ordered delivery; <strong>UDP</strong> just fires packets and forgets &mdash; each carries a source &amp; destination <strong>port</strong>.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 200" role="img"
+           aria-label="TCP performs a three-way handshake of SYN, SYN-ACK and ACK before data; UDP sends independent datagrams left to right, one of which is lost.">
+        <!-- TCP lane -->
+        <text class="netx2-t" x="14" y="16" font-size="11" font-weight="700" fill="var(--accent)">TCP · reliable handshake</text>
+        <rect x="14"  y="26" width="72" height="36" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+        <text class="netx2-t" x="50"  y="48" text-anchor="middle" font-size="10" fill="var(--text)">Client</text>
+        <rect x="434" y="26" width="72" height="36" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+        <text class="netx2-t" x="470" y="48" text-anchor="middle" font-size="10" fill="var(--text)">Server</text>
+        <line x1="86" y1="44" x2="434" y2="44" stroke="var(--border)" stroke-width="2"/>
+        <text class="netx2-mono" x="50" y="60" text-anchor="middle" font-size="7.5" fill="var(--text-muted)">:50314</text>
+        <text class="netx2-mono" x="470" y="60" text-anchor="middle" font-size="7.5" fill="var(--text-muted)">:443</text>
+
+        <g class="netx2-tcp-syn">
+          <circle cx="92" cy="44" r="7" fill="var(--accent)"/>
+          <text class="netx2-t" x="92" y="33" text-anchor="middle" font-size="9" font-weight="700" fill="var(--accent)">SYN</text></g>
+        <g class="netx2-tcp-sa">
+          <circle cx="92" cy="44" r="7" fill="var(--accent-2)"/>
+          <text class="netx2-t" x="92" y="33" text-anchor="middle" font-size="9" font-weight="700" fill="var(--accent-2)">SYN-ACK</text></g>
+        <g class="netx2-tcp-ack">
+          <circle cx="92" cy="44" r="7" fill="var(--accent)"/>
+          <text class="netx2-t" x="92" y="33" text-anchor="middle" font-size="9" font-weight="700" fill="var(--accent)">ACK</text></g>
+        <text class="netx2-tcp-ok netx2-t" x="260" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#9ece6a">✓ connected — data flows in order</text>
+
+        <!-- UDP lane -->
+        <text class="netx2-t" x="14" y="128" font-size="11" font-weight="700" fill="var(--accent-2)">UDP · fire &amp; forget</text>
+        <rect x="14"  y="138" width="72" height="36" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+        <text class="netx2-t" x="50"  y="160" text-anchor="middle" font-size="10" fill="var(--text)">Client</text>
+        <rect x="434" y="138" width="72" height="36" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+        <text class="netx2-t" x="470" y="160" text-anchor="middle" font-size="10" fill="var(--text)">Server</text>
+        <line x1="86" y1="156" x2="434" y2="156" stroke="var(--border)" stroke-width="2"/>
+
+        <g class="netx2-udp1"><circle cx="92" cy="156" r="7" fill="var(--accent-2)"/></g>
+        <g class="netx2-udp2"><circle cx="92" cy="156" r="7" fill="var(--accent-2)"/>
+          <text class="netx2-t" x="92" y="145" text-anchor="middle" font-size="8.5" fill="#f7768e">lost ✕</text></g>
+        <g class="netx2-udp3"><circle cx="92" cy="156" r="7" fill="var(--accent-2)"/></g>
+      </svg>
+    </div>
 
     <div class="block-desc">
       <span>TCP provides reliable, ordered delivery with flow control and congestion management; UDP offers fast, connectionless datagrams.</span>
@@ -417,6 +871,31 @@ Prevents fast sender from overwhelming slow receiver.
   <!-- ══ DNS ═══════════════════════════════════════════════════════════ -->
   <section id="dns">
     <h2>DNS — Domain Name System</h2>
+
+    <div class="netx2-wrap">
+      <p class="netx2-cap">A <strong>DNS</strong> lookup turns a name you can read into an IP address the network can route to.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 150" role="img"
+           aria-label="The browser sends the name example.com to a DNS resolver, which replies with the IP address 93.184.216.34.">
+        <rect x="14" y="42" width="100" height="58" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <rect x="24" y="52" width="80" height="24" rx="4" fill="var(--code-bg)"/>
+        <text class="netx2-dns-ok netx2-t" x="64" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#9ece6a">✓ 93.184…</text>
+        <text class="netx2-t" x="64" y="92" text-anchor="middle" font-size="10" fill="var(--text)">Browser</text>
+
+        <line x1="114" y1="71" x2="406" y2="71" stroke="var(--border)" stroke-width="2"/>
+
+        <rect class="netx2-dns-pulse" x="406" y="40" width="100" height="62" rx="10" fill="var(--accent-subtle)"/>
+        <rect x="406" y="42" width="100" height="58" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="456" y="67" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent)">DNS</text>
+        <text class="netx2-t" x="456" y="83" text-anchor="middle" font-size="8.5" fill="var(--text-muted)">resolver</text>
+
+        <g class="netx2-dns-q">
+          <rect x="118" y="60" width="104" height="22" rx="11" fill="var(--accent-subtle)" stroke="var(--accent)"/>
+          <text class="netx2-mono" x="170" y="75" text-anchor="middle" font-size="9.5" fill="var(--accent)">example.com ?</text></g>
+        <g class="netx2-dns-r">
+          <rect x="112" y="60" width="116" height="22" rx="11" fill="var(--accent-subtle-2)" stroke="var(--accent-2)"/>
+          <text class="netx2-mono" x="170" y="75" text-anchor="middle" font-size="9.5" fill="var(--accent-2)">93.184.216.34</text></g>
+      </svg>
+    </div>
 
     <div class="block-desc">
       <span>DNS resolves human-readable domain names to IP addresses, using a hierarchical distributed database of record types.</span>
@@ -575,6 +1054,41 @@ sudo killall -HUP mDNSResponder</pre>
   <!-- ══ VPN ═══════════════════════════════════════════════════════════ -->
   <section id="vpn">
     <h2>VPN — Virtual Private Network</h2>
+
+    <div class="netx2-wrap">
+      <p class="netx2-cap">Both ends <strong>exchange keys</strong>, lock the channel, then your readable text becomes <strong>ciphertext</strong> in transit &mdash; the same idea behind a TLS/HTTPS handshake.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 170" role="img"
+           aria-label="Two endpoints exchange keys to form an encrypted tunnel, after which plaintext HELLO is turned into ciphertext as it crosses to the server.">
+        <rect x="14" y="58" width="92" height="54" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="60" y="90" text-anchor="middle" font-size="10" fill="var(--text)">You</text>
+        <rect x="414" y="58" width="92" height="54" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="460" y="90" text-anchor="middle" font-size="10" fill="var(--text)">Server</text>
+
+        <line x1="106" y1="85" x2="414" y2="85" stroke="var(--border)" stroke-width="3" stroke-linecap="round"/>
+        <line class="netx2-vpn-enc" x1="106" y1="85" x2="414" y2="85" stroke="var(--accent-2)" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/>
+
+        <!-- key exchange -->
+        <g class="netx2-vpn-kl">
+          <circle cx="238" cy="85" r="5.5" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+          <rect x="241" y="83.5" width="12" height="3" fill="var(--accent)"/>
+          <text class="netx2-t" x="238" y="68" text-anchor="middle" font-size="8.5" fill="var(--text-muted)">key</text></g>
+        <g class="netx2-vpn-kr">
+          <circle cx="282" cy="85" r="5.5" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+          <rect x="267" y="83.5" width="12" height="3" fill="var(--accent)"/>
+          <text class="netx2-t" x="282" y="68" text-anchor="middle" font-size="8.5" fill="var(--text-muted)">key</text></g>
+
+        <!-- lock: channel secured -->
+        <g class="netx2-vpn-lock">
+          <rect x="248" y="70" width="24" height="18" rx="3" fill="var(--accent)"/>
+          <path d="M252 70 v-4 a8 8 0 0 1 16 0 v4" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+          <circle cx="260" cy="79" r="2.4" fill="var(--surface)"/>
+        </g>
+
+        <!-- plaintext -> ciphertext -->
+        <text class="netx2-vpn-pt netx2-mono" x="150" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">HELLO</text>
+        <text class="netx2-vpn-ct netx2-mono" x="150" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent-2)">§∎#Ø</text>
+      </svg>
+    </div>
 
     <div class="block-desc">
       <span>VPN creates an encrypted tunnel over a public network to securely connect remote sites or users.</span>
@@ -796,6 +1310,33 @@ push "redirect-gateway def1 bypass-dhcp"
   <section id="nat">
     <h2>NAT — Network Address Translation</h2>
 
+    <div class="netx2-wrap">
+      <p class="netx2-cap">NAT rewrites a packet's <strong>private IP</strong> and port into a shared <strong>public IP</strong> and port as it heads out to the internet.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 150" role="img"
+           aria-label="A packet from private address 192.168.1.10 passes through a NAT router and leaves with public address 203.0.113.1.">
+        <rect x="14" y="46" width="108" height="50" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t"    x="68" y="68" text-anchor="middle" font-size="9.5" fill="var(--text)">Private host</text>
+        <text class="netx2-mono" x="68" y="84" text-anchor="middle" font-size="9"   fill="var(--text-muted)">192.168.1.10</text>
+
+        <rect class="netx2-nat-pulse" x="224" y="44" width="72" height="54" rx="10" fill="var(--accent-subtle)"/>
+        <rect x="226" y="46" width="68" height="50" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="260" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent)">NAT</text>
+
+        <rect x="398" y="46" width="108" height="50" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t"    x="452" y="68" text-anchor="middle" font-size="9.5" fill="var(--text)">Internet</text>
+        <text class="netx2-mono" x="452" y="84" text-anchor="middle" font-size="9"   fill="var(--text-muted)">203.0.113.1</text>
+
+        <line x1="122" y1="71" x2="398" y2="71" stroke="var(--border)" stroke-width="2"/>
+
+        <g class="netx2-nat-a">
+          <circle cx="128" cy="71" r="7" fill="var(--accent)"/>
+          <text class="netx2-mono" x="128" y="58" text-anchor="middle" font-size="8.5" fill="var(--accent)">:52001</text></g>
+        <g class="netx2-nat-b">
+          <circle cx="128" cy="71" r="7" fill="var(--accent-2)"/>
+          <text class="netx2-mono" x="128" y="58" text-anchor="middle" font-size="8.5" fill="var(--accent-2)">:40001</text></g>
+      </svg>
+    </div>
+
     <div class="block-desc">
       <span>NAT translates private internal IP addresses to a public IP, allowing multiple devices to share one internet connection.</span>
       <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
@@ -956,6 +1497,31 @@ Solution: IPv6, CGNAT-aware protocols, DS-Lite.</pre>
   <section id="proxy">
     <h2>Proxy — Forward &amp; Reverse</h2>
 
+    <div class="netx2-wrap">
+      <p class="netx2-cap">A proxy relays the <strong>HTTP request</strong> on to the server and passes the <strong>response</strong> back &mdash; both hops run through the middle.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 160" role="img"
+           aria-label="A GET request travels from the client through the proxy to the server, and a 200 OK response travels back the same way.">
+        <rect x="14" y="54" width="92" height="52" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="60" y="84" text-anchor="middle" font-size="10" fill="var(--text)">Client</text>
+
+        <rect class="netx2-http-pulse" x="212" y="52" width="96" height="56" rx="10" fill="var(--accent-subtle)"/>
+        <rect x="214" y="54" width="92" height="52" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="260" y="84" text-anchor="middle" font-size="10" font-weight="700" fill="var(--accent)">Proxy</text>
+
+        <rect x="414" y="54" width="92" height="52" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="460" y="84" text-anchor="middle" font-size="10" fill="var(--text)">Server</text>
+
+        <line x1="106" y1="80" x2="414" y2="80" stroke="var(--border)" stroke-width="2"/>
+
+        <g class="netx2-http-get">
+          <rect x="88" y="69" width="52" height="22" rx="11" fill="var(--accent-subtle)" stroke="var(--accent)"/>
+          <text class="netx2-mono" x="114" y="84" text-anchor="middle" font-size="9" fill="var(--accent)">GET /</text></g>
+        <g class="netx2-http-res">
+          <rect x="84" y="69" width="60" height="22" rx="11" fill="var(--accent-subtle-2)" stroke="var(--accent-2)"/>
+          <text class="netx2-mono" x="114" y="84" text-anchor="middle" font-size="9" fill="var(--accent-2)">200 OK</text></g>
+      </svg>
+    </div>
+
     <div class="block-desc">
       <span>A proxy server sits between clients and servers, mediating requests for security, caching, or load balancing.</span>
       <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
@@ -1109,6 +1675,32 @@ upstream app_random {
   <!-- ══ FIREWALLS ════════════════════════════════════════════════════ -->
   <section id="firewall">
     <h2>Firewalls</h2>
+
+    <div class="netx2-wrap">
+      <p class="netx2-cap">A firewall checks every packet against its rules &mdash; <strong>allowed</strong> traffic passes through, <strong>blocked</strong> traffic stops at the wall.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 170" role="img"
+           aria-label="Packets approach a firewall wall; allowed packets pass to the protected side while a blocked packet stops at the wall and is dropped.">
+        <text class="netx2-t" x="14"  y="20" font-size="10" fill="var(--text-muted)">Traffic in</text>
+        <text class="netx2-t" x="506" y="20" text-anchor="end" font-size="10" fill="var(--text-muted)">Protected</text>
+
+        <!-- wall -->
+        <rect x="248" y="22" width="22" height="126" rx="4" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"/>
+        <line x1="248" y1="52"  x2="270" y2="52"  stroke="var(--border)"/>
+        <line x1="248" y1="85"  x2="270" y2="85"  stroke="var(--border)"/>
+        <line x1="248" y1="118" x2="270" y2="118" stroke="var(--border)"/>
+        <line x1="259" y1="22"  x2="259" y2="52"  stroke="var(--border)"/>
+        <line x1="259" y1="85"  x2="259" y2="118" stroke="var(--border)"/>
+        <text class="netx2-t" x="259" y="162" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--accent)">firewall</text>
+
+        <g class="netx2-fw-ok1"><circle cx="36" cy="85" r="8" fill="#9ece6a"/></g>
+        <g class="netx2-fw-ok3"><circle cx="36" cy="85" r="8" fill="#9ece6a"/></g>
+        <g class="netx2-fw-bad"><circle cx="36" cy="85" r="8" fill="#f7768e"/></g>
+        <g class="netx2-fw-x">
+          <line x1="238" y1="66" x2="256" y2="84" stroke="#f7768e" stroke-width="3" stroke-linecap="round"/>
+          <line x1="256" y1="66" x2="238" y2="84" stroke="#f7768e" stroke-width="3" stroke-linecap="round"/>
+          <text class="netx2-t" x="247" y="106" text-anchor="middle" font-size="9" font-weight="700" fill="#f7768e">dropped</text></g>
+      </svg>
+    </div>
 
     <div class="block-desc">
       <span>Firewalls control network traffic by enforcing rules — filtering packets, tracking state, or inspecting application content.</span>
@@ -1342,6 +1934,30 @@ table inet filter {
   <section id="ids-ips">
     <h2>IDS / IPS — Intrusion Detection &amp; Prevention</h2>
 
+    <div class="netx2-wrap">
+      <p class="netx2-cap">An inline <strong>IPS</strong> inspects the stream: clean packets pass, a matched threat raises an <strong>alert</strong> and is dropped in real time.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 170" role="img"
+           aria-label="Traffic flows through an inline IPS sensor; clean packets pass to the clean side, while a malicious packet triggers an alert and is dropped at the sensor.">
+        <text class="netx2-t" x="14"  y="20" font-size="10" fill="var(--text-muted)">Traffic</text>
+        <text class="netx2-t" x="506" y="20" text-anchor="end" font-size="10" fill="var(--text-muted)">Clean</text>
+
+        <rect class="netx2-ips-alert" x="226" y="42" width="76" height="68" rx="10" fill="var(--accent-subtle-2)"/>
+        <rect x="228" y="44" width="72" height="64" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <circle cx="258" cy="74" r="9" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="265" y1="81" x2="273" y2="89" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <text class="netx2-t" x="264" y="104" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--accent)">IPS</text>
+
+        <line x1="34" y1="80" x2="486" y2="80" stroke="var(--border)" stroke-width="2"/>
+
+        <g class="netx2-ips-c1"><circle cx="34" cy="80" r="8" fill="#9ece6a"/></g>
+        <g class="netx2-ips-c2"><circle cx="34" cy="80" r="8" fill="#9ece6a"/></g>
+        <g class="netx2-ips-mal"><circle cx="34" cy="80" r="8" fill="#f7768e"/></g>
+        <g class="netx2-ips-alert">
+          <text class="netx2-t" x="264" y="34" text-anchor="middle" font-size="13" fill="#f7768e">⚠</text>
+          <text class="netx2-t" x="264" y="128" text-anchor="middle" font-size="9" font-weight="700" fill="#f7768e">threat blocked</text></g>
+      </svg>
+    </div>
+
     <div class="block-desc">
       <span>IDS monitors traffic and alerts on suspicious activity; IPS sits inline and actively blocks threats.</span>
       <a class="w3-link" href="https://www.w3schools.com/tags/ref_networking.asp" target="_blank">W3Schools →</a>
@@ -1523,6 +2139,35 @@ classtype:...     <span class="c"># categorized alert type</span></pre>
   <!-- ══ LOAD BALANCERS ═══════════════════════════════════════════════ -->
   <section id="loadbalancer">
     <h2>Load Balancers</h2>
+
+    <div class="netx2-wrap">
+      <p class="netx2-cap">A load balancer spreads incoming requests across the <strong>server pool</strong> &mdash; here, round-robin sends each one to the next server.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 200" role="img"
+           aria-label="Requests from a client reach a load balancer, which forwards each successive request to a different server in a pool of three.">
+        <rect x="14" y="82" width="78" height="44" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="53" y="108" text-anchor="middle" font-size="10" fill="var(--text)">Client</text>
+
+        <rect x="206" y="78" width="80" height="52" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="246" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="var(--accent)">LB</text>
+        <text class="netx2-t" x="246" y="114" text-anchor="middle" font-size="7.5" fill="var(--text-muted)">round-robin</text>
+
+        <rect x="420" y="16"  width="86" height="40" rx="9" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+        <text class="netx2-t" x="463" y="40"  text-anchor="middle" font-size="9.5" fill="var(--text)">Server 1</text>
+        <rect x="420" y="80"  width="86" height="40" rx="9" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+        <text class="netx2-t" x="463" y="104" text-anchor="middle" font-size="9.5" fill="var(--text)">Server 2</text>
+        <rect x="420" y="144" width="86" height="40" rx="9" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+        <text class="netx2-t" x="463" y="168" text-anchor="middle" font-size="9.5" fill="var(--text)">Server 3</text>
+
+        <line x1="92"  y1="104" x2="206" y2="104" stroke="var(--border)" stroke-width="2"/>
+        <line x1="286" y1="104" x2="420" y2="36"  stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="286" y1="104" x2="420" y2="100" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="286" y1="104" x2="420" y2="164" stroke="var(--border)" stroke-width="1.5"/>
+
+        <g class="netx2-lb-r1"><circle cx="92" cy="104" r="7" fill="var(--accent)"/></g>
+        <g class="netx2-lb-r2"><circle cx="92" cy="104" r="7" fill="var(--accent-2)"/></g>
+        <g class="netx2-lb-r3"><circle cx="92" cy="104" r="7" fill="var(--accent)"/></g>
+      </svg>
+    </div>
 
     <div class="block-desc">
       <span>Load balancers distribute incoming traffic across multiple servers to ensure high availability and performance.</span>
@@ -1772,6 +2417,36 @@ backend api_servers
   <section id="waf">
     <h2>WAF — Web Application Firewall</h2>
 
+    <div class="netx2-wrap">
+      <p class="netx2-cap">A WAF inspects HTTP payloads: a clean request reaches the app, while a malicious one (like SQL injection) is blocked with <strong>403</strong>.</p>
+      <svg class="netx2-svg" viewBox="0 0 520 175" role="img"
+           aria-label="A clean GET request passes through the WAF to the web app, while a request containing a SQL injection payload is blocked at the WAF with a 403 response.">
+        <rect x="14" y="56" width="88" height="52" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="58" y="86" text-anchor="middle" font-size="10" fill="var(--text)">Client</text>
+
+        <path d="M260 44 l44 14 v22 c0 26 -20 40 -44 48 c-24 -8 -44 -22 -44 -48 v-22 Z"
+              fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="260" y="86" text-anchor="middle" font-size="10" font-weight="700" fill="var(--accent)">WAF</text>
+
+        <rect x="418" y="56" width="88" height="52" rx="10" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text class="netx2-t" x="462" y="86" text-anchor="middle" font-size="10" fill="var(--text)">Web app</text>
+
+        <line x1="102" y1="82" x2="418" y2="82" stroke="var(--border)" stroke-width="2"/>
+
+        <g class="netx2-waf-ok1">
+          <rect x="84" y="71" width="52" height="22" rx="11" fill="var(--accent-subtle-2)" stroke="var(--accent-2)"/>
+          <text class="netx2-mono" x="110" y="86" text-anchor="middle" font-size="9" fill="var(--accent-2)">GET /</text></g>
+        <g class="netx2-waf-ok2">
+          <rect x="84" y="71" width="52" height="22" rx="11" fill="var(--accent-subtle-2)" stroke="var(--accent-2)"/>
+          <text class="netx2-mono" x="110" y="86" text-anchor="middle" font-size="9" fill="var(--accent-2)">GET /</text></g>
+        <g class="netx2-waf-bad">
+          <rect x="78" y="71" width="64" height="22" rx="11" fill="rgba(247,118,142,0.16)" stroke="#f7768e"/>
+          <text class="netx2-mono" x="110" y="86" text-anchor="middle" font-size="8.5" fill="#f7768e">' OR 1=1</text></g>
+        <g class="netx2-waf-403">
+          <text class="netx2-t" x="260" y="140" text-anchor="middle" font-size="10" font-weight="700" fill="#f7768e">403 blocked</text></g>
+      </svg>
+    </div>
+
     <div class="block-desc">
       <span>A WAF protects web applications by filtering and monitoring HTTP/HTTPS traffic against common attacks like SQLi, XSS, and CSRF.</span>
       <a class="w3-link" href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools →</a>
@@ -1912,7 +2587,7 @@ location /api/ {
 </main>
 
 <footer>Networking Cheatsheet &mdash; network security &amp; infrastructure reference</footer>
-<script src="js/script.js"></script>
+<script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

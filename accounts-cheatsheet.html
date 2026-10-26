@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accounts &amp; IAM &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css?v=8" />
+
+  <style>
+    /* ══ acx- : Accounts & IAM — ALL page graphics + animations ════════════
+       Beginner-first login / identity explainers. Text, rails and surfaces
+       pull from the theme CSS variables so BOTH light and dark read well.
+       Only the moving parts use a few fixed accent hues (the page palette):
+       amber #e0b366 · rose #e8808f · blue #7aa2f7 · green #9ece6a ·
+       violet #bb9af7 · plus var(--accent). Everything is inline SVG/CSS —
+       no libraries, no network — and all motion stops under reduced-motion. */
+
+    .acx-panel {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin: 0 0 0.6rem;
+      overflow-x: auto;
+    }
+    .acx-svg { width: 100%; display: block; }
+    .acx-hero-svg { min-width: 600px; }
+    .acx-flow-svg { min-width: 460px; }
+
+    .acx-cap {
+      display: block;
+      margin: 0 0.15rem 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .acx-cap code, .acx-note code, .acx-real code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      background: var(--accent-subtle);
+      border: 1px solid var(--accent-subtle-2);
+      padding: 0.03rem 0.38rem;
+      border-radius: var(--radius-xs);
+    }
+
+    /* "Why it matters" + real-world lines inside live panels */
+    .acx-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .acx-note strong { color: var(--text); }
+    .acx-real {
+      margin-top: 0.65rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .acx-real b { color: var(--accent); font-weight: 600; }
+
+    /* SVG text / rails themed through the variables */
+    .acx-label { fill: var(--code-text); opacity: 0.66; font-family: 'Inter', -apple-system, sans-serif; }
+    .acx-mono  { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+    .acx-rail  { stroke: var(--code-text); opacity: 0.14; stroke-width: 2; stroke-linecap: round; }
+
+    /* Legend under the hero */
+    .acx-legend {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.5rem 1.3rem;
+      font-size: 0.77rem; color: var(--text-muted);
+      margin: 0 0.15rem 1.6rem; line-height: 1.5;
+    }
+    .acx-legend-item { display: inline-flex; align-items: center; gap: 0.45rem; }
+    .acx-chip {
+      width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0;
+    }
+    .acx-chip.k { background: #e8808f; }   /* credentials */
+    .acx-chip.q { background: #bb9af7; }   /* lookup */
+    .acx-chip.m { background: #9ece6a; }   /* match */
+    .acx-chip.t { background: #e0b366; }   /* token */
+
+    .acx-replay {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin: 0 0 1.4rem; padding: 0.35rem 0.8rem;
+      font-size: 0.73rem; font-weight: 600; font-family: inherit;
+      color: var(--accent); background: var(--accent-subtle);
+      border: 1px solid var(--accent-subtle-2); border-radius: 99px;
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
+    }
+    .acx-replay:hover { background: var(--accent-subtle-2); transform: scale(1.03); }
+
+    /* ── HERO: how login works ─────────────────────────────────────────
+       Four coloured packets cross a timeline: you send credentials (rose),
+       the app looks them up (violet), the store confirms a match (green),
+       the app issues a token (amber), and access unlocks.                  */
+    .acx-replaying .acx-pkt1, .acx-replaying .acx-pkt2,
+    .acx-replaying .acx-pkt3, .acx-replaying .acx-pkt4,
+    .acx-replaying .acx-unlock { animation: none; }
+
+    .acx-pkt1 { animation: acx-pkt1 13s ease-in-out infinite; }
+    @keyframes acx-pkt1 {
+      0%   { transform: translateX(0);     opacity: 0; }
+      3%   { opacity: 1; }
+      15%  { transform: translateX(110px); opacity: 1; }
+      19%  { transform: translateX(110px); opacity: 0; }
+      100% { transform: translateX(110px); opacity: 0; }
+    }
+    .acx-pkt2 { animation: acx-pkt2 13s ease-in-out infinite; }
+    @keyframes acx-pkt2 {
+      0%,19%  { transform: translateX(0);     opacity: 0; }
+      23%     { opacity: 1; }
+      34%     { transform: translateX(110px); opacity: 1; }
+      38%     { transform: translateX(110px); opacity: 0; }
+      100%    { opacity: 0; }
+    }
+    .acx-pkt3 { animation: acx-pkt3 13s ease-in-out infinite; }
+    @keyframes acx-pkt3 {
+      0%,39%  { transform: translateX(0);      opacity: 0; }
+      43%     { opacity: 1; }
+      54%     { transform: translateX(-110px); opacity: 1; }
+      58%     { transform: translateX(-110px); opacity: 0; }
+      100%    { opacity: 0; }
+    }
+    .acx-pkt4 { animation: acx-pkt4 13s ease-in-out infinite; }
+    @keyframes acx-pkt4 {
+      0%,58%  { transform: translateX(0);      opacity: 0; }
+      62%     { opacity: 1; }
+      76%     { transform: translateX(-110px); opacity: 1; }
+      80%     { transform: translateX(-110px); opacity: 1; }
+      86%     { opacity: 1; }
+      100%    { transform: translateX(-110px); opacity: 0; }
+    }
+    .acx-unlock { animation: acx-unlock 13s ease-in-out infinite; transform-origin: center; }
+    @keyframes acx-unlock {
+      0%,80%  { opacity: 0; transform: scale(0.6); }
+      86%     { opacity: 1; transform: scale(1.08); }
+      90%     { transform: scale(1); }
+      98%     { opacity: 1; }
+      100%    { opacity: 0; }
+    }
+
+    /* ── Passwords & hashing: plaintext → salted hash ──────────────────── */
+    .acx-hash-in { animation: acx-hash-in 7s ease-in-out infinite; }
+    @keyframes acx-hash-in {
+      0%   { transform: translateX(0);     opacity: 0; }
+      7%   { opacity: 1; }
+      40%  { transform: translateX(132px); opacity: 1; }
+      47%  { transform: translateX(132px); opacity: 0; }
+      100% { transform: translateX(132px); opacity: 0; }
+    }
+    .acx-hash-out { animation: acx-hash-out 7s ease-in-out infinite; }
+    @keyframes acx-hash-out {
+      0%,50% { transform: translateX(0);     opacity: 0; }
+      57%    { opacity: 1; }
+      92%    { transform: translateX(140px); opacity: 1; }
+      97%    { opacity: 0; }
+      100%   { opacity: 0; }
+    }
+    .acx-salt { animation: acx-salt 7s ease-in-out infinite; }
+    @keyframes acx-salt {
+      0%,20% { transform: translateY(0);    opacity: 0; }
+      30%    { opacity: 1; }
+      46%    { transform: translateY(20px); opacity: 1; }
+      52%    { opacity: 0; }
+      100%   { opacity: 0; }
+    }
+
+    /* ── MFA: a dot clears password, then OTP, then access ─────────────── */
+    .acx-mfa-dot { animation: acx-mfa-dot 11s ease-in-out infinite; }
+    @keyframes acx-mfa-dot {
+      0%   { transform: translateX(0);     opacity: 0; }
+      5%   { transform: translateX(0);     opacity: 1; }
+      20%  { transform: translateX(0);     opacity: 1; }
+      33%  { transform: translateX(171px); opacity: 1; }
+      55%  { transform: translateX(171px); opacity: 1; }
+      68%  { transform: translateX(342px); opacity: 1; }
+      92%  { transform: translateX(342px); opacity: 1; }
+      100% { transform: translateX(342px); opacity: 0; }
+    }
+    .acx-mfa-code { animation: acx-mfa-code 11s ease-in-out infinite; }
+    @keyframes acx-mfa-code {
+      0%,22%  { opacity: 0; }
+      30%     { opacity: 1; }
+      56%     { opacity: 1; }
+      62%     { opacity: 0.25; }
+      100%    { opacity: 0.25; }
+    }
+    .acx-mfa-unlock { animation: acx-mfa-unlock 11s ease-in-out infinite; transform-origin: center; }
+    @keyframes acx-mfa-unlock {
+      0%,66%  { opacity: 0; transform: scale(0.6); }
+      72%     { opacity: 1; transform: scale(1.1); }
+      78%     { transform: scale(1); }
+      100%    { opacity: 1; }
+    }
+
+    /* ── IAM: role lands on a user, then permissions light up ──────────── */
+    .acx-iam-role { animation: acx-iam-role 9s ease-in-out infinite; }
+    @keyframes acx-iam-role {
+      0%   { transform: translateY(-26px); opacity: 0; }
+      10%  { transform: translateY(-26px); opacity: 0; }
+      22%  { transform: translateY(0);     opacity: 1; }
+      100% { transform: translateY(0);     opacity: 1; }
+    }
+    .acx-iam-act1 { animation: acx-iam-light 9s ease-in-out infinite; }
+    .acx-iam-act2 { animation: acx-iam-light 9s ease-in-out infinite; animation-delay: -8.1s; }
+    .acx-iam-act3 { animation: acx-iam-light 9s ease-in-out infinite; animation-delay: -7.2s; }
+    @keyframes acx-iam-light {
+      0%,40%  { opacity: 0.2; }
+      48%     { opacity: 1; }
+      100%    { opacity: 1; }
+    }
+
+    /* ── SSO: one key, several apps unlock in turn ─────────────────────── */
+    .acx-sso-key { animation: acx-sso-key 9s ease-in-out infinite; transform-origin: 96px 86px; }
+    @keyframes acx-sso-key {
+      0%,12% { transform: rotate(0deg); }
+      22%    { transform: rotate(-32deg); }
+      34%    { transform: rotate(0deg); }
+      100%   { transform: rotate(0deg); }
+    }
+    .acx-sso-u1 { animation: acx-sso-unlock 9s ease-in-out infinite; animation-delay: -8.2s; transform-origin: center; }
+    .acx-sso-u2 { animation: acx-sso-unlock 9s ease-in-out infinite; animation-delay: -7.4s; transform-origin: center; }
+    .acx-sso-u3 { animation: acx-sso-unlock 9s ease-in-out infinite; animation-delay: -6.6s; transform-origin: center; }
+    @keyframes acx-sso-unlock {
+      0%,34%  { opacity: 0; transform: scale(0.5); }
+      42%     { opacity: 1; transform: scale(1.12); }
+      48%     { transform: scale(1); }
+      100%    { opacity: 1; }
+    }
+    .acx-sso-l1 { animation: acx-sso-lock 9s ease-in-out infinite; animation-delay: -8.2s; }
+    .acx-sso-l2 { animation: acx-sso-lock 9s ease-in-out infinite; animation-delay: -7.4s; }
+    .acx-sso-l3 { animation: acx-sso-lock 9s ease-in-out infinite; animation-delay: -6.6s; }
+    @keyframes acx-sso-lock {
+      0%,34% { opacity: 1; }
+      42%    { opacity: 0; }
+      100%   { opacity: 0; }
+    }
+
+    /* ── SAML: user ↔ SP ↔ IdP round trip ──────────────────────────────── */
+    .acx-saml-p1 { animation: acx-saml-p1 12s ease-in-out infinite; }
+    @keyframes acx-saml-p1 {
+      0%   { transform: translateX(0);    opacity: 0; }
+      4%   { opacity: 1; }
+      16%  { transform: translateX(55px); opacity: 1; }
+      20%  { transform: translateX(55px); opacity: 0; }
+      100% { opacity: 0; }
+    }
+    .acx-saml-p2 { animation: acx-saml-p2 12s ease-in-out infinite; }
+    @keyframes acx-saml-p2 {
+      0%,21% { transform: translateX(0);    opacity: 0; }
+      25%    { opacity: 1; }
+      37%    { transform: translateX(55px); opacity: 1; }
+      41%    { transform: translateX(55px); opacity: 0; }
+      100%   { opacity: 0; }
+    }
+    .acx-saml-auth { animation: acx-saml-auth 12s ease-in-out infinite; transform-origin: center; }
+    @keyframes acx-saml-auth {
+      0%,42%  { opacity: 0; transform: scale(0.6); }
+      48%     { opacity: 1; transform: scale(1.1); }
+      54%     { transform: scale(1); }
+      60%     { opacity: 1; }
+      64%     { opacity: 0; }
+      100%    { opacity: 0; }
+    }
+    .acx-saml-p3 { animation: acx-saml-p3 12s ease-in-out infinite; }
+    @keyframes acx-saml-p3 {
+      0%,64% { transform: translateX(0);     opacity: 0; }
+      68%    { opacity: 1; }
+      82%    { transform: translateX(-55px); opacity: 1; }
+      86%    { transform: translateX(-55px); opacity: 0; }
+      100%   { opacity: 0; }
+    }
+    .acx-saml-ok { animation: acx-saml-ok 12s ease-in-out infinite; transform-origin: center; }
+    @keyframes acx-saml-ok {
+      0%,86%  { opacity: 0; transform: scale(0.6); }
+      92%     { opacity: 1; transform: scale(1.1); }
+      96%     { transform: scale(1); }
+      100%    { opacity: 1; }
+    }
+
+    /* ── OAuth: the token hand-off ─────────────────────────────────────── */
+    .acx-oauth-ask { animation: acx-oauth-ask 10s ease-in-out infinite; }
+    @keyframes acx-oauth-ask {
+      0%   { transform: translateX(0);     opacity: 0; }
+      5%   { opacity: 1; }
+      26%  { transform: translateX(250px); opacity: 1; }
+      31%  { transform: translateX(250px); opacity: 0; }
+      100% { opacity: 0; }
+    }
+    .acx-oauth-tok { animation: acx-oauth-tok 10s ease-in-out infinite; }
+    @keyframes acx-oauth-tok {
+      0%,40% { transform: translateX(0);      opacity: 0; }
+      46%    { opacity: 1; }
+      74%    { transform: translateX(-250px); opacity: 1; }
+      80%    { transform: translateX(-250px); opacity: 1; }
+      86%    { opacity: 1; }
+      100%   { transform: translateX(-250px); opacity: 0; }
+    }
+    .acx-oauth-ok { animation: acx-oauth-ok 10s ease-in-out infinite; transform-origin: center; }
+    @keyframes acx-oauth-ok {
+      0%,80%  { opacity: 0; transform: scale(0.6); }
+      87%     { opacity: 1; transform: scale(1.1); }
+      92%     { transform: scale(1); }
+      100%    { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .acx-legend { font-size: 0.72rem; gap: 0.4rem 0.9rem; }
+    }
+
+    /* Respect users who prefer no motion: park everything in a readable state */
+    @media (prefers-reduced-motion: reduce) {
+      .acx-pkt1, .acx-pkt2, .acx-pkt3, .acx-pkt4, .acx-unlock,
+      .acx-hash-in, .acx-hash-out, .acx-salt,
+      .acx-mfa-dot, .acx-mfa-code, .acx-mfa-unlock,
+      .acx-iam-role, .acx-iam-act1, .acx-iam-act2, .acx-iam-act3,
+      .acx-sso-key, .acx-sso-u1, .acx-sso-u2, .acx-sso-u3,
+      .acx-sso-l1, .acx-sso-l2, .acx-sso-l3,
+      .acx-saml-p1, .acx-saml-p2, .acx-saml-p3, .acx-saml-auth, .acx-saml-ok,
+      .acx-oauth-ask, .acx-oauth-tok, .acx-oauth-ok {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">📚 Cheatsheets</div>
+    <div class="search-wrap">
+      <input type="search" id="search" placeholder="Search..." />
+      <kbd class="shortcut-hint">/</kbd>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+      <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </aside>
+  <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+  <script src="js/header.js?v=8"></script>
+  <script>renderHeader('Accounts')</script>
+  <script>renderSourceLink('Accounts')</script>
+
+  <main>
+
+    <div class="page-header">
+      <h1>Accounts &amp; IAM</h1>
+      <p class="subtitle">How logging in actually works — passwords, 2FA, roles and single sign-on, explained from zero</p>
+      <span id="source-link"></span>
+      <nav class="toc">
+        <a href="#overview">How login works</a>
+        <a href="#passwords">Passwords &amp; hashing</a>
+        <a href="#mfa">MFA / 2FA</a>
+        <a href="#iam">IAM</a>
+        <a href="#sso">SSO</a>
+        <a href="#saml">SAML</a>
+        <a href="#oauth">OAuth</a>
+      </nav>
+    </div>
+
+    <!-- ══ HERO: HOW LOGIN WORKS ═══════════════════════════════════════ -->
+    <section id="overview">
+      <h2>How Login Works</h2>
+
+      <div class="block-desc">
+        <span>You type your email and password, the app checks them against your stored (hashed) credentials, and on success it hands you a <strong>session token</strong> — a wristband that keeps you logged in.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/Authentication" target="_blank">MDN →</a>
+      </div>
+
+      <div class="acx-panel">
+        <svg class="acx-svg acx-hero-svg" viewBox="0 0 760 232" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="Login flow: you send email and password to the app, the app checks the credential store, the store confirms a match, the app issues a session token, and access is granted.">
+          <defs>
+            <marker id="acx-h-k" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e8808f"/></marker>
+            <marker id="acx-h-q" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#bb9af7"/></marker>
+          </defs>
+
+          <!-- rails -->
+          <line class="acx-rail" x1="174" y1="98" x2="305" y2="98"/>
+          <line class="acx-rail" x1="455" y1="98" x2="586" y2="98"/>
+
+          <!-- ── You (blue) ── -->
+          <rect x="24" y="46" width="150" height="104" rx="13" fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.42)" stroke-width="1.5"/>
+          <text x="99" y="80" text-anchor="middle" font-size="22">🧑‍💻</text>
+          <text x="99" y="104" text-anchor="middle" class="acx-label" font-size="10.5" fill="#7aa2f7" font-weight="700">You</text>
+          <text x="99" y="121" text-anchor="middle" class="acx-label" font-size="8.3">enter email + password</text>
+          <!-- access-granted badge that appears at the end -->
+          <g class="acx-unlock">
+            <circle cx="99" cy="98" r="19" fill="rgba(158,206,106,0.18)" stroke="#9ece6a" stroke-width="1.6"/>
+            <path d="M90,98 L97,105 L109,91" fill="none" stroke="#9ece6a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <!-- ── App (green) ── -->
+          <rect x="305" y="46" width="150" height="104" rx="13" fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.42)" stroke-width="1.5"/>
+          <text x="380" y="80" text-anchor="middle" font-size="22">🖥️</text>
+          <text x="380" y="104" text-anchor="middle" class="acx-label" font-size="10.5" fill="#9ece6a" font-weight="700">The App</text>
+          <text x="380" y="121" text-anchor="middle" class="acx-label" font-size="8.3">checks + issues token</text>
+
+          <!-- ── Credential store (violet) ── -->
+          <rect x="586" y="46" width="150" height="104" rx="13" fill="rgba(187,154,247,0.09)" stroke="rgba(187,154,247,0.42)" stroke-width="1.5"/>
+          <text x="661" y="80" text-anchor="middle" font-size="22">🗄️</text>
+          <text x="661" y="104" text-anchor="middle" class="acx-label" font-size="10.5" fill="#bb9af7" font-weight="700">Credential store</text>
+          <text x="661" y="121" text-anchor="middle" class="acx-label" font-size="8.3">salted hashes only</text>
+
+          <!-- arrows -->
+          <line x1="178" y1="98" x2="301" y2="98" stroke="#e8808f" stroke-width="1.4" marker-end="url(#acx-h-k)" opacity="0.5"/>
+          <line x1="459" y1="98" x2="582" y2="98" stroke="#bb9af7" stroke-width="1.4" marker-end="url(#acx-h-q)" opacity="0.5"/>
+
+          <!-- step captions -->
+          <text x="240" y="170" text-anchor="middle" class="acx-mono" font-size="8.5" fill="#e8808f">1 · credentials</text>
+          <text x="520" y="170" text-anchor="middle" class="acx-mono" font-size="8.5" fill="#bb9af7">2 · look up</text>
+          <text x="520" y="186" text-anchor="middle" class="acx-mono" font-size="8.5" fill="#9ece6a">3 · match ✓</text>
+          <text x="240" y="186" text-anchor="middle" class="acx-mono" font-size="8.5" fill="#e0b366">4 · token 🎫</text>
+
+          <!-- packet 1: credentials You → App (rose) -->
+          <g class="acx-pkt1">
+            <rect x="178" y="88" width="68" height="20" rx="10" fill="rgba(232,128,143,0.18)" stroke="#e8808f" stroke-width="1.1"/>
+            <text x="212" y="102" text-anchor="middle" class="acx-mono" font-size="8" fill="#e8808f">••••••</text>
+          </g>
+          <!-- packet 2: lookup App → store (violet) -->
+          <g class="acx-pkt2">
+            <rect x="459" y="88" width="62" height="20" rx="10" fill="rgba(187,154,247,0.18)" stroke="#bb9af7" stroke-width="1.1"/>
+            <text x="490" y="102" text-anchor="middle" class="acx-mono" font-size="8" fill="#bb9af7">check?</text>
+          </g>
+          <!-- packet 3: match store → App (green) -->
+          <g class="acx-pkt3">
+            <rect x="524" y="88" width="58" height="20" rx="10" fill="rgba(158,206,106,0.18)" stroke="#9ece6a" stroke-width="1.1"/>
+            <text x="553" y="102" text-anchor="middle" class="acx-mono" font-size="8" fill="#9ece6a">✓ yes</text>
+          </g>
+          <!-- packet 4: token App → You (amber) -->
+          <g class="acx-pkt4">
+            <rect x="233" y="88" width="68" height="20" rx="10" fill="rgba(224,179,102,0.2)" stroke="#e0b366" stroke-width="1.1"/>
+            <text x="267" y="102" text-anchor="middle" class="acx-mono" font-size="8" fill="#e0b366">🎫 token</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="acx-legend">
+        <span class="acx-legend-item"><span class="acx-chip k"></span> You send credentials</span>
+        <span class="acx-legend-item"><span class="acx-chip q"></span> App looks them up</span>
+        <span class="acx-legend-item"><span class="acx-chip m"></span> Store confirms a match</span>
+        <span class="acx-legend-item"><span class="acx-chip t"></span> App issues a session token</span>
+      </div>
+
+      <button class="acx-replay" id="acx-replay-btn" type="button">↺ Replay</button>
+
+      <div class="block-desc">
+        <span>Two words people mix up: <strong>authentication</strong> = "who are you?" (login), <strong>authorization</strong> = "what are you allowed to do?" (your roles &amp; permissions).</span>
+        <a class="w3-link" href="https://auth0.com/intro-to-iam/authentication-vs-authorization" target="_blank">Auth0 →</a>
+      </div>
+    </section>
+
+
+    <!-- ══ PASSWORDS & HASHING ═════════════════════════════════════════ -->
+    <section id="passwords">
+      <h2>Passwords &amp; Hashing</h2>
+
+      <div class="block-desc">
+        <span>A good site <strong>never</strong> stores your real password — it stores a one-way, salted <em>hash</em>, so even a stolen database can't reveal it.</span>
+        <a class="w3-link" href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank">OWASP →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">how a password is stored</div>
+          <pre><span class="c"># 1. User signs up with a password</span>
+password = <span style="color:#9ece6a">"hunter2"</span>
+
+<span class="c"># 2. Add a random *salt* (unique per user)</span>
+salt     = random_bytes(16)
+
+<span class="c"># 3. Hash it with a slow algorithm (bcrypt/argon2)</span>
+hash     = bcrypt(password, salt)
+<span class="c"># -> $2b$12$Nf9k...e2C  (store THIS, not the password)</span>
+
+<span class="c"># 4. Login: hash the typed password the same way,</span>
+<span class="c">#    then compare the two hashes.</span>
+bcrypt_verify(typed_password, stored_hash)  <span class="c"># true / false</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; Plaintext → salted hash</div>
+          <div class="live-output">
+            <div class="acx-panel" style="margin:0 0 0.75rem;">
+              <svg class="acx-svg" viewBox="0 0 480 110" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="A plaintext password enters a hashing function with salt and comes out as an unreadable hash.">
+                <!-- hash box -->
+                <rect x="186" y="26" width="118" height="58" rx="10" fill="rgba(187,154,247,0.12)" stroke="rgba(187,154,247,0.5)" stroke-width="1.4"/>
+                <text x="245" y="50" text-anchor="middle" class="acx-mono" font-size="9" fill="#bb9af7">bcrypt()</text>
+                <text x="245" y="66" text-anchor="middle" class="acx-label" font-size="7.5">one-way hash</text>
+                <!-- target slot on the right -->
+                <rect x="372" y="40" width="96" height="30" rx="8" fill="none" stroke="var(--border-strong)" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="420" y="59" text-anchor="middle" class="acx-label" font-size="7.5">stored</text>
+
+                <!-- salt dropping in (amber) -->
+                <g class="acx-salt">
+                  <circle cx="245" cy="14" r="4" fill="#e0b366"/>
+                  <text x="266" y="17" class="acx-mono" font-size="7.5" fill="#e0b366">+ salt</text>
+                </g>
+
+                <!-- plaintext chip entering (rose) -->
+                <g class="acx-hash-in">
+                  <rect x="18" y="40" width="86" height="30" rx="8" fill="rgba(232,128,143,0.18)" stroke="#e8808f" stroke-width="1.2"/>
+                  <text x="61" y="59" text-anchor="middle" class="acx-mono" font-size="9" fill="#e8808f">hunter2</text>
+                </g>
+                <!-- hash chip leaving (green) -->
+                <g class="acx-hash-out">
+                  <rect x="302" y="40" width="92" height="30" rx="8" fill="rgba(158,206,106,0.16)" stroke="#9ece6a" stroke-width="1.2"/>
+                  <text x="348" y="59" text-anchor="middle" class="acx-mono" font-size="8.5" fill="#9ece6a">$2b$…e2C</text>
+                </g>
+              </svg>
+            </div>
+            <p class="acx-note"><strong>Why it matters:</strong> hashing is one-way — you can't turn <code>$2b$…e2C</code> back into <code>hunter2</code>. The random <strong>salt</strong> means two people with the same password still get different hashes, so attackers can't reuse precomputed tables.</p>
+            <p class="acx-real"><b>Real world:</b> pick long, unique passphrases and let a password manager remember them. A 3-word phrase like <code>purple-otter-lamp</code> beats <code>P@ss1</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══ MFA / 2FA ═══════════════════════════════════════════════════ -->
+    <section id="mfa">
+      <h2>MFA / 2FA</h2>
+
+      <div class="block-desc">
+        <span>Multi-factor adds a second proof on top of your password: <strong>something you know</strong> (password) + <strong>something you have</strong> (a one-time code from your phone).</span>
+        <a class="w3-link" href="https://support.google.com/accounts/answer/185839" target="_blank">Google 2-Step →</a> <a class="w3-link" href="https://www.zoho.com/oneauth/" target="_blank">Zoho OneAuth →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">the three factor types</div>
+          <pre><span class="c"># A factor is a *category* of proof.</span>
+<span style="color:#7aa2f7">Something you KNOW</span>   password, PIN
+<span style="color:#e0b366">Something you HAVE</span>   phone code, security key
+<span style="color:#9ece6a">Something you ARE</span>    fingerprint, face
+
+<span class="c"># 2FA = password + a 6-digit TOTP code</span>
+<span class="c"># that changes every 30 seconds:</span>
+code = TOTP(shared_secret, current_time)   <span class="c"># 492 118</span>
+
+<span class="c"># Authenticator apps store the shared_secret</span>
+<span class="c"># after you scan the setup QR code.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; Password, then a second factor</div>
+          <div class="live-output">
+            <div class="acx-panel" style="margin:0 0 0.75rem;">
+              <svg class="acx-svg acx-flow-svg" viewBox="0 0 520 128" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="Login clears the password step, then a one-time code from a phone, then access is granted.">
+                <line class="acx-rail" x1="154" y1="60" x2="195" y2="60"/>
+                <line class="acx-rail" x1="325" y1="60" x2="366" y2="60"/>
+
+                <!-- 1 · password (blue) -->
+                <rect x="24" y="30" width="130" height="60" rx="11" fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.42)" stroke-width="1.4"/>
+                <text x="89" y="55" text-anchor="middle" font-size="16">🔑</text>
+                <text x="89" y="76" text-anchor="middle" class="acx-label" font-size="8.8" fill="#7aa2f7">1 · password</text>
+
+                <!-- 2 · OTP phone (amber) -->
+                <rect x="195" y="30" width="130" height="60" rx="11" fill="rgba(224,179,102,0.1)" stroke="rgba(224,179,102,0.45)" stroke-width="1.4"/>
+                <text x="260" y="52" text-anchor="middle" font-size="15">📱</text>
+                <g class="acx-mfa-code">
+                  <text x="260" y="72" text-anchor="middle" class="acx-mono" font-size="10" fill="#e0b366">492 118</text>
+                </g>
+                <text x="260" y="104" text-anchor="middle" class="acx-label" font-size="8.3">2 · code you HAVE</text>
+
+                <!-- 3 · access (green) -->
+                <rect x="366" y="30" width="130" height="60" rx="11" fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.42)" stroke-width="1.4"/>
+                <g class="acx-mfa-unlock">
+                  <circle cx="431" cy="54" r="15" fill="rgba(158,206,106,0.18)" stroke="#9ece6a" stroke-width="1.5"/>
+                  <path d="M423,54 L429,60 L440,48" fill="none" stroke="#9ece6a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <text x="431" y="80" text-anchor="middle" class="acx-label" font-size="8.8" fill="#9ece6a">3 · access</text>
+
+                <!-- travelling dot -->
+                <g class="acx-mfa-dot"><circle cx="89" cy="60" r="5.5" fill="var(--accent)"/></g>
+              </svg>
+            </div>
+            <p class="acx-note"><strong>Why it matters:</strong> even if someone steals your password, they still can't log in without the ever-changing code on your phone. That one extra step blocks the vast majority of account takeovers.</p>
+            <p class="acx-real"><b>Real world:</b> <code>Zoho OneAuth</code> and <code>Google Authenticator</code> are authenticator apps — they generate the 6-digit codes. Prefer app codes or a security key over SMS, which can be intercepted.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══ IAM ═════════════════════════════════════════════════════════ -->
+    <section id="iam">
+      <h2>IAM — Identity &amp; Access Management</h2>
+
+      <div class="block-desc">
+        <span>IAM decides <strong>who can do what</strong>: give a <em>user</em> (or group) a <em>role</em>, and that role carries the <em>permissions</em> to act on a <em>resource</em>.</span>
+        <a class="w3-link" href="https://cloud.google.com/iam/docs/overview" target="_blank">Google Cloud IAM →</a> <a class="w3-link" href="https://www.zoho.com/directory/" target="_blank">Zoho →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">iam building blocks</div>
+          <pre><span class="c"># The vocabulary</span>
+Identity (principal)  a user, group, or service account
+Role                  a bundle of permissions (e.g. Editor)
+Permission            a single allowed action (storage.objects.get)
+Policy                binds  principal + role  on a resource
+
+<span class="c"># Google Cloud IAM binding (policy snippet)</span>
+{
+  <span style="color:#9ece6a">"role"</span>: <span style="color:#9ece6a">"roles/storage.objectViewer"</span>,
+  <span style="color:#9ece6a">"members"</span>: [<span style="color:#9ece6a">"user:asha@example.com"</span>]
+}
+<span class="c"># Least privilege: grant the smallest role that works.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; A role unlocks actions</div>
+          <div class="live-output">
+            <div class="acx-panel" style="margin:0 0 0.75rem;">
+              <svg class="acx-svg acx-flow-svg" viewBox="0 0 520 150" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="A user is granted an Editor role, which lights up read, write and deploy permissions on a resource.">
+                <defs>
+                  <marker id="acx-iam-arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--accent)"/></marker>
+                </defs>
+
+                <!-- user (blue) -->
+                <rect x="24" y="52" width="120" height="66" rx="11" fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.42)" stroke-width="1.4"/>
+                <text x="84" y="84" text-anchor="middle" font-size="18">👤</text>
+                <text x="84" y="106" text-anchor="middle" class="acx-label" font-size="8.5" fill="#7aa2f7">principal</text>
+
+                <!-- role badge landing on the user (violet) -->
+                <g class="acx-iam-role">
+                  <rect x="40" y="26" width="88" height="22" rx="11" fill="rgba(187,154,247,0.2)" stroke="#bb9af7" stroke-width="1.3"/>
+                  <text x="84" y="41" text-anchor="middle" class="acx-mono" font-size="8.5" fill="#bb9af7">role: Editor</text>
+                </g>
+
+                <!-- arrow to resource -->
+                <line x1="150" y1="85" x2="316" y2="85" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#acx-iam-arr)" opacity="0.55"/>
+                <text x="233" y="78" text-anchor="middle" class="acx-mono" font-size="8" fill="var(--accent)">grants</text>
+
+                <!-- resource with 3 permission chips (green) -->
+                <rect x="322" y="30" width="174" height="108" rx="11" fill="rgba(158,206,106,0.07)" stroke="rgba(158,206,106,0.4)" stroke-width="1.4"/>
+                <text x="409" y="48" text-anchor="middle" class="acx-label" font-size="8.5" fill="#9ece6a">resource: project</text>
+                <g class="acx-iam-act1">
+                  <rect x="338" y="58" width="142" height="20" rx="6" fill="rgba(158,206,106,0.16)" stroke="#9ece6a" stroke-width="1"/>
+                  <text x="409" y="72" text-anchor="middle" class="acx-mono" font-size="8" fill="#9ece6a">✓ read</text>
+                </g>
+                <g class="acx-iam-act2">
+                  <rect x="338" y="82" width="142" height="20" rx="6" fill="rgba(158,206,106,0.16)" stroke="#9ece6a" stroke-width="1"/>
+                  <text x="409" y="96" text-anchor="middle" class="acx-mono" font-size="8" fill="#9ece6a">✓ write</text>
+                </g>
+                <g class="acx-iam-act3">
+                  <rect x="338" y="106" width="142" height="20" rx="6" fill="rgba(158,206,106,0.16)" stroke="#9ece6a" stroke-width="1"/>
+                  <text x="409" y="120" text-anchor="middle" class="acx-mono" font-size="8" fill="#9ece6a">✓ deploy</text>
+                </g>
+              </svg>
+            </div>
+            <p class="acx-note"><strong>Why it matters:</strong> you grant <strong>roles</strong>, not one permission at a time — and you grant them to <strong>groups</strong> so access stays tidy as teams change. <em>Least privilege</em> means handing out the smallest role that still gets the job done.</p>
+            <p class="acx-real"><b>Real world:</b> in <code>Google Cloud IAM</code> you bind a principal to a role on a resource. In a <code>Zoho</code> account, admins assign roles like <em>Admin</em>, <em>Agent</em> or <em>Billing</em> that unlock exactly those screens.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══ SSO ═════════════════════════════════════════════════════════ -->
+    <section id="sso">
+      <h2>SSO — Single Sign-On</h2>
+
+      <div class="block-desc">
+        <span>Single Sign-On lets you log in <strong>once</strong> and then open many apps without typing your password again — one trusted key opens every door.</span>
+        <a class="w3-link" href="https://www.zoho.com/directory/" target="_blank">Zoho SSO →</a> <a class="w3-link" href="https://support.google.com/a/answer/60224" target="_blank">Google Workspace →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">the idea</div>
+          <pre><span class="c"># Without SSO: log in to each app separately</span>
+Mail   -> login
+Drive  -> login
+Chat   -> login
+
+<span class="c"># With SSO: log in once at the identity provider,</span>
+<span class="c"># every connected app trusts that one session.</span>
+login @ IdP   ->  Mail  ✓
+              ->  Drive ✓
+              ->  Chat  ✓
+
+<span class="c"># Built on protocols like SAML or OpenID Connect.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; One key, many apps</div>
+          <div class="live-output">
+            <div class="acx-panel" style="margin:0 0 0.75rem;">
+              <svg class="acx-svg" viewBox="0 0 480 176" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="One key turns and unlocks three apps in sequence.">
+                <!-- connector lines -->
+                <line x1="150" y1="88" x2="300" y2="40"  class="acx-rail"/>
+                <line x1="150" y1="88" x2="300" y2="88"  class="acx-rail"/>
+                <line x1="150" y1="88" x2="300" y2="136" class="acx-rail"/>
+
+                <!-- the single key (amber) -->
+                <g class="acx-sso-key">
+                  <circle cx="96" cy="86" r="15" fill="none" stroke="#e0b366" stroke-width="4"/>
+                  <line x1="108" y1="98" x2="140" y2="130" stroke="#e0b366" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="130" y1="120" x2="138" y2="112" stroke="#e0b366" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="138" y1="128" x2="146" y2="120" stroke="#e0b366" stroke-width="4" stroke-linecap="round"/>
+                </g>
+                <text x="96" y="150" text-anchor="middle" class="acx-label" font-size="8.5" fill="#e0b366">one login</text>
+
+                <!-- app 1 (blue) -->
+                <rect x="300" y="18" width="150" height="44" rx="9" fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.4)" stroke-width="1.3"/>
+                <text x="322" y="45" text-anchor="middle" font-size="14">📧</text>
+                <text x="372" y="44" text-anchor="middle" class="acx-label" font-size="8.5" fill="#7aa2f7">Mail</text>
+                <g class="acx-sso-l1"><rect x="420" y="30" width="18" height="18" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.4"/><path d="M425,30 v-3 a4,4 0 0 1 8,0 v3" fill="none" stroke="var(--text-muted)" stroke-width="1.4"/></g>
+                <g class="acx-sso-u1"><circle cx="429" cy="40" r="10" fill="rgba(158,206,106,0.18)" stroke="#9ece6a" stroke-width="1.3"/><path d="M424,40 l4,4 l7,-8" fill="none" stroke="#9ece6a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+
+                <!-- app 2 (green) -->
+                <rect x="300" y="66" width="150" height="44" rx="9" fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.4)" stroke-width="1.3"/>
+                <text x="322" y="93" text-anchor="middle" font-size="14">📁</text>
+                <text x="372" y="92" text-anchor="middle" class="acx-label" font-size="8.5" fill="#9ece6a">Drive</text>
+                <g class="acx-sso-l2"><rect x="420" y="78" width="18" height="18" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.4"/><path d="M425,78 v-3 a4,4 0 0 1 8,0 v3" fill="none" stroke="var(--text-muted)" stroke-width="1.4"/></g>
+                <g class="acx-sso-u2"><circle cx="429" cy="88" r="10" fill="rgba(158,206,106,0.18)" stroke="#9ece6a" stroke-width="1.3"/><path d="M424,88 l4,4 l7,-8" fill="none" stroke="#9ece6a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+
+                <!-- app 3 (violet) -->
+                <rect x="300" y="114" width="150" height="44" rx="9" fill="rgba(187,154,247,0.09)" stroke="rgba(187,154,247,0.4)" stroke-width="1.3"/>
+                <text x="322" y="141" text-anchor="middle" font-size="14">💬</text>
+                <text x="372" y="140" text-anchor="middle" class="acx-label" font-size="8.5" fill="#bb9af7">Chat</text>
+                <g class="acx-sso-l3"><rect x="420" y="126" width="18" height="18" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.4"/><path d="M425,126 v-3 a4,4 0 0 1 8,0 v3" fill="none" stroke="var(--text-muted)" stroke-width="1.4"/></g>
+                <g class="acx-sso-u3"><circle cx="429" cy="136" r="10" fill="rgba(158,206,106,0.18)" stroke="#9ece6a" stroke-width="1.3"/><path d="M424,136 l4,4 l7,-8" fill="none" stroke="#9ece6a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+              </svg>
+            </div>
+            <p class="acx-note"><strong>Why it matters:</strong> one strong login (ideally with MFA) instead of a dozen weak, reused passwords. When you leave a company, disabling that single identity instantly cuts access to every connected app.</p>
+            <p class="acx-real"><b>Real world:</b> "Sign in with Google" at work, or <code>Okta</code> / <code>Zoho Directory</code> opening Mail, Drive and chat from one login. SSO usually runs on <strong>SAML</strong> or <strong>OpenID Connect</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══ SAML ════════════════════════════════════════════════════════ -->
+    <section id="saml">
+      <h2>SAML — How It Works</h2>
+
+      <div class="block-desc">
+        <span>SAML is the handshake behind a lot of SSO: the app (<strong>Service Provider</strong>) sends you to the <strong>Identity Provider</strong> to log in, and the IdP sends back a <em>signed assertion</em> the app trusts.</span>
+        <a class="w3-link" href="https://support.google.com/a/answer/6087519" target="_blank">Google SAML →</a> <a class="w3-link" href="https://www.zoho.com/directory/" target="_blank">Zoho →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">the three parties + the assertion</div>
+          <pre><span class="c"># Three roles</span>
+User (browser)        wants in
+SP  Service Provider  the app you're opening
+IdP Identity Provider where you actually log in
+
+<span class="c"># Flow</span>
+1  You open the SP
+2  SP redirects you to the IdP to sign in
+3  You authenticate at the IdP
+4  IdP returns a *signed* SAML assertion
+5  SP verifies the signature and logs you in
+
+<span class="c"># A SAML assertion (trimmed XML)</span>
+&lt;saml:Assertion&gt;
+  &lt;saml:Subject&gt;asha@example.com&lt;/saml:Subject&gt;
+  &lt;ds:Signature&gt;…IdP's signature…&lt;/ds:Signature&gt;
+&lt;/saml:Assertion&gt;</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; User ↔ SP ↔ IdP</div>
+          <div class="live-output">
+            <div class="acx-panel" style="margin:0 0 0.75rem;">
+              <svg class="acx-svg acx-flow-svg" viewBox="0 0 540 160" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="You visit the service provider, it redirects to the identity provider, you authenticate, the IdP returns a signed assertion, and the SP logs you in.">
+                <line class="acx-rail" x1="150" y1="78" x2="205" y2="78"/>
+                <line class="acx-rail" x1="335" y1="78" x2="390" y2="78"/>
+
+                <!-- user (blue) -->
+                <rect x="20" y="48" width="130" height="60" rx="11" fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.42)" stroke-width="1.4"/>
+                <text x="85" y="76" text-anchor="middle" font-size="16">🧑‍💻</text>
+                <text x="85" y="97" text-anchor="middle" class="acx-label" font-size="8.5" fill="#7aa2f7">You</text>
+
+                <!-- SP (green) -->
+                <rect x="205" y="48" width="130" height="60" rx="11" fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.42)" stroke-width="1.4"/>
+                <text x="270" y="72" text-anchor="middle" font-size="15">🖥️</text>
+                <text x="270" y="92" text-anchor="middle" class="acx-label" font-size="8.5" fill="#9ece6a">SP · the app</text>
+                <g class="acx-saml-ok">
+                  <circle cx="270" cy="78" r="15" fill="rgba(158,206,106,0.2)" stroke="#9ece6a" stroke-width="1.5"/>
+                  <path d="M262,78 l5,5 l10,-11" fill="none" stroke="#9ece6a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+
+                <!-- IdP (violet) -->
+                <rect x="390" y="48" width="130" height="60" rx="11" fill="rgba(187,154,247,0.09)" stroke="rgba(187,154,247,0.42)" stroke-width="1.4"/>
+                <text x="455" y="72" text-anchor="middle" font-size="15">🛡️</text>
+                <text x="455" y="92" text-anchor="middle" class="acx-label" font-size="8.5" fill="#bb9af7">IdP · login</text>
+                <g class="acx-saml-auth">
+                  <text x="455" y="40" text-anchor="middle" class="acx-mono" font-size="8" fill="#bb9af7">you sign in ✓</text>
+                </g>
+
+                <!-- packet 1: visit (blue) -->
+                <g class="acx-saml-p1">
+                  <rect x="150" y="68" width="55" height="20" rx="10" fill="rgba(122,162,247,0.18)" stroke="#7aa2f7" stroke-width="1.1"/>
+                  <text x="177" y="82" text-anchor="middle" class="acx-mono" font-size="7.5" fill="#7aa2f7">1 visit</text>
+                </g>
+                <!-- packet 2: redirect (violet) -->
+                <g class="acx-saml-p2">
+                  <rect x="335" y="68" width="55" height="20" rx="10" fill="rgba(187,154,247,0.18)" stroke="#bb9af7" stroke-width="1.1"/>
+                  <text x="362" y="82" text-anchor="middle" class="acx-mono" font-size="7.5" fill="#bb9af7">2 go log in</text>
+                </g>
+                <!-- packet 3: signed assertion back (amber) -->
+                <g class="acx-saml-p3">
+                  <rect x="335" y="118" width="55" height="20" rx="10" fill="rgba(224,179,102,0.2)" stroke="#e0b366" stroke-width="1.1"/>
+                  <text x="362" y="132" text-anchor="middle" class="acx-mono" font-size="7.5" fill="#e0b366">4 signed</text>
+                </g>
+                <line class="acx-rail" x1="335" y1="128" x2="390" y2="128"/>
+              </svg>
+            </div>
+            <p class="acx-note"><strong>Why it matters:</strong> the app never sees your password — only a <strong>signed assertion</strong> it can verify came from the trusted IdP. That signature is what stops anyone forging a "logged-in" message.</p>
+            <p class="acx-real"><b>Real world:</b> clicking "Log in with your company account" and landing on your org's <code>Okta</code>, <code>Azure AD</code> or <code>Zoho Directory</code> page is SAML (or its cousin OpenID Connect) at work.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══ OAUTH ═══════════════════════════════════════════════════════ -->
+    <section id="oauth">
+      <h2>OAuth — "Login with Google"</h2>
+
+      <div class="block-desc">
+        <span>OAuth lets an app act on your behalf with a <em>token</em> — it gets limited access (e.g. your name &amp; email) <strong>without ever seeing your password</strong>.</span>
+        <a class="w3-link" href="https://developers.google.com/identity/protocols/oauth2" target="_blank">Google OAuth →</a>
+      </div>
+
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">the token hand-off</div>
+          <pre><span class="c"># 1. App sends you to Google to approve</span>
+GET accounts.google.com/o/oauth2/auth
+    ?client_id=APP
+    &amp;scope=email%20profile      <span class="c"># what it may see</span>
+    &amp;redirect_uri=app.com/cb
+
+<span class="c"># 2. You approve on Google's own page.</span>
+<span class="c"># 3. Google sends an access token back to the app:</span>
+{
+  <span style="color:#9ece6a">"access_token"</span>: <span style="color:#9ece6a">"ya29.a0Af…"</span>,
+  <span style="color:#9ece6a">"scope"</span>: <span style="color:#9ece6a">"email profile"</span>,
+  <span style="color:#9ece6a">"expires_in"</span>: 3600
+}
+<span class="c"># 4. App uses the token — never your password.</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; Token hand-off</div>
+          <div class="live-output">
+            <div class="acx-panel" style="margin:0 0 0.75rem;">
+              <svg class="acx-svg acx-flow-svg" viewBox="0 0 520 132" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="The app asks Google for access, you approve, and Google hands back a token the app uses on your behalf.">
+                <line class="acx-rail" x1="150" y1="66" x2="370" y2="66"/>
+
+                <!-- app (green) -->
+                <rect x="20" y="36" width="130" height="60" rx="11" fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.42)" stroke-width="1.4"/>
+                <text x="85" y="62" text-anchor="middle" font-size="15">🖥️</text>
+                <text x="85" y="82" text-anchor="middle" class="acx-label" font-size="8.5" fill="#9ece6a">The app</text>
+                <g class="acx-oauth-ok">
+                  <circle cx="85" cy="66" r="14" fill="rgba(158,206,106,0.2)" stroke="#9ece6a" stroke-width="1.5"/>
+                  <path d="M78,66 l5,5 l9,-10" fill="none" stroke="#9ece6a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+
+                <!-- google (violet) -->
+                <rect x="370" y="36" width="130" height="60" rx="11" fill="rgba(187,154,247,0.09)" stroke="rgba(187,154,247,0.42)" stroke-width="1.4"/>
+                <text x="435" y="60" text-anchor="middle" font-size="15">🔐</text>
+                <text x="435" y="80" text-anchor="middle" class="acx-label" font-size="8.5" fill="#bb9af7">Google · you approve</text>
+
+                <!-- ask packet (green, app -> google) -->
+                <g class="acx-oauth-ask">
+                  <rect x="150" y="34" width="70" height="20" rx="10" fill="rgba(158,206,106,0.16)" stroke="#9ece6a" stroke-width="1.1"/>
+                  <text x="185" y="48" text-anchor="middle" class="acx-mono" font-size="7.5" fill="#9ece6a">may I?</text>
+                </g>
+                <!-- token packet (amber, google -> app) -->
+                <g class="acx-oauth-tok">
+                  <rect x="300" y="78" width="70" height="20" rx="10" fill="rgba(224,179,102,0.2)" stroke="#e0b366" stroke-width="1.1"/>
+                  <text x="335" y="92" text-anchor="middle" class="acx-mono" font-size="7.5" fill="#e0b366">🎫 token</text>
+                </g>
+                <line class="acx-rail" x1="150" y1="88" x2="370" y2="88"/>
+              </svg>
+            </div>
+            <p class="acx-note"><strong>Why it matters:</strong> you share a scoped <strong>token</strong>, not your password, and you can revoke it anytime from your account. The token also limits <em>what</em> the app may touch via its <code>scope</code>.</p>
+            <p class="acx-real"><b>Real world:</b> "Continue with Google / GitHub" buttons use OAuth. Tip: OAuth is about <em>access</em> (a token); when it also tells the app <em>who you are</em>, that layer on top is <strong>OpenID Connect</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>Accounts &amp; IAM cheatsheet &mdash; login, passwords, MFA, roles, SSO, SAML &amp; OAuth explained simply &mdash; open in any browser</footer>
+
+  <script>
+    /* Replay the hero login animation: briefly park the keyframes, then let
+       them run again from the top. Pure DOM, no network, no dependencies. */
+    (function () {
+      var btn = document.getElementById('acx-replay-btn');
+      if (!btn) return;
+      var hero = document.getElementById('overview');
+      btn.addEventListener('click', function () {
+        hero.classList.add('acx-replaying');
+        /* force reflow so the animations restart cleanly */
+        void hero.offsetWidth;
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { hero.classList.remove('acx-replaying'); });
+        });
+      });
+    })();
+  </script>
+  <script src="js/script.js?v=8"></script>
+<div class="notes-overlay" id="notes-overlay"></div>
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-panel-header">
+    <h3 id="notes-panel-title">Source Notes</h3>
+    <button class="notes-panel-close" id="notes-panel-close">✕</button>
+  </div>
+  <div class="notes-panel-body" id="notes-panel-body"></div>
+</div>
+</body>
+</html>

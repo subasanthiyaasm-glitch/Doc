@@ -4,13 +4,410 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shell &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     .sh-kw { color:#bb9af7; }
     .sh-fn { color:#7aa2f7; }
     .sh-str { color:#9ece6a; }
     .sh-cm { color:#565f89; }
     .sh-op { color:#e0af68; }
+  </style>
+  <style>
+    /* ===== shx2- : per-section concept animations (multi-colour, calm) ===== */
+    /* Surfaces/text use theme variables so light + dark both work; the moving/
+       graphic accents use a small fixed palette so each visual stays colourful. */
+    .shx2-fig{
+      margin:.75rem 0 .25rem;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:.6rem .75rem;
+    }
+    .shx2-fig__cap{
+      display:block;
+      font-size:.72rem;
+      color:var(--text-muted);
+      margin-bottom:.5rem;
+      letter-spacing:.02em;
+    }
+    .shx2-row{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .shx2-arr{ color:var(--text-subtle); font-size:.95rem; }
+    .shx2-sep{ color:var(--text-subtle); }
+    .shx2-key,.shx2-folder,.shx2-doc,.shx2-cmd,.shx2-bit,.shx2-vname,.shx2-vval,
+    .shx2-loophead,.shx2-pid,.shx2-run,.shx2-sig,.shx2-stopped,.shx2-gline,.shx2-echo,
+    .shx2-out--echo,.shx2-eq2,.shx2-count{
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.75rem;
+    }
+
+    /* 1 — Most used: shortcut keys glow one at a time */
+    .shx2-key{
+      padding:.22rem .5rem;
+      border-radius:var(--radius-xs);
+      background:var(--surface);
+      border:1px solid var(--border);
+      color:var(--kc);
+      box-shadow:0 1px 0 var(--border);
+      animation:shx2-keypulse 6.5s ease-in-out infinite;
+    }
+    .shx2-key--a{ --kc:#7aa2f7; animation-delay:0s; }
+    .shx2-key--b{ --kc:#e8808f; animation-delay:1.1s; }
+    .shx2-key--c{ --kc:#9ece6a; animation-delay:2.2s; }
+    .shx2-key--d{ --kc:#e0b366; animation-delay:3.3s; }
+    .shx2-key--e{ --kc:#bb9af7; animation-delay:4.4s; }
+    @keyframes shx2-keypulse{
+      0%,11%,100%{ transform:translateY(0); box-shadow:0 1px 0 var(--border); }
+      5.5%{ transform:translateY(-3px); box-shadow:0 0 9px -1px var(--kc); }
+    }
+
+    /* 2 — Getting started: echo prints its text */
+    .shx2-term{
+      display:inline-block;
+      background:var(--code-bg);
+      border-radius:var(--radius-xs);
+      padding:.4rem .6rem;
+      color:var(--code-text);
+    }
+    .shx2-echo .shx2-tp{ color:#9ece6a; }
+    .shx2-echo .shx2-tf{ color:#7aa2f7; }
+    .shx2-echo .shx2-ts{ color:#e0b366; }
+    .shx2-out--echo{
+      color:#e8808f;
+      animation:shx2-fade 4.5s ease-in-out infinite;
+    }
+    @keyframes shx2-fade{
+      0%,18%{ opacity:0; transform:translateX(-5px); }
+      38%,82%{ opacity:1; transform:translateX(0); }
+      100%{ opacity:0; }
+    }
+
+    /* 3 — Navigation: cd lights up each folder in turn */
+    .shx2-folder{
+      padding:.22rem .5rem;
+      border-radius:var(--radius-xs);
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--fc);
+      animation:shx2-cd 6.6s ease-in-out infinite;
+    }
+    .shx2-folder--1{ --fc:#7aa2f7; animation-delay:0s; }
+    .shx2-folder--2{ --fc:#9ece6a; animation-delay:2.2s; }
+    .shx2-folder--3{ --fc:#bb9af7; animation-delay:4.4s; }
+    @keyframes shx2-cd{
+      0%,28%,100%{ box-shadow:none; transform:translateY(0); }
+      6%,20%{ box-shadow:0 0 10px -2px var(--fc); transform:translateY(-2px); }
+    }
+
+    /* 4 — Files: cp writes a fresh copy */
+    .shx2-doc{
+      padding:.22rem .5rem;
+      border-radius:var(--radius-xs);
+      border:1px solid var(--border);
+      background:var(--surface);
+    }
+    .shx2-doc--src{ color:#7aa2f7; }
+    .shx2-doc--copy{ color:#9ece6a; animation:shx2-copyin 4.5s ease-in-out infinite; }
+    @keyframes shx2-copyin{
+      0%,14%{ opacity:0; transform:translateX(-12px) scale(.92); }
+      42%,82%{ opacity:1; transform:translateX(0) scale(1); }
+      100%{ opacity:0; }
+    }
+
+    /* 5 — Processes: runs, then a signal stops it */
+    .shx2-pid{ color:var(--text-muted); }
+    .shx2-run{ color:#9ece6a; display:inline-flex; align-items:center; gap:.35rem; animation:shx2-runph 5.5s ease-in-out infinite; }
+    .shx2-rundot{ width:7px; height:7px; border-radius:50%; background:#9ece6a; display:inline-block; animation:shx2-blink2 1.3s step-end infinite; }
+    .shx2-sig{ color:#e8808f; opacity:0; animation:shx2-sigflash 5.5s ease-in-out infinite; }
+    .shx2-stopped{ color:var(--text-subtle); opacity:0; animation:shx2-stopph 5.5s ease-in-out infinite; }
+    @keyframes shx2-runph{ 0%,52%{ opacity:1; } 60%,100%{ opacity:.25; } }
+    @keyframes shx2-blink2{ 0%,50%{ opacity:1; } 51%,100%{ opacity:.25; } }
+    @keyframes shx2-sigflash{ 0%,50%{ opacity:0; } 56%,64%{ opacity:1; } 72%,100%{ opacity:0; } }
+    @keyframes shx2-stopph{ 0%,60%{ opacity:0; } 70%,94%{ opacity:1; } 100%{ opacity:0; } }
+
+    /* 6 — Network: ping packet goes out and back */
+    .shx2-net{ width:100%; max-width:280px; height:auto; }
+    .shx2-netlabel{ fill:var(--text-muted); font-size:9px; font-family:ui-monospace,Menlo,monospace; }
+    .shx2-packet{ animation:shx2-ping 3.4s ease-in-out infinite; }
+    @keyframes shx2-ping{
+      0%{ transform:translateX(0); opacity:0; }
+      10%{ opacity:1; }
+      44%,56%{ transform:translateX(146px); opacity:1; }
+      90%{ transform:translateX(0); opacity:1; }
+      100%{ transform:translateX(0); opacity:0; }
+    }
+
+    /* 7 — Permissions: rwx bits pop on in sequence */
+    .shx2-bit{
+      width:1.4rem; text-align:center;
+      padding:.2rem 0;
+      border-radius:var(--radius-xs);
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--bc);
+      font-weight:700;
+      animation:shx2-bitpop 5s ease-in-out infinite;
+    }
+    .shx2-bit--r{ --bc:#9ece6a; animation-delay:0s; }
+    .shx2-bit--w{ --bc:#e0b366; animation-delay:.6s; }
+    .shx2-bit--x{ --bc:#e8808f; animation-delay:1.2s; }
+    .shx2-eq2{ color:#bb9af7; font-weight:700; }
+    @keyframes shx2-bitpop{
+      0%,8%{ transform:scale(.82); box-shadow:none; }
+      14%{ transform:scale(1.08); box-shadow:0 0 10px -1px var(--bc); }
+      24%,100%{ transform:scale(1); box-shadow:none; }
+    }
+
+    /* 8 — Text processing: grep highlights the matching line */
+    .shx2-grep{ display:flex; flex-direction:column; gap:.25rem; width:100%; max-width:230px; }
+    .shx2-gline{
+      padding:.18rem .45rem;
+      border-radius:var(--radius-xs);
+      background:var(--surface);
+      border:1px solid var(--border);
+      color:var(--text-subtle);
+    }
+    .shx2-gline--hit{ color:#e0b366; animation:shx2-hit 4.5s ease-in-out infinite; }
+    @keyframes shx2-hit{
+      0%,22%{ background:var(--surface); box-shadow:none; }
+      40%,80%{ background:rgba(224,179,102,.16); box-shadow:0 0 0 1px rgba(224,179,102,.5); }
+      100%{ background:var(--surface); box-shadow:none; }
+    }
+
+    /* 9 — Pipes: data moves through each command */
+    .shx2-cmd{
+      padding:.22rem .5rem;
+      border-radius:var(--radius-xs);
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--cc);
+      animation:shx2-stage 5.4s ease-in-out infinite;
+    }
+    .shx2-cmd--1{ --cc:#7aa2f7; animation-delay:0s; }
+    .shx2-cmd--2{ --cc:#bb9af7; animation-delay:1.3s; }
+    .shx2-cmd--3{ --cc:#9ece6a; animation-delay:2.6s; }
+    .shx2-bar{ color:#e0b366; font-weight:700; }
+    @keyframes shx2-stage{
+      0%,6%,100%{ box-shadow:none; transform:translateY(0); }
+      13%,22%{ box-shadow:0 0 10px -2px var(--cc); transform:translateY(-2px); }
+    }
+
+    /* 10 — Variables: $NAME expands to its value */
+    .shx2-vname{
+      padding:.22rem .5rem; border-radius:var(--radius-xs);
+      border:1px solid var(--border); background:var(--surface);
+      color:#bb9af7; animation:shx2-vdim 4.5s ease-in-out infinite;
+    }
+    .shx2-vval{
+      padding:.22rem .5rem; border-radius:var(--radius-xs);
+      border:1px solid var(--border); background:var(--surface);
+      color:#9ece6a; animation:shx2-fade 4.5s ease-in-out infinite;
+    }
+    @keyframes shx2-vdim{ 0%,32%{ opacity:1; } 52%,100%{ opacity:.45; } }
+
+    /* 11 — Scripting: a loop counter ticks through values */
+    .shx2-loophead{
+      padding:.22rem .5rem; border-radius:var(--radius-xs);
+      border:1px solid var(--border); background:var(--surface);
+      color:var(--text-muted);
+    }
+    .shx2-count{ position:relative; display:inline-block; width:1.3ch; height:1.25em; font-weight:700; font-size:.9rem; }
+    .shx2-n{ position:absolute; left:0; top:0; opacity:0; animation:shx2-tick 5s ease-in-out infinite; }
+    .shx2-n--1{ color:#7aa2f7; animation-delay:0s; }
+    .shx2-n--2{ color:#9ece6a; animation-delay:1s; }
+    .shx2-n--3{ color:#e0b366; animation-delay:2s; }
+    .shx2-n--4{ color:#e8808f; animation-delay:3s; }
+    .shx2-n--5{ color:#bb9af7; animation-delay:4s; }
+    @keyframes shx2-tick{
+      0%{ opacity:0; transform:translateY(3px); }
+      3%,17%{ opacity:1; transform:translateY(0); }
+      20%,100%{ opacity:0; transform:translateY(-3px); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .shx2-fig *{ animation:none !important; }
+      .shx2-out--echo,.shx2-doc--copy,.shx2-vval,.shx2-packet,
+      .shx2-run,.shx2-rundot,.shx2-sig,.shx2-stopped{ opacity:1 !important; }
+      .shx2-n{ opacity:0 !important; }
+      .shx2-n--1{ opacity:1 !important; }
+      .shx2-gline--hit{ background:rgba(224,179,102,.16) !important; }
+    }
+  </style>
+  <style>
+    /* ===== shx3- : bash terminal demo + scripting walk-through (calm, multi-colour) ===== */
+    /* Surfaces + text ride the theme variables (light/dark); the moving graphic
+       accents use a small fixed palette so each visual stays colourful. */
+
+    /* --- shared figure shell (matches the page's shx2- figures) --- */
+    .shx3-wrap{ margin:.75rem 0 .25rem; }
+    .shx3-fig{
+      margin:.75rem 0 .25rem;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:.6rem .75rem;
+    }
+    .shx3-fig__cap{
+      display:block;
+      font-size:.72rem;
+      color:var(--text-muted);
+      margin-bottom:.5rem;
+      letter-spacing:.02em;
+    }
+
+    /* --- 1 · animated bash terminal window --- */
+    .shx3-win{
+      max-width:520px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      overflow:hidden;
+      box-shadow:0 2px 10px -4px rgba(0,0,0,.35);
+    }
+    .shx3-titlebar{
+      display:flex;
+      align-items:center;
+      gap:.4rem;
+      padding:.45rem .6rem;
+      background:var(--surface);
+      border-bottom:1px solid var(--border);
+    }
+    .shx3-dot{ width:11px; height:11px; border-radius:50%; display:inline-block; }
+    .shx3-dot--r{ background:#e8808f; }
+    .shx3-dot--y{ background:#e0b366; }
+    .shx3-dot--g{ background:#9ece6a; }
+    .shx3-winname{
+      margin-left:.4rem;
+      font-size:.72rem;
+      color:var(--text-muted);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    }
+    .shx3-body{
+      background:var(--code-bg);
+      color:var(--code-text);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.82rem;
+      line-height:1.5;
+      padding:.6rem .7rem;
+      height:13.5rem;
+      overflow:auto;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .shx3-line{ min-height:1.2em; }
+    .shx3-outline{ color:#9ece6a; }
+    .shx3-prompt{ color:#e0b366; font-weight:700; }
+    .shx3-t-fn{ color:#7aa2f7; }
+    .shx3-t-kw{ color:#bb9af7; }
+    .shx3-t-var{ color:#bb9af7; }
+    .shx3-t-op{ color:#e8808f; }
+    .shx3-t-str{ color:#9ece6a; }
+    .shx3-t-num{ color:#e0b366; }
+    .shx3-t-cm{ color:var(--text-subtle); }
+    .shx3-caret{
+      display:inline-block;
+      width:.55ch;
+      height:1.05em;
+      margin-left:1px;
+      background:#e0b366;
+      vertical-align:text-bottom;
+      animation:shx3-blink 1.05s step-end infinite;
+    }
+    @keyframes shx3-blink{ 0%,50%{ opacity:1; } 51%,100%{ opacity:0; } }
+
+    /* the read -> expand -> run -> print note */
+    .shx3-steps{
+      list-style:none;
+      margin:.8rem 0 0;
+      padding:0;
+      display:grid;
+      gap:.4rem;
+    }
+    .shx3-steps li{
+      font-size:.82rem;
+      color:var(--text-muted);
+      line-height:1.4;
+    }
+    .shx3-steps code{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xs);
+      padding:.02rem .28rem;
+      font-size:.82em;
+    }
+    .shx3-stepn{
+      display:inline-block;
+      min-width:4.3rem;
+      text-align:center;
+      margin-right:.55rem;
+      padding:.1rem .45rem;
+      border-radius:var(--radius-xs);
+      border:1px solid var(--border);
+      background:var(--surface);
+      font-family:ui-monospace,Menlo,monospace;
+      font-size:.7rem;
+      font-weight:700;
+      letter-spacing:.03em;
+    }
+    .shx3-stepn--read{ color:#7aa2f7; }
+    .shx3-stepn--exp{ color:#bb9af7; }
+    .shx3-stepn--run{ color:#e0b366; }
+    .shx3-stepn--out{ color:#9ece6a; }
+
+    /* --- 2 · script runs top-to-bottom (pointer walks the lines) --- */
+    .shx3-script{
+      position:relative;
+      padding-left:1.5rem;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.8rem;
+    }
+    .shx3-ptr{
+      position:absolute;
+      left:.2rem;
+      top:0;
+      color:var(--accent);
+      font-weight:700;
+      line-height:1.7em;
+      animation:shx3-ptrmove 8.4s ease-in-out infinite;
+    }
+    .shx3-lines{ list-style:none; margin:0; padding:0; }
+    .shx3-sl{
+      height:1.7em;
+      line-height:1.7em;
+      padding:0 .4rem;
+      border-radius:var(--radius-xs);
+      animation:shx3-slhi 8.4s ease-in-out infinite;
+    }
+    .shx3-sl--1{ animation-delay:0s; }
+    .shx3-sl--2{ animation-delay:1.4s; }
+    .shx3-sl--3{ animation-delay:2.8s; }
+    .shx3-sl--4{ animation-delay:4.2s; }
+    .shx3-sl--5{ animation-delay:5.6s; }
+    .shx3-sl--6{ animation-delay:7s; }
+    @keyframes shx3-ptrmove{
+      0%{ transform:translateY(0); opacity:0; }
+      3%,14.6%{ transform:translateY(0); opacity:1; }
+      16.6%,31.3%{ transform:translateY(1.7em); opacity:1; }
+      33.3%,48%{ transform:translateY(3.4em); opacity:1; }
+      50%,64.6%{ transform:translateY(5.1em); opacity:1; }
+      66.6%,81.3%{ transform:translateY(6.8em); opacity:1; }
+      83.3%,97%{ transform:translateY(8.5em); opacity:1; }
+      100%{ transform:translateY(8.5em); opacity:0; }
+    }
+    @keyframes shx3-slhi{
+      0%,16%{ background:var(--accent-subtle); box-shadow:inset 2px 0 0 var(--accent); }
+      19%,100%{ background:transparent; box-shadow:inset 2px 0 0 transparent; }
+    }
+
+    @media (max-width:620px){
+      .shx3-win{ max-width:100%; }
+      .shx3-stepn{ min-width:3.6rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .shx3-caret{ animation:none; opacity:1; }
+      .shx3-ptr{ animation:none; opacity:1; transform:translateY(0); }
+      .shx3-sl{ animation:none; }
+      .shx3-sl--1{ background:var(--accent-subtle); box-shadow:inset 2px 0 0 var(--accent); }
+    }
   </style>
 </head>
 <body>
@@ -30,15 +427,17 @@
     </div>
   </aside>
   <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-  <script src="js/header.js"></script>
+  <script src="js/header.js?v=8"></script>
   <script>renderHeader('Shell')</script>
   <script>renderSourceLink('Shell')</script>
   <main>
     <div class="page-header">
       <h1>Shell</h1>
-      <p class="subtitle">Quick reference with basic commands</p>
+      <p class="subtitle">The terminal made simple: you type a command, press Enter, and the shell runs it for you.</p>
       <span id="source-link"></span>
       <nav class="toc">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#bash-how">Bash Terminal</a>
         <a href="#most-used">Most Used</a>
         <a href="#start">Start</a>
         <a href="#navigation">Navigation</a>
@@ -50,8 +449,341 @@
         <a href="#pipes">Pipes</a>
         <a href="#variables">Variables</a>
         <a href="#scripting">Scripting</a>
+        <a href="#bash-scripting">Bash Scripting</a>
       </nav>
     </div>
+
+    <!-- How It Works (animated explainer) -->
+    <section id="how-it-works">
+      <style>
+        .shx-stage {
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 1.25rem 1.25rem 1.5rem;
+          margin-top: 0.5rem;
+        }
+        .shx-flow {
+          display: flex;
+          align-items: stretch;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+        .shx-card {
+          flex: 1 1 180px;
+          min-width: 160px;
+          background: var(--surface-2);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-sm);
+          padding: 0.75rem;
+          animation: shx-glow 5s ease-in-out infinite;
+        }
+        .shx-card--shell { animation-delay: 1.3s; }
+        .shx-card--out   { animation-delay: 2.6s; }
+        .shx-card-tag {
+          font-size: 0.68rem;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+        }
+        .shx-card-tag b {
+          display: inline-block;
+          min-width: 1.15rem;
+          height: 1.15rem;
+          line-height: 1.15rem;
+          text-align: center;
+          margin-right: 0.35rem;
+          border-radius: 50%;
+          background: var(--accent);
+          color: #fff;
+          font-size: 0.7rem;
+        }
+        .shx-term, .shx-proc, .shx-out {
+          background: var(--code-bg);
+          color: var(--code-text);
+          border-radius: var(--radius-xs);
+          padding: 0.5rem 0.6rem;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 0.82rem;
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+          min-height: 2.6rem;
+        }
+        .shx-dollar { color: var(--accent-2); font-weight: 700; }
+        .shx-typed {
+          display: inline-block;
+          overflow: hidden;
+          white-space: nowrap;
+          width: 5ch;
+          vertical-align: bottom;
+          animation: shx-type 1.1s steps(5) 0.3s both;
+        }
+        .shx-caret {
+          display: inline-block;
+          width: 0.5ch;
+          height: 1em;
+          background: var(--accent-2);
+          margin-left: 1px;
+          animation: shx-blink 1.1s step-end infinite;
+        }
+        .shx-gear { display: inline-block; animation: shx-spin 6s linear infinite; }
+        .shx-proc code { color: var(--accent-2); background: none; padding: 0; }
+        .shx-out { flex-direction: column; align-items: flex-start; gap: 0.1rem; }
+        .shx-out span { color: var(--code-text); opacity: 0.92; }
+        .shx-link {
+          position: relative;
+          flex: 0 0 42px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-subtle);
+        }
+        .shx-arrow { font-size: 1.3rem; }
+        .shx-dot {
+          position: absolute;
+          top: 50%;
+          left: 4px;
+          width: 8px;
+          height: 8px;
+          margin-top: -4px;
+          border-radius: 50%;
+          background: var(--accent-2);
+          box-shadow: 0 0 6px var(--accent-2);
+          opacity: 0;
+          animation: shx-travel 3.2s ease-in-out infinite;
+        }
+        .shx-dot--2 { animation-delay: 1.6s; }
+        .shx-note {
+          color: var(--text-muted);
+          font-size: 0.86rem;
+          margin: 0.9rem 0 0;
+          line-height: 1.5;
+        }
+        .shx-note code {
+          background: var(--surface-2);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-xs);
+          padding: 0.05rem 0.3rem;
+          font-size: 0.82em;
+        }
+        .shx-mini {
+          margin-top: 1.1rem;
+          padding-top: 1rem;
+          border-top: 1px dashed var(--border);
+        }
+        .shx-mini-head {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text);
+          margin-bottom: 0.7rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .shx-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: var(--radius-xs);
+          background: var(--accent-subtle);
+          color: var(--accent);
+          border: 1px solid var(--accent-subtle-2);
+          font-family: ui-monospace, Menlo, monospace;
+          font-weight: 700;
+        }
+        .shx-pipeflow {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        .shx-chip {
+          background: var(--code-bg);
+          color: var(--code-text);
+          padding: 0.4rem 0.6rem;
+          border-radius: var(--radius-xs);
+          font-family: ui-monospace, Menlo, monospace;
+          font-size: 0.8rem;
+          white-space: nowrap;
+        }
+        .shx-chip--out { color: var(--accent-2); }
+        .shx-eq { color: var(--text-subtle); font-size: 1.1rem; }
+        .shx-file {
+          background: var(--surface-2);
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 0.4rem 0.6rem;
+          border-radius: var(--radius-xs);
+          font-size: 0.82rem;
+          white-space: nowrap;
+        }
+        .shx-wire {
+          position: relative;
+          flex: 1 1 56px;
+          min-width: 56px;
+          height: 14px;
+        }
+        .shx-wire::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 10px;
+          height: 2px;
+          margin-top: -1px;
+          background: var(--accent-subtle-2);
+        }
+        .shx-wire::after {
+          content: "▸";
+          position: absolute;
+          right: -2px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--accent);
+          font-size: 0.85rem;
+          line-height: 1;
+        }
+        .shx-flowdot {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 8px;
+          height: 8px;
+          margin-top: -4px;
+          border-radius: 50%;
+          background: var(--accent-2);
+          box-shadow: 0 0 6px var(--accent-2);
+          opacity: 0;
+          animation: shx-flow 2.6s ease-in-out infinite;
+        }
+        .shx-flowdot--2 { animation-delay: 1.3s; }
+
+        @keyframes shx-type { from { width: 0; } to { width: 5ch; } }
+        @keyframes shx-blink { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
+        @keyframes shx-spin { to { transform: rotate(360deg); } }
+        @keyframes shx-glow {
+          0%, 100% { box-shadow: 0 0 0 0 transparent; }
+          50% { box-shadow: 0 0 0 3px var(--accent-subtle); }
+        }
+        @keyframes shx-travel {
+          0% { left: 2px; opacity: 0; }
+          25% { opacity: 1; }
+          75% { opacity: 1; }
+          100% { left: calc(100% - 10px); opacity: 0; }
+        }
+        @keyframes shx-flow {
+          0% { left: 0; opacity: 0; }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { left: calc(100% - 12px); opacity: 0; }
+        }
+
+        @media (max-width: 620px) {
+          .shx-flow { flex-direction: column; }
+          .shx-link { flex-basis: auto; height: 30px; }
+          .shx-arrow { transform: rotate(90deg); }
+          .shx-dot { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .shx-card, .shx-typed, .shx-caret, .shx-gear,
+          .shx-dot, .shx-flowdot {
+            animation: none !important;
+          }
+          .shx-typed { width: 5ch; }
+          .shx-caret { opacity: 1; }
+          .shx-dot, .shx-flowdot { opacity: 0; }
+        }
+      </style>
+
+      <h2>How the Shell Runs a Command</h2>
+
+      <div class="block-desc">
+        <span>Brand new to the terminal? Here's the whole idea in one picture: type a command, the shell runs it, and you see the result.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_getstarted.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="shx-stage">
+        <!-- Three-step flow -->
+        <div class="shx-flow">
+          <div class="shx-card shx-card--prompt">
+            <div class="shx-card-tag"><b>1</b>You type</div>
+            <div class="shx-term">
+              <span class="shx-dollar">$</span><span class="shx-typed">ls&nbsp;-l</span><span class="shx-caret"></span>
+            </div>
+          </div>
+          <div class="shx-link"><span class="shx-arrow">→</span><span class="shx-dot"></span></div>
+          <div class="shx-card shx-card--shell">
+            <div class="shx-card-tag"><b>2</b>Shell starts a process</div>
+            <div class="shx-proc"><span class="shx-gear">⚙</span>&nbsp;running <code>ls</code>…</div>
+          </div>
+          <div class="shx-link"><span class="shx-arrow">→</span><span class="shx-dot shx-dot--2"></span></div>
+          <div class="shx-card shx-card--out">
+            <div class="shx-card-tag"><b>3</b>It prints output</div>
+            <div class="shx-out"><span>notes.txt</span><span>pics/</span><span>todo.md</span></div>
+          </div>
+        </div>
+        <p class="shx-note">A command is just a small program. You type it after the <code>$</code> prompt, the shell launches it as a process, and whatever it prints comes back to your screen.</p>
+
+        <!-- Pipe -->
+        <div class="shx-mini">
+          <div class="shx-mini-head"><span class="shx-badge">|</span> The pipe — pass output into the next command</div>
+          <div class="shx-pipeflow">
+            <code class="shx-chip">ls</code>
+            <div class="shx-wire"><span class="shx-flowdot"></span></div>
+            <code class="shx-chip">grep notes</code>
+            <span class="shx-eq">→</span>
+            <code class="shx-chip shx-chip--out">notes.txt</code>
+          </div>
+          <p class="shx-note shx-note--sm"><code>cmd1 | cmd2</code> takes the output of the first command and feeds it straight into the second.</p>
+        </div>
+
+        <!-- Redirect -->
+        <div class="shx-mini">
+          <div class="shx-mini-head"><span class="shx-badge">&gt;</span> The redirect — save output to a file</div>
+          <div class="shx-pipeflow">
+            <code class="shx-chip">ls</code>
+            <div class="shx-wire"><span class="shx-flowdot shx-flowdot--2"></span></div>
+            <span class="shx-file">📄 files.txt</span>
+          </div>
+          <p class="shx-note shx-note--sm"><code>cmd &gt; file</code> sends the output into a file instead of showing it on the screen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bash Terminal (animated demo) -->
+    <section id="bash-how">
+      <h2>A Bash Terminal in Action</h2>
+
+      <div class="block-desc">
+        <span>Watch a live <code>bash</code> session: each line is typed after the <code>$</code> prompt, run, and its output appears just below.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_shell.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="shx3-wrap">
+        <div class="shx3-win" role="img" aria-label="An animated bash terminal that types echo, ls, a pipe, and a short for loop, each followed by its output">
+          <div class="shx3-titlebar">
+            <span class="shx3-dot shx3-dot--r"></span>
+            <span class="shx3-dot shx3-dot--y"></span>
+            <span class="shx3-dot shx3-dot--g"></span>
+            <span class="shx3-winname">bash — demo</span>
+          </div>
+          <div class="shx3-body" id="shx3-term-body"></div>
+        </div>
+
+        <ol class="shx3-steps">
+          <li><span class="shx3-stepn shx3-stepn--read">read</span> the shell reads the whole line you typed</li>
+          <li><span class="shx3-stepn shx3-stepn--exp">expand</span> it fills in variables like <code>$i</code> and globs like <code>*.txt</code></li>
+          <li><span class="shx3-stepn shx3-stepn--run">run</span> it launches the command as a process</li>
+          <li><span class="shx3-stepn shx3-stepn--out">print</span> whatever the command writes comes back to the screen</li>
+        </ol>
+      </div>
+    </section>
 
     <!-- Most Used Commands -->
     <section id="most-used">
@@ -97,6 +829,17 @@ $ <span class="sh-fn">clear</span>            <span class="sh-cm"># clear the te
           </div>
         </div>
       </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">Handy shortcuts light up as you work</span>
+        <div class="shx2-row">
+          <kbd class="shx2-key shx2-key--a">Tab</kbd>
+          <kbd class="shx2-key shx2-key--b">⌃C</kbd>
+          <kbd class="shx2-key shx2-key--c">⌃R</kbd>
+          <kbd class="shx2-key shx2-key--d">↑</kbd>
+          <kbd class="shx2-key shx2-key--e">⌃L</kbd>
+        </div>
+      </div>
     </section>
 
     <!-- Getting Started -->
@@ -131,6 +874,15 @@ $ <span class="sh-fn">uname</span> <span class="sh-op">-</span>a</pre>
               <span style="color:#565f89;">Darwin hostname 23.0.0 Darwin Kernel Version...</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">echo sends your text straight to the screen</span>
+        <div class="shx2-row">
+          <span class="shx2-term shx2-echo"><span class="shx2-tp">$</span> <span class="shx2-tf">echo</span> <span class="shx2-ts">"hello"</span></span>
+          <span class="shx2-arr">→</span>
+          <span class="shx2-out--echo">hello</span>
         </div>
       </div>
     </section>
@@ -173,6 +925,17 @@ $ <span class="sh-fn">find</span> <span class="sh-op">.</span> <span class="sh-o
           </div>
         </div>
       </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">cd walks you from one folder to the next</span>
+        <div class="shx2-row">
+          <span class="shx2-folder shx2-folder--1">🏠 ~</span>
+          <span class="shx2-sep">/</span>
+          <span class="shx2-folder shx2-folder--2">📁 project</span>
+          <span class="shx2-sep">/</span>
+          <span class="shx2-folder shx2-folder--3">📁 src</span>
+        </div>
+      </div>
     </section>
 
     <!-- File Operations -->
@@ -204,6 +967,15 @@ $ <span class="sh-fn">rm</span> <span class="sh-op">-</span>rf dirname</pre>
               <span style="color:#e0af68;">rm -rf — remove directory recursively</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">cp leaves the original and writes a fresh copy</span>
+        <div class="shx2-row">
+          <span class="shx2-doc shx2-doc--src">📄 a.txt</span>
+          <span class="shx2-arr">→</span>
+          <span class="shx2-doc shx2-doc--copy">📄 b.txt</span>
         </div>
       </div>
 
@@ -284,6 +1056,16 @@ $ <span class="sh-fn">bg</span> %1                 <span class="sh-cm"># resume 
           </div>
         </div>
       </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">A process runs until a signal stops it</span>
+        <div class="shx2-row">
+          <span class="shx2-pid">PID 1234</span>
+          <span class="shx2-run"><span class="shx2-rundot"></span>running</span>
+          <span class="shx2-sig">⚡ SIGTERM</span>
+          <span class="shx2-stopped">■ stopped</span>
+        </div>
+      </div>
     </section>
 
     <!-- Network -->
@@ -333,6 +1115,18 @@ $ <span class="sh-fn">ss</span> <span class="sh-op">-</span>tulnp              <
           </div>
         </div>
       </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">ping sends a packet out and waits for the reply</span>
+        <svg class="shx2-net" viewBox="0 0 250 48" role="img" aria-label="A packet travels from your computer to a host and returns">
+          <line x1="46" y1="22" x2="196" y2="22" stroke="var(--border-strong)" stroke-width="2" />
+          <circle cx="30" cy="22" r="12" fill="none" stroke="#7aa2f7" stroke-width="2" />
+          <rect x="198" y="10" width="22" height="24" rx="3" fill="none" stroke="#bb9af7" stroke-width="2" />
+          <circle class="shx2-packet" cx="50" cy="22" r="4" fill="#e0b366" />
+          <text class="shx2-netlabel" x="30" y="46" text-anchor="middle">you</text>
+          <text class="shx2-netlabel" x="209" y="47" text-anchor="middle">host</text>
+        </svg>
+      </div>
     </section>
 
     <!-- Permissions -->
@@ -371,6 +1165,16 @@ $ <span class="sh-fn">ls</span> <span class="sh-op">-</span>l</pre>
               <span style="color:#565f89;">perms  links user  group  size</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">Each slot is read, write, execute — on or off</span>
+        <div class="shx2-row">
+          <span class="shx2-bit shx2-bit--r">r</span>
+          <span class="shx2-bit shx2-bit--w">w</span>
+          <span class="shx2-bit shx2-bit--x">x</span>
+          <span class="shx2-eq2">= 7</span>
         </div>
       </div>
 
@@ -498,6 +1302,15 @@ $ <span class="sh-fn">awk</span> <span class="sh-str">'{print $1}'</span> file.t
         </div>
       </div>
 
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">grep keeps only the lines that match</span>
+        <div class="shx2-grep">
+          <div class="shx2-gline">apple pie</div>
+          <div class="shx2-gline shx2-gline--hit">error: disk full</div>
+          <div class="shx2-gline">banana bread</div>
+        </div>
+      </div>
+
       <div class="block-desc">
         <span>Sort, filter, and compare text with <code>sort</code>, <code>uniq</code>, <code>cut</code>, <code>diff</code>, and <code>tee</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/linux/index.php" target="_blank">W3Schools →</a>
@@ -560,6 +1373,17 @@ $ <span class="sh-fn">cmd1</span> ; <span class="sh-fn">cmd2</span></pre>
           </div>
         </div>
       </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">| feeds each command's output into the next</span>
+        <div class="shx2-row">
+          <code class="shx2-cmd shx2-cmd--1">cat</code>
+          <span class="shx2-bar">|</span>
+          <code class="shx2-cmd shx2-cmd--2">sort</code>
+          <span class="shx2-bar">|</span>
+          <code class="shx2-cmd shx2-cmd--3">uniq</code>
+        </div>
+      </div>
     </section>
 
     <!-- Variables -->
@@ -594,6 +1418,15 @@ $ <span class="sh-fn">cmd1</span> ; <span class="sh-fn">cmd2</span></pre>
               <span style="color:#e0af68;">${var:-default} — use default if var unset</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">The shell swaps $NAME for its stored value</span>
+        <div class="shx2-row">
+          <code class="shx2-vname">$NAME</code>
+          <span class="shx2-arr">→</span>
+          <code class="shx2-vval">Ada</code>
         </div>
       </div>
     </section>
@@ -637,6 +1470,15 @@ $ <span class="sh-fn">cmd1</span> ; <span class="sh-fn">cmd2</span></pre>
         </div>
       </div>
 
+      <div class="shx2-fig">
+        <span class="shx2-fig__cap">A loop runs the body once for each value</span>
+        <div class="shx2-row">
+          <code class="shx2-loophead">for i in 1..5</code>
+          <span class="shx2-arr">→</span>
+          <span class="shx2-count"><span class="shx2-n shx2-n--1">1</span><span class="shx2-n shx2-n--2">2</span><span class="shx2-n shx2-n--3">3</span><span class="shx2-n shx2-n--4">4</span><span class="shx2-n shx2-n--5">5</span></span>
+        </div>
+      </div>
+
       <div class="block-desc">
         <span>Use <code>case</code> for pattern matching, <code>function</code> for reusable code, and <code>$1</code>, <code>$@</code>, <code>$#</code> for script arguments.</span>
         <a class="w3-link" href="https://www.w3schools.com/linux/linux_shell.php" target="_blank">W3Schools →</a>
@@ -674,6 +1516,93 @@ greet <span class="sh-str">"World"</span>
       </div>
     </section>
 
+    <!-- Bash Scripting Basics -->
+    <section id="bash-scripting">
+      <h2>Bash Scripting Basics</h2>
+
+      <div class="block-desc">
+        <span>A script is just commands saved in a file. Start with a <code>#!/usr/bin/env bash</code> shebang, store values in variables, and read them back with <code>"$var"</code> or <code>$(command)</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_shell.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">Shebang, variables &amp; substitution</div>
+          <pre><span class="sh-cm">#!/usr/bin/env bash</span>
+name=<span class="sh-str">"Ada"</span>              <span class="sh-cm"># set a variable (no spaces around =)</span>
+<span class="sh-fn">echo</span> <span class="sh-str">"Hi, </span><span class="sh-op">$</span><span class="sh-str">name"</span>      <span class="sh-cm"># always quote "$var"</span>
+today=<span class="sh-op">$(</span><span class="sh-fn">date</span> +%F<span class="sh-op">)</span>   <span class="sh-cm"># $(...) command substitution</span>
+<span class="sh-fn">echo</span> <span class="sh-str">"Today is </span><span class="sh-op">$</span><span class="sh-str">today"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">$ bash greet.sh</span><br />
+              <span style="color:#9ece6a;">Hi, Ada</span><br />
+              <span style="color:#9ece6a;">Today is 2026-10-26</span><br /><br />
+              <span style="color:#7dcfff;">#!/usr/bin/env bash → finds bash on PATH</span><br />
+              <span style="color:#e0af68;">"$name" → quotes keep spaces safe</span><br />
+              <span style="color:#e0af68;">$(cmd) → runs cmd, drops in its output</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Branch with <code>if/then/fi</code>, repeat with <code>for</code> and <code>while</code>, and bundle reusable steps into a <code>function</code> that reads arguments via <code>$1</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/linux/linux_shell.php" target="_blank">W3Schools →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">if / for / while / functions</div>
+          <pre><span class="sh-kw">if</span> [ <span class="sh-str">"</span><span class="sh-op">$</span><span class="sh-str">1"</span> = <span class="sh-str">"hi"</span> ]; <span class="sh-kw">then</span>
+  <span class="sh-fn">echo</span> <span class="sh-str">"hello"</span>
+<span class="sh-kw">fi</span>
+
+<span class="sh-kw">for</span> f <span class="sh-kw">in</span> *.txt; <span class="sh-kw">do</span>
+  <span class="sh-fn">echo</span> <span class="sh-str">"</span><span class="sh-op">$</span><span class="sh-str">f"</span>
+<span class="sh-kw">done</span>
+
+n=<span class="sh-op">1</span>
+<span class="sh-kw">while</span> [ <span class="sh-op">$</span>n <span class="sh-op">-</span>le <span class="sh-op">3</span> ]; <span class="sh-kw">do</span>
+  <span class="sh-fn">echo</span> <span class="sh-str">"</span><span class="sh-op">$</span><span class="sh-str">n"</span>
+  n=<span class="sh-op">$((</span>n+<span class="sh-op">1))</span>
+<span class="sh-kw">done</span>
+
+<span class="sh-fn">greet</span>() {
+  <span class="sh-fn">echo</span> <span class="sh-str">"Hi, </span><span class="sh-op">$</span><span class="sh-str">1"</span>
+}
+<span class="sh-fn">greet</span> <span class="sh-str">"Ada"</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;">if … then … fi — run block when test is true</span><br />
+              <span style="color:#565f89;">for f in *.txt — loop over matching files</span><br />
+              <span style="color:#565f89;">while [ … ] — loop while test stays true</span><br />
+              <span style="color:#9ece6a;">n = 1 → 2 → 3, then stops</span><br />
+              <span style="color:#565f89;">greet() { … } — define once, call anytime</span><br />
+              <span style="color:#9ece6a;">greet "Ada" → Hi, Ada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shx3-fig">
+        <span class="shx3-fig__cap">A script runs top-to-bottom — one line at a time</span>
+        <div class="shx3-script" aria-hidden="true">
+          <span class="shx3-ptr">▸</span>
+          <ol class="shx3-lines">
+            <li class="shx3-sl shx3-sl--1"><span class="shx3-t-cm">#!/usr/bin/env bash</span></li>
+            <li class="shx3-sl shx3-sl--2"><span class="shx3-t-var">name</span>=<span class="shx3-t-str">"Ada"</span></li>
+            <li class="shx3-sl shx3-sl--3"><span class="shx3-t-fn">echo</span> <span class="shx3-t-str">"Hi, $name"</span></li>
+            <li class="shx3-sl shx3-sl--4"><span class="shx3-t-kw">for</span> i <span class="shx3-t-kw">in</span> 1 2 3; <span class="shx3-t-kw">do</span></li>
+            <li class="shx3-sl shx3-sl--5">&nbsp;&nbsp;<span class="shx3-t-fn">echo</span> <span class="shx3-t-var">$i</span></li>
+            <li class="shx3-sl shx3-sl--6"><span class="shx3-t-kw">done</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
 
 
   </main>
@@ -682,7 +1611,83 @@ greet <span class="sh-str">"World"</span>
     <p>Shell Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <!-- shx3- : drives the animated bash terminal demo (calm typing loop) -->
+  <script>
+  (function(){
+    var body = document.getElementById('shx3-term-body');
+    if(!body) return;
+
+    var reduce = false;
+    try{ reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+
+    // Each step: a command split into coloured tokens, then its output lines.
+    var steps = [
+      { cmd:[['echo ','fn'],['"hi"','str']], out:['hi'] },
+      { cmd:[['ls','fn']], out:['notes.txt  pics  todo.md'] },
+      { cmd:[['ls ','fn'],['| ','op'],['wc ','fn'],['-l','op']], out:['3'] },
+      { cmd:[['for ','kw'],['i ','var'],['in ','kw'],['1 2 3','num'],['; ','op'],['do ','kw'],['echo ','fn'],['$i','var'],['; ','op'],['done','kw']], out:['1','2','3'] }
+    ];
+
+    var CH=60, PRE=620, OUT=300, AFTER=1050, LOOP=2100;
+
+    function clearBody(){ while(body.firstChild) body.removeChild(body.firstChild); }
+    function makeLine(cls){ var d=document.createElement('div'); d.className='shx3-line'+(cls?' '+cls:''); body.appendChild(d); return d; }
+    function makePrompt(line){ var p=document.createElement('span'); p.className='shx3-prompt'; p.textContent='$ '; line.appendChild(p); }
+    function toScroll(){ try{ body.scrollTop = body.scrollHeight; }catch(e){} }
+
+    function renderStatic(){
+      clearBody();
+      steps.forEach(function(step){
+        var line=makeLine();
+        makePrompt(line);
+        var cmd=document.createElement('span'); cmd.className='shx3-cmd';
+        step.cmd.forEach(function(tk){ var s=document.createElement('span'); s.className='shx3-t-'+tk[1]; s.textContent=tk[0]; cmd.appendChild(s); });
+        line.appendChild(cmd);
+        step.out.forEach(function(o){ var d=makeLine('shx3-outline'); d.textContent=o; });
+      });
+      var caret=document.createElement('span'); caret.className='shx3-caret'; body.appendChild(caret);
+    }
+
+    if(reduce){ renderStatic(); return; }
+
+    function printOut(outs, j, done){
+      if(j>=outs.length){ done(); return; }
+      var d=makeLine('shx3-outline'); d.textContent=outs[j]; toScroll();
+      setTimeout(function(){ printOut(outs, j+1, done); }, OUT);
+    }
+
+    function runStep(i){
+      if(i>=steps.length){ setTimeout(function(){ clearBody(); runStep(0); }, LOOP); return; }
+      var step=steps[i];
+      var line=makeLine();
+      makePrompt(line);
+      var cmd=document.createElement('span'); cmd.className='shx3-cmd'; line.appendChild(cmd);
+      var caret=document.createElement('span'); caret.className='shx3-caret'; line.appendChild(caret);
+      toScroll();
+
+      var chars=[];
+      step.cmd.forEach(function(tk){ for(var k=0;k<tk[0].length;k++){ chars.push([tk[0].charAt(k), tk[1]]); } });
+
+      var ci=0;
+      function typeChar(){
+        if(ci<chars.length){
+          var s=document.createElement('span'); s.className='shx3-t-'+chars[ci][1]; s.textContent=chars[ci][0];
+          cmd.appendChild(s);
+          ci++; toScroll();
+          setTimeout(typeChar, CH);
+        } else {
+          if(caret.parentNode) caret.parentNode.removeChild(caret);
+          printOut(step.out, 0, function(){ setTimeout(function(){ runStep(i+1); }, AFTER); });
+        }
+      }
+      setTimeout(typeChar, PRE);
+    }
+
+    runStep(0);
+  })();
+  </script>
+
+  <script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

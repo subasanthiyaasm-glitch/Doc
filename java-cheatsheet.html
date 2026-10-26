@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Java &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
 </head>
 <body>
 
@@ -23,15 +23,16 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=7"></script>
 <script>renderHeader('Java')</script>
 <script>renderSourceLink('Java')</script>
   <main>
   <div class="page-header">
     <h1>Java</h1>
-    <p class="subtitle">Quick reference with live previews</p>
+    <p class="subtitle">A beginner-friendly Java reference &mdash; short examples you can watch run.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#how-java-runs">How it runs</a>
       <a href="#getting-started">Start</a>
       <a href="#strings">Strings</a>
       <a href="#arrays">Arrays</a>
@@ -45,12 +46,310 @@
     </nav>
   </div>
 
+    <!-- Animated beginner explainer: Write Once, Run Anywhere -->
+    <section id="how-java-runs">
+      <style>
+        #how-java-runs .javax-card{
+          background:var(--surface);
+          border:1px solid var(--border);
+          border-radius:var(--radius);
+          padding:1.1rem 1.2rem 1.3rem;
+          box-shadow:var(--shadow-sm);
+          margin-top:.5rem;
+        }
+        #how-java-runs .javax-fig{ width:100%; height:auto; display:block; }
+
+        /* boxes along the pipeline */
+        #how-java-runs .javax-box{ fill:var(--surface-2); stroke:var(--border-strong); stroke-width:1.2; }
+        #how-java-runs .javax-box--jvm{
+          fill:var(--accent-subtle);
+          stroke:var(--accent);
+          stroke-width:1.6;
+          animation:javax-glow 3.6s ease-in-out infinite;
+        }
+        #how-java-runs .javax-title{ fill:var(--text); font-family:var(--display); font-weight:600; font-size:14.5px; }
+        #how-java-runs .javax-sub{ fill:var(--text-muted); font-family:'Inter',sans-serif; font-size:10.5px; }
+
+        /* arrows + commands */
+        #how-java-runs .javax-arrow{ stroke:var(--text-subtle); stroke-width:1.6; fill:none; }
+        #how-java-runs .javax-cmd{ fill:var(--accent); font-family:'JetBrains Mono',monospace; font-size:10.5px; }
+        #how-java-runs .javax-cmd-note{ fill:var(--text-subtle); font-family:'Inter',sans-serif; font-size:10px; font-style:italic; }
+
+        /* JVM -> OS cluster */
+        #how-java-runs .javax-conn{ stroke:var(--accent-2); stroke-width:1.4; stroke-dasharray:3 4; opacity:.65; fill:none; }
+        #how-java-runs .javax-chip{ fill:var(--surface-2); stroke:var(--border-strong); stroke-width:1.2; }
+        #how-java-runs .javax-oslabel{ fill:var(--text); font-family:var(--display); font-weight:600; font-size:12px; }
+        #how-java-runs .javax-os{ animation:javax-breathe 4.2s ease-in-out infinite; }
+        #how-java-runs .javax-caption{ fill:var(--text-muted); font-family:'Inter',sans-serif; font-size:11px; }
+
+        /* travelling token (drawn before the boxes, so boxes occlude it => it "enters" each stage) */
+        #how-java-runs .javax-token-core{ fill:var(--accent-2); }
+        #how-java-runs .javax-token-halo{ fill:var(--accent-2); animation:javax-halo 2.4s ease-in-out infinite; }
+        #how-java-runs .javax-token{ animation:javax-flow 8.5s ease-in-out infinite; }
+
+        @keyframes javax-flow{
+          0%   { transform:translateX(0);     opacity:0; }
+          5%   { transform:translateX(0);     opacity:1; }
+          13%  { transform:translateX(0);     opacity:1; }
+          28%  { transform:translateX(218px); opacity:1; }
+          36%  { transform:translateX(218px); opacity:1; }
+          52%  { transform:translateX(436px); opacity:1; }
+          61%  { transform:translateX(436px); opacity:1; }
+          80%  { transform:translateX(654px); opacity:1; }
+          89%  { transform:translateX(654px); opacity:1; }
+          95%  { transform:translateX(654px); opacity:0; }
+          100% { transform:translateX(654px); opacity:0; }
+        }
+        @keyframes javax-glow{ 0%,100%{ stroke-opacity:.5; } 50%{ stroke-opacity:1; } }
+        @keyframes javax-breathe{ 0%,100%{ opacity:.68; } 50%{ opacity:1; } }
+        @keyframes javax-halo{ 0%,100%{ opacity:.12; } 50%{ opacity:.32; } }
+
+        @media (prefers-reduced-motion: reduce){
+          #how-java-runs .javax-token{ animation:none; opacity:1; transform:translateX(109px); }
+          #how-java-runs .javax-token-halo{ animation:none; opacity:.25; }
+          #how-java-runs .javax-box--jvm{ animation:none; stroke-opacity:1; }
+          #how-java-runs .javax-os{ animation:none; opacity:1; }
+        }
+      </style>
+
+      <h2>How Java Runs: Write Once, Run Anywhere</h2>
+
+      <div class="block-desc">
+        <span>You write <code>Main.java</code>, <code>javac</code> turns it into portable <code>Main.class</code> bytecode, and the <b>JVM</b> runs that bytecode on Windows, macOS, or Linux. Watch the dot flow through each step.</span>
+        <a class="w3-link" href="https://www.w3schools.com/java/java_intro.asp" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="javax-card">
+        <svg class="javax-fig" viewBox="0 0 820 250" role="img"
+             aria-label="Main.java is compiled by javac into Main.class bytecode; the java command runs it on the JVM, which can run the same bytecode on Windows, macOS, or Linux to produce output.">
+          <defs>
+            <marker id="javax-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--text-subtle)"/>
+            </marker>
+          </defs>
+
+          <!-- arrows between the stages -->
+          <line class="javax-arrow" x1="138" y1="87" x2="242" y2="87" marker-end="url(#javax-ah)"/>
+          <line class="javax-arrow" x1="356" y1="87" x2="460" y2="87" marker-end="url(#javax-ah)"/>
+          <line class="javax-arrow" x1="574" y1="87" x2="678" y2="87" marker-end="url(#javax-ah)"/>
+
+          <!-- travelling token (before boxes, so boxes cover it as it "enters" each stage) -->
+          <g class="javax-token">
+            <circle class="javax-token-halo" cx="83" cy="87" r="12"/>
+            <circle class="javax-token-core" cx="83" cy="87" r="6"/>
+          </g>
+
+          <!-- stage boxes -->
+          <rect class="javax-box" x="28"  y="52" width="110" height="70" rx="12"/>
+          <text class="javax-title" x="83"  y="81"  text-anchor="middle">Main.java</text>
+          <text class="javax-sub"   x="83"  y="101" text-anchor="middle">the code you write</text>
+
+          <rect class="javax-box" x="246" y="52" width="110" height="70" rx="12"/>
+          <text class="javax-title" x="301" y="81"  text-anchor="middle">Main.class</text>
+          <text class="javax-sub"   x="301" y="101" text-anchor="middle">portable bytecode</text>
+
+          <rect class="javax-box javax-box--jvm" x="464" y="52" width="110" height="70" rx="12"/>
+          <text class="javax-title" x="519" y="81"  text-anchor="middle">JVM</text>
+          <text class="javax-sub"   x="519" y="101" text-anchor="middle">runs the bytecode</text>
+
+          <rect class="javax-box" x="682" y="52" width="110" height="70" rx="12"/>
+          <text class="javax-title" x="737" y="81"  text-anchor="middle">Output</text>
+          <text class="javax-sub"   x="737" y="101" text-anchor="middle">Hello, World!</text>
+
+          <!-- the command under each arrow -->
+          <text class="javax-cmd"      x="190" y="109" text-anchor="middle">javac Main.java</text>
+          <text class="javax-cmd"      x="408" y="109" text-anchor="middle">java Main</text>
+          <text class="javax-cmd-note" x="626" y="109" text-anchor="middle">prints</text>
+
+          <!-- JVM runs the same bytecode on any OS -->
+          <path class="javax-conn" d="M519 122 L407 170"/>
+          <path class="javax-conn" d="M519 122 L519 170"/>
+          <path class="javax-conn" d="M519 122 L631 170"/>
+
+          <g class="javax-os" style="animation-delay:0s">
+            <rect class="javax-chip" x="357" y="170" width="100" height="40" rx="10"/>
+            <text class="javax-oslabel" x="407" y="195" text-anchor="middle">Windows</text>
+          </g>
+          <g class="javax-os" style="animation-delay:.7s">
+            <rect class="javax-chip" x="469" y="170" width="100" height="40" rx="10"/>
+            <text class="javax-oslabel" x="519" y="195" text-anchor="middle">macOS</text>
+          </g>
+          <g class="javax-os" style="animation-delay:1.4s">
+            <rect class="javax-chip" x="581" y="170" width="100" height="40" rx="10"/>
+            <text class="javax-oslabel" x="631" y="195" text-anchor="middle">Linux</text>
+          </g>
+
+          <text class="javax-caption" x="519" y="236" text-anchor="middle">One Main.class file runs on all three &mdash; that is the JVM's job.</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ===== javax2: per-concept inline animations + memory/GC diagrams (single style block) ===== -->
+    <style id="javax2-styles">
+      /* layout: compact concept strip beside each section */
+      .javax2-strip{
+        display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+        background:var(--surface); border:1px solid var(--border);
+        border-radius:var(--radius); padding:.75rem 1rem; margin:.4rem 0 1.25rem;
+      }
+      .javax2-strip svg{ width:300px; max-width:100%; height:auto; display:block; flex:0 0 auto; }
+      .javax2-cap{ flex:1 1 180px; min-width:160px; font-family:var(--display);
+        font-size:.82rem; line-height:1.45; color:var(--text-muted); }
+      .javax2-cap code{ font-size:.78rem; }
+
+      /* larger memory/GC diagram cards */
+      .javax2-diagram{
+        background:var(--surface); border:1px solid var(--border);
+        border-radius:var(--radius); padding:1rem 1.1rem 1.1rem; margin:.4rem 0 1.4rem;
+      }
+      .javax2-diagram svg{ width:100%; height:auto; display:block; }
+      .javax2-dtitle{ font-family:var(--display); font-weight:600; font-size:.95rem;
+        color:var(--text); margin:0 0 .5rem; }
+      .javax2-legend{ display:flex; flex-wrap:wrap; gap:.3rem 1.1rem; margin-top:.65rem;
+        font-family:var(--display); font-size:.72rem; color:var(--text-muted); }
+      .javax2-legend i{ display:inline-block; width:10px; height:10px; border-radius:3px;
+        margin-right:.35rem; vertical-align:middle; }
+
+      /* text on theme variables (light + dark) */
+      .javax2-label{ fill:var(--text); font-family:var(--display); font-weight:600; font-size:11px; }
+      .javax2-muted{ fill:var(--text-muted); font-family:'Inter',system-ui,sans-serif; font-size:9px; }
+      .javax2-h{ fill:var(--text); font-family:var(--display); font-weight:600; font-size:14px; }
+      .javax2-n{ fill:var(--text); font-family:'JetBrains Mono',monospace; font-size:12px; }
+      .javax2-sm{ fill:var(--text-muted); font-family:'Inter',system-ui,sans-serif; font-size:11px; }
+      .javax2-addr{ fill:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:10.5px; }
+
+      /* surfaces on theme variables */
+      .javax2-cell{ fill:var(--surface-2); stroke:var(--border); stroke-width:1.2; }
+      .javax2-obj{ fill:var(--surface); stroke:var(--border); stroke-width:1.3; }
+      .javax2-heap,.javax2-stack{ fill:var(--surface-2); stroke:var(--border); stroke-width:1.3; }
+
+      /* fixed multi-colour accents for the moving / highlighted graphics */
+      .javax2-amber{ fill:#e0b366; }  .javax2-amber-s{ stroke:#e0b366; }
+      .javax2-rose{ fill:#e8808f; }   .javax2-rose-s{ stroke:#e8808f; }
+      .javax2-blue{ fill:#7aa2f7; }   .javax2-blue-s{ stroke:#7aa2f7; }
+      .javax2-green{ fill:#9ece6a; }  .javax2-green-s{ stroke:#9ece6a; }
+      .javax2-violet{ fill:#bb9af7; } .javax2-violet-s{ stroke:#bb9af7; }
+      .javax2-acc{ fill:var(--accent); } .javax2-acc-s{ stroke:var(--accent); }
+
+      .javax2-glow{ fill:none; stroke-width:2.2; opacity:.5; }
+      .javax2-edge{ fill:none; stroke:#7aa2f7; stroke-width:2; }
+      .javax2-edgeln{ fill:none; stroke:var(--text-muted); stroke-width:1.5; }
+      .javax2-roots{ fill:var(--surface-2); stroke:#e0b366; stroke-width:1.6; }
+      .javax2-young{ fill:#7aa2f7; fill-opacity:.08; stroke:#7aa2f7; stroke-opacity:.5; stroke-width:1.2; }
+      .javax2-old{ fill:#bb9af7; fill-opacity:.08; stroke:#bb9af7; stroke-opacity:.5; stroke-width:1.2; }
+      .javax2-garb{ fill:#e8808f; fill-opacity:.16; stroke:#e8808f; stroke-width:1.5; }
+
+      /* ---- animation bindings ---- */
+      .javax2-seqA{ animation:javax2-seq3 3.6s ease-in-out infinite; }
+      .javax2-seqB{ animation:javax2-seq4 4s ease-in-out infinite; }
+      .javax2-d0{ animation-delay:0s; } .javax2-d1{ animation-delay:1.2s; } .javax2-d2{ animation-delay:2.4s; }
+      .javax2-e0{ animation-delay:0s; } .javax2-e1{ animation-delay:1s; }
+      .javax2-e2{ animation-delay:2s; } .javax2-e3{ animation-delay:3s; }
+      .javax2-stepper{ animation:javax2-step4 5s ease-in-out infinite; }
+      .javax2-appear{ opacity:1; transform-box:fill-box; transform-origin:center;
+        animation:javax2-appear 4s ease-in-out infinite; }
+      .javax2-pulseEl{ animation:javax2-pulse 3s ease-in-out infinite; }
+      .javax2-condtok{ opacity:1; animation:javax2-cond 4.8s ease-in-out infinite; }
+      .javax2-orbit{ transform-box:fill-box; transform-origin:center;
+        animation:javax2-spin 5s linear infinite; }
+      .javax2-growitem{ opacity:1; transform-box:fill-box; transform-origin:center bottom;
+        animation:javax2-grow 5s ease-in-out infinite; }
+      .javax2-gi0{ animation-delay:0s; } .javax2-gi1{ animation-delay:.6s; }
+      .javax2-gi2{ animation-delay:1.2s; } .javax2-gi3{ animation-delay:1.8s; }
+      .javax2-reqtok{ opacity:1; animation:javax2-req 4.5s ease-in-out infinite; }
+      .javax2-restok{ opacity:0; animation:javax2-res 4.5s ease-in-out infinite; }
+      .javax2-pipetok{ opacity:1; animation:javax2-pipe 5s ease-in-out infinite; }
+      .javax2-qouttok{ opacity:1; animation:javax2-qout 4.5s ease-in-out infinite; }
+      .javax2-rintok{ opacity:0; animation:javax2-rin 4.5s ease-in-out infinite; }
+
+      /* GC + memory */
+      .javax2-root-el{ animation:javax2-rootpulse 4s ease-in-out infinite; }
+      .javax2-mark{ fill:none; stroke:#9ece6a; stroke-width:2.6; opacity:.9;
+        animation:javax2-gcmark 9s ease-in-out infinite; }
+      .javax2-md0{ animation-delay:0s; } .javax2-md1{ animation-delay:.7s; }
+      .javax2-md2{ animation-delay:1.4s; } .javax2-md3{ animation-delay:2.1s; }
+      .javax2-sweep{ transform-box:fill-box; transform-origin:center;
+        animation:javax2-gcsweep 9s ease-in-out infinite; }
+      .javax2-freed{ opacity:0; animation:javax2-freed 9s ease-in-out infinite; }
+      .javax2-phaseA{ animation:javax2-phaseA 9s ease-in-out infinite; }
+      .javax2-phaseB{ animation:javax2-phaseB 9s ease-in-out infinite; }
+      .javax2-memdot1{ opacity:0; animation:javax2-memdot1 6.5s ease-in-out infinite; }
+      .javax2-memdot2{ opacity:0; animation:javax2-memdot2 6.5s ease-in-out infinite; }
+
+      /* ---- keyframes ---- */
+      @keyframes javax2-seq3{ 0%{opacity:.18} 6%{opacity:1} 27%{opacity:1} 34%{opacity:.18} 100%{opacity:.18} }
+      @keyframes javax2-seq4{ 0%{opacity:.16} 5%{opacity:1} 20%{opacity:1} 26%{opacity:.16} 100%{opacity:.16} }
+      @keyframes javax2-step4{
+        0%,16%{transform:translateX(0)}
+        22%,41%{transform:translateX(62px)}
+        47%,66%{transform:translateX(124px)}
+        72%,92%{transform:translateX(186px)}
+        100%{transform:translateX(0)} }
+      @keyframes javax2-appear{
+        0%,18%{opacity:0;transform:scale(.85)}
+        34%,78%{opacity:1;transform:scale(1)}
+        96%,100%{opacity:0;transform:scale(.85)} }
+      @keyframes javax2-cond{
+        0%{transform:translate(0,0);opacity:0}
+        10%{opacity:1}
+        30%,45%{transform:translate(78px,0);opacity:1}
+        72%{transform:translate(150px,20px);opacity:1}
+        88%,100%{transform:translate(150px,20px);opacity:0} }
+      @keyframes javax2-spin{ to{ transform:rotate(360deg); } }
+      @keyframes javax2-grow{
+        0%{opacity:0;transform:scale(.5)}
+        12%{opacity:1;transform:scale(1)}
+        86%{opacity:1;transform:scale(1)}
+        100%{opacity:0;transform:scale(.5)} }
+      @keyframes javax2-req{
+        0%{transform:translateX(0);opacity:0} 6%{opacity:1}
+        40%{transform:translateX(104px);opacity:1} 46%{opacity:0} 100%{opacity:0} }
+      @keyframes javax2-res{
+        0%,50%{transform:translateX(104px);opacity:0} 56%{opacity:1}
+        90%{transform:translateX(0);opacity:1} 96%,100%{opacity:0} }
+      @keyframes javax2-pipe{
+        0%{transform:translateX(0);opacity:0} 5%{opacity:1}
+        22%,30%{transform:translateX(64px)}
+        47%,55%{transform:translateX(128px)}
+        72%,90%{transform:translateX(192px);opacity:1}
+        96%,100%{transform:translateX(192px);opacity:0} }
+      @keyframes javax2-qout{
+        0%{transform:translateX(0);opacity:0} 6%{opacity:1}
+        42%{transform:translateX(108px);opacity:1} 48%{opacity:0} 100%{opacity:0} }
+      @keyframes javax2-rin{
+        0%,52%{transform:translateX(108px);opacity:0} 58%{opacity:1}
+        92%{transform:translateX(0);opacity:1} 98%,100%{opacity:0} }
+      @keyframes javax2-pulse{ 0%,100%{opacity:.35} 50%{opacity:.85} }
+      @keyframes javax2-rootpulse{ 0%,100%{opacity:.55} 50%{opacity:1} }
+      @keyframes javax2-gcmark{ 0%,12%{opacity:0} 22%{opacity:.9} 90%{opacity:.9} 100%{opacity:0} }
+      @keyframes javax2-gcsweep{
+        0%,55%{opacity:1;transform:scale(1)}
+        70%{opacity:.08;transform:scale(.7)}
+        92%{opacity:.08;transform:scale(.7)}
+        100%{opacity:1;transform:scale(1)} }
+      @keyframes javax2-freed{ 0%,60%{opacity:0} 74%,92%{opacity:1} 100%{opacity:0} }
+      @keyframes javax2-phaseA{ 0%,8%{opacity:.25} 14%{opacity:1} 50%{opacity:1} 56%,100%{opacity:.25} }
+      @keyframes javax2-phaseB{ 0%,52%{opacity:.25} 58%{opacity:1} 92%{opacity:1} 96%,100%{opacity:.25} }
+      @keyframes javax2-memdot1{
+        0%{opacity:0;transform:translate(0,0)} 10%{opacity:1}
+        45%{opacity:1;transform:translate(240px,-20px)}
+        52%,100%{opacity:0;transform:translate(240px,-20px)} }
+      @keyframes javax2-memdot2{
+        0%,52%{opacity:0;transform:translate(0,0)} 60%{opacity:1}
+        92%{opacity:1;transform:translate(240px,-6px)}
+        98%,100%{opacity:0;transform:translate(240px,-6px)} }
+
+      @media (prefers-reduced-motion: reduce){
+        .javax2-strip [class*="javax2-"], .javax2-diagram [class*="javax2-"]{ animation:none !important; }
+      }
+    </style>
+
     <!-- Getting Started -->
     <section id="getting-started">
       <h2>Getting Started</h2>
 
       <div class="block-desc">
-        <span>The <code>main()</code> method is the entry point of every Java application.</span>
+        <span>Every Java program starts at the <code>main()</code> method &mdash; the first code that runs.</span>
         <a class="w3-link" href="https://www.w3schools.com/java/java_getstarted.asp" target="_blank">W3Schools →</a>
       </div>
       <div class="cheat-block">
@@ -1387,7 +1686,7 @@ batch.<span class="lm">executeBatch</span>();</pre>
     <p>Java Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

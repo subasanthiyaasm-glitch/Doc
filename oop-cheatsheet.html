@@ -4,7 +4,86 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OOP &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
+  <style>
+  /* oopx2- : compact inline concept animations added to the four pillar
+     sections. Prefixed oopx2- so they never collide with the intro's oopx-.
+     Every colour comes from the shared theme tokens, so light + dark both
+     read correctly. Motion is calm (one element at a time) and is switched
+     off entirely for visitors who prefer reduced motion. */
+  .oopx2-viz{
+    display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--radius);padding:.85rem 1.1rem;margin:0 0 1.1rem;
+  }
+  .oopx2-viz svg{flex:0 0 auto;}
+  .oopx2-cap{
+    color:var(--text-muted);font-size:.82rem;line-height:1.55;
+    flex:1 1 210px;min-width:190px;
+  }
+  .oopx2-cap b{color:var(--text);font-weight:600;}
+  .oopx2-cap .oopx2-k{color:var(--accent-2);font-weight:600;}
+
+  /* 1 - Encapsulation: a cover slides across to seal the private fields;
+     a padlock marks them sealed. Only the cover moves. */
+  .oopx2-seal{
+    transform-box:fill-box;transform-origin:left center;
+    animation:oopx2-seal 4.4s ease-in-out infinite;
+  }
+  @keyframes oopx2-seal{
+    0%,8%{transform:scaleX(0)}
+    42%,68%{transform:scaleX(1)}
+    100%{transform:scaleX(0)}
+  }
+
+  /* 2 - Inheritance: a single trait token travels down from Animal to Dog. */
+  .oopx2-trait{animation:oopx2-trait 3.6s ease-in-out infinite;}
+  @keyframes oopx2-trait{
+    0%{opacity:0;transform:translateY(0)}
+    14%{opacity:1}
+    72%{opacity:1;transform:translateY(16px)}
+    88%,100%{opacity:0;transform:translateY(16px)}
+  }
+
+  /* 3 - Polymorphism: speak() routes down one branch, then the other.
+     The two signals are phased so only one is ever moving at a time. */
+  .oopx2-sigA{animation:oopx2-sigA 5.4s ease-in-out infinite;}
+  @keyframes oopx2-sigA{
+    0%{opacity:0;transform:translate(0,0)}
+    6%{opacity:1}
+    34%{opacity:1;transform:translate(-42px,20px)}
+    40%,100%{opacity:0;transform:translate(-42px,20px)}
+  }
+  .oopx2-sigB{animation:oopx2-sigB 5.4s ease-in-out infinite;}
+  @keyframes oopx2-sigB{
+    0%,50%{opacity:0;transform:translate(0,0)}
+    56%{opacity:1}
+    84%{opacity:1;transform:translate(42px,20px)}
+    90%,100%{opacity:0;transform:translate(42px,20px)}
+  }
+
+  /* 4 - Abstraction: the hidden gears turn slowly behind a simple interface. */
+  .oopx2-gear{
+    transform-box:fill-box;transform-origin:center;
+    animation:oopx2-spin 8s linear infinite;
+  }
+  .oopx2-gear2{
+    transform-box:fill-box;transform-origin:center;
+    animation:oopx2-spin 6s linear infinite reverse;
+  }
+  @keyframes oopx2-spin{to{transform:rotate(360deg)}}
+
+  /* Respect reduced-motion: freeze every oopx2 animation but leave each
+     visual in a clear, readable resting state. */
+  @media (prefers-reduced-motion: reduce){
+    .oopx2-seal,.oopx2-trait,.oopx2-sigA,.oopx2-sigB,
+    .oopx2-gear,.oopx2-gear2{animation:none !important;}
+    .oopx2-seal{transform:scaleX(1);}   /* shown sealed */
+    .oopx2-trait{opacity:1;}            /* trait resting on the link */
+    .oopx2-sigA{opacity:1;}            /* one signal shown at the source */
+    .oopx2-sigB{opacity:0;}
+  }
+  </style>
 </head>
 <body>
 
@@ -23,16 +102,17 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=8"></script>
 <script>renderHeader('OOP')</script>
 <script>renderSourceLink('OOP')</script>
 
 <main>
   <div class="page-header">
     <h1>OOP</h1>
-    <p class="subtitle">Object-Oriented Programming principles &amp; patterns</p>
+    <p class="subtitle">Build programs out of objects &mdash; the four big ideas, in plain English.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#oop-intro">Start Here</a>
       <a href="#pillars">Four Pillars</a>
       <a href="#encapsulation">Encapsulation</a>
       <a href="#inheritance">Inheritance</a>
@@ -44,13 +124,290 @@
     </nav>
   </div>
 
+  <!-- ═══════════════════════════ ANIMATED INTRO (beginner-friendly) ═══ -->
+  <section id="oop-intro">
+    <style>
+    /* All classes prefixed oopx- to avoid colliding with shared styles.
+       Colours come from the shared theme tokens so light + dark both work. */
+    #oop-intro .oopx-wrap{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:1.5rem 1.5rem 1.75rem;
+      box-shadow:var(--shadow-sm);
+    }
+    #oop-intro .oopx-lead{
+      color:var(--text-muted);font-size:.92rem;line-height:1.6;
+      margin:.1rem 0 1.4rem;max-width:64ch;
+    }
+    #oop-intro .oopx-lead strong{color:var(--text);font-weight:600;}
+    #oop-intro .oopx-h3{
+      font-family:var(--display);font-size:1rem;font-weight:700;color:var(--text);
+      margin:0 0 .85rem;display:flex;align-items:center;gap:.5rem;
+    }
+    #oop-intro .oopx-h3::before{
+      content:"";width:9px;height:9px;border-radius:3px;
+      background:var(--accent-2);display:inline-block;
+    }
+
+    /* ── Class vs Object (cookie cutter) ── */
+    #oop-intro .oopx-cookie{
+      display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;
+      background:var(--surface-2);border:1px solid var(--border);
+      border-radius:var(--radius-sm);padding:.9rem 1.15rem;margin-bottom:1.9rem;
+    }
+    #oop-intro .oopx-cookie svg{flex:0 0 auto;}
+    #oop-intro .oopx-cookie-note{
+      color:var(--text-muted);font-size:.82rem;line-height:1.55;
+      flex:1 1 180px;min-width:170px;
+    }
+    #oop-intro .oopx-cookie-note b{color:var(--text);font-weight:600;}
+    #oop-intro .oopx-tag{color:var(--accent-2);font-weight:600;}
+
+    #oop-intro .oopx-cutter{animation:oopx-press 3.2s ease-in-out infinite;}
+    @keyframes oopx-press{0%,100%{transform:translateY(0)}48%,56%{transform:translateY(5px)}}
+    #oop-intro .oopx-ck{
+      opacity:0;transform-box:fill-box;transform-origin:center;
+      animation:oopx-pop 3.2s ease-in-out infinite;
+    }
+    #oop-intro .oopx-ck.c2{animation-delay:.35s}
+    #oop-intro .oopx-ck.c3{animation-delay:.7s}
+    @keyframes oopx-pop{
+      0%,28%{opacity:0;transform:scale(.4)}
+      52%{opacity:1;transform:scale(1)}
+      90%{opacity:1;transform:scale(1)}
+      100%{opacity:0;transform:scale(.4)}
+    }
+
+    /* ── Four pillar cards ── */
+    #oop-intro .oopx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem;}
+    @media(max-width:620px){#oop-intro .oopx-grid{grid-template-columns:1fr;}}
+    #oop-intro .oopx-card{
+      position:relative;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:var(--surface-2);padding:1rem 1.05rem 1.1rem;
+      transition:border-color .5s ease,box-shadow .5s ease,transform .5s ease;
+    }
+    #oop-intro .oopx-card.oopx-active{
+      border-color:var(--accent-2);
+      box-shadow:0 0 0 1px var(--accent-2),var(--shadow-sm);
+      transform:translateY(-2px);
+    }
+    #oop-intro .oopx-num{
+      position:absolute;top:.75rem;right:.9rem;font-family:var(--display);
+      font-size:.75rem;font-weight:700;color:var(--text-subtle);transition:color .5s ease;
+    }
+    #oop-intro .oopx-card.oopx-active .oopx-num{color:var(--accent-2);}
+    #oop-intro .oopx-ct{
+      font-family:var(--display);font-size:.98rem;font-weight:700;
+      color:var(--text);margin-bottom:.15rem;
+    }
+    #oop-intro .oopx-def{color:var(--text-muted);font-size:.82rem;line-height:1.45;}
+    #oop-intro .oopx-ana{color:var(--text-subtle);font-size:.76rem;line-height:1.45;margin-top:.5rem;}
+    #oop-intro .oopx-ana b{color:var(--accent-2);font-weight:600;}
+    #oop-intro .oopx-viz{height:74px;display:flex;align-items:center;justify-content:center;margin:.55rem 0 .3rem;}
+
+    /* Pillar SVG motion runs only on the card that is currently highlighted,
+       so the page stays calm (one thing moves at a time). */
+    #oop-intro .oopx-active .oopx-lock{
+      animation:oopx-lockpulse 2.4s ease-in-out infinite;
+      transform-box:fill-box;transform-origin:center;
+    }
+    @keyframes oopx-lockpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+    #oop-intro .oopx-active .oopx-cover{animation:oopx-fade 3s ease-in-out infinite;}
+    @keyframes oopx-fade{0%,100%{opacity:.3}50%{opacity:1}}
+
+    #oop-intro .oopx-active .oopx-drop{animation:oopx-drop 2.6s ease-in-out infinite;}
+    @keyframes oopx-drop{
+      0%{opacity:0;transform:translateY(0)}
+      18%{opacity:1}
+      78%{opacity:1;transform:translateY(25px)}
+      100%{opacity:0;transform:translateY(25px)}
+    }
+
+    #oop-intro .oopx-active .oopx-dog{animation:oopx-blinkA 2.8s ease-in-out infinite;}
+    #oop-intro .oopx-active .oopx-cat{animation:oopx-blinkB 2.8s ease-in-out infinite;}
+    @keyframes oopx-blinkA{0%,100%{opacity:.35}25%{opacity:1}55%{opacity:.35}}
+    @keyframes oopx-blinkB{0%,50%{opacity:.35}80%{opacity:1}100%{opacity:.35}}
+    #oop-intro .oopx-active .oopx-ping{
+      animation:oopx-ping 2.8s ease-in-out infinite;
+      transform-box:fill-box;transform-origin:center;
+    }
+    @keyframes oopx-ping{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+    #oop-intro .oopx-active .oopx-wheel{
+      animation:oopx-steer 4s ease-in-out infinite;
+      transform-box:fill-box;transform-origin:center;
+    }
+    @keyframes oopx-steer{0%,100%{transform:rotate(-11deg)}50%{transform:rotate(11deg)}}
+    #oop-intro .oopx-active .oopx-gear{
+      animation:oopx-spin 6s linear infinite;
+      transform-box:fill-box;transform-origin:center;
+    }
+    @keyframes oopx-spin{to{transform:rotate(360deg)}}
+
+    /* Respect users who prefer no motion: freeze everything, keep it readable. */
+    @media (prefers-reduced-motion: reduce){
+      #oop-intro [class*="oopx-"]{animation:none !important;}
+      #oop-intro .oopx-ck{opacity:1;}
+    }
+    </style>
+
+    <span class="badge b-comp">Start Here</span>
+    <h2>OOP in Plain English</h2>
+
+    <div class="oopx-wrap">
+      <p class="oopx-lead"><strong>Object-Oriented Programming (OOP)</strong> is a way of building software out of <strong>objects</strong> &mdash; small bundles that keep some data together with the things that data can do. Here are the big ideas, each with a tiny picture and an everyday example.</p>
+
+      <h3 class="oopx-h3">Class vs Object</h3>
+      <div class="oopx-cookie">
+        <svg viewBox="0 0 290 76" width="280" height="74" role="img" aria-label="A cookie cutter stamping out cookies">
+          <!-- the cutter = the class -->
+          <path class="oopx-cutter" d="M40,12 L45.3,26.7 L60.9,27.2 L48.6,36.8 L52.9,51.8 L40,43 L27.1,51.8 L31.4,36.8 L19.1,27.2 L34.7,26.7 Z"
+                fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+          <text x="40" y="70" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="var(--display)">class</text>
+          <!-- arrow -->
+          <line x1="74" y1="32" x2="138" y2="32" stroke="var(--text-subtle)" stroke-width="1.6" marker-end="url(#oopxCArrow)"/>
+          <!-- the cookies = the objects -->
+          <g class="oopx-ck c1">
+            <circle cx="170" cy="32" r="15" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="1.6"/>
+            <circle cx="165" cy="28" r="2" fill="var(--accent)"/><circle cx="175" cy="30" r="2" fill="var(--accent)"/><circle cx="169" cy="37" r="2" fill="var(--accent)"/>
+          </g>
+          <g class="oopx-ck c2">
+            <circle cx="212" cy="32" r="15" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="1.6"/>
+            <circle cx="207" cy="28" r="2" fill="var(--accent)"/><circle cx="217" cy="30" r="2" fill="var(--accent)"/><circle cx="211" cy="37" r="2" fill="var(--accent)"/>
+          </g>
+          <g class="oopx-ck c3">
+            <circle cx="254" cy="32" r="15" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="1.6"/>
+            <circle cx="249" cy="28" r="2" fill="var(--accent)"/><circle cx="259" cy="30" r="2" fill="var(--accent)"/><circle cx="253" cy="37" r="2" fill="var(--accent)"/>
+          </g>
+          <text x="212" y="70" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="var(--display)">objects</text>
+          <defs>
+            <marker id="oopxCArrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--text-subtle)"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="oopx-cookie-note">A <b>class</b> is the <span class="oopx-tag">cookie cutter</span> &mdash; the plan. An <b>object</b> is a <span class="oopx-tag">cookie</span> you stamp out from it. One cutter, many cookies.</div>
+      </div>
+
+      <h3 class="oopx-h3">The Four Pillars</h3>
+      <div class="oopx-grid">
+
+        <!-- 1. Encapsulation -->
+        <div class="oopx-card">
+          <span class="oopx-num">01</span>
+          <div class="oopx-ct">Encapsulation</div>
+          <div class="oopx-def">Keep an object's data and its methods together, and hide the inner details.</div>
+          <div class="oopx-viz">
+            <svg viewBox="0 0 120 56" width="150" height="70" role="img" aria-label="A sealed object with a lock hiding its data">
+              <rect x="12" y="11" width="96" height="34" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+              <g class="oopx-cover">
+                <circle cx="34" cy="28" r="5" fill="var(--accent-2)"/>
+                <circle cx="50" cy="28" r="5" fill="var(--accent-2)"/>
+              </g>
+              <g class="oopx-lock">
+                <path d="M72,27 a7,7 0 0 1 14,0" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+                <rect x="70" y="27" width="18" height="15" rx="3" fill="var(--accent)"/>
+                <circle cx="79" cy="34" r="1.8" fill="var(--surface)"/>
+              </g>
+            </svg>
+          </div>
+          <div class="oopx-ana"><b>Like</b> a car dashboard: you see the speed, but the engine stays sealed under the hood.</div>
+        </div>
+
+        <!-- 2. Inheritance -->
+        <div class="oopx-card">
+          <span class="oopx-num">02</span>
+          <div class="oopx-ct">Inheritance</div>
+          <div class="oopx-def">A new class can reuse and extend an existing one, instead of starting from scratch.</div>
+          <div class="oopx-viz">
+            <svg viewBox="0 0 120 64" width="150" height="74" role="img" aria-label="A Dog class inheriting from an Animal class">
+              <rect x="34" y="4" width="52" height="18" rx="6" fill="var(--surface)" stroke="var(--border)"/>
+              <text x="60" y="16" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text)" font-family="var(--display)">Animal</text>
+              <line x1="60" y1="23" x2="60" y2="50" stroke="var(--text-subtle)" stroke-width="1.4" stroke-dasharray="3 3"/>
+              <circle class="oopx-drop" cx="60" cy="24" r="3.5" fill="var(--accent)"/>
+              <rect x="34" y="42" width="52" height="18" rx="6" fill="var(--surface)" stroke="var(--accent-2)"/>
+              <text x="60" y="54" text-anchor="middle" font-size="9" font-weight="600" fill="var(--text)" font-family="var(--display)">Dog</text>
+            </svg>
+          </div>
+          <div class="oopx-ana"><b>Like</b> a child inheriting traits from a parent &mdash; a Dog is an Animal, plus extras.</div>
+        </div>
+
+        <!-- 3. Polymorphism -->
+        <div class="oopx-card">
+          <span class="oopx-num">03</span>
+          <div class="oopx-ct">Polymorphism</div>
+          <div class="oopx-def">The same call can behave differently depending on the object's type.</div>
+          <div class="oopx-viz">
+            <svg viewBox="0 0 130 64" width="160" height="72" role="img" aria-label="A speak call routing to a dog barking and a cat meowing">
+              <line x1="65" y1="22" x2="31" y2="42" stroke="var(--text-subtle)" stroke-width="1.4"/>
+              <line x1="65" y1="22" x2="99" y2="42" stroke="var(--text-subtle)" stroke-width="1.4"/>
+              <g class="oopx-ping">
+                <rect x="42" y="4" width="46" height="18" rx="9" fill="var(--accent)"/>
+                <text x="65" y="16" text-anchor="middle" font-size="9" font-weight="600" fill="var(--surface)" font-family="var(--display)">speak()</text>
+              </g>
+              <g class="oopx-dog">
+                <rect x="6" y="42" width="50" height="18" rx="6" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="31" y="54" text-anchor="middle" font-size="8.5" fill="var(--text)">Dog: Woof</text>
+              </g>
+              <g class="oopx-cat">
+                <rect x="74" y="42" width="50" height="18" rx="6" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="99" y="54" text-anchor="middle" font-size="8.5" fill="var(--text)">Cat: Meow</text>
+              </g>
+            </svg>
+          </div>
+          <div class="oopx-ana"><b>Like</b> saying "speak()" &mdash; a Dog barks, a Cat meows. One word, different results.</div>
+        </div>
+
+        <!-- 4. Abstraction -->
+        <div class="oopx-card">
+          <span class="oopx-num">04</span>
+          <div class="oopx-ct">Abstraction</div>
+          <div class="oopx-def">Show a simple way to use something and hide the messy complexity inside.</div>
+          <div class="oopx-viz">
+            <svg viewBox="0 0 120 64" width="150" height="72" role="img" aria-label="A steering wheel in front of hidden spinning gears">
+              <g opacity="0.45">
+                <circle class="oopx-gear" cx="34" cy="42" r="9" fill="none" stroke="var(--text-subtle)" stroke-width="4" stroke-dasharray="4 4"/>
+                <circle class="oopx-gear" cx="50" cy="25" r="7" fill="none" stroke="var(--text-subtle)" stroke-width="3.5" stroke-dasharray="3.5 3.5"/>
+              </g>
+              <g class="oopx-wheel">
+                <circle cx="80" cy="34" r="18" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/>
+                <circle cx="80" cy="34" r="4" fill="var(--accent)"/>
+                <line x1="80" y1="34" x2="80" y2="52" stroke="var(--accent)" stroke-width="2.5"/>
+                <line x1="80" y1="34" x2="64.4" y2="25" stroke="var(--accent)" stroke-width="2.5"/>
+                <line x1="80" y1="34" x2="95.6" y2="25" stroke="var(--accent)" stroke-width="2.5"/>
+              </g>
+            </svg>
+          </div>
+          <div class="oopx-ana"><b>Like</b> driving with a steering wheel &mdash; no need to touch the gears underneath.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      var cards = document.querySelectorAll('#oop-intro .oopx-card');
+      if(!cards.length) return;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduce) return;  // leave cards static; CSS already freezes all motion
+      var i = 0;
+      function tick(){
+        for(var k=0;k<cards.length;k++) cards[k].classList.remove('oopx-active');
+        cards[i].classList.add('oopx-active');
+        i = (i + 1) % cards.length;
+      }
+      tick();
+      setInterval(tick, 2800);
+    })();
+    </script>
+  </section>
+
   <!-- ═══════════════════════════════════════════ FOUR PILLARS ═══ -->
   <section id="pillars">
     <span class="badge b-comp">Fundamentals</span>
     <h2>Four Pillars of OOP</h2>
 
     <div class="block-desc">
-      <span>The four pillars: <strong>Encapsulation</strong> (data hiding), <strong>Inheritance</strong> (code reuse), <strong>Polymorphism</strong> (flexible behavior), and <strong>Abstraction</strong> (hiding complexity). Core to Java design.</span>
+      <span>OOP stands on four big ideas: <strong>Encapsulation</strong> (hide the data), <strong>Inheritance</strong> (reuse code), <strong>Polymorphism</strong> (one call, many behaviors), and <strong>Abstraction</strong> (hide the hard parts).</span>
       <a class="w3-link" href="https://www.w3schools.com/java/java_oop_concepts.asp" target="_blank">W3Schools →</a>
     </div>
     <div class="cheat-block">
@@ -138,6 +495,27 @@
       <span>Wrap data and methods into a single unit (class), restricting direct access. Use <code>private</code> fields with <code>public</code> getters/setters to control access and validate input.</span>
       <a class="w3-link" href="https://www.w3schools.com/java/java_encapsulation.asp" target="_blank">W3Schools →</a>
     </div>
+
+    <!-- oopx2: encapsulation — a cover seals the private fields; a lock marks them sealed -->
+    <div class="oopx2-viz">
+      <svg viewBox="0 0 150 60" width="150" height="60" role="img" aria-label="A cover sealing an object's private fields, marked by a padlock">
+        <rect x="10" y="12" width="130" height="36" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+        <!-- the private fields -->
+        <circle cx="36" cy="30" r="5" fill="var(--accent-2)"/>
+        <circle cx="56" cy="30" r="5" fill="var(--accent-2)"/>
+        <circle cx="76" cy="30" r="5" fill="var(--accent-2)"/>
+        <!-- the cover sweeps across to seal them -->
+        <rect class="oopx2-seal" x="16" y="15" width="88" height="30" rx="6" fill="var(--accent)" opacity="0.2"/>
+        <!-- padlock = sealed -->
+        <g>
+          <path d="M117,30 v-3 a7,7 0 0 1 14,0 v3" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
+          <rect x="114" y="30" width="20" height="15" rx="3" fill="var(--accent)"/>
+          <circle cx="124" cy="37" r="1.9" fill="var(--surface)"/>
+        </g>
+      </svg>
+      <div class="oopx2-cap">The object keeps its <b>private</b> fields sealed; outside code reaches them only through the <span class="oopx2-k">public methods</span> it chooses to expose.</div>
+    </div>
+
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">BankAccount.java</div>
@@ -201,6 +579,21 @@
       <span><strong>IS-A</strong> relationship — subclass reuses and extends superclass behavior. Use <code>extends</code> for classes, <code>implements</code> for interfaces. Java supports single class inheritance only.</span>
       <a class="w3-link" href="https://www.w3schools.com/java/java_inheritance.asp" target="_blank">W3Schools →</a>
     </div>
+
+    <!-- oopx2: inheritance — a trait travels down from Animal to Dog -->
+    <div class="oopx2-viz">
+      <svg viewBox="0 0 150 72" width="150" height="72" role="img" aria-label="A trait passing down from the Animal class to the Dog class">
+        <rect x="42" y="6" width="66" height="20" rx="6" fill="var(--surface)" stroke="var(--accent-2)"/>
+        <text x="75" y="19.5" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text)" font-family="var(--display)">Animal</text>
+        <line x1="75" y1="28" x2="75" y2="46" stroke="var(--text-subtle)" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <!-- the inherited trait travels down the link -->
+        <circle class="oopx2-trait" cx="75" cy="30" r="4" fill="var(--accent)"/>
+        <rect x="42" y="48" width="66" height="20" rx="6" fill="var(--surface)" stroke="var(--border)"/>
+        <text x="75" y="61.5" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text)" font-family="var(--display)">Dog</text>
+      </svg>
+      <div class="oopx2-cap"><b>Dog</b> inherits the traits and behaviour of <b>Animal</b> for free &mdash; reuse what exists first, then add only what is new.</div>
+    </div>
+
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Inheritance.java</div>
@@ -264,6 +657,31 @@
       <span><strong>Same interface, different behavior.</strong> Compile-time (method overloading) resolved at compile time. Runtime (method overriding) resolved via dynamic dispatch at runtime.</span>
       <a class="w3-link" href="https://www.w3schools.com/java/java_polymorphism.asp" target="_blank">W3Schools →</a>
     </div>
+
+    <!-- oopx2: polymorphism — speak() routes to bark, then meow (one signal at a time) -->
+    <div class="oopx2-viz">
+      <svg viewBox="0 0 160 72" width="160" height="72" role="img" aria-label="A speak call routing to a dog bark and a cat meow">
+        <line x1="80" y1="26" x2="37" y2="46" stroke="var(--text-subtle)" stroke-width="1.4"/>
+        <line x1="80" y1="26" x2="123" y2="46" stroke="var(--text-subtle)" stroke-width="1.4"/>
+        <g>
+          <rect x="52" y="4" width="56" height="20" rx="10" fill="var(--accent)"/>
+          <text x="80" y="17.5" text-anchor="middle" font-size="10" font-weight="600" fill="var(--surface)" font-family="var(--display)">speak()</text>
+        </g>
+        <!-- one signal travels to each subtype in turn -->
+        <circle class="oopx2-sigA" cx="80" cy="26" r="3.5" fill="var(--accent-2)"/>
+        <circle class="oopx2-sigB" cx="80" cy="26" r="3.5" fill="var(--accent-2)"/>
+        <g>
+          <rect x="8" y="48" width="58" height="20" rx="6" fill="var(--surface)" stroke="var(--border)"/>
+          <text x="37" y="61.5" text-anchor="middle" font-size="9" fill="var(--text)">Dog: Woof</text>
+        </g>
+        <g>
+          <rect x="94" y="48" width="58" height="20" rx="6" fill="var(--surface)" stroke="var(--border)"/>
+          <text x="123" y="61.5" text-anchor="middle" font-size="9" fill="var(--text)">Cat: Meow</text>
+        </g>
+      </svg>
+      <div class="oopx2-cap">One call, <span class="oopx2-k">speak()</span>, resolves to the method that fits the object &mdash; a Dog barks, a Cat meows.</div>
+    </div>
+
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Polymorphism.java</div>
@@ -338,6 +756,50 @@ a.<span class="lm">sound</span>();              <span class="lcm">// prints "Bar
       <span><strong>Abstract classes</strong> provide partial implementation (can have state). <strong>Interfaces</strong> define a full contract (no state since Java 8 default methods). Use abstract class for "how partially", interface for "what".</span>
       <a class="w3-link" href="https://www.w3schools.com/java/java_abstract.asp" target="_blank">W3Schools →</a>
     </div>
+
+    <!-- oopx2: abstraction — a simple interface in front, complex gears turning behind -->
+    <div class="oopx2-viz">
+      <svg viewBox="0 0 160 68" width="160" height="68" role="img" aria-label="A simple interface panel in front of hidden turning gears">
+        <!-- the hidden machinery (faint, behind) -->
+        <g opacity="0.4">
+          <g class="oopx2-gear">
+            <circle cx="38" cy="34" r="12" fill="none" stroke="var(--text-muted)" stroke-width="3.5"/>
+            <circle cx="38" cy="34" r="3.5" fill="var(--text-muted)"/>
+            <g stroke="var(--text-muted)" stroke-width="3.5" stroke-linecap="round">
+              <line x1="50" y1="34" x2="54.5" y2="34"/>
+              <line x1="26" y1="34" x2="21.5" y2="34"/>
+              <line x1="38" y1="46" x2="38" y2="50.5"/>
+              <line x1="38" y1="22" x2="38" y2="17.5"/>
+              <line x1="46.5" y1="42.5" x2="49.7" y2="45.7"/>
+              <line x1="29.5" y1="42.5" x2="26.3" y2="45.7"/>
+              <line x1="29.5" y1="25.5" x2="26.3" y2="22.3"/>
+              <line x1="46.5" y1="25.5" x2="49.7" y2="22.3"/>
+            </g>
+          </g>
+          <g class="oopx2-gear2">
+            <circle cx="58" cy="20" r="6.5" fill="none" stroke="var(--text-muted)" stroke-width="2.5"/>
+            <circle cx="58" cy="20" r="2" fill="var(--text-muted)"/>
+            <g stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round">
+              <line x1="64.5" y1="20" x2="67.5" y2="20"/>
+              <line x1="51.5" y1="20" x2="48.5" y2="20"/>
+              <line x1="58" y1="26.5" x2="58" y2="29.5"/>
+              <line x1="58" y1="13.5" x2="58" y2="10.5"/>
+              <line x1="62.6" y1="24.6" x2="64.7" y2="26.7"/>
+              <line x1="53.4" y1="24.6" x2="51.3" y2="26.7"/>
+              <line x1="53.4" y1="15.4" x2="51.3" y2="13.3"/>
+              <line x1="62.6" y1="15.4" x2="64.7" y2="13.3"/>
+            </g>
+          </g>
+        </g>
+        <!-- the simple interface in front -->
+        <rect x="70" y="10" width="78" height="48" rx="8" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="109" y="25" text-anchor="middle" font-size="8.5" fill="var(--text-muted)" font-family="var(--display)">drive()</text>
+        <rect x="86" y="34" width="46" height="13" rx="6.5" fill="var(--surface-2)" stroke="var(--border)"/>
+        <circle cx="125" cy="40.5" r="4.5" fill="var(--accent-2)"/>
+      </svg>
+      <div class="oopx2-cap">A simple <span class="oopx2-k">interface</span> is all you touch; the complicated machinery keeps turning out of sight.</div>
+    </div>
+
     <div class="cheat-block">
       <div class="code-panel">
         <div class="panel-label">Abstraction.java</div>
@@ -690,7 +1152,7 @@ upper.<span class="lm">transform</span>(<span class="ls">"hello"</span>);  <span
 </main>
 
 <footer>OOP Cheatsheet &mdash; Object-Oriented Programming reference</footer>
-<script src="js/script.js"></script>
+<script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">
