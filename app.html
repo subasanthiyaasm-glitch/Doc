@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#6366f1">
+<meta name="theme-color" content="#f5f5f4">
 <title>Campus Notes</title>
 <script>document.documentElement.dataset.theme = localStorage.getItem('cnTheme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script>
 <link rel="stylesheet" href="css/app.css">
@@ -30,6 +30,8 @@
       <a href="#/timetable" data-r="timetable"><svg class="ico"><use href="#i-cal"/></svg><span>Timetable</span></a>
       <a href="#/resources" data-r="resources"><svg class="ico"><use href="#i-book"/></svg><span>Resources</span></a>
     </nav>
+    <div class="cn-sec">Subjects</div>
+    <div class="cn-folders" id="cnFolders"></div>
     <div class="cn-side-foot">Your notes are saved on this device.</div>
   </aside>
   <div class="cn-main">

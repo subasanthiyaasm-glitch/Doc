@@ -71,56 +71,59 @@
     const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
     const pending = db.tasks.filter(t => !t.done).length;
     view.innerHTML = `<div class="grid">
-      <div class="card hero"><h2>${greet} 👋</h2><p>${todays.length} class${todays.length === 1 ? '' : 'es'} today · ${pending} pending task${pending === 1 ? '' : 's'} · ${activeNotes().length} notes</p><a class="btn" href="#/notes/new">+ New note</a></div>
-      <div class="card"><h3>⏱ Study time</h3><div class="stat">${fmtMin(db.usage[today()] || 0)}</div><div class="mute">today · ${fmtMin(week)} this week</div></div>
-      <div class="card"><h3>🗓️ Today's classes</h3>${todays.length ? '<ul class="list">' + todays.map(s => `<li><span>${esc(s.subject)}</span><span class="mute">${esc(s.start)}–${esc(s.end)} ${esc(s.room)}</span></li>`).join('') + '</ul>' : '<p class="mute">No classes today.</p>'}</div>
-      <div class="card"><h3>✅ Upcoming</h3>${due.length ? '<ul class="list">' + due.map(t => `<li><span>${esc(t.title)}</span><span class="mute ${t.due && t.due < today() ? 'overdue' : ''}">${esc(t.due || 'no date')}</span></li>`).join('') + '</ul>' : '<p class="mute">Nothing pending 🎉</p>'}</div>
-      <div class="card"><h3>📝 Recent notes</h3>${recent.length ? '<ul class="list">' + recent.map(n => `<li><a href="#/notes/${n.id}">${esc(n.title || 'Untitled')}</a><span class="mute">${esc(n.subject)}</span></li>`).join('') + '</ul>' : '<p class="mute">No notes yet.</p>'}<p><a class="btn" href="#/notes/new">+ New note</a></p></div>
+      <div class="hero"><h2>${greet}</h2><p>${todays.length} class${todays.length === 1 ? '' : 'es'} today · ${pending} pending task${pending === 1 ? '' : 's'} · ${activeNotes().length} notes</p><a class="btn" href="#/notes/new">+ New note</a></div>
+      <div class="card"><h3>Study time</h3><div class="stat">${fmtMin(db.usage[today()] || 0)}</div><div class="mute">today · ${fmtMin(week)} this week</div></div>
+      <div class="card"><h3>Today's classes</h3>${todays.length ? '<ul class="list">' + todays.map(s => `<li><span>${esc(s.subject)}</span><span class="mute">${esc(s.start)}–${esc(s.end)} ${esc(s.room)}</span></li>`).join('') + '</ul>' : '<p class="mute">No classes today.</p>'}</div>
+      <div class="card"><h3>Upcoming</h3>${due.length ? '<ul class="list">' + due.map(t => `<li><span>${esc(t.title)}</span><span class="mute ${t.due && t.due < today() ? 'overdue' : ''}">${esc(t.due || 'no date')}</span></li>`).join('') + '</ul>' : '<p class="mute">Nothing pending</p>'}</div>
+      <div class="card"><h3>Recent notes</h3>${recent.length ? '<ul class="list">' + recent.map(n => `<li><a href="#/notes/${n.id}">${esc(n.title || 'Untitled')}</a><span class="mute">${esc(n.subject)}</span></li>`).join('') + '</ul>' : '<p class="mute">No notes yet.</p>'}</div>
     </div>`;
   }
 
   function notes(param) {
     if (param === 'new') {
-      const n = { id: uid(), title: '', subject: '', tags: [], body: '', pinned: false, updated: Date.now() };
+      const subj = sessionStorage.getItem('cnSubj') || '';
+      const n = { id: uid(), title: '', subject: subj, tags: [], body: '', pinned: false, updated: Date.now() };
       db.notes.push(n); save(); location.replace('#/notes/' + n.id); return;
     }
     const q = (sessionStorage.getItem('cnQ') || '').toLowerCase();
     const subj = sessionStorage.getItem('cnSubj') || '';
     const showTrash = param === 'trash';
-    let list = db.notes.filter(n => showTrash ? n.trashedAt : !n.trashedAt)
-      .filter(n => !subj || n.subject === subj)
+    const list = db.notes.filter(n => showTrash ? n.trashedAt : !n.trashedAt)
+      .filter(n => showTrash || !subj || n.subject === subj)
       .filter(n => !q || (n.title + ' ' + n.body + ' ' + n.tags.join(' ')).toLowerCase().includes(q))
       .sort((a, b) => (b.pinned - a.pinned) || (b.updated - a.updated));
     const cur = db.notes.find(n => n.id === param);
-    view.innerHTML = `<div class="notes">
-      <div class="card">
-        <div class="row"><a class="btn" href="#/notes/new">+ New</a><a href="#/notes/${showTrash ? '' : 'trash'}">${showTrash ? '← Notes' : '🗑 Trash'}</a></div>
-        <div class="row"><input id="nq" placeholder="Search notes" value="${esc(q)}" style="width:100%"></div>
-        <div class="row"><select id="ns" style="width:100%"><option value="">All subjects</option>${subjects().map(s => `<option ${s === subj ? 'selected' : ''}>${esc(s)}</option>`).join('')}</select></div>
-        <ul class="list note-list">${list.map(n => `<li class="${cur && cur.id === n.id ? 'sel' : ''}" data-id="${n.id}"><span>${n.pinned ? '📌 ' : ''}${esc(n.title || 'Untitled')}</span><span class="mute">${esc(n.subject)}</span></li>`).join('') || '<li class="mute">No notes</li>'}</ul>
+    const snip = n => esc(new Date(n.updated).toLocaleDateString() + '  ' + (n.body.replace(/[#*`>\-\n]+/g, ' ').trim().slice(0, 60) || 'No additional text'));
+    view.innerHTML = `<div class="notes ${cur ? 'has-sel' : ''}">
+      <div class="nl">
+        <div class="nl-head"><input id="nq" placeholder="Search" value="${esc(q)}"><button class="ghost" id="nnew" title="New note" aria-label="New note">✎</button></div>
+        <ul class="list note-list">${list.map(n => `<li class="${cur && cur.id === n.id ? 'sel' : ''}" data-id="${n.id}"><div class="t">${n.pinned ? '📌 ' : ''}${esc(n.title || 'Untitled')}</div><div class="s">${snip(n)}</div></li>`).join('') || `<li class="mute">${showTrash ? 'Trash is empty' : 'No notes'}</li>`}</ul>
       </div>
-      <div class="card" id="ned">${cur ? editorHtml(cur) : '<p class="mute">Select or create a note.</p>'}</div>
+      <div class="ne" id="ned">${cur ? editorHtml(cur) : '<div class="empty">Select or create a note</div>'}</div>
     </div>`;
-    $('#nq').oninput = e => { sessionStorage.setItem('cnQ', e.target.value); notes(param); $('#nq').focus(); $('#nq').setSelectionRange(9e9, 9e9); };
-    $('#ns').onchange = e => { sessionStorage.setItem('cnSubj', e.target.value); notes(param); };
+    $('#nq').oninput = e => { sessionStorage.setItem('cnQ', e.target.value); notes(param); const i = $('#nq'); i.focus(); i.setSelectionRange(9e9, 9e9); };
+    $('#nnew').onclick = () => { location.hash = '#/notes/new'; };
     view.querySelectorAll('.note-list li[data-id]').forEach(li => li.onclick = () => { location.hash = '#/notes/' + li.dataset.id; });
     if (cur) bindEditor(cur);
   }
 
   function editorHtml(n) {
-    if (n.trashedAt) return `<h3>${esc(n.title || 'Untitled')}</h3><div class="preview">${md(n.body)}</div>
-      <div class="row" style="margin-top:12px"><button id="nrestore">Restore</button><button class="danger" id="npurge">Delete forever</button></div>`;
-    return `<div class="row">
-        <input id="nt" placeholder="Title" value="${esc(n.title)}" style="flex:2">
-        <input id="nsub" placeholder="Subject" value="${esc(n.subject)}" list="subjList" style="flex:1">
-        <datalist id="subjList">${subjects().map(s => `<option>${esc(s)}</option>`).join('')}</datalist>
-        <input id="ntags" placeholder="tags, comma separated" value="${esc(n.tags.join(', '))}" style="flex:1">
-      </div>
-      <div class="row"><button class="ghost" id="npin">${n.pinned ? 'Unpin' : '📌 Pin'}</button><button class="danger" id="ntrash">Move to trash</button><span class="mute" id="nsaved"></span></div>
-      <div class="editor"><textarea id="nb" placeholder="Write in Markdown…">${esc(n.body)}</textarea><div class="preview" id="np">${md(n.body)}</div></div>`;
+    const back = `<button class="ghost back" id="nback" aria-label="Back">‹ Notes</button>`;
+    if (n.trashedAt) return `<div class="ne-bar">${back}<span class="sp"></span><button class="ghost" id="nrestore">Restore</button><button class="danger" id="npurge">Delete forever</button></div>
+      <div class="ne-body"><h2 class="ne-title">${esc(n.title || 'Untitled')}</h2><div class="preview">${md(n.body)}</div></div>`;
+    return `<div class="ne-bar">${back}<span class="mute" id="nsaved">${esc(new Date(n.updated).toLocaleString())}</span><span class="sp"></span>
+        <button class="ghost" id="nmode">Preview</button><button class="ghost" id="npin">${n.pinned ? 'Unpin' : 'Pin'}</button><button class="danger" id="ntrash">Delete</button></div>
+      <div class="ne-body">
+        <input class="ne-title" id="nt" placeholder="Title" value="${esc(n.title)}">
+        <div class="ne-meta"><input id="nsub" placeholder="Subject" value="${esc(n.subject)}" list="subjList"><datalist id="subjList">${subjects().map(s => `<option>${esc(s)}</option>`).join('')}</datalist>
+          <input id="ntags" placeholder="Tags" value="${esc(n.tags.join(', '))}"></div>
+        <textarea class="ne-text" id="nb" placeholder="Start writing… (Markdown supported)">${esc(n.body)}</textarea>
+        <div class="preview" id="np" hidden></div>
+      </div>`;
   }
 
   function bindEditor(n) {
+    $('#nback').onclick = () => { location.hash = n.trashedAt ? '#/notes/trash' : '#/notes'; };
     if (n.trashedAt) {
       $('#nrestore').onclick = () => { delete n.trashedAt; save(); location.hash = '#/notes/' + n.id; };
       $('#npurge').onclick = () => { if (confirm('Delete this note forever?')) { db.notes = db.notes.filter(x => x !== n); save(); location.hash = '#/notes/trash'; } };
@@ -131,19 +134,38 @@
       n.title = $('#nt').value.trim(); n.subject = $('#nsub').value.trim();
       n.tags = $('#ntags').value.split(',').map(t => t.trim()).filter(Boolean);
       n.body = $('#nb').value; n.updated = Date.now(); save();
-      $('#nsaved').textContent = 'Saved ' + new Date().toLocaleTimeString();
-      const li = view.querySelector(`.note-list li[data-id="${n.id}"] span`);
+      $('#nsaved').textContent = 'Saved';
+      const li = view.querySelector(`.note-list li[data-id="${n.id}"] .t`);
       if (li) li.textContent = (n.pinned ? '📌 ' : '') + (n.title || 'Untitled');
+      folders();
     };
-    const onEdit = () => { $('#np').innerHTML = md($('#nb').value); clearTimeout(timer); timer = setTimeout(persist, 500); };
+    const onEdit = () => { clearTimeout(timer); timer = setTimeout(persist, 500); };
     ['#nt', '#nsub', '#ntags', '#nb'].forEach(s => $(s).addEventListener('input', onEdit));
-    $('#npin').onclick = () => { n.pinned = !n.pinned; save(); notes(n.id); };
+    $('#nmode').onclick = () => {
+      const p = $('#np'), t = $('#nb'), on = p.hidden;
+      if (on) p.innerHTML = md(t.value);
+      p.hidden = !on; t.hidden = on; $('#nmode').textContent = on ? 'Edit' : 'Preview';
+    };
+    $('#npin').onclick = () => { persist(); n.pinned = !n.pinned; save(); notes(n.id); };
     $('#ntrash').onclick = () => { persist(); n.trashedAt = Date.now(); save(); location.hash = '#/notes'; };
+    if (!n.title && !n.body) $('#nt').focus();
+  }
+
+  // Subject folders in the sidebar (like Notes folders)
+  function folders() {
+    const box = $('#cnFolders'); if (!box) return;
+    const cur = sessionStorage.getItem('cnSubj') || '';
+    const onNotes = location.hash.startsWith('#/notes') && !location.hash.startsWith('#/notes/trash');
+    const count = s => activeNotes().filter(n => !s || n.subject === s).length;
+    const item = (s, label) => `<a href="#/notes" data-subj="${esc(s)}" class="${onNotes && cur === s ? 'active' : ''}"><svg class="ico"><use href="#i-note"/></svg><span>${esc(label)}</span><span class="n">${count(s)}</span></a>`;
+    box.innerHTML = item('', 'All notes') + subjects().map(s => item(s, s)).join('') +
+      `<a href="#/notes/trash" class="${location.hash.startsWith('#/notes/trash') ? 'active' : ''}"><svg class="ico"><use href="#i-out"/></svg><span>Trash</span><span class="n">${db.notes.filter(n => n.trashedAt).length}</span></a>`;
+    box.querySelectorAll('[data-subj]').forEach(a => a.onclick = () => { sessionStorage.setItem('cnSubj', a.dataset.subj); if (location.hash === '#/notes') route(); });
   }
 
   function tasks() {
     const list = db.tasks.slice().sort((a, b) => (a.done - b.done) || (a.due || '9').localeCompare(b.due || '9'));
-    view.innerHTML = `<div class="card">
+    view.innerHTML = `<div class="wrap">
       <form class="row" id="tf"><input id="tt" placeholder="Assignment / to-do" required style="flex:2">
         <select id="tk"><option>Assignment</option><option>Exam</option><option>To-do</option></select>
         <input id="tsub" placeholder="Subject"><input id="td" type="date"><button>Add</button></form>
@@ -161,7 +183,7 @@
   function timetable() {
     const cell = d => db.slots.filter(s => s.day === d).sort((a, b) => a.start.localeCompare(b.start))
       .map(s => `<div>${esc(s.start)}–${esc(s.end)} <b>${esc(s.subject)}</b> ${esc(s.room)} <button class="ghost" data-del="${s.id}">✕</button></div>`).join('');
-    view.innerHTML = `<div class="card">
+    view.innerHTML = `<div class="wrap" style="max-width:none">
       <form class="row" id="sf"><select id="sd">${DAYS.map(d => `<option>${d}</option>`).join('')}</select>
         <input id="ss" type="time" required><input id="se" type="time" required>
         <input id="ssub" placeholder="Subject" required><input id="sr" placeholder="Room"><button>Add class</button></form>
@@ -196,8 +218,9 @@
     $('#cnTitle').textContent = r[0];
     document.title = r[0] + ' — Campus Notes';
     document.querySelectorAll('#cnNav a').forEach(a => a.classList.toggle('active', a.dataset.r === name));
+    view.classList.toggle('full', name === 'notes');
     r[1](param);
-    view.classList.remove('view-in'); void view.offsetWidth; view.classList.add('view-in');
+    folders();
   }
 
   // ── Theme ────────────────────────────────────────────────
