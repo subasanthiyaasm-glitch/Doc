@@ -6,35 +6,35 @@
   <title>Sign in &mdash; Cheatsheets</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-    .login-card { width: min(420px, 92vw); padding: 1.5rem; border: 1px solid var(--h2-border); border-radius: 12px; }
-    .login-card h1 { margin-top: 0; font-size: 1.4rem; }
-    #loginDivElementId { min-height: 420px; }
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    .login-card { width: min(420px, 92vw); padding: 1.5rem; border: 1px solid var(--h2-border); border-radius: 12px; text-align: center; }
   </style>
   <script src="https://static.zohocdn.com/catalyst/sdk/js/4.5.0/catalystWebSDK.js"></script>
-  <script src="https://quickguide-60034244588.development.catalystserverless.in/__catalyst/sdk/init.js"></script>
+  <script src="/__catalyst/sdk/init.js"></script>
 </head>
 <body>
   <div class="login-card">
-    <h1>📚 Cheatsheets — Sign in</h1>
-    <div id="loginDivElementId"></div>
+    <h1>📚 Cheatsheets</h1>
+    <p id="msg">Redirecting to sign in…</p>
+    <p><a id="go" href="/__catalyst/auth/login">Sign in</a></p>
   </div>
   <script>
     (function () {
       const params = new URLSearchParams(location.search);
-      // Only allow relative same-site redirects (prevents open redirect)
+      // Only allow relative same-site page names (prevents open redirect)
       const rawNext = params.get('next') || 'index.html';
       const next = /^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(rawNext) ? rawNext : 'index.html';
+      const hosted = '/__catalyst/auth/login?service_url=' + encodeURIComponent(location.origin + '/' + next);
+      document.getElementById('go').href = hosted;
 
       if (params.get('logout')) {
-        catalyst.auth.signOut(location.origin + '/login.html');
+        try { catalyst.auth.signOut(location.origin + '/login.html'); } catch (e) { location.replace(hosted); }
         return;
       }
-      catalyst.auth.isUserAuthenticated()
-        .then(() => location.replace(next))
-        .catch(() => catalyst.auth.signIn('loginDivElementId', {
-          service_url: location.origin + '/' + next,
-        }));
+      const toLogin = () => location.replace(hosted);
+      try {
+        catalyst.auth.isUserAuthenticated().then(() => location.replace(next)).catch(toLogin);
+      } catch (e) { toLogin(); }
     })();
   </script>
 </body>
