@@ -32,7 +32,7 @@
 </main>
 <script src="js/header.js"></script>
 <script>
-  const API = '/server/doc_api';
+  const API = 'https://quickguide-60034244588.development.catalystserverless.in/server/doc_api';
   const MAX = 10 * 1024 * 1024, EXT = ['pdf','png','jpg','jpeg','txt','md','zip','docx'];
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   const dur = s => { s = Number(s) || 0; const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? `${h}h ${m}m` : `${m}m ${s % 60}s`; };
