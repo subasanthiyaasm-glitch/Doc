@@ -1,7 +1,12 @@
 {
   "functions": {
-    "targets": ["doc_api"],
+    "targets": [
+      "doc_api"
+    ],
     "ignore": [],
     "source": "functions"
+  },
+  "client": {
+    "source": "client"
   }
 }

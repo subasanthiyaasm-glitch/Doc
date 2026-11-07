@@ -24,11 +24,11 @@
       // Only allow relative same-site page names (prevents open redirect)
       const rawNext = params.get('next') || 'index.html';
       const next = /^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(rawNext) ? rawNext : 'index.html';
-      const hosted = '/__catalyst/auth/login?service_url=' + encodeURIComponent(location.origin + '/' + next);
+      const hosted = '/__catalyst/auth/login?service_url=' + encodeURIComponent(location.origin + location.pathname.replace(/[^/]*$/, '') + next);
       document.getElementById('go').href = hosted;
 
       if (params.get('logout')) {
-        try { catalyst.auth.signOut(location.origin + '/login.html'); } catch (e) { location.replace(hosted); }
+        try { catalyst.auth.signOut(location.origin + location.pathname); } catch (e) { location.replace(hosted); }
         return;
       }
       const toLogin = () => location.replace(hosted);

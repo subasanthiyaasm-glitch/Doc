@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const API = 'https://quickguide-60034244588.development.catalystserverless.in/server/doc_api';
+  const API = location.hostname.endsWith("catalystserverless.in") ? "/server/doc_api" : "https://quickguide-60034244588.development.catalystserverless.in/server/doc_api";
   const PUBLIC_PAGES = ['login.html'];
   const HEARTBEAT_MS = 30000;
 
