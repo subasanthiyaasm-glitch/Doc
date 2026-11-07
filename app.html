@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Notes</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="cn-shell">
+  <aside class="cn-side">
+    <div class="cn-brand">📘 Campus Notes</div>
+    <nav id="cnNav">
+      <a href="#/dashboard" data-r="dashboard">🏠 Dashboard</a>
+      <a href="#/notes" data-r="notes">📝 Notes</a>
+      <a href="#/tasks" data-r="tasks">✅ Assignments &amp; To-dos</a>
+      <a href="#/timetable" data-r="timetable">🗓️ Timetable</a>
+      <a href="#/resources" data-r="resources">📚 Resources</a>
+    </nav>
+  </aside>
+  <div class="cn-main">
+    <header class="cn-top">
+      <h1 id="cnTitle">Dashboard</h1>
+      <div class="cn-user">
+        <span id="cnUsage" title="Time used today">⏱ 0m today</span>
+        <a href="account.html" id="cnAccount">👤 Account</a>
+        <button id="cnLogout" type="button">Logout</button>
+      </div>
+    </header>
+    <main id="cnView"></main>
+  </div>
+</div>
+<script src="https://static.zohocdn.com/catalyst/sdk/js/4.5.0/catalystWebSDK.js"></script>
+<script src="https://quickguide-60034244588.development.catalystserverless.in/__catalyst/sdk/init.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
