@@ -2061,8 +2061,8 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (
 alert http $HOME_NET any -> $EXTERNAL_NET any (
     msg:"XSS Attack Detected";
     flow:established,to_server;
-    content:"<script>"; nocase;
-    http_uri; pcre:"/<script[^>]*>/i";
+    content:"&lt;script&gt;"; nocase;
+    http_uri; pcre:"/&lt;script[^&gt;]*&gt;/i";
     sid:2000001; rev:1;
     metadata:severity attack, attack_target Web_Server;
     reference:cve,2023-XXXX;

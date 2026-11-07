@@ -176,8 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── 3. BUILD SEARCH INDEX (Trie) ──────────────────────────
-  const trie   = new SearchTrie();
-  const allDocs = []; // flat array of all indexable records
+  let trie, allDocs; // rebuilt on every (SPA) page change
+  function buildIndex() {
+  trie    = new SearchTrie();
+  allDocs = []; // flat array of all indexable records
 
   // Index each language entry as a navigable page doc
   LANGUAGES.forEach(lang => {
@@ -221,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .filter(t => t.length > 1);
     trie.insert(tokens, rec);
   });
+  } // end buildIndex
 
   /** Run a trie-backed query, applying optional page filter */
   function trieSearch(query, filter = 'all') {
@@ -505,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sidebarSearchInput?.addEventListener('click', openSearch);
 
   // ── 5. IN-PAGE SECTION FILTER ─────────────────────────────
-  const sections = Array.from(document.querySelectorAll('section[id]'));
+  let sections = [];
 
   function walkText(root, fn) {
     const iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT);
@@ -543,9 +546,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── 6. COPY BUTTON ─────────────────────────────────────────
+  function setupCopy() {
   document.querySelectorAll('.code-panel').forEach(panel => {
     const pre = panel.querySelector('pre');
-    if (!pre) return;
+    if (!pre || panel.querySelector(':scope > .copy-btn')) return;
     panel.style.position = 'relative';
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
@@ -569,12 +573,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     panel.appendChild(btn);
   });
+  }
 
   // ── Guided tour: spotlight each section with an explanation card ──
-  (function setupTour() {
+  let tourCleanup = null;
+  function setupTour() {
+    if (tourCleanup) { tourCleanup(); tourCleanup = null; }
     const reduceMo = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const secs = [...document.querySelectorAll('main section[id]')];
     if (!secs.length) return;
+    const ac = new AbortController();
 
     const fab = document.createElement('button');
     fab.className = 'tour-fab';
@@ -636,9 +644,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Escape') end();
       else if (e.key === 'ArrowRight') { if (i < secs.length - 1) { i++; place(); } else end(); }
       else if (e.key === 'ArrowLeft') { if (i > 0) { i--; place(); } }
-    });
-    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) place(); });
-  })();
+    }, { signal: ac.signal });
+    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) place(); }, { signal: ac.signal });
+    tourCleanup = () => { ac.abort(); fab.remove(); overlay.remove(); };
+  }
 
   // ── Back to top ──
   const backToTop = document.createElement('button');
@@ -666,9 +675,12 @@ document.addEventListener('DOMContentLoaded', () => {
   onScroll();
 
   // ── 9. ACTIVE TOC  (IntersectionObserver – more accurate than scroll) ──
+  let tocIO = null;
+  function setupToc() {
+  if (tocIO) { tocIO.disconnect(); tocIO = null; }
   const tocLinks = document.querySelectorAll('.toc a');
   if (tocLinks.length && sections.length) {
-    const io = new IntersectionObserver(entries => {
+    const io = tocIO = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         tocLinks.forEach(a => {
@@ -678,9 +690,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { rootMargin: '-20% 0px -70% 0px' });
     sections.forEach(sec => io.observe(sec));
   }
+  }
 
   // ── 10. COLLAPSIBLE SECTIONS ──────────────────────────────
+  function setupCollapsible() {
   document.querySelectorAll('section[id] > h2').forEach(h2 => {
+    if (h2.dataset.bound) return;
+    h2.dataset.bound = '1';
     h2.style.cursor='pointer';
     h2.setAttribute('role','button');
     h2.setAttribute('aria-expanded','true');
@@ -690,13 +706,19 @@ document.addEventListener('DOMContentLoaded', () => {
       h2.setAttribute('aria-expanded', !isNowCollapsed);
     });
   });
+  }
 
-  // ── 11. SMOOTH ANCHOR LINKS ──────────────────────────────
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
-    });
+  // ── 11. SMOOTH ANCHOR LINKS (delegated: survives SPA page swaps) ──
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || a.getAttribute('href').length < 2) return;
+    let target = null;
+    try { target = document.querySelector(a.getAttribute('href')); } catch (_) {}
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({behavior:'smooth'});
+      history.replaceState(history.state, '', a.getAttribute('href'));
+    }
   });
 
   // ── 12. KEYBOARD SHORTCUTS ──────────────────────────────
@@ -781,5 +803,19 @@ document.addEventListener('DOMContentLoaded', () => {
   notesClose?.addEventListener('click', closeNotes);
   notesOverlay?.addEventListener('click', closeNotes);
   document.addEventListener('keydown', e => { if(e.key==='Escape') { closeSearch(); closeNotes(); } });
+
+  // ── 14. PER-PAGE INIT (re-run by js/router.js after each SPA navigation) ──
+  function initPage() {
+    sections = Array.from(document.querySelectorAll('section[id]'));
+    buildIndex();
+    setupCopy();
+    setupTour();
+    setupToc();
+    setupCollapsible();
+    closeSearch(); closeNotes();
+    onScroll();
+  }
+  initPage();
+  window.DOC_initPage = initPage;
 
 });

@@ -135,4 +135,7 @@ function renderSourceLink(activeId) {
   const s = document.createElement('script');
   s.src = 'js/auth.js';
   document.head.appendChild(s);
+  const r = document.createElement('script');
+  r.src = 'js/router.js';
+  document.head.appendChild(r);
 })();

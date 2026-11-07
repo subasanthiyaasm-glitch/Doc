@@ -9,8 +9,10 @@
   const PUBLIC_PAGES = ['login.html'];
   const HEARTBEAT_MS = 30000;
 
-  const pageFile = (location.pathname.split('/').pop() || 'index.html');
-  const pageId = pageFile.replace(/\.html$/, '').toLowerCase().replace(/[^a-z0-9-]/g, '-') || 'index';
+  const curFile = () => (location.pathname.split('/').pop() || 'index.html');
+  const curId = () => curFile().replace(/\.html$/, '').toLowerCase().replace(/[^a-z0-9-]/g, '-') || 'index';
+  let pageFile = curFile();
+  let pageId = curId();
   if (PUBLIC_PAGES.includes(pageFile)) return;
 
   const api = (path, opts = {}) =>
@@ -57,6 +59,7 @@
     trackDailyLogin();
     trackTime();
     onReady(() => { renderUserBadge(me); renderAttachments(); });
+    window.addEventListener('doc:navigate', () => renderAttachments());
   }).catch(() => {
     // Network/API failure (not 401): never leave the page blank
     document.documentElement.style.visibility = '';
@@ -75,7 +78,8 @@
 
   // ── active time on page (only while tab is visible) ──
   function trackTime() {
-    const sessionKey = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
+    const newKey = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
+    let sessionKey = newKey();
     let active = 0, since = document.visibilityState === 'visible' ? Date.now() : null;
     const total = () => Math.round((active + (since ? Date.now() - since : 0)) / 1000);
     const send = (beacon) => {
@@ -92,6 +96,13 @@
     });
     setInterval(() => { if (since) send(false); }, HEARTBEAT_MS);
     setTimeout(() => send(false), 5000);
+    // SPA navigation: flush time for the old page, start a fresh session for the new one
+    window.addEventListener('doc:navigate', () => {
+      send(true);
+      pageFile = curFile(); pageId = curId();
+      sessionKey = newKey(); active = 0;
+      since = document.visibilityState === 'visible' ? Date.now() : null;
+    });
   }
 
   // ── user badge + logout in the sidebar brand ──
@@ -113,17 +124,21 @@
 
   // ── attachments panel at the bottom of the main content ──
   function renderAttachments() {
-    if (pageFile === 'stats.html' || pageFile === 'account.html') return;
+    document.getElementById('attachments')?.remove();
+    const f = curFile(), pid = curId();
+    if (f === 'stats.html' || f === 'account.html') return;
     const main = document.querySelector('main') || document.querySelector('.content') || document.body;
     const box = document.createElement('section');
     box.className = 'doc-attachments';
     box.id = 'attachments';
     box.innerHTML = '<h2>📎 Attachments</h2><div class="att-upload"></div><ul class="att-list"><li>Loading…</li></ul>';
+    box.dataset.page = pid;
     main.appendChild(box);
     loadList(box);
   }
 
   function loadList(box) {
+    const pageId = box.dataset.page;
     api('/attachments?page=' + pageId).then(data => {
       const list = box.querySelector('.att-list');
       list.innerHTML = data.items.length ? data.items.map(a =>
