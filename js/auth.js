@@ -107,14 +107,15 @@
 
   // ── user badge + logout in the sidebar brand ──
   function renderUserBadge(me) {
-    const host = document.querySelector('.sidebar-brand') || document.body;
+    document.querySelector('.doc-user')?.remove();
+    const brand = document.querySelector('.sidebar-brand');
     const div = document.createElement('div');
     div.className = 'doc-user';
     div.innerHTML = `<span title="${escHtml(me.email)}">👤 ${escHtml(me.name || me.email)}</span>` +
       ' <a href="account.html" title="My account">⚙️</a>' +
       (me.isAdmin ? ' <a href="stats.html">📊</a>' : '') +
       ' <a href="#" id="doc-logout">Logout</a>';
-    host.appendChild(div);
+    if (brand) brand.insertAdjacentElement('afterend', div); else document.body.prepend(div);
     div.querySelector('#doc-logout').addEventListener('click', e => {
       e.preventDefault();
       localStorage.removeItem('doc_login_' + new Date().toISOString().slice(0, 10));
