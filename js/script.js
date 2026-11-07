@@ -1,588 +1,445 @@
-// ═══════════════════════════════════════════════════════════════
-//  script.js  —  Shared runtime for every cheatsheet page
-//
-//  FEATURES (all reusable, no globals leaked):
-//    • Trie-based cross-page search modal (Cmd+K / /)
-//    • In-page section filter + text highlight (sidebar input)
-//    • Light / dark theme with localStorage persistence
-//    • Sidebar show/hide + mobile overlay
-//    • Copy-code button on every code-panel
-//    • Scroll progress bar
-//    • Back-to-top button
-//    • Active TOC highlight (IntersectionObserver)
-//    • Collapsible sections (click h2)
-//    • Notes side-panel (GitHub markdown fetch + cache)
-//    • j/k keyboard section navigation
-//    • JS fetch demo helpers (runFetch, runAsyncFetch)
-// ═══════════════════════════════════════════════════════════════
-
-/* ───────────────────────────────────────────────────
-   DEMO HELPERS  (referenced from inline onclick="")
-   --------------------------------------------------- */
 async function runFetch() {
   const el = document.getElementById('fetch-result');
-  if (!el) return;
-  el.innerHTML = '<span class="demo-loading">Loading…</span>';
+  el.innerHTML = '<div style="color:#8892b0;">Loading...</div>';
   try {
-    const res  = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+    const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');
     const data = await res.json();
-    el.innerHTML =
-      `<span class="demo-ok">&gt; Title: ${data.title}</span>\n` +
-      `<span class="demo-warn">&gt; Completed: ${data.completed}</span>`;
+    el.innerHTML = `<div style="color:#9ece6a;">&gt; Title: ${data.title}</div><div style="color:#e0af68;">&gt; Completed: ${data.completed}</div>`;
   } catch (e) {
-    el.innerHTML = `<span class="demo-err">&gt; Error: ${e.message}</span>`;
+    el.innerHTML = `<div style="color:#f7768e;">&gt; Error: ${e.message}</div>`;
   }
 }
 
 async function runAsyncFetch() {
   const el = document.getElementById('fetch-result2');
-  if (!el) return;
-  el.innerHTML = '<span class="demo-loading">Loading…</span>';
+  el.innerHTML = '<div style="color:#8892b0;">Loading...</div>';
   try {
-    const res  = await fetch('https://jsonplaceholder.typicode.com/users/1');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const res = await fetch('https://jsonplaceholder.typicode.com/users/1');
+    if (!res.ok) throw new Error('Failed');
     const user = await res.json();
-    el.innerHTML =
-      `<span class="demo-ok">&gt; ${user.name}</span>\n` +
-      `<span class="demo-warn">&gt; ${user.email}</span>`;
+    el.innerHTML = `<div style="color:#9ece6a;">&gt; ${user.name}</div><div style="color:#e0af68;">&gt; ${user.email}</div>`;
   } catch (e) {
-    el.innerHTML = `<span class="demo-err">&gt; Error: ${e.message}</span>`;
+    el.innerHTML = `<div style="color:#f7768e;">&gt; Error: ${e.message}</div>`;
   }
 }
 
-/* ───────────────────────────────────────────────────
-   UTILITY HELPERS
-   --------------------------------------------------- */
-/** Escape HTML entities */
-const escHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-/** Escape RegExp special chars */
-const escRe   = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-/** Debounce: delay fn execution until ms after last call */
-function debounce(fn, ms) {
-  let t;
-  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
-}
-
-/* ───────────────────────────────────────────────────
-   TRIE-BASED SEARCH INDEX
-   Gives O(prefix-length) lookups instead of O(n*m) scan
-   --------------------------------------------------- */
-class TrieNode {
-  constructor() { this.children = {}; this.refs = []; }
-}
-
-class SearchTrie {
-  constructor() { this.root = new TrieNode(); }
-
-  /** Insert a search record keyed by every word token in `text` */
-  insert(tokens, record) {
-    for (const token of tokens) {
-      let node = this.root;
-      for (const ch of token) {
-        if (!node.children[ch]) node.children[ch] = new TrieNode();
-        node = node.children[ch];
-        if (!node.refs.includes(record)) node.refs.push(record);
-      }
-    }
-  }
-
-  /** Return all records whose tokens start with `prefix` */
-  search(prefix) {
-    let node = this.root;
-    for (const ch of prefix) {
-      if (!node.children[ch]) return [];
-      node = node.children[ch];
-    }
-    return node.refs;
-  }
-}
-
-/* ───────────────────────────────────────────────────
-   MINIMAL MARKDOWN RENDERER  (for notes panel)
-   --------------------------------------------------- */
-function renderMd(md) {
-  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  let h = md
-    .replace(/```(\w*)\n([\s\S]*?)```/g, (_, l, c) =>
-      `<pre><code class="lang-${l}">${esc(c.trim())}</code></pre>`)
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/^#{6}\s+(.+)$/gm,'<h6>$1</h6>')
-    .replace(/^#{5}\s+(.+)$/gm,'<h5>$1</h5>')
-    .replace(/^#{4}\s+(.+)$/gm,'<h4>$1</h4>')
-    .replace(/^###\s+(.+)$/gm,'<h3>$1</h3>')
-    .replace(/^##\s+(.+)$/gm,'<h2>$1</h2>')
-    .replace(/^#\s+(.+)$/gm,'<h1>$1</h1>')
-    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/^>\s+(.+)$/gm,'<blockquote>$1</blockquote>')
-    .replace(/^[\-\*]\s+(.+)$/gm,'<li>$1</li>')
-    .replace(/^\|(.+)\|$/gm,(m,c)=>{
-      const cells=c.split('|').map(x=>x.trim());
-      if(cells.every(x=>/^[\-:]+$/.test(x))) return '';
-      return '<tr>'+cells.map(x=>`<td>${x}</td>`).join('')+'</tr>';
-    })
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener" style="color:var(--accent)">$1</a>')
-    .replace(/\n{2,}/g,'</p><p>')
-    .replace(/\n/g,'<br>');
-  h = h.replace(/(<li>[\s\S]*?<\/li>)+/g, m => '<ul>'+m+'</ul>');
-  h = h.replace(/(<tr>[\s\S]*?<\/tr>)+/g, m => '<table>'+m+'</table>');
-  return '<p>'+h+'</p>';
-}
-
-/* ───────────────────────────────────────────────────
-   MAIN  —  runs after DOM ready
-   --------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-
-  // ── 1. THEME ──────────────────────────────────────────────
-  const themeBtn = document.getElementById('theme-btn');
-  const applyTheme = dark => {
-    document.body.classList.toggle('dark-theme', dark);
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-    if (themeBtn) themeBtn.innerHTML = dark ? svgIcon('sun') : svgIcon('moon');
-  };
-  applyTheme(localStorage.getItem('theme') === 'dark');
-  themeBtn?.addEventListener('click', () =>
-    applyTheme(!document.body.classList.contains('dark-theme')));
-
-  // ── 2. SIDEBAR SHOW / HIDE ──────────────────────────────
-  const sidebar      = document.getElementById('sidebar');
-  const overlay      = document.getElementById('sidebar-overlay');
-  const sidebarToggle= document.getElementById('sidebar-toggle');
-  const hideBtn      = document.getElementById('sidebar-hide-btn');
-  const showBtn      = document.getElementById('sidebar-show-btn');
-
-  if (sidebar) {
-    if (localStorage.getItem('sidebar-hidden') === 'true' && window.innerWidth > 768)
-      sidebar.classList.add('hidden');
-
-    hideBtn?.addEventListener('click', () => {
-      sidebar.classList.add('hidden');
-      localStorage.setItem('sidebar-hidden','true');
-    });
-    showBtn?.addEventListener('click', () => {
-      sidebar.classList.remove('hidden');
-      localStorage.setItem('sidebar-hidden','false');
-    });
-  }
-  if (sidebarToggle && sidebar && overlay) {
-    const openSb  = () => { sidebar.classList.add('open');    overlay.classList.add('active');    };
-    const closeSb = () => { sidebar.classList.remove('open'); overlay.classList.remove('active'); };
-    sidebarToggle.addEventListener('click', () =>
-      sidebar.classList.contains('open') ? closeSb() : openSb());
-    overlay.addEventListener('click', closeSb);
-  }
-
-  // ── 3. BUILD SEARCH INDEX (Trie) ──────────────────────────
-  let trie, allDocs; // rebuilt on every (SPA) page change
-  function buildIndex() {
-  trie    = new SearchTrie();
-  allDocs = []; // flat array of all indexable records
-
-  // Index each language entry as a navigable page doc
-  LANGUAGES.forEach(lang => {
-    const rec = {
-      type:    'page',
-      page:    lang.id,
-      icon:    lang.icon,
-      href:    lang.href,
-      section: lang.id,
-      snippet: lang.tags.join(' '),
-      tags:    lang.tags,
-    };
-    allDocs.push(rec);
-    const tokens = [lang.id.toLowerCase(), ...lang.tags];
-    trie.insert(tokens, rec);
-  });
-
-  // Index sections on the current page
-  const currentPageName = document.querySelector('.page-header h1')?.textContent?.trim() || '';
-  const currentPageIcon = LANGUAGES.find(l => l.id === currentPageName)?.icon || 'doc';
-  const currentHrefBase = location.pathname.replace(/[^/]*$/, '');
-
-  document.querySelectorAll('section[id]').forEach(sec => {
-    const h2      = sec.querySelector('h2');
-    const title   = h2 ? h2.textContent.trim().replace(/\s*[▾▸]$/, '') : sec.id;
-    // Grab visible text, skip style/script, limit to 300 chars
-    const rawText = [...sec.querySelectorAll(':not(style):not(script)')]
-      .map(el => el.textContent).join(' ')
-      .replace(/\s+/g, ' ').trim().slice(0, 300).toLowerCase();
-    const rec = {
-      type:    'section',
-      page:    currentPageName,
-      icon:    currentPageIcon,
-      href:    currentHrefBase,
-      section: title,
-      id:      sec.id,
-      snippet: rawText,
-    };
-    allDocs.push(rec);
-    const tokens = [...title.toLowerCase().split(/\W+/), ...rawText.split(/\W+/)]
-      .filter(t => t.length > 1);
-    trie.insert(tokens, rec);
-  });
-  } // end buildIndex
-
-  /** Run a trie-backed query, applying optional page filter */
-  function trieSearch(query, filter = 'all') {
-    const q = query.toLowerCase().trim();
-    if (!q) return [];
-
-    // Collect candidates from every token in the query
-    const words    = q.split(/\W+/).filter(w => w.length > 1);
-    const queryWords = words.length ? words : [q];
-    let candidates  = [];
-    for (const w of queryWords) {
-      const hits = trie.search(w);
-      candidates = candidates.concat(hits);
-    }
-
-    // Also do substring fallback for short queries
-    if (q.length >= 2) {
-      allDocs.forEach(r => {
-        const haystack = (r.page + ' ' + r.section + ' ' + (r.snippet||'')).toLowerCase();
-        if (haystack.includes(q) && !candidates.includes(r)) candidates.push(r);
-      });
-    }
-
-    // Filter by active page dropdown
-    if (filter !== 'all') candidates = candidates.filter(r => r.page === filter);
-
-    // Score: exact section title match > page match > snippet match
-    candidates = candidates.map(r => {
-      const sectionMatch = r.section.toLowerCase().includes(q);
-      const pageMatch    = r.page.toLowerCase().includes(q);
-      const score = sectionMatch ? 3 : pageMatch ? 2 : 1;
-      return { r, score };
-    });
-    candidates.sort((a,b) => b.score - a.score);
-
-    // Deduplicate by page+section and cap at 20 results
-    const seen = new Set();
-    return candidates
-      .map(c => c.r)
-      .filter(r => {
-        const key = r.page + '|' + r.section;
-        if (seen.has(key)) return false;
-        seen.add(key); return true;
-      })
-      .slice(0, 20);
-  }
-
-
-  // ── 4. GLOBAL SEARCH  (Spotlight-style) ────────────────────────
-  // ── Search history helpers ───────────────────────────────────
-  const HISTORY_KEY  = 'srch_history';
-  const getHistory   = () => JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');
-  const addHistory   = q => {
-    if (!q || q.length < 2) return;
-    const h = [q, ...getHistory().filter(x=>x!==q)].slice(0,8);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
-  };
-  const clearHistory = () => localStorage.removeItem(HISTORY_KEY);
-
-  // ── Inject HTML ───────────────────────────────────────────────────
-  document.body.insertAdjacentHTML('beforeend', `
-  <div class="sl-backdrop" id="search-modal" role="dialog" aria-label="Search" aria-modal="true">
-    <div class="sl-box">
-      <div class="sl-input-row">
-        <svg class="sl-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <circle cx="8.5" cy="8.5" r="5.25" stroke="currentColor" stroke-width="1.6"/>
-          <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        <input id="global-search" type="search"
-          placeholder="Search anything… try flexbox, git merge, async"
-          autocomplete="off" spellcheck="false" aria-label="Search cheatsheets" />
-        <kbd class="sl-esc-key">Esc</kbd>
+  // ── Inject global search modal ──
+  const modalHtml = `
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-box">
+      <div class="search-modal-header">
+        <div class="search-modal-dropdown" id="search-dropdown">
+          <button class="search-modal-dropdown-btn" id="search-dropdown-btn">
+            <span id="search-filter-label">All Pages</span>
+            <span class="arrow">▾</span>
+          </button>
+          <ul class="search-modal-filter-list" id="search-filter-list"></ul>
+        </div>
+        <div class="search-modal-input">
+          <span class="smi-icon">${svgIcon('search')}</span>
+          <input type="search" id="global-search" placeholder="Search across all cheatsheets..." autocomplete="off" />
+        </div>
+        <div class="search-modal-kbd"><kbd>Esc</kbd></div>
+        <div class="search-modal-close"><button id="search-modal-close">✕</button></div>
       </div>
-      <div class="sl-filters" id="sl-filters" role="listbox" aria-label="Filter by page"></div>
-      <div class="sl-results" id="search-results" role="listbox" aria-label="Search results"></div>
-      <div class="sl-footer">
+      <div class="search-modal-results" id="search-results"></div>
+      <div class="search-modal-footer">
         <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
-        <span><kbd>↵</kbd> open</span>
+        <span><kbd>Enter</kbd> open</span>
         <span><kbd>Esc</kbd> close</span>
-        <span class="sl-footer-right"><kbd>⌘</kbd><kbd>K</kbd> anywhere</span>
       </div>
     </div>
-  </div>
-  <div class="notes-overlay" id="notes-overlay"></div>
-  <aside class="notes-panel" id="notes-panel" role="complementary" aria-label="Notes panel">
-    <div class="notes-panel-header">
-      <h3 id="notes-panel-title">Notes</h3>
-      <button class="notes-panel-close" id="notes-panel-close" aria-label="Close notes">×</button>
-    </div>
-    <div class="notes-panel-body" id="notes-panel-body"></div>
-  </aside>`);
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-  const searchModal   = document.getElementById('search-modal');
-  const globalSearch  = document.getElementById('global-search');
+  const searchModal = document.getElementById('search-modal');
+  const globalSearch = document.getElementById('global-search');
   const searchResults = document.getElementById('search-results');
-  const slFilters     = document.getElementById('sl-filters');
+  const searchDropdown = document.getElementById('search-dropdown');
+  const searchDropdownBtn = document.getElementById('search-dropdown-btn');
+  const searchFilterList = document.getElementById('search-filter-list');
+  const searchFilterLabel = document.getElementById('search-filter-label');
+  const searchModalClose = document.getElementById('search-modal-close');
 
-  // ── Build filter pills ─────────────────────────────────────────────
+  // Build filter list from LANGUAGES
   let activeFilter = 'all';
+  searchFilterList.innerHTML = '<li><a data-filter="all" class="filter-active"><span class="fi">' + svgIcon('layers') + '</span>All Pages</a></li>' +
+    LANGUAGES.map(l => `<li><a data-filter="${l.id}"><span class="fi">${svgIcon(l.icon)}</span>${l.id}</a></li>`).join('');
 
-  slFilters.innerHTML =
-    `<button class="sl-pill sl-pill-active" data-filter="all" role="option" aria-selected="true">
-      <span aria-hidden="true">${svgIcon('layers')}</span>All
-    </button>` +
-    LANGUAGES.map(l =>
-      `<button class="sl-pill" data-filter="${l.id}" role="option" aria-selected="false">
-        <span aria-hidden="true">${svgIcon(l.icon)}</span>${l.id}
-      </button>`
-    ).join('');
-
-  slFilters.addEventListener('click', e => {
-    const btn = e.target.closest('.sl-pill');
-    if (!btn) return;
-    activeFilter = btn.dataset.filter;
-    slFilters.querySelectorAll('.sl-pill').forEach(b => {
-      const sel = b.dataset.filter === activeFilter;
-      b.classList.toggle('sl-pill-active', sel);
-      b.setAttribute('aria-selected', sel);
-    });
-    renderSearchResults(globalSearch.value);
-  });
-
-  // ── Open / close ──────────────────────────────────────────────────
-  let resultIdx = 0;
-
-  const openSearch = () => {
+  // Open/close modal
+  function openSearchModal() {
     searchModal.classList.add('active');
     globalSearch.value = '';
-    resultIdx = 0;
-    renderEmpty();
+    searchResults.innerHTML = '';
     globalSearch.focus();
-  };
-  const closeSearch = () => {
+    if (typeof startPrefetch === 'function') startPrefetch(); // ensure the whole site is indexed
+  }
+
+  function closeSearchModal() {
     searchModal.classList.remove('active');
-  };
+    searchDropdown.classList.remove('open');
+  }
 
+  // Keyboard shortcuts to open
   document.addEventListener('keydown', e => {
-    if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); openSearch(); }
-    if (e.key==='/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)
-        && !searchModal.classList.contains('active')) { e.preventDefault(); openSearch(); }
-  });
-  searchModal.addEventListener('click', e => { if (e.target===searchModal) closeSearch(); });
-
-  // ── Empty state: history + quick access ─────────────────────────
-  function renderEmpty() {
-    const hist = getHistory();
-    let html = '';
-
-    if (hist.length) {
-      html += `<div class="sl-group">
-        Recent
-        <button class="sl-clear" id="sl-clear-hist">Clear</button>
-      </div>`;
-      html += hist.map((q, i) =>
-        `<button class="sl-result sl-hist${i===0?' sl-active':''}" data-hist="${escHtml(q)}" data-idx="${i}" role="option" aria-selected="${i===0}">
-          <span class="sl-ri">🕘</span>
-          <span class="sl-rt">${escHtml(q)}</span>
-          <span class="sl-rtype">history</span>
-        </button>`
-      ).join('');
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearchModal(); }
+    if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && !searchModal.classList.contains('active')) {
+      e.preventDefault(); openSearchModal();
     }
+  });
 
-    html += `<div class="sl-group">Quick Access</div>`;
-    html += LANGUAGES.slice(0,10).map((l, i) => {
-      const idx = hist.length + i;
-      const act = !hist.length && i===0 ? ' sl-active' : '';
-      return `<a href="${l.href}" class="sl-result${act}" data-idx="${idx}" role="option" aria-selected="${!hist.length&&i===0}">
-        <span class="sl-ri">${svgIcon(l.icon)}</span>
-        <div class="sl-rb">
-          <span class="sl-rt">${l.id}</span>
-        </div>
-        <span class="sl-rtype">page</span>
-      </a>`;
-    }).join('');
+  searchModalClose.addEventListener('click', closeSearchModal);
+  searchModal.addEventListener('click', e => { if (e.target === searchModal) closeSearchModal(); });
 
-    searchResults.innerHTML = html;
-    resultIdx = 0;
-    document.getElementById('sl-clear-hist')?.addEventListener('click', e => {
-      e.stopPropagation(); clearHistory(); renderEmpty();
-    });
-    searchResults.querySelectorAll('.sl-hist').forEach(btn => {
-      btn.addEventListener('click', () => {
-        globalSearch.value = btn.dataset.hist;
-        renderSearchResults(btn.dataset.hist);
-        globalSearch.focus();
+  // Dropdown toggle
+  searchDropdownBtn.addEventListener('click', e => { e.stopPropagation(); searchDropdown.classList.toggle('open'); });
+  document.addEventListener('click', () => searchDropdown.classList.remove('open'));
+  searchDropdown.addEventListener('click', e => e.stopPropagation());
+
+  // Filter selection
+  searchFilterList.addEventListener('click', e => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    activeFilter = a.dataset.filter;
+    searchFilterLabel.textContent = activeFilter === 'all' ? 'All Pages' : activeFilter;
+    searchFilterList.querySelectorAll('a').forEach(x => x.classList.toggle('filter-active', x.dataset.filter === activeFilter));
+    searchDropdown.classList.remove('open');
+    doGlobalSearch(globalSearch.value);
+  });
+
+  // ── Cross-page search engine ──────────────────────────────
+  // The current page is indexed instantly; every other cheatsheet is fetched,
+  // parsed and cached in the background so one box searches the whole site.
+  function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escRegex(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  const INDEX_VERSION = 'v3';
+  const PAGE_BY_ID = {};
+  LANGUAGES.forEach(l => { PAGE_BY_ID[l.id] = l; });
+  const BASE = location.href.replace(/[^/]*$/, '');
+  const currentPage = (document.querySelector('.page-header h1')?.textContent || '').trim();
+
+  let searchIndex = [];
+  const indexedPages = new Set();
+
+  function indexDoc(doc, page, href) {
+    if (!page || indexedPages.has(page)) return;
+    indexedPages.add(page);
+    const icon = PAGE_BY_ID[page]?.icon || '📄';
+    searchIndex.push({ page, icon, href, id: '', section: page + ' cheatsheet',
+      title: page, text: (page + ' cheatsheet quick reference').toLowerCase() });
+    doc.querySelectorAll('section[id]').forEach(sec => {
+      const h2 = sec.querySelector('h2');
+      const title = (h2 ? h2.textContent : sec.id).replace(/[▾▸]/g, '').trim();
+      searchIndex.push({
+        page, icon, href, id: sec.id, section: title, title,
+        text: sec.textContent.replace(/\s+/g, ' ').toLowerCase().slice(0, 600)
       });
     });
   }
 
-  // ── Get href for a result ─────────────────────────────────────────
-  function getHref(r) {
-    const pagePath = LANGUAGES.find(l=>l.id===r.page)?.href || '#';
-    if (r.type==='section') {
-      return location.pathname.endsWith(pagePath) ? '#'+r.id : pagePath+'#'+r.id;
-    }
-    return pagePath;
+  // Index the page we are on right now.
+  indexDoc(document, currentPage || (LANGUAGES[0] && LANGUAGES[0].id),
+           BASE + (PAGE_BY_ID[currentPage]?.href || location.pathname.split('/').pop()));
+
+  function persistIndex() {
+    try { localStorage.setItem('searchIndex_' + INDEX_VERSION,
+      JSON.stringify({ pages: [...indexedPages], items: searchIndex })); } catch (e) {}
   }
 
-  // ── Render search results ────────────────────────────────────────
-  function renderSearchResults(query) {
-    const q = query.trim();
-    if (!q) { renderEmpty(); return; }
+  function prefetchAll() {
+    try {
+      const cached = JSON.parse(localStorage.getItem('searchIndex_' + INDEX_VERSION) || 'null');
+      if (cached && Array.isArray(cached.items)) {
+        cached.items.forEach(it => { if (!indexedPages.has(it.page)) searchIndex.push(it); });
+        (cached.pages || []).forEach(p => indexedPages.add(p));
+      }
+    } catch (e) {}
+    const queue = LANGUAGES.filter(l => !indexedPages.has(l.id));
+    let i = 0;
+    (function next() {
+      if (i >= queue.length) { persistIndex(); return; }
+      const l = queue[i++];
+      fetch(BASE + l.href)
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(html => {
+          indexDoc(new DOMParser().parseFromString(html, 'text/html'), l.id, BASE + l.href);
+          if (searchModal.classList.contains('active') && globalSearch.value.trim()) doGlobalSearch(globalSearch.value);
+        })
+        .catch(() => {})
+        .then(() => setTimeout(next, 25));
+    })();
+  }
+  let prefetchStarted = false;
+  function startPrefetch() { if (prefetchStarted) return; prefetchStarted = true; prefetchAll(); }
+  if ('requestIdleCallback' in window) requestIdleCallback(startPrefetch, { timeout: 1200 });
+  setTimeout(startPrefetch, 500); // reliable fallback when idle callbacks are throttled
 
-    const results = trieSearch(q, activeFilter);
+  function scoreItem(item, terms) {
+    const t = item.title.toLowerCase(), sec = item.section.toLowerCase(), pg = item.page.toLowerCase(), body = item.text;
+    let score = 0;
+    for (const term of terms) {
+      if (!(t.includes(term) || sec.includes(term) || pg.includes(term) || body.includes(term))) return -1; // all terms must match
+      if (pg === term) score += 12;
+      if (t.startsWith(term)) score += 8;
+      if (t.includes(term)) score += 5;
+      if (sec.includes(term)) score += 3;
+      if (pg.includes(term)) score += 2;
+      if (body.includes(term)) score += 1;
+    }
+    if (item.page === currentPage) score += 1.5; // gentle bias to the open page
+    return score;
+  }
+
+  function doGlobalSearch(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) { searchResults.innerHTML = ''; return; }
+    const terms = q.split(/\s+/).filter(Boolean);
+
+    let results = searchIndex
+      .filter(item => activeFilter === 'all' || item.page === activeFilter)
+      .map(item => ({ item, s: scoreItem(item, terms) }))
+      .filter(x => x.s >= 0)
+      .sort((a, b) => b.s - a.s);
+
+    const seen = new Set();
+    results = results.filter(({ item }) => {
+      const k = item.page + '|' + item.section;
+      if (seen.has(k)) return false; seen.add(k); return true;
+    }).slice(0, 20);
+
     if (!results.length) {
-      searchResults.innerHTML =
-        `<div class="sl-empty">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M16.5 16.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          No results for <strong>&ldquo;${escHtml(q)}&rdquo;</strong>
-          <span>Try a shorter term or check spelling</span>
-        </div>`;
+      const stillIndexing = indexedPages.size < LANGUAGES.length
+        ? ' <span style="opacity:.55">(still indexing other pages…)</span>' : '';
+      searchResults.innerHTML = '<div class="search-modal-empty">No results for "' + escHtml(query) + '"' + stillIndexing + '</div>';
       return;
     }
 
-    const re  = new RegExp('('+escRe(q)+')', 'gi');
-    const hl  = s => s.replace(re, '<mark>$1</mark>');
-    const pages    = results.filter(r=>r.type==='page');
-    const sections = results.filter(r=>r.type==='section');
-    let html = ''; let gi = 0;
+    const rx = new RegExp('(' + terms.map(escRegex).join('|') + ')', 'gi');
+    const hl = s => escHtml(s).replace(rx, '<mark style="background:var(--highlight-bg);padding:0 2px;border-radius:2px;">$1</mark>');
 
-    if (pages.length) {
-      html += `<div class="sl-group">Pages</div>`;
-      html += pages.map(r => {
-        const i=gi++; const act=i===0?' sl-active':'';
-        return `<a href="${getHref(r)}" class="sl-result${act}" data-idx="${i}" role="option" aria-selected="${i===0}">
-          <span class="sl-ri">${svgIcon(r.icon)}</span>
-          <div class="sl-rb"><span class="sl-rt">${hl(escHtml(r.section))}</span></div>
-          <span class="sl-rtype">page</span>
-        </a>`;
-      }).join('');
-    }
-
-    if (sections.length) {
-      html += `<div class="sl-group">Sections</div>`;
-      html += sections.map(r => {
-        const i=gi++; const act=(i===0&&!pages.length)?' sl-active':'';
-        const snip = hl((r.snippet||'').slice(0,90));
-        return `<a href="${getHref(r)}" class="sl-result${act}" data-idx="${i}" role="option" aria-selected="${i===0&&!pages.length}">
-          <span class="sl-ri">${svgIcon(r.icon)}</span>
-          <div class="sl-rb">
-            <span class="sl-rt">${hl(escHtml(r.section))}</span>
-            <span class="sl-rs">${escHtml(r.page)} &middot; ${snip}…</span>
-          </div>
-          <span class="sl-rtype">section</span>
-        </a>`;
-      }).join('');
-    }
-
-    searchResults.innerHTML = html;
+    searchResults.innerHTML = results.map(({ item }, i) => {
+      const href = item.id ? item.href + '#' + item.id : item.href;
+      let body = item.text;
+      const pos = body.search(rx);
+      if (pos > 40) body = '…' + body.slice(pos - 28);
+      return `<a href="${href}" class="search-result-item${i === 0 ? ' result-active' : ''}" data-idx="${i}" style="animation-delay:${Math.min(i * 22, 260)}ms">
+        <span class="search-result-icon">${svgIcon(item.icon)}</span>
+        <div class="search-result-info">
+          <div class="search-result-title">${hl(item.section)}</div>
+          <div class="search-result-section">${escHtml(item.page)} — ${hl(body.slice(0, 120))}…</div>
+        </div>
+        <span class="search-result-badge">${escHtml(item.page)}</span>
+      </a>`;
+    }).join('');
     resultIdx = 0;
   }
 
-  // ── Keyboard nav ─────────────────────────────────────────────────
-  const debouncedSearch = debounce(renderSearchResults, 100);
-  globalSearch.addEventListener('input', () => { debouncedSearch(globalSearch.value); resultIdx=0; });
+  let resultIdx = 0;
+  globalSearch.addEventListener('input', () => { doGlobalSearch(globalSearch.value); resultIdx = 0; });
 
   globalSearch.addEventListener('keydown', e => {
-    const items = searchResults.querySelectorAll('.sl-result:not(.sl-hist)');
-    if (e.key==='ArrowDown') { e.preventDefault(); resultIdx=Math.min(resultIdx+1,items.length-1); syncActive(items); }
-    if (e.key==='ArrowUp')   { e.preventDefault(); resultIdx=Math.max(resultIdx-1,0);              syncActive(items); }
-    if (e.key==='Enter')     { e.preventDefault(); addHistory(globalSearch.value.trim()); if(items[resultIdx]) items[resultIdx].click(); }
-    if (e.key==='Escape')    { closeSearch(); }
+    const items = searchResults.querySelectorAll('.search-result-item');
+    if (e.key === 'ArrowDown') { e.preventDefault(); resultIdx = Math.min(resultIdx + 1, items.length - 1); updateActive(items); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); resultIdx = Math.max(resultIdx - 1, 0); updateActive(items); }
+    if (e.key === 'Enter') { e.preventDefault(); if (items[resultIdx]) items[resultIdx].click(); }
   });
 
-  function syncActive(items) {
-    items.forEach((el,i) => {
-      el.classList.toggle('sl-active', i===resultIdx);
-      el.setAttribute('aria-selected', i===resultIdx);
-    });
-    items[resultIdx]?.scrollIntoView({block:'nearest'});
+  function updateActive(items) {
+    items.forEach((el, i) => el.classList.toggle('result-active', i === resultIdx));
+    items[resultIdx]?.scrollIntoView({ block: 'nearest' });
   }
 
-  searchResults.addEventListener('click', e => {
-    if (e.target.closest('.sl-result:not(.sl-hist)')) {
-      addHistory(globalSearch.value.trim()); closeSearch();
+  const search = document.getElementById('search');
+  if (search && search.parentElement && !search.parentElement.querySelector('.search-ico')) {
+    const si = document.createElement('span');
+    si.className = 'search-ico';
+    si.innerHTML = svgIcon('search');
+    search.parentElement.insertBefore(si, search);
+  }
+  // The sidebar search box is a trigger that opens the full command palette.
+  if (search) {
+    search.setAttribute('readonly', '');
+    search.setAttribute('placeholder', 'Search cheatsheets…');
+    search.classList.add('search-trigger');
+    const openFromSidebar = (e) => { e.preventDefault(); search.blur(); openSearchModal(); };
+    search.addEventListener('focus', openFromSidebar);
+    search.addEventListener('click', openFromSidebar);
+  }
+  const sidebarSearch = document.getElementById('sidebar-search');
+  const sections = document.querySelectorAll('section[id]');
+  const themeBtn = document.getElementById('theme-btn');
+
+  function setTheme(dark) {
+    document.body.classList.toggle('dark-theme', dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    if (themeBtn) themeBtn.innerHTML = dark ? svgIcon('sun') : svgIcon('moon');
+  }
+
+  setTheme(localStorage.getItem('theme') === 'dark');
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      setTheme(!document.body.classList.contains('dark-theme'));
+    });
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // `/` and Cmd/Ctrl+K open the command palette (handled above); here we only
+  // let Escape clear the inline sidebar filter.
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.activeElement === search) {
+      search.blur();
+      search.value = '';
+      filterSections('');
     }
   });
 
-  // Sidebar search → opens modal
-  const sidebarSearchInput = document.getElementById('search');
-  sidebarSearchInput?.addEventListener('focus', e => { e.preventDefault(); sidebarSearchInput.blur(); openSearch(); });
-  sidebarSearchInput?.addEventListener('click', openSearch);
-
-  // ── 5. IN-PAGE SECTION FILTER ─────────────────────────────
-  let sections = [];
-
-  function walkText(root, fn) {
-    const iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT);
-    let node;
-    while ((node=iter.nextNode())) { if(fn(node)) break; }
+  if (sidebarSearch) {
+    sidebarSearch.addEventListener('focus', e => {
+      e.preventDefault();
+      sidebarSearch.blur();
+      openSearchModal();
+    });
+    sidebarSearch.addEventListener('click', e => {
+      e.preventDefault();
+      sidebarSearch.blur();
+      openSearchModal();
+    });
   }
+
+  search.addEventListener('input', () => { filterSections(search.value); currentMatch = -1; });
+
+  let currentMatch = -1;
+
+  search.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const visible = Array.from(sections).filter(s => !s.classList.contains('section-hidden'));
+      if (!visible.length) return;
+      if (e.shiftKey) {
+        currentMatch = (currentMatch - 1 + visible.length) % visible.length;
+      } else {
+        currentMatch = (currentMatch + 1) % visible.length;
+      }
+      visible[currentMatch].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 
   function filterSections(query) {
     const q = query.toLowerCase().trim();
-    sections.forEach(sec => {
-      // Restore original HTML first
-      sec.querySelectorAll('.code-panel pre').forEach(pre => {
-        if (pre.dataset.origHtml) pre.innerHTML = pre.dataset.origHtml;
-      });
-      if (!q) { sec.classList.remove('section-hidden'); return; }
-      const text = sec.textContent.toLowerCase();
-      if (!text.includes(q)) { sec.classList.add('section-hidden'); return; }
-      sec.classList.remove('section-hidden');
-      // Highlight in code panels
-      sec.querySelectorAll('.code-panel pre').forEach(pre => {
-        if (!pre.dataset.origHtml) pre.dataset.origHtml = pre.innerHTML;
-        walkText(pre, node => {
-          const i = node.textContent.toLowerCase().indexOf(q);
-          if (i===-1) return false;
-          const before = document.createTextNode(node.textContent.slice(0,i));
-          const mark   = document.createElement('span'); mark.className='highlight'; mark.textContent=node.textContent.slice(i,i+q.length);
-          const after  = document.createTextNode(node.textContent.slice(i+q.length));
+    sections.forEach(section => {
+      if (!q) {
+        section.classList.remove('section-hidden');
+        return;
+      }
+      const text = section.textContent.toLowerCase();
+      section.classList.toggle('section-hidden', !text.includes(q));
+    });
+    document.querySelectorAll('.cheat-block .code-panel pre').forEach(pre => {
+      if (!pre.dataset.origHtml) pre.dataset.origHtml = pre.innerHTML;
+      pre.innerHTML = pre.dataset.origHtml;
+    });
+    if (q) {
+      document.querySelectorAll('.cheat-block .code-panel pre').forEach(pre => {
+        const idx = pre.textContent.toLowerCase().indexOf(q);
+        if (idx === -1) return;
+        walkTextNodes(pre, node => {
+          const text = node.textContent;
+          const i = text.toLowerCase().indexOf(q);
+          if (i === -1) return false;
+          const before = document.createTextNode(text.slice(0, i));
+          const mark = document.createElement('span');
+          mark.className = 'highlight';
+          mark.textContent = text.slice(i, i + q.length);
+          const after = document.createTextNode(text.slice(i + q.length));
           node.parentNode.replaceChild(after, node);
           node.parentNode.insertBefore(mark, after);
           node.parentNode.insertBefore(before, mark);
           return true;
         });
       });
-    });
+    }
   }
 
-  // ── 6. COPY BUTTON ─────────────────────────────────────────
-  function setupCopy() {
-  document.querySelectorAll('.code-panel').forEach(panel => {
-    const pre = panel.querySelector('pre');
-    if (!pre || panel.querySelector(':scope > .copy-btn')) return;
-    panel.style.position = 'relative';
+  function walkTextNodes(root, fn) {
+    const iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = iter.nextNode())) {
+      if (fn(node)) break;
+    }
+  }
+
+  // Mobile sidebar toggle
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const showBtn = document.getElementById('sidebar-show-btn');
+
+  if (sidebar) {
+    // Restore sidebar state
+    const savedHidden = localStorage.getItem('sidebar-hidden');
+    if (savedHidden === 'true' && window.innerWidth > 768) {
+      sidebar.classList.add('hidden');
+    }
+
+    // Hide sidebar
+    const hideBtn = document.getElementById('sidebar-hide-btn');
+    if (hideBtn) {
+      hideBtn.addEventListener('click', () => {
+        sidebar.classList.add('hidden');
+        localStorage.setItem('sidebar-hidden', 'true');
+      });
+    }
+
+    // Show sidebar
+    if (showBtn) {
+      showBtn.addEventListener('click', () => {
+        sidebar.classList.remove('hidden');
+        localStorage.setItem('sidebar-hidden', 'false');
+      });
+    }
+  }
+
+  if (sidebarToggle && sidebar && overlay) {
+    function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    overlay.addEventListener('click', closeSidebar);
+  }
+
+  // ── Copy code button ──
+  document.querySelectorAll('.code-panel pre').forEach(pre => {
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.textContent = 'Copy';
-    btn.setAttribute('aria-label', 'Copy code to clipboard');
     btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(pre.textContent).then(() => {
-        btn.textContent = '✓ Copied';
+      const code = pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(() => { btn.textContent='Copy'; btn.classList.remove('copied'); }, 1600);
-      }).catch(() => {
-        // Fallback for older browsers
-        const ta = document.createElement('textarea');
-        ta.value = pre.textContent;
-        document.body.appendChild(ta); ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        btn.textContent='✓ Copied'; btn.classList.add('copied');
-        setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},1600);
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
       });
     });
-    panel.appendChild(btn);
+    pre.parentElement.style.position = 'relative';
+    pre.parentElement.appendChild(btn);
   });
-  }
 
   // ── Guided tour: spotlight each section with an explanation card ──
-  let tourCleanup = null;
-  function setupTour() {
-    if (tourCleanup) { tourCleanup(); tourCleanup = null; }
+  (function setupTour() {
     const reduceMo = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const secs = [...document.querySelectorAll('main section[id]')];
     if (!secs.length) return;
-    const ac = new AbortController();
 
     const fab = document.createElement('button');
     fab.className = 'tour-fab';
@@ -644,178 +501,167 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Escape') end();
       else if (e.key === 'ArrowRight') { if (i < secs.length - 1) { i++; place(); } else end(); }
       else if (e.key === 'ArrowLeft') { if (i > 0) { i--; place(); } }
-    }, { signal: ac.signal });
-    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) place(); }, { signal: ac.signal });
-    tourCleanup = () => { ac.abort(); fab.remove(); overlay.remove(); };
-  }
+    });
+    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) place(); });
+  })();
 
   // ── Back to top ──
   const backToTop = document.createElement('button');
   backToTop.className = 'back-to-top';
   backToTop.innerHTML = '↑';
   backToTop.title = 'Back to top';
-  backToTop.setAttribute('aria-label','Scroll to top');
   document.body.appendChild(backToTop);
-  backToTop.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
-  // ── 8. SCROLL PROGRESS BAR ───────────────────────────────
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ── Active TOC highlight on scroll ──
+  const tocLinks = document.querySelectorAll('.toc a');
+  const sectionEls = document.querySelectorAll('section[id]');
+
+  function highlightToc() {
+    let current = '';
+    sectionEls.forEach(section => {
+      const top = section.offsetTop - 120;
+      if (window.scrollY >= top) current = section.id;
+    });
+    tocLinks.forEach(link => {
+      link.classList.toggle('toc-active', link.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', highlightToc, { passive: true });
+  highlightToc();
+
+  // ── Scroll progress bar ──
   const progressBar = document.createElement('div');
   progressBar.className = 'scroll-progress';
-  progressBar.setAttribute('role','progressbar');
-  progressBar.setAttribute('aria-label','Reading progress');
   document.body.appendChild(progressBar);
 
-  const onScroll = () => {
-    const st    = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (total>0 ? (st/total)*100 : 0)+'%';
-    backToTop.classList.toggle('visible', st>400);
-  };
-  window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }, { passive: true });
 
-  // ── 9. ACTIVE TOC  (IntersectionObserver – more accurate than scroll) ──
-  let tocIO = null;
-  function setupToc() {
-  if (tocIO) { tocIO.disconnect(); tocIO = null; }
-  const tocLinks = document.querySelectorAll('.toc a');
-  if (tocLinks.length && sections.length) {
-    const io = tocIO = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        tocLinks.forEach(a => {
-          a.classList.toggle('toc-active', a.getAttribute('href')==='#'+entry.target.id);
-        });
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-    sections.forEach(sec => io.observe(sec));
-  }
-  }
-
-  // ── 10. COLLAPSIBLE SECTIONS ──────────────────────────────
-  function setupCollapsible() {
+  // ── Collapsible sections ──
   document.querySelectorAll('section[id] > h2').forEach(h2 => {
-    if (h2.dataset.bound) return;
-    h2.dataset.bound = '1';
-    h2.style.cursor='pointer';
-    h2.setAttribute('role','button');
-    h2.setAttribute('aria-expanded','true');
+    h2.style.cursor = 'pointer';
     h2.addEventListener('click', () => {
-      const sec     = h2.parentElement;
-      const isNowCollapsed = sec.classList.toggle('collapsed');
-      h2.setAttribute('aria-expanded', !isNowCollapsed);
+      const section = h2.parentElement;
+      section.classList.toggle('collapsed');
     });
   });
-  }
 
-  // ── 11. SMOOTH ANCHOR LINKS (delegated: survives SPA page swaps) ──
-  document.addEventListener('click', e => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a || a.getAttribute('href').length < 2) return;
-    let target = null;
-    try { target = document.querySelector(a.getAttribute('href')); } catch (_) {}
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({behavior:'smooth'});
-      history.replaceState(history.state, '', a.getAttribute('href'));
-    }
-  });
-
-  // ── 12. KEYBOARD SHORTCUTS ──────────────────────────────
+  // ── Keyboard shortcuts help ──
   const kbHelp = document.createElement('div');
   kbHelp.className = 'kb-help';
-  kbHelp.setAttribute('aria-hidden','true');
-  kbHelp.innerHTML =
-    '<kbd>/</kbd> search &nbsp;'
-    +'<kbd>j</kbd><kbd>k</kbd> navigate &nbsp;'
-    +'<kbd>⌘</kbd><kbd>K</kbd> quick open &nbsp;'
-    +'<kbd>Esc</kbd> clear';
+  kbHelp.innerHTML = '<kbd>/</kbd> search &nbsp; <kbd>j</kbd><kbd>k</kbd> navigate &nbsp; <kbd>⌘</kbd><kbd>K</kbd> focus &nbsp; <kbd>Esc</kbd> clear';
   document.body.appendChild(kbHelp);
 
-  document.addEventListener('keydown', e => {
-    if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-    if (searchModal.classList.contains('active')) return;
+  // ── Notes panel (fetch markdown from GitHub) ──
+  const notesOverlay = document.getElementById('notes-overlay');
+  const notesPanel = document.getElementById('notes-panel');
+  const notesBody = document.getElementById('notes-panel-body');
+  const notesClose = document.getElementById('notes-panel-close');
+  const notesTitle = document.getElementById('notes-panel-title');
 
-    // j / k  — jump between visible sections
-    if (e.key==='j' || e.key==='k') {
-      e.preventDefault();
-      const visible = sections.filter(s => !s.classList.contains('section-hidden'));
-      const cur     = visible.findIndex(s => {
-        const r = s.getBoundingClientRect();
-        return r.top >= -60 && r.top < 220;
+  if (notesOverlay && notesPanel && notesBody && notesClose) {
+    function openNotes(id) {
+      const url = SOURCE_MAP[id];
+      if (!url) return;
+      notesOverlay.classList.add('active');
+      notesPanel.classList.add('open');
+      notesTitle.textContent = id + ' — Source Notes';
+      notesBody.innerHTML = '<div class="notes-loading"><div class="notes-spinner"></div>Fetching from GitHub...</div>';
+
+      let rawUrl = url.replace('github.com', 'raw.githubusercontent.com').replace('/tree/main/', '/refs/heads/main/');
+      if (!rawUrl.endsWith('.md')) rawUrl += '/README.md';
+
+      const cacheKey = 'notes_' + id;
+      const cacheTime = localStorage.getItem(cacheKey + '_time');
+      const now = Date.now();
+
+      if (localStorage.getItem(cacheKey) && cacheTime && (now - parseInt(cacheTime)) < 86400000) {
+        notesBody.innerHTML = renderMd(localStorage.getItem(cacheKey));
+        return;
+      }
+
+      fetch(rawUrl).then(r => { if (!r.ok) throw new Error('Not found'); return r.text(); })
+        .then(md => {
+          localStorage.setItem(cacheKey, md);
+          localStorage.setItem(cacheKey + '_time', now.toString());
+          notesBody.innerHTML = renderMd(md);
+        })
+        .catch(() => {
+          notesBody.innerHTML = '<div class="notes-loading" style="color:var(--text-subtle);">Could not fetch notes. <a href="' + url + '" target="_blank" style="color:var(--accent);margin-left:0.3rem;">Open on GitHub →</a></div>';
+        });
+    }
+
+    function closeNotes() { notesOverlay.classList.remove('active'); notesPanel.classList.remove('open'); }
+
+    document.addEventListener('click', e => { const btn = e.target.closest('.notes-toggle'); if (btn) openNotes(btn.dataset.id); });
+    notesClose.addEventListener('click', closeNotes);
+    notesOverlay.addEventListener('click', closeNotes);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNotes(); });
+  }
+
+  function renderMd(md) {
+    let h = md
+      .replace(/```(\w*)\n([\s\S]*?)```/g, (_, l, c) => `<pre><code>${esc(c.trim())}</code></pre>`)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/^######\s+(.+)$/gm, '<h6>$1</h6>')
+      .replace(/^#####\s+(.+)$/gm, '<h5>$1</h5>')
+      .replace(/^####\s+(.+)$/gm, '<h4>$1</h4>')
+      .replace(/^###\s+(.+)$/gm, '<h3>$1</h3>')
+      .replace(/^##\s+(.+)$/gm, '<h2>$1</h2>')
+      .replace(/^#\s+(.+)$/gm, '<h1>$1</h1>')
+      .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^>\s+(.+)$/gm, '<blockquote>$1</blockquote>')
+      .replace(/^[\-\*]\s+(.+)$/gm, '<li>$1</li>')
+      .replace(/^\|(.+)\|$/gm, (m, c) => {
+        const cells = c.split('|').map(x => x.trim());
+        if (cells.every(x => /^[\-:]+$/.test(x))) return '';
+        return '<tr>' + cells.map(x => `<td>${x.replace(/\*\*/g, '')}</td>`).join('') + '</tr>';
+      })
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--accent);">$1</a>')
+      .replace(/\n{2,}/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+    h = h.replace(/(<li>[\s\S]*?<\/li>)/g, m => m.startsWith('<ul>') ? m : '<ul>' + m + '</ul>');
+    h = h.replace(/(<tr>[\s\S]*?<\/tr>)/g, m => '<table>' + m + '</table>');
+    return '<p>' + h + '</p>';
+  }
+
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // ── Keyboard shortcuts ──
+  document.addEventListener('keydown', e => {
+    // j/k to navigate sections
+    if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      const visible = Array.from(sectionEls).filter(s => !s.classList.contains('section-hidden'));
+      const currentIdx = visible.findIndex(s => {
+        const rect = s.getBoundingClientRect();
+        return rect.top >= -100 && rect.top < 200;
       });
-      const next = e.key==='j'
-        ? visible[Math.min((cur<0?0:cur)+1, visible.length-1)]
-        : visible[Math.max((cur<0?0:cur)-1, 0)];
-      next?.scrollIntoView({behavior:'smooth',block:'start'});
+
+      if (e.key === 'j' || e.key === 'J') {
+        e.preventDefault();
+        const next = visible[Math.min(currentIdx + 1, visible.length - 1)];
+        if (next) next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      if (e.key === 'k' || e.key === 'K') {
+        e.preventDefault();
+        const prev = visible[Math.max(currentIdx - 1, 0)];
+        if (prev) prev.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   });
-
-  // ── 13. NOTES PANEL (GitHub markdown fetch + 24h cache) ────
-  const notesOverlay = document.getElementById('notes-overlay');
-  const notesPanel   = document.getElementById('notes-panel');
-  const notesBody    = document.getElementById('notes-panel-body');
-  const notesClose   = document.getElementById('notes-panel-close');
-  const notesTitle   = document.getElementById('notes-panel-title');
-
-  const openNotes = id => {
-    const url = SOURCE_MAP[id];
-    if (!url) return;
-    notesOverlay.classList.add('active');
-    notesPanel.classList.add('open');
-    notesTitle.textContent = id + ' — Notes';
-    notesBody.innerHTML = '<div class="notes-loading"><div class="notes-spinner"></div>Fetching from GitHub…</div>';
-
-    const cacheKey  = 'notes_' + id;
-    const cached    = localStorage.getItem(cacheKey);
-    const cacheTime = parseInt(localStorage.getItem(cacheKey+'_time')||'0');
-    if (cached && Date.now()-cacheTime < 86400000) { notesBody.innerHTML=renderMd(cached); return; }
-
-    let rawUrl = url.replace('github.com','raw.githubusercontent.com')
-                    .replace('/tree/main/','/refs/heads/main/');
-    if (!rawUrl.endsWith('.md')) rawUrl += '/README.md';
-
-    fetch(rawUrl)
-      .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-      .then(md => {
-        localStorage.setItem(cacheKey, md);
-        localStorage.setItem(cacheKey+'_time', Date.now().toString());
-        notesBody.innerHTML = renderMd(md);
-      })
-      .catch(() => {
-        notesBody.innerHTML =
-          `<div class="notes-loading" style="color:var(--text-subtle);flex-direction:column;gap:.75rem;">
-            <span>⚠️ Could not load notes.</span>
-            <a href="${url}" target="_blank" rel="noopener" style="color:var(--accent)">🔗 Open on GitHub →</a>
-          </div>`;
-      });
-  };
-
-  const closeNotes = () => {
-    notesOverlay.classList.remove('active');
-    notesPanel.classList.remove('open');
-  };
-
-  document.addEventListener('click', e => {
-    const btn = e.target.closest('.notes-toggle');
-    if (btn) openNotes(btn.dataset.id);
-  });
-  notesClose?.addEventListener('click', closeNotes);
-  notesOverlay?.addEventListener('click', closeNotes);
-  document.addEventListener('keydown', e => { if(e.key==='Escape') { closeSearch(); closeNotes(); } });
-
-  // ── 14. PER-PAGE INIT (re-run by js/router.js after each SPA navigation) ──
-  function initPage() {
-    sections = Array.from(document.querySelectorAll('section[id]'));
-    buildIndex();
-    setupCopy();
-    setupTour();
-    setupToc();
-    setupCollapsible();
-    closeSearch(); closeNotes();
-    onScroll();
-  }
-  initPage();
-  window.DOC_initPage = initPage;
-
 });

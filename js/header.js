@@ -34,52 +34,51 @@ function svgIcon(name, cls) {
 }
 
 const LANGUAGES = [
-  { id: 'HTML', href: 'index.html', icon: 'brackets', tags: ['web','markup','frontend','html'] },
-  { id: 'CSS', href: 'css-cheatsheet.html', icon: 'css', tags: ['web','styling','frontend','flexbox','grid','css'] },
-  { id: 'JS', href: 'js-cheatsheet.html', icon: 'bolt', tags: ['javascript','web','frontend','async','es6'] },
-  { id: 'Java', href: 'java-cheatsheet.html', icon: 'coffee', tags: ['backend','oop','language','jvm','spring'] },
-  { id: 'C', href: 'c-cheatsheet.html', icon: 'chip', tags: ['systems','language','low-level','pointers'] },
-  { id: 'Python', href: 'python-cheatsheet.html', icon: 'snake', tags: ['scripting','ai','data','ml','django'] },
-  { id: 'SQL', href: 'postgresql-cheatsheet.html', icon: 'database', tags: ['database','query','postgres','sql','joins'] },
-  { id: 'Shell', href: 'shell-cheatsheet.html', icon: 'terminal', tags: ['terminal','bash','cli','linux','unix'] },
-  { id: 'Git', href: 'git-cheatsheet.html', icon: 'git', tags: ['version-control','vcs','github','branching'] },
-  { id: 'DSA', href: 'dsa-cheatsheet.html', icon: 'bars', tags: ['algorithms','data structures','complexity','sorting'] },
-  { id: 'OOP', href: 'oop-cheatsheet.html', icon: 'cube', tags: ['design','patterns','object','encapsulation'] },
-  { id: 'Networking', href: 'networking-cheatsheet.html', icon: 'network', tags: ['tcp','http','protocols','ip','dns'] },
-  { id: 'Java Web', href: 'java-web-cheatsheet.html', icon: 'coffee', tags: ['servlet','spring','backend','rest','jpa'] },
-  { id: 'File Tools', href: 'filetools-cheatsheet.html', icon: 'folder', tags: ['filesystem','io','tools','files','streams'] },
-  { id: 'VS Code', href: 'vscode-cheatsheet.html', icon: 'pen', tags: ['editor','shortcuts','ide','extensions','vscode'] },
-  { id: 'AI Concepts', href: 'ai-concepts-cheatsheet.html', icon: 'spark', tags: ['ml','llm','ai','deep learning','neural networks'] },
-  { id: 'AI Apps', href: 'ai-apps-cheatsheet.html', icon: 'robot', tags: ['llm','agents','langchain','gpt','rag','tools'] },
-  { id: 'Mac', href: 'mac-cheatsheet.html', icon: 'monitor', tags: ['macos','shortcuts','terminal','spotlight'] },
-  { id: 'HLD', href: 'hld-cheatsheet.html', icon: 'blueprint', tags: ['system design','architecture','scalability','caching'] },
-  { id: 'LLD', href: 'lld-cheatsheet.html', icon: 'layout', tags: ['design patterns','solid','oop','clean code'] },
-  { id: 'REST API', href: 'rest-api-cheatsheet.html', icon: 'globe', tags: ['http','api','rest','json','crud','status codes'] },
-  { id: 'XML', href: 'xml-cheatsheet.html', icon: 'doc', tags: ['markup','xpath','parsing','schema','xslt'] },
-  { id: 'Concepts', href: 'programming-concepts-cheatsheet.html', icon: 'spark', tags: ['programming','concepts','fundamentals','paradigms'] },
-  { id: 'Data Types', href: 'data-types-cheatsheet.html', icon: 'layers', tags: ['types','primitives','memory','data'] },
-  { id: 'Accounts', href: 'accounts-cheatsheet.html', icon: 'key', tags: ['accounting','finance','ledger','accounts'] },
+  { id: 'HTML', href: 'index.html', icon: 'brackets' },
+  { id: 'CSS', href: 'css-cheatsheet.html', icon: 'css' },
+  { id: 'JS', href: 'js-cheatsheet.html', icon: 'bolt' },
+  { id: 'Java', href: 'java-cheatsheet.html', icon: 'coffee' },
+  { id: 'C', href: 'c-cheatsheet.html', icon: 'chip' },
+  { id: 'Python', href: 'python-cheatsheet.html', icon: 'snake' },
+  { id: 'SQL', href: 'postgresql-cheatsheet.html', icon: 'database' },
+  { id: 'Shell', href: 'shell-cheatsheet.html', icon: 'terminal' },
+  { id: 'Git', href: 'git-cheatsheet.html', icon: 'git' },
+  { id: 'DSA', href: 'dsa-cheatsheet.html', icon: 'bars' },
+  { id: 'OOP', href: 'oop-cheatsheet.html', icon: 'cube' },
+  { id: 'Networking', href: 'networking-cheatsheet.html', icon: 'network' },
+  { id: 'Java Web', href: 'java-web-cheatsheet.html', icon: 'coffee' },
+  { id: 'File Tools', href: 'filetools-cheatsheet.html', icon: 'folder' },
+  { id: 'VS Code', href: 'vscode-cheatsheet.html', icon: 'pen' },
+  { id: 'AI Concepts', href: 'ai-concepts-cheatsheet.html', icon: 'spark' },
+  { id: 'AI Apps', href: 'ai-apps-cheatsheet.html', icon: 'robot' },
+  { id: 'Mac', href: 'mac-cheatsheet.html', icon: 'monitor' },
+  { id: 'HLD', href: 'hld-cheatsheet.html', icon: 'blueprint' },
+  { id: 'LLD', href: 'lld-cheatsheet.html', icon: 'layout' },
+  { id: 'REST API', href: 'rest-api-cheatsheet.html', icon: 'globe' },
+  { id: 'XML', href: 'xml-cheatsheet.html', icon: 'doc' },
+  { id: 'Concepts', href: 'programming-concepts-cheatsheet.html', icon: 'spark' },
+  { id: 'Data Types', href: 'data-types-cheatsheet.html', icon: 'layers' },
+  { id: 'Accounts', href: 'accounts-cheatsheet.html', icon: 'key' },
 ];
 
 const GITHUB_BASE = 'https://github.com/arun1742002/obsidian/tree/main/Notes';
 
-/** Map of page id → GitHub source URL (null = no source) */
 const SOURCE_MAP = {
-  'HTML':        GITHUB_BASE + '/Web/HTML.md',
-  'CSS':         GITHUB_BASE + '/Web/CSS.md',
-  'JS':          GITHUB_BASE + '/Web/JavaScript.md',
-  'Java':        GITHUB_BASE + '/Languages/Java.md',
-  'C':           null,
-  'Python':      GITHUB_BASE + '/Languages/Python.md',
-  'SQL':         GITHUB_BASE + '/Database/SQL%20DB.md',
-  'Shell':       null,
-  'Git':         null,
-  'DSA':         GITHUB_BASE + '/DSA',
-  'OOP':         GITHUB_BASE + '/DSA/Data%20Strucure/OOPS.md',
-  'Networking':  GITHUB_BASE + '/Networking',
-  'Java Web':    GITHUB_BASE + '/Web',
-  'File Tools':  GITHUB_BASE + '/FileHandling',
-  'VS Code':     null,
+  'HTML': GITHUB_BASE + '/Web/HTML.md',
+  'CSS': GITHUB_BASE + '/Web/CSS.md',
+  'JS': GITHUB_BASE + '/Web/JavaScript.md',
+  'Java': GITHUB_BASE + '/Languages/Java.md',
+  'C': null,
+  'Python': GITHUB_BASE + '/Languages/Python.md',
+  'SQL': GITHUB_BASE + '/Database/SQL%20DB.md',
+  'Shell': null,
+  'Git': null,
+  'DSA': GITHUB_BASE + '/DSA',
+  'OOP': GITHUB_BASE + '/DSA/Data%20Strucure/OOPS.md',
+  'Networking': GITHUB_BASE + '/Networking',
+  'Java Web': GITHUB_BASE + '/Web',
+  'File Tools': GITHUB_BASE + '/FileHandling',
+  'VS Code': null,
   'AI Concepts': GITHUB_BASE + '/AI%20%26%20ML',
   'AI Apps': GITHUB_BASE + '/AI%20%26%20ML/LLM%20%26%20AI%20Agents%20%E2%80%94%20Complete%20Concepts%20Guide.md',
   'Mac': null,
@@ -92,50 +91,28 @@ const SOURCE_MAP = {
   'Accounts': null,
 };
 
-// ─── Render sidebar nav ────────────────────────────────────────────
-/**
- * Populates #sidebar-nav with icon links; marks activeId as .active.
- * Also sets the sidebar-brand GitHub link.
- * @param {string} activeId  Must match a LANGUAGES[].id
- */
 function renderHeader(activeId) {
   const nav = document.getElementById('sidebar-nav');
   if (!nav) return;
-
   nav.innerHTML = LANGUAGES.map(l => {
-    const isActive = l.id === activeId;
-    return `<a href="${l.href}" class="nav-item${isActive ? ' active' : ''}" aria-current="${isActive ? 'page' : 'false'}">
-      <span class="nav-icon" aria-hidden="true">${svgIcon(l.icon)}</span>
+    const active = l.id === activeId ? ' active' : '';
+    return `<a href="${l.href}" class="nav-item${active}">
+      <span class="nav-icon">${svgIcon(l.icon)}</span>
       <span class="nav-label">${l.id}</span>
     </a>`;
   }).join('');
 
   const brand = document.querySelector('.sidebar-brand');
   if (brand && !brand.querySelector('a')) {
-    brand.innerHTML = `<span class="brand-name">${svgIcon('layers')} Cheatsheets</span><a href="${GITHUB_BASE}" target="_blank" rel="noopener" class="gh-link" title="GitHub Source">${svgIcon('bolt')}</a>`;
+    brand.innerHTML = `<span class="brand-name">${svgIcon('layers')} Cheatsheets</span><a href="${GITHUB_BASE}" target="_blank" class="gh-link" title="GitHub Source">${svgIcon('bolt')}</a>`;
   }
 }
 
-// ─── Render source / notes buttons ────────────────────────────────
-/**
- * Injects "View Notes" + "GitHub" buttons into #source-link.
- * @param {string} activeId
- */
 function renderSourceLink(activeId) {
   const el = document.getElementById('source-link');
   if (!el) return;
   const url = SOURCE_MAP[activeId];
   if (url) {
-    el.innerHTML = `<button class="source-btn notes-toggle" data-id="${activeId}" aria-label="View notes for ${activeId}">${svgIcon('bookopen')} View Notes</button> <a href="${url}" target="_blank" rel="noopener" class="source-btn" aria-label="${activeId} on GitHub">${svgIcon('bolt')} GitHub</a>`;
+    el.innerHTML = `<button class="source-btn notes-toggle" data-id="${activeId}">${svgIcon('bookopen')} View Notes</button> <a href="${url}" target="_blank" class="source-btn">${svgIcon('bolt')} GitHub</a>`;
   }
 }
-
-// ─── Auth, tracking & attachments (see js/auth.js) ────────────────
-(function loadAuth() {
-  const s = document.createElement('script');
-  s.src = 'js/auth.js';
-  document.head.appendChild(s);
-  const r = document.createElement('script');
-  r.src = 'js/router.js';
-  document.head.appendChild(r);
-})();
