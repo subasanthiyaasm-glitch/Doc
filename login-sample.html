@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Login — Catalyst</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f5f6f8; }
+    .card { width: min(420px, 92vw); background: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    #loginDivElementId { min-height: 420px; }
+    #status { font-size: .9rem; color: #555; margin-top: .5rem; }
+    button { margin-top: 1rem; padding: .5rem 1rem; cursor: pointer; }
+  </style>
+  <!-- Catalyst Web SDK + project init (same-origin path, served by Slate/Catalyst hosting) -->
+  <script src="https://static.zohocdn.com/catalyst/sdk/js/4.5.0/catalystWebSDK.js"></script>
+  <script src="/__catalyst/sdk/init.js"></script>
+</head>
+<body>
+  <div class="card">
+    <h1>Sample Login</h1>
+    <div id="status">Checking session…</div>
+    <div id="loginDivElementId"></div>
+    <div id="loggedIn" hidden>
+      <p>Signed in as <strong id="who"></strong></p>
+      <button id="logout">Sign out</button>
+    </div>
+  </div>
+
+  <script>
+    const status = document.getElementById('status');
+
+    catalyst.auth.isUserAuthenticated()
+      .then(res => {
+        const u = res.content || {};
+        status.textContent = 'Session found ✅';
+        document.getElementById('who').textContent = u.email_id || u.first_name || 'user';
+        document.getElementById('loggedIn').hidden = false;
+      })
+      .catch(() => {
+        status.textContent = 'Not signed in — please log in.';
+        catalyst.auth.signIn('loginDivElementId', {
+          service_url: location.origin + '/login-sample.html'
+        });
+      });
+
+    document.getElementById('logout').onclick = () =>
+      catalyst.auth.signOut(location.origin + '/login-sample.html');
+  </script>
+</body>
