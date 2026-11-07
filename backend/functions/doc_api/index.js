@@ -11,16 +11,9 @@ const MAX_BYTES = 10 * 1024 * 1024;
 const ALLOWED_EXT = ['pdf', 'png', 'jpg', 'jpeg', 'txt', 'md', 'zip', 'docx'];
 const RETENTION_DAYS = 90;
 const ADMIN_ROLE = 'App Administrator';
-const ALLOWED_ORIGINS = ['https://notes.onslate.in'];
-
+// CORS is handled by the Catalyst gateway (project CORS domains: notes.onslate.in).
+// Do NOT set Access-Control-* headers here — duplicates break the browser origin check.
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-File-Name, X-Page');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  }
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
