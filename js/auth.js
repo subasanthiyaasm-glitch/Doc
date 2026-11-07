@@ -22,7 +22,26 @@
     });
 
   function goLogin() {
+    // Loop guard: if we already bounced to login in the last 60s, the session cookie
+    // is being blocked (cross-site). Show the page instead of looping/blank screen.
+    const last = +sessionStorage.getItem('doc_login_redirect') || 0;
+    if (Date.now() - last < 60000) {
+      document.documentElement.style.visibility = '';
+      onReady(renderSignInBadge);
+      return;
+    }
+    sessionStorage.setItem('doc_login_redirect', String(Date.now()));
     location.replace('login.html?next=' + encodeURIComponent(pageFile + location.hash));
+  }
+
+  function renderSignInBadge() {
+    if (document.getElementById('docSignIn')) return;
+    const a = document.createElement('a');
+    a.id = 'docSignIn';
+    a.href = 'login.html?next=' + encodeURIComponent(pageFile);
+    a.textContent = 'Sign in (session blocked by browser cookies)';
+    a.style.cssText = 'position:fixed;bottom:12px;right:12px;z-index:9999;padding:6px 10px;border-radius:6px;background:#c0392b;color:#fff;font:12px sans-serif;text-decoration:none';
+    document.body.appendChild(a);
   }
 
   const escHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -33,11 +52,15 @@
 
   api('/me').then(me => {
     document.documentElement.style.visibility = '';
+    sessionStorage.removeItem('doc_login_redirect');
     window.DOC_USER = me;
     trackDailyLogin();
     trackTime();
     onReady(() => { renderUserBadge(me); renderAttachments(); });
-  }).catch(() => { /* redirected */ });
+  }).catch(() => {
+    // Network/API failure (not 401): never leave the page blank
+    document.documentElement.style.visibility = '';
+  });
 
   function onReady(fn) {
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn();
