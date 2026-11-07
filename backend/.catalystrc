@@ -1,0 +1,11 @@
+{
+  "projects": [
+    {
+      "id": "10624000000048001",
+      "name": "quickguide",
+      "env": [{ "name": "Development", "id": "60034244588", "type": 3 }],
+      "timezone": "Asia/Kolkata",
+      "default": true
+    }
+  ]
+}

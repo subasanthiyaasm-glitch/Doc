@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "targets": ["doc_api"],
+    "ignore": [],
+    "source": "functions"
+  }
+}

@@ -97,4 +97,10 @@ function renderSourceLink(activeId) {
     `<button class="source-btn notes-toggle" data-id="${activeId}" aria-label="View notes for ${activeId}">📖 View Notes</button>` +
     ` <a href="${url}" target="_blank" rel="noopener" class="source-btn" aria-label="${activeId} on GitHub">⚡ GitHub</a>`;
 }
-HEADEROF
+
+// ─── Auth, tracking & attachments (see js/auth.js) ────────────────
+(function loadAuth() {
+  const s = document.createElement('script');
+  s.src = 'js/auth.js';
+  document.head.appendChild(s);
+})();
