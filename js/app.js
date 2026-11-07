@@ -51,7 +51,7 @@
       save();
     }
     last = now;
-    $('#cnUsage').textContent = '⏱ ' + fmtMin(db.usage[today()] || 0) + ' today';
+    $('#cnUsage span').textContent = fmtMin(db.usage[today()] || 0) + ' today';
   }
   setInterval(tick, 15000);
   document.addEventListener('visibilitychange', () => { last = Date.now(); });
@@ -67,7 +67,11 @@
     const due = db.tasks.filter(t => !t.done).sort((a, b) => (a.due || '9').localeCompare(b.due || '9')).slice(0, 6);
     const recent = activeNotes().sort((a, b) => b.updated - a.updated).slice(0, 6);
     const week = Object.entries(db.usage).filter(([d]) => d > new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10)).reduce((a, [, v]) => a + v, 0);
+    const h = new Date().getHours();
+    const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    const pending = db.tasks.filter(t => !t.done).length;
     view.innerHTML = `<div class="grid">
+      <div class="card hero"><h2>${greet} 👋</h2><p>${todays.length} class${todays.length === 1 ? '' : 'es'} today · ${pending} pending task${pending === 1 ? '' : 's'} · ${activeNotes().length} notes</p><a class="btn" href="#/notes/new">+ New note</a></div>
       <div class="card"><h3>⏱ Study time</h3><div class="stat">${fmtMin(db.usage[today()] || 0)}</div><div class="mute">today · ${fmtMin(week)} this week</div></div>
       <div class="card"><h3>🗓️ Today's classes</h3>${todays.length ? '<ul class="list">' + todays.map(s => `<li><span>${esc(s.subject)}</span><span class="mute">${esc(s.start)}–${esc(s.end)} ${esc(s.room)}</span></li>`).join('') + '</ul>' : '<p class="mute">No classes today.</p>'}</div>
       <div class="card"><h3>✅ Upcoming</h3>${due.length ? '<ul class="list">' + due.map(t => `<li><span>${esc(t.title)}</span><span class="mute ${t.due && t.due < today() ? 'overdue' : ''}">${esc(t.due || 'no date')}</span></li>`).join('') + '</ul>' : '<p class="mute">Nothing pending 🎉</p>'}</div>
@@ -193,7 +197,15 @@
     document.title = r[0] + ' — Campus Notes';
     document.querySelectorAll('#cnNav a').forEach(a => a.classList.toggle('active', a.dataset.r === name));
     r[1](param);
+    view.classList.remove('view-in'); void view.offsetWidth; view.classList.add('view-in');
   }
+
+  // ── Theme ────────────────────────────────────────────────
+  $('#cnTheme').onclick = () => {
+    const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t;
+    localStorage.setItem('cnTheme', t);
+  };
   window.addEventListener('hashchange', route);
 
   // ── Logout ───────────────────────────────────────────────
