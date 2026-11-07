@@ -4,13 +4,286 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VS Code &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .vs-kw { color:#bb9af7; }
     .vs-fn { color:#7aa2f7; }
     .vs-str { color:#9ece6a; }
     .vs-cm { color:#565f89; }
     .vs-op { color:#e0af68; }
+
+    /* ===== Animated "how it works" explainer + per-section figures (vsx-) =====
+       Containers and text use theme variables so light & dark both work.
+       Moving parts use fixed accents: amber #e0b366, rose #e8808f, blue #7aa2f7,
+       green #9ece6a, violet #bb9af7, plus var(--accent). */
+    .vsx-stage{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem 1.1rem 1.3rem; margin-top:0.5rem; }
+    .vsx-lead{ display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; margin:0 0 0.9rem; color:var(--text-muted); font-size:0.84rem; line-height:1.5; }
+    .vsx-lead strong{ color:var(--text); }
+    .vsx-arrow{ color:var(--text-subtle); font-size:1.1rem; line-height:1; }
+    .vsx-kbd{ display:inline-flex; align-items:center; justify-content:center; min-width:1.9rem; height:1.65rem; padding:0 0.5rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-weight:700; font-size:0.76rem; color:#15161f; box-shadow:0 2px 0 rgba(0,0,0,0.28); white-space:nowrap; }
+    .vsx-kbd--violet{ background:#bb9af7; }
+    .vsx-kbd--blue{ background:#7aa2f7; }
+    .vsx-kbd--amber{ background:#e0b366; }
+    .vsx-kbd--green{ background:#9ece6a; }
+    .vsx-kbd--rose{ background:#e8808f; }
+    .vsx-kbd--accent{ background:var(--accent); color:#fff; }
+    .vsx-kbd--press{ animation:vsx-press 6s ease-in-out infinite; }
+    .vsx-kbd--press2{ animation:vsx-press2 6s ease-in-out infinite; }
+    .vsx-kbd--press3{ animation:vsx-press3 6s ease-in-out infinite; }
+    .vsx-kbd--press3b{ animation:vsx-press3b 6s ease-in-out infinite; }
+    .vsx-kbd--pressLate{ animation:vsx-press-late 6s ease-in-out infinite; }
+    .vsx-kbd--pressTab{ animation:vsx-press-tab 6s ease-in-out infinite; }
+
+    /* --- hero editor mock (inline SVG, 16s loop, four 4s scenes) --- */
+    .vsx-screen{ display:block; width:100%; max-width:820px; height:auto; margin:0 auto; border-radius:var(--radius-sm); }
+    .vsx-screen text{ font-family:ui-monospace,Menlo,monospace; }
+    .vsx-sc{ opacity:0; }
+    .vsx-sc1{ animation:vsx-show1 16s linear infinite; }
+    .vsx-sc2{ animation:vsx-show2 16s linear infinite; }
+    .vsx-sc3{ animation:vsx-show3 16s linear infinite; }
+    .vsx-sc4{ animation:vsx-show4 16s linear infinite; }
+    .vsx-k1{ animation:vsx-k1 16s linear infinite; }
+    .vsx-k2{ animation:vsx-k2 16s linear infinite; }
+    .vsx-k3{ animation:vsx-k3 16s linear infinite; }
+    .vsx-k4{ animation:vsx-k4 16s linear infinite; }
+    .vsx-pal{ animation:vsx-pal 16s linear infinite; }
+    .vsx-t1{ animation:vsx-type1 16s linear infinite; }
+    .vsx-row{ animation:vsx-row 16s linear infinite; }
+    .vsx-toast{ animation:vsx-toast 16s linear infinite; }
+    .vsx-sel1{ animation:vsx-sel1 16s linear infinite; }
+    .vsx-sel2{ animation:vsx-sel2 16s linear infinite; }
+    .vsx-sel3{ animation:vsx-sel3 16s linear infinite; }
+    .vsx-cur1{ animation:vsx-cur1 16s linear infinite; }
+    .vsx-cur2{ animation:vsx-cur2 16s linear infinite; }
+    .vsx-cur3{ animation:vsx-cur3 16s linear infinite; }
+    .vsx-blink{ animation:vsx-blink 1s step-end infinite; }
+    .vsx-gx{ transform-box:fill-box; transform-origin:left center; animation:vsx-grow 16s linear infinite; }
+    .vsx-chip2{ animation:vsx-chip2 16s linear infinite; }
+    .vsx-widget{ animation:vsx-widget 16s linear infinite; }
+    .vsx-t3a{ animation:vsx-type3a 16s linear infinite; }
+    .vsx-t3b{ animation:vsx-type3b 16s linear infinite; }
+    .vsx-m1{ animation:vsx-m1 16s linear infinite; }
+    .vsx-m2{ animation:vsx-m2 16s linear infinite; }
+    .vsx-m3{ animation:vsx-m3 16s linear infinite; }
+    .vsx-count{ animation:vsx-count 16s linear infinite; }
+    .vsx-btn{ animation:vsx-btn 16s linear infinite; }
+    .vsx-new3{ animation:vsx-new3 16s linear infinite; }
+    .vsx-term{ animation:vsx-term 16s linear infinite; }
+    .vsx-t4{ animation:vsx-type4 16s linear infinite; }
+    .vsx-out1{ animation:vsx-out1 16s linear infinite; }
+    .vsx-out2{ animation:vsx-out2 16s linear infinite; }
+
+    .vsx-steps{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0.6rem; margin-top:0.9rem; }
+    .vsx-step{ background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.65rem 0.7rem; animation:vsx-glow 16s linear infinite; }
+    .vsx-step--1{ --vsx-c:#bb9af7; animation-delay:0s; }
+    .vsx-step--2{ --vsx-c:#7aa2f7; animation-delay:4s; }
+    .vsx-step--3{ --vsx-c:#e0b366; animation-delay:8s; }
+    .vsx-step--4{ --vsx-c:#9ece6a; animation-delay:12s; }
+    .vsx-step-head{ display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.35rem; font-weight:600; font-size:0.82rem; color:var(--text); font-family:var(--display); }
+    .vsx-step-head b{ display:inline-flex; align-items:center; justify-content:center; width:1.25rem; height:1.25rem; border-radius:50%; background:var(--vsx-c); color:#15161f; font-size:0.72rem; flex:0 0 auto; }
+    .vsx-step-head .vsx-kbd{ height:1.35rem; min-width:1.5rem; font-size:0.66rem; padding:0 0.35rem; margin-left:auto; }
+    .vsx-step p{ margin:0; font-size:0.76rem; color:var(--text-muted); line-height:1.5; }
+    .vsx-note{ margin:0.9rem 0 0; font-size:0.86rem; color:var(--text-muted); line-height:1.55; }
+    .vsx-note code, .vsx-fig__cap code{ background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-xs); padding:0.05rem 0.3rem; font-size:0.82em; color:var(--text); }
+
+    /* --- per-section mini figures --- */
+    .vsx-fig{ margin:0 0 1rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.7rem 0.95rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .vsx-fig__art{ display:flex; align-items:center; gap:0.55rem; flex:0 0 auto; }
+    .vsx-fig__cap{ flex:1 1 200px; min-width:160px; font-size:0.78rem; color:var(--text-muted); line-height:1.5; }
+    .vsx-fig__cap b{ color:var(--text); }
+    .vsx-fig .vsx-kbd{ height:1.5rem; font-size:0.72rem; }
+    .vsx-mono{ font-family:ui-monospace,Menlo,monospace; }
+
+    /* 1 command palette */
+    .vsx-mpal{ width:150px; background:var(--code-bg); border:1px solid #bb9af7; border-radius:var(--radius-xs); padding:3px; font-family:ui-monospace,Menlo,monospace; font-size:0.62rem; color:var(--code-text); line-height:1.4; }
+    .vsx-mpal__in{ background:rgba(255,255,255,0.08); border-radius:3px; padding:2px 5px; margin-bottom:3px; color:#bb9af7; font-weight:700; }
+    .vsx-mpal__in span{ color:var(--code-text); font-weight:400; }
+    .vsx-caret{ display:inline-block; width:0.45em; height:1em; background:#7aa2f7; vertical-align:text-bottom; margin-left:1px; animation:vsx-blink 1.1s step-end infinite; }
+    .vsx-prow{ padding:2px 5px; border-radius:3px; animation:vsx-rowhl 6s ease-in-out infinite; }
+    .vsx-prow--1{ --vsx-c:rgba(122,162,247,0.38); animation-delay:1s; }
+    .vsx-prow--2{ --vsx-c:rgba(224,179,102,0.38); animation-delay:2.3s; }
+    .vsx-prow--3{ --vsx-c:rgba(187,154,247,0.38); animation-delay:3.6s; }
+
+    /* 2 move line */
+    .vsx-lines{ display:flex; flex-direction:column; gap:4px; width:110px; background:var(--code-bg); padding:7px 8px; border-radius:var(--radius-xs); }
+    .vsx-ln{ height:10px; border-radius:3px; background:var(--code-text); opacity:0.3; }
+    .vsx-ln--a{ width:70%; animation:vsx-down 6s ease-in-out infinite; }
+    .vsx-ln--b{ width:95%; background:#e0b366; opacity:1; animation:vsx-up 6s ease-in-out infinite; }
+    .vsx-ln--c{ width:55%; }
+
+    /* 3 multi-cursor */
+    .vsx-mc{ display:flex; flex-direction:column; gap:4px; background:var(--code-bg); padding:6px 8px; border-radius:var(--radius-xs); width:140px; }
+    .vsx-mrow{ display:flex; align-items:center; gap:3px; height:12px; }
+    .vsx-mrow i{ display:block; height:8px; border-radius:3px; background:var(--code-text); opacity:0.3; }
+    .vsx-mcur{ display:block; width:2px; height:12px; background:#7aa2f7; animation:vsx-blink 1s step-end infinite; }
+    .vsx-mtyped{ display:inline-block; overflow:hidden; white-space:nowrap; width:0; font-family:ui-monospace,Menlo,monospace; font-weight:700; font-size:0.62rem; line-height:12px; color:#9ece6a; animation:vsx-mtype 6s steps(5) infinite; }
+
+    /* 4 search & replace */
+    .vsx-srow{ background:var(--code-bg); color:var(--code-text); padding:0.35rem 0.6rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-size:0.74rem; white-space:nowrap; }
+    .vsx-sw{ position:relative; display:inline-block; border-radius:3px; animation:vsx-swhl 6s ease-in-out infinite; }
+    .vsx-sw--1{ animation-delay:0s; }
+    .vsx-sw--2{ animation-delay:0.45s; }
+    .vsx-sw--3{ animation-delay:0.9s; }
+    .vsx-sw .vsx-old{ display:inline-block; padding:0 3px; color:#e0b366; animation:vsx-swold 6s ease-in-out infinite; }
+    .vsx-sw .vsx-new{ position:absolute; left:0; top:0; padding:0 3px; color:#9ece6a; opacity:0; animation:vsx-swnew 6s ease-in-out infinite; }
+
+    /* 5 terminal */
+    .vsx-chip{ background:var(--code-bg); color:var(--code-text); padding:0.4rem 0.6rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-size:0.76rem; white-space:nowrap; display:inline-flex; align-items:center; }
+    .vsx-prompt{ color:#9ece6a; font-weight:700; margin-right:0.45em; }
+    .vsx-typed{ display:inline-block; overflow:hidden; white-space:nowrap; width:0; vertical-align:bottom; animation:vsx-type11 6s steps(11) infinite; }
+    .vsx-result{ background:var(--surface-2); border:1px solid var(--border); color:#9ece6a; padding:0.35rem 0.55rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-size:0.72rem; white-space:nowrap; opacity:0; animation:vsx-result 6s ease-in-out infinite; }
+
+    /* 6 tabs */
+    .vsx-tabs{ display:flex; background:var(--code-bg); border-radius:var(--radius-xs); padding:3px; gap:3px; }
+    .vsx-tab{ padding:3px 8px; border-radius:3px; font-family:ui-monospace,Menlo,monospace; font-size:0.64rem; color:var(--code-text); opacity:0.5; border-top:2px solid transparent; animation:vsx-tabhl 6s ease-in-out infinite; }
+    .vsx-tab--1{ --vsx-c:#7aa2f7; animation-delay:0.3s; }
+    .vsx-tab--2{ --vsx-c:#e0b366; animation-delay:2.3s; }
+    .vsx-tab--3{ --vsx-c:#e8808f; animation-delay:4.3s; }
+
+    /* 7 sidebar */
+    .vsx-win{ display:flex; width:124px; height:62px; background:var(--code-bg); border-radius:var(--radius-xs); overflow:hidden; border:1px solid var(--border); }
+    .vsx-win__act{ flex:0 0 12px; background:rgba(255,255,255,0.05); display:flex; flex-direction:column; align-items:center; gap:4px; padding-top:5px; }
+    .vsx-win__act i{ display:block; width:6px; height:6px; border-radius:2px; }
+    .vsx-win__side{ width:36px; flex:0 0 auto; background:rgba(255,255,255,0.08); padding:6px 4px; display:flex; flex-direction:column; gap:4px; overflow:hidden; animation:vsx-side 6s ease-in-out infinite; }
+    .vsx-win__side i{ display:block; height:5px; border-radius:2px; background:#bb9af7; opacity:0.75; }
+    .vsx-win__ed{ flex:1; padding:6px; display:flex; flex-direction:column; gap:4px; }
+    .vsx-win__ed i{ display:block; height:5px; border-radius:2px; background:var(--code-text); opacity:0.3; }
+
+    /* 8 debug */
+    .vsx-dbg{ position:relative; display:flex; flex-direction:column; gap:5px; background:var(--code-bg); padding:7px 8px 7px 28px; border-radius:var(--radius-xs); width:124px; }
+    .vsx-dbg i{ display:block; height:7px; border-radius:3px; background:var(--code-text); opacity:0.3; }
+    .vsx-bp{ position:absolute; left:8px; top:18.5px; width:8px; height:8px; border-radius:50%; background:#e8808f; animation:vsx-bp 6s ease-in-out infinite; }
+    .vsx-ptr{ position:absolute; left:18px; top:18px; width:0; height:0; border-left:7px solid #e0b366; border-top:4.5px solid transparent; border-bottom:4.5px solid transparent; opacity:0; animation:vsx-stepdown 6s ease-in-out infinite; }
+
+    /* 9 git */
+    .vsx-flow{ display:flex; align-items:center; }
+    .vsx-node{ padding:0.3rem 0.5rem; border-radius:var(--radius-xs); background:var(--surface-2); border:1px solid var(--border); color:var(--text-muted); font-family:ui-monospace,Menlo,monospace; font-size:0.68rem; font-weight:600; animation:vsx-nodehl 6s ease-in-out infinite; }
+    .vsx-node--1{ --vsx-c:#e0b366; animation-delay:0s; }
+    .vsx-node--2{ --vsx-c:#7aa2f7; animation-delay:2s; }
+    .vsx-node--3{ --vsx-c:#9ece6a; animation-delay:4s; }
+    .vsx-track{ position:relative; width:26px; height:2px; background:var(--border-strong); }
+    .vsx-track i{ position:absolute; top:-3px; left:0; width:8px; height:8px; border-radius:50%; background:#e8808f; box-shadow:0 0 6px #e8808f; opacity:0; animation:vsx-run 6s ease-in-out infinite; }
+    .vsx-track--2 i{ animation-delay:2s; background:#bb9af7; box-shadow:0 0 6px #bb9af7; }
+
+    /* 10 settings */
+    .vsx-toggle{ position:relative; width:40px; height:22px; border-radius:11px; background:var(--surface-2); border:1px solid var(--border-strong); flex:0 0 auto; animation:vsx-track 6s ease-in-out infinite; }
+    .vsx-toggle i{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#7aa2f7; animation:vsx-knob 6s ease-in-out infinite; }
+    .vsx-json{ background:var(--code-bg); color:var(--code-text); padding:0.3rem 0.5rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-size:0.64rem; white-space:nowrap; }
+    .vsx-json .vsx-key{ color:#7aa2f7; }
+    .vsx-sw2{ position:relative; display:inline-block; }
+    .vsx-sw2 .vsx-v1{ color:#e8808f; animation:vsx-vold 6s ease-in-out infinite; }
+    .vsx-sw2 .vsx-v2{ position:absolute; left:0; top:0; color:#9ece6a; opacity:0; animation:vsx-vnew 6s ease-in-out infinite; }
+
+    /* 11 extensions */
+    .vsx-puzzle{ width:26px; height:26px; border-radius:6px; background:#bb9af7; display:flex; align-items:center; justify-content:center; color:#15161f; font-size:0.85rem; flex:0 0 auto; animation:vsx-pop 6s ease-in-out infinite; }
+    .vsx-bar{ width:80px; height:8px; border-radius:6px; overflow:hidden; background:var(--surface-2); border:1px solid var(--border); }
+    .vsx-bar i{ display:block; height:100%; width:0; background:linear-gradient(90deg,#7aa2f7,#9ece6a); animation:vsx-fill 6s ease-in-out infinite; }
+    .vsx-installed{ background:var(--surface-2); border:1px solid var(--border); color:#9ece6a; padding:0.3rem 0.5rem; border-radius:var(--radius-xs); font-family:ui-monospace,Menlo,monospace; font-size:0.7rem; font-weight:600; white-space:nowrap; opacity:0; animation:vsx-inst 6s ease-in-out infinite; }
+
+    /* 12 snippets */
+    .vsx-snipbody{ display:flex; flex-direction:column; gap:4px; background:var(--code-bg); padding:6px 8px; border-radius:var(--radius-xs); width:126px; }
+    .vsx-sl{ display:flex; align-items:center; gap:3px; height:10px; opacity:0; animation:vsx-sl 6s ease-in-out infinite; }
+    .vsx-sl i{ display:block; height:7px; border-radius:3px; background:var(--code-text); opacity:0.3; }
+    .vsx-sl--1{ animation-delay:0s; }
+    .vsx-sl--2{ animation-delay:0.12s; }
+    .vsx-sl--3{ animation-delay:0.24s; }
+    .vsx-ts{ display:inline-flex; align-items:center; justify-content:center; height:10px; padding:0 3px; border-radius:2px; font-family:ui-monospace,Menlo,monospace; font-weight:700; font-size:0.52rem; line-height:1; background:var(--surface-2); color:var(--text-muted); animation:vsx-tshl 6s ease-in-out infinite; }
+    .vsx-ts--1{ --vsx-c:#e0b366; animation-delay:0s; }
+    .vsx-ts--2{ --vsx-c:#7aa2f7; animation-delay:0.9s; }
+    .vsx-ts--0{ --vsx-c:#9ece6a; animation-delay:1.8s; }
+
+    /* --- keyframes: hero (16s timeline, scene n occupies (n-1)*25% .. n*25%) --- */
+    @keyframes vsx-show1{ 0%{opacity:0} 2%,23%{opacity:1} 25%,100%{opacity:0} }
+    @keyframes vsx-show2{ 0%,25%{opacity:0} 27%,48%{opacity:1} 50%,100%{opacity:0} }
+    @keyframes vsx-show3{ 0%,50%{opacity:0} 52%,73%{opacity:1} 75%,100%{opacity:0} }
+    @keyframes vsx-show4{ 0%,75%{opacity:0} 77%,98%{opacity:1} 100%{opacity:0} }
+    @keyframes vsx-k1{ 0%,3%,5%,100%{transform:none} 4%{transform:translateY(2px)} }
+    @keyframes vsx-k2{ 0%,27%,29%,31%,33%,35%,37%,100%{transform:none} 28%,32%,36%{transform:translateY(2px)} }
+    @keyframes vsx-k3{ 0%,53%,55%,100%{transform:none} 54%{transform:translateY(2px)} }
+    @keyframes vsx-k4{ 0%,78%,80%,100%{transform:none} 79%{transform:translateY(2px)} }
+    @keyframes vsx-pal{ 0%,4%{opacity:0; transform:translateY(-6px)} 6%,100%{opacity:1; transform:none} }
+    @keyframes vsx-type1{ 0%,6%{clip-path:inset(-3px 100% -3px -2px)} 12%,100%{clip-path:inset(-3px -2px -3px -2px)} }
+    @keyframes vsx-row{ 0%,13%{opacity:0} 15%,100%{opacity:1} }
+    @keyframes vsx-toast{ 0%,17%{opacity:0; transform:translateY(4px)} 19%,100%{opacity:1; transform:none} }
+    @keyframes vsx-sel1{ 0%,28%{opacity:0} 29%,40%{opacity:1} 42%,100%{opacity:0} }
+    @keyframes vsx-sel2{ 0%,32%{opacity:0} 33%,40%{opacity:1} 42%,100%{opacity:0} }
+    @keyframes vsx-sel3{ 0%,36%{opacity:0} 37%,40%{opacity:1} 42%,100%{opacity:0} }
+    @keyframes vsx-cur1{ 0%,28%{opacity:0; transform:none} 29%,40%{opacity:1; transform:none} 43%,100%{opacity:1; transform:translateX(4px)} }
+    @keyframes vsx-cur2{ 0%,32%{opacity:0; transform:none} 33%,40%{opacity:1; transform:none} 43%,100%{opacity:1; transform:translateX(4px)} }
+    @keyframes vsx-cur3{ 0%,36%{opacity:0; transform:none} 37%,40%{opacity:1; transform:none} 43%,100%{opacity:1; transform:translateX(4px)} }
+    @keyframes vsx-grow{ 0%,40%{opacity:0; transform:scaleX(0)} 41%{opacity:1; transform:scaleX(0.05)} 43%,100%{opacity:1; transform:scaleX(1)} }
+    @keyframes vsx-chip2{ 0%,43%{opacity:0; transform:translateY(4px)} 45%,100%{opacity:1; transform:none} }
+    @keyframes vsx-widget{ 0%,54%{opacity:0; transform:translateY(-6px)} 56%,100%{opacity:1; transform:none} }
+    @keyframes vsx-type3a{ 0%,56%{clip-path:inset(-3px 100% -3px -2px)} 60%,100%{clip-path:inset(-3px -2px -3px -2px)} }
+    @keyframes vsx-type3b{ 0%,62%{clip-path:inset(-3px 100% -3px -2px)} 66%,100%{clip-path:inset(-3px -2px -3px -2px)} }
+    @keyframes vsx-m1{ 0%,60%{opacity:0} 61%,69%{opacity:1} 71%,100%{opacity:0} }
+    @keyframes vsx-m2{ 0%,62%{opacity:0} 63%,69%{opacity:1} 71%,100%{opacity:0} }
+    @keyframes vsx-m3{ 0%,64%{opacity:0} 65%,69%{opacity:1} 71%,100%{opacity:0} }
+    @keyframes vsx-count{ 0%,60%{opacity:0} 61%,100%{opacity:1} }
+    @keyframes vsx-btn{ 0%,68%,70%,100%{transform:none} 69%{transform:translateY(1.5px)} }
+    @keyframes vsx-new3{ 0%,69%{opacity:0} 71%,100%{opacity:1} }
+    @keyframes vsx-term{ 0%,79%{opacity:0; transform:translateY(100px)} 82%,100%{opacity:1; transform:none} }
+    @keyframes vsx-type4{ 0%,83%{clip-path:inset(-3px 100% -3px -2px)} 87%,100%{clip-path:inset(-3px -2px -3px -2px)} }
+    @keyframes vsx-out1{ 0%,89%{opacity:0} 90%,100%{opacity:1} }
+    @keyframes vsx-out2{ 0%,91%{opacity:0} 92%,100%{opacity:1} }
+    @keyframes vsx-blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+    @keyframes vsx-glow{ 0%{box-shadow:0 0 0 0 transparent; border-color:var(--border)} 2%,22%{box-shadow:0 0 0 2px var(--vsx-c); border-color:var(--vsx-c)} 25%,100%{box-shadow:0 0 0 0 transparent; border-color:var(--border)} }
+
+    /* --- keyframes: mini figures (6s loops) --- */
+    @keyframes vsx-press{ 0%,14%,18%,100%{transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28)} 16%{transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28)} }
+    @keyframes vsx-press2{ 0%,14%,18%,58%,62%,100%{transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28)} 16%,60%{transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28)} }
+    @keyframes vsx-press3{ 0%,3%,7%,36%,40%,69%,73%,100%{transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28)} 5%,38%,71%{transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28)} }
+    @keyframes vsx-press3b{ 0%,22%,26%,45%,49%,68%,72%,100%{transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28)} 24%,47%,70%{transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28)} }
+    @keyframes vsx-press-late{ 0%,70%,74%,100%{transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28)} 72%{transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28)} }
+    @keyframes vsx-press-tab{ 0%,24%,28%,100%{transform:none; box-shadow:0 2px 0 rgba(0,0,0,0.28)} 26%{transform:translateY(2px); box-shadow:0 0 0 rgba(0,0,0,0.28)} }
+    @keyframes vsx-rowhl{ 0%,5%,30%,100%{background:transparent} 10%,25%{background:var(--vsx-c)} }
+    @keyframes vsx-up{ 0%,20%{transform:none} 35%,70%{transform:translateY(-14px)} 85%,100%{transform:none} }
+    @keyframes vsx-down{ 0%,20%{transform:none} 35%,70%{transform:translateY(14px)} 85%,100%{transform:none} }
+    @keyframes vsx-mtype{ 0%,25%{width:0} 45%,88%{width:5ch} 100%{width:0} }
+    @keyframes vsx-swhl{ 0%,10%{background:transparent} 18%,45%{background:rgba(224,179,102,0.4)} 55%,100%{background:transparent} }
+    @keyframes vsx-swold{ 0%,52%{opacity:1} 60%,90%{opacity:0} 100%{opacity:1} }
+    @keyframes vsx-swnew{ 0%,52%{opacity:0} 60%,90%{opacity:1} 100%{opacity:0} }
+    @keyframes vsx-type11{ 0%,18%{width:0} 48%,100%{width:11ch} }
+    @keyframes vsx-result{ 0%,52%{opacity:0; transform:translateY(3px)} 58%,92%{opacity:1; transform:none} 100%{opacity:0} }
+    @keyframes vsx-tabhl{ 0%,5%,30%,100%{opacity:0.5; background:transparent; border-top-color:transparent} 10%,25%{opacity:1; background:rgba(255,255,255,0.08); border-top-color:var(--vsx-c)} }
+    @keyframes vsx-side{ 0%,20%{width:36px; padding-left:4px; padding-right:4px} 35%,65%{width:0; padding-left:0; padding-right:0} 80%,100%{width:36px; padding-left:4px; padding-right:4px} }
+    @keyframes vsx-bp{ 0%,15%{box-shadow:0 0 0 0 rgba(232,128,143,0.55)} 28%,100%{box-shadow:0 0 0 6px rgba(232,128,143,0)} }
+    @keyframes vsx-stepdown{ 0%,20%{opacity:0; transform:none} 26%,45%{opacity:1; transform:none} 49%,68%{opacity:1; transform:translateY(12px)} 72%,90%{opacity:1; transform:translateY(24px)} 96%,100%{opacity:0; transform:translateY(24px)} }
+    @keyframes vsx-nodehl{ 0%,2%,28%,100%{background:var(--surface-2); color:var(--text-muted); border-color:var(--border)} 6%,22%{background:var(--vsx-c); color:#15161f; border-color:var(--vsx-c)} }
+    @keyframes vsx-run{ 0%,22%{left:0; opacity:0} 25%{opacity:1} 32%{left:calc(100% - 8px); opacity:1} 34%,100%{left:calc(100% - 8px); opacity:0} }
+    @keyframes vsx-track{ 0%,25%{background:var(--surface-2)} 35%,75%{background:rgba(158,206,106,0.35)} 85%,100%{background:var(--surface-2)} }
+    @keyframes vsx-knob{ 0%,25%{transform:none; background:#7aa2f7} 35%,75%{transform:translateX(18px); background:#9ece6a} 85%,100%{transform:none; background:#7aa2f7} }
+    @keyframes vsx-vold{ 0%,28%{opacity:1} 35%,78%{opacity:0} 85%,100%{opacity:1} }
+    @keyframes vsx-vnew{ 0%,28%{opacity:0} 35%,78%{opacity:1} 85%,100%{opacity:0} }
+    @keyframes vsx-pop{ 0%,55%,100%{transform:none} 62%{transform:scale(1.2)} 70%{transform:none} }
+    @keyframes vsx-fill{ 0%,20%{width:0} 55%,100%{width:100%} }
+    @keyframes vsx-inst{ 0%,55%{opacity:0; transform:translateY(3px)} 62%,92%{opacity:1; transform:none} 100%{opacity:0} }
+    @keyframes vsx-sl{ 0%,30%{opacity:0; transform:translateX(-4px)} 36%,92%{opacity:1; transform:none} 100%{opacity:0} }
+    @keyframes vsx-tshl{ 0%,40%,56%,100%{background:var(--surface-2); color:var(--text-muted)} 44%,52%{background:var(--vsx-c); color:#15161f} }
+
+    @media (max-width:720px){
+      .vsx-steps{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      [class^="vsx-"], [class*=" vsx-"], .vsx-screen *{ animation:none !important; transition:none !important; }
+      /* hero: show scene 1 in its finished state */
+      .vsx-sc1{ opacity:1; }
+      .vsx-sc2, .vsx-sc3, .vsx-sc4{ display:none; }
+      .vsx-pal, .vsx-row, .vsx-toast{ opacity:1; transform:none; }
+      .vsx-t1{ clip-path:none; }
+      .vsx-step--1{ box-shadow:0 0 0 2px var(--vsx-c); border-color:var(--vsx-c); }
+      /* figures: a readable still frame */
+      .vsx-prow--1{ background:var(--vsx-c); }
+      .vsx-mtyped, .vsx-typed{ width:auto; }
+      .vsx-sw--1{ background:rgba(224,179,102,0.4); }
+      .vsx-result, .vsx-installed, .vsx-sl, .vsx-ptr{ opacity:1; transform:none; }
+      .vsx-tab--1{ opacity:1; background:rgba(255,255,255,0.08); border-top-color:var(--vsx-c); }
+      .vsx-node--1{ background:var(--vsx-c); color:#15161f; border-color:var(--vsx-c); }
+      .vsx-ts--1{ background:var(--vsx-c); color:#15161f; }
+      .vsx-track i{ opacity:0; }
+      .vsx-bar i{ width:70%; }
+    }
   </style>
 </head>
 <body>
@@ -30,15 +303,16 @@
     </div>
   </aside>
   <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-  <script src="js/header.js"></script>
+  <script src="js/header.js?v=7"></script>
   <script>renderHeader('VS Code')</script>
   <script>renderSourceLink('VS Code')</script>
   <main>
     <div class="page-header">
       <h1>VS Code</h1>
-      <p class="subtitle">Quick reference with shortcuts &amp; features</p>
+      <p class="subtitle">New to VS Code? See how a single shortcut does a whole job &mdash; the command palette, multi-cursor editing, search &amp; replace and the built-in terminal, explained with pictures.</p>
       <span id="source-link"></span>
       <nav class="toc">
+        <a href="#how-it-works">How It Works</a>
         <a href="#getting-started">Basics</a>
         <a href="#editing">Editing</a>
         <a href="#multi-cursor">Multi-Cursor</a>
@@ -54,9 +328,230 @@
       </nav>
     </div>
 
+    <!-- How It Works (animated explainer) -->
+    <section id="how-it-works">
+      <h2>How It Works: Shortcuts That Speed You Up</h2>
+
+      <div class="block-desc">
+        <span>New to VS Code? The big idea: you press a <strong>shortcut</strong> and the editor does a whole job for you &mdash; runs a command, edits several places at once, swaps every match, or opens a terminal. Watch the four scenes loop below.</span>
+        <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank">Tips &amp; Tricks →</a>
+      </div>
+
+      <div class="vsx-stage">
+        <p class="vsx-lead">
+          <span>You press</span>
+          <kbd class="vsx-kbd vsx-kbd--violet">&#8984;&#8679;P</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <span><strong>VS Code reacts</strong> &mdash; one keystroke, one visible effect. Four everyday examples:</span>
+        </p>
+
+        <svg class="vsx-screen" viewBox="0 0 560 320" role="img" aria-labelledby="vsx-title vsx-desc" xmlns="http://www.w3.org/2000/svg">
+          <title id="vsx-title">Animated editor: a shortcut is pressed and its effect appears</title>
+          <desc id="vsx-desc">Four scenes loop: the command palette formats the document, Cmd+D adds cursors and edits three places at once, Cmd+H finds and replaces every match, and Ctrl+backtick opens the terminal to run tests.</desc>
+          <defs>
+            <clipPath id="vsx-clip"><rect x="0.5" y="0.5" width="559" height="319" rx="10"/></clipPath>
+          </defs>
+
+          <!-- window frame -->
+          <rect x="0.5" y="0.5" width="559" height="319" rx="10" fill="var(--code-bg)" stroke="var(--border-strong)"/>
+          <circle cx="16" cy="13" r="4.5" fill="#e8808f"/>
+          <circle cx="31" cy="13" r="4.5" fill="#e0b366"/>
+          <circle cx="46" cy="13" r="4.5" fill="#9ece6a"/>
+          <text x="280" y="17" text-anchor="middle" font-size="10" fill="var(--code-label)">app.js &mdash; my-project</text>
+          <line x1="0.5" y1="26" x2="559.5" y2="26" stroke="rgba(255,255,255,0.08)"/>
+
+          <!-- activity bar -->
+          <g clip-path="url(#vsx-clip)">
+            <rect x="0.5" y="26" width="40" height="294" fill="rgba(255,255,255,0.035)"/>
+          </g>
+          <rect x="13" y="42" width="14" height="14" rx="3" fill="#7aa2f7" opacity="0.9"/>
+          <circle cx="20" cy="77" r="6" fill="none" stroke="#e0b366" stroke-width="2.2"/>
+          <line x1="24.5" y1="81.5" x2="28" y2="85" stroke="#e0b366" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="104" r="3" fill="#e8808f"/>
+          <circle cx="25" cy="112" r="3" fill="#e8808f"/>
+          <line x1="16" y1="107" x2="16" y2="118" stroke="#e8808f" stroke-width="2"/>
+          <line x1="16" y1="113" x2="22" y2="112" stroke="#e8808f" stroke-width="2"/>
+          <polygon points="14,132 28,140 14,148" fill="#9ece6a" opacity="0.9"/>
+          <rect x="13" y="160" width="6" height="6" rx="1.5" fill="#bb9af7"/>
+          <rect x="21" y="160" width="6" height="6" rx="1.5" fill="#bb9af7"/>
+          <rect x="13" y="168" width="6" height="6" rx="1.5" fill="#bb9af7"/>
+          <rect x="21" y="168" width="6" height="6" rx="1.5" fill="#bb9af7" opacity="0.45"/>
+
+          <!-- line numbers -->
+          <g font-size="9" fill="var(--code-label)" text-anchor="end">
+            <text x="60" y="51">1</text><text x="60" y="73">2</text><text x="60" y="95">3</text><text x="60" y="117">4</text>
+            <text x="60" y="139">5</text><text x="60" y="161">6</text><text x="60" y="183">7</text><text x="60" y="205">8</text>
+          </g>
+
+          <!-- code lines (bars stand in for tokens) -->
+          <g>
+            <rect x="72" y="44" width="36" height="8" rx="3" fill="#bb9af7" opacity="0.85"/>
+            <rect x="114" y="44" width="58" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="178" y="44" width="54" height="8" rx="3" fill="#7aa2f7" opacity="0.85"/>
+
+            <rect x="88" y="66" width="22" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="116" y="66" width="44" height="8" rx="3" fill="#7aa2f7" opacity="0.85"/>
+            <rect x="166" y="66" width="38" height="8" rx="3" fill="#e0b366" opacity="0.9"/>
+            <rect x="210" y="66" width="70" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+
+            <rect x="88" y="88" width="22" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="116" y="88" width="30" height="8" rx="3" fill="#bb9af7" opacity="0.85"/>
+            <rect x="152" y="88" width="92" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+
+            <rect x="88" y="110" width="22" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="116" y="110" width="38" height="8" rx="3" fill="#e0b366" opacity="0.9"/>
+            <rect x="160" y="110" width="26" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="192" y="110" width="72" height="8" rx="3" fill="#9ece6a" opacity="0.85"/>
+
+            <rect x="88" y="132" width="22" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="116" y="132" width="56" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="178" y="132" width="48" height="8" rx="3" fill="#7aa2f7" opacity="0.85"/>
+
+            <rect x="88" y="154" width="22" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+            <rect x="116" y="154" width="38" height="8" rx="3" fill="#e0b366" opacity="0.9"/>
+            <rect x="160" y="154" width="110" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+
+            <rect x="72" y="176" width="30" height="8" rx="3" fill="#bb9af7" opacity="0.85"/>
+            <rect x="108" y="176" width="80" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+
+            <rect x="72" y="198" width="40" height="8" rx="3" fill="var(--code-text)" opacity="0.28"/>
+          </g>
+
+          <!-- scene 1: command palette -->
+          <g class="vsx-sc vsx-sc1">
+            <g class="vsx-k1">
+              <rect x="468" y="36" width="72" height="22" rx="5" fill="#bb9af7"/>
+              <text x="504" y="51" text-anchor="middle" font-size="11" font-weight="700" fill="#15161f">&#8984;&#8679;P</text>
+            </g>
+            <g class="vsx-pal">
+              <rect x="150" y="34" width="260" height="98" rx="6" fill="var(--code-bg)" stroke="#bb9af7"/>
+              <rect x="150" y="34" width="260" height="98" rx="6" fill="rgba(255,255,255,0.06)"/>
+              <rect x="158" y="42" width="244" height="18" rx="4" fill="rgba(255,255,255,0.08)"/>
+              <text x="164" y="55" font-size="10" font-weight="700" fill="#bb9af7">&gt;</text>
+              <text class="vsx-t1" x="176" y="55" font-size="10" fill="var(--code-text)">Format Document</text>
+              <rect class="vsx-row" x="158" y="66" width="244" height="16" rx="3" fill="rgba(122,162,247,0.3)"/>
+              <text x="166" y="78" font-size="10" fill="var(--code-text)">Format Document</text>
+              <text x="394" y="78" text-anchor="end" font-size="9" fill="var(--code-label)">&#8679;&#8997;F</text>
+              <text x="166" y="98" font-size="10" fill="var(--code-text)" opacity="0.55">Format Selection</text>
+              <text x="166" y="118" font-size="10" fill="var(--code-text)" opacity="0.55">Fold All</text>
+            </g>
+            <g class="vsx-toast">
+              <rect x="384" y="184" width="156" height="24" rx="6" fill="#9ece6a"/>
+              <text x="462" y="200" text-anchor="middle" font-size="10" font-weight="700" fill="#15161f">&#10003; Document formatted</text>
+            </g>
+          </g>
+
+          <!-- scene 2: multi-cursor (Cmd+D x3, then type once) -->
+          <g class="vsx-sc vsx-sc2">
+            <g class="vsx-k2">
+              <rect x="482" y="36" width="58" height="22" rx="5" fill="#7aa2f7"/>
+              <text x="511" y="51" text-anchor="middle" font-size="11" font-weight="700" fill="#15161f">&#8984;D</text>
+            </g>
+            <rect class="vsx-sel1" x="163" y="63" width="44" height="14" rx="3" fill="rgba(122,162,247,0.22)" stroke="#7aa2f7"/>
+            <rect class="vsx-sel2" x="113" y="107" width="44" height="14" rx="3" fill="rgba(122,162,247,0.22)" stroke="#7aa2f7"/>
+            <rect class="vsx-sel3" x="113" y="151" width="44" height="14" rx="3" fill="rgba(122,162,247,0.22)" stroke="#7aa2f7"/>
+            <rect class="vsx-gx" x="166" y="65" width="42" height="10" rx="3" fill="#9ece6a"/>
+            <rect class="vsx-gx" x="116" y="109" width="42" height="10" rx="3" fill="#9ece6a"/>
+            <rect class="vsx-gx" x="116" y="153" width="42" height="10" rx="3" fill="#9ece6a"/>
+            <g class="vsx-cur1"><rect class="vsx-blink" x="205" y="63" width="2" height="14" fill="#7aa2f7"/></g>
+            <g class="vsx-cur2"><rect class="vsx-blink" x="155" y="107" width="2" height="14" fill="#7aa2f7"/></g>
+            <g class="vsx-cur3"><rect class="vsx-blink" x="155" y="151" width="2" height="14" fill="#7aa2f7"/></g>
+            <g class="vsx-chip2">
+              <rect x="384" y="184" width="156" height="24" rx="6" fill="#7aa2f7"/>
+              <text x="462" y="200" text-anchor="middle" font-size="10" font-weight="700" fill="#15161f">3 cursors &middot; typed once</text>
+            </g>
+          </g>
+
+          <!-- scene 3: search & replace -->
+          <g class="vsx-sc vsx-sc3">
+            <g class="vsx-k3">
+              <rect x="482" y="36" width="58" height="22" rx="5" fill="#e0b366"/>
+              <text x="511" y="51" text-anchor="middle" font-size="11" font-weight="700" fill="#15161f">&#8984;H</text>
+            </g>
+            <g class="vsx-widget">
+              <rect x="300" y="66" width="240" height="60" rx="6" fill="var(--code-bg)" stroke="#e0b366"/>
+              <rect x="300" y="66" width="240" height="60" rx="6" fill="rgba(255,255,255,0.06)"/>
+              <rect x="308" y="74" width="160" height="18" rx="4" fill="rgba(255,255,255,0.08)"/>
+              <text class="vsx-t3a" x="314" y="87" font-size="10" fill="var(--code-text)">item</text>
+              <text class="vsx-count" x="532" y="87" text-anchor="end" font-size="9" font-weight="700" fill="#e0b366">3 of 3</text>
+              <rect x="308" y="100" width="160" height="18" rx="4" fill="rgba(255,255,255,0.08)"/>
+              <text class="vsx-t3b" x="314" y="113" font-size="10" fill="#9ece6a">entry</text>
+              <g class="vsx-btn">
+                <rect x="472" y="100" width="62" height="18" rx="4" fill="#bb9af7"/>
+                <text x="503" y="112.5" text-anchor="middle" font-size="8.5" font-weight="700" fill="#15161f">Replace All</text>
+              </g>
+            </g>
+            <rect class="vsx-m1" x="163" y="63" width="44" height="14" rx="3" fill="rgba(224,179,102,0.25)" stroke="#e0b366"/>
+            <rect class="vsx-m2" x="113" y="107" width="44" height="14" rx="3" fill="rgba(224,179,102,0.25)" stroke="#e0b366"/>
+            <rect class="vsx-m3" x="113" y="151" width="44" height="14" rx="3" fill="rgba(224,179,102,0.25)" stroke="#e0b366"/>
+            <g class="vsx-new3">
+              <rect x="166" y="65" width="42" height="10" rx="3" fill="#9ece6a"/>
+              <rect x="116" y="109" width="42" height="10" rx="3" fill="#9ece6a"/>
+              <rect x="116" y="153" width="42" height="10" rx="3" fill="#9ece6a"/>
+            </g>
+          </g>
+
+          <!-- scene 4: integrated terminal -->
+          <g class="vsx-sc vsx-sc4">
+            <g class="vsx-k4">
+              <rect x="482" y="36" width="58" height="22" rx="5" fill="#9ece6a"/>
+              <text x="511" y="51" text-anchor="middle" font-size="11" font-weight="700" fill="#15161f">&#8963;`</text>
+            </g>
+            <g clip-path="url(#vsx-clip)">
+              <g class="vsx-term">
+                <rect x="40.5" y="220" width="519" height="100" fill="rgba(0,0,0,0.38)"/>
+                <line x1="40.5" y1="220" x2="559.5" y2="220" stroke="#9ece6a" stroke-opacity="0.7"/>
+                <text x="54" y="236" font-size="8.5" letter-spacing="1" font-weight="700" fill="#9ece6a">TERMINAL</text>
+                <text x="116" y="236" font-size="8.5" letter-spacing="1" fill="var(--code-label)">PROBLEMS</text>
+                <text x="54" y="258" font-size="10" font-weight="700" fill="#9ece6a">$</text>
+                <text class="vsx-t4" x="66" y="258" font-size="10" fill="var(--code-text)">npm test</text>
+                <text class="vsx-out1" x="54" y="280" font-size="10" fill="#9ece6a">&#10003; 12 tests passed</text>
+                <text class="vsx-out2" x="54" y="298" font-size="10" fill="var(--code-label)">Done in 1.2s</text>
+              </g>
+            </g>
+          </g>
+        </svg>
+
+        <div class="vsx-steps">
+          <div class="vsx-step vsx-step--1">
+            <div class="vsx-step-head"><b>1</b>Command Palette <kbd class="vsx-kbd vsx-kbd--violet">&#8984;&#8679;P</kbd></div>
+            <p>Type what you want to do &mdash; every command is one search away, no menus.</p>
+          </div>
+          <div class="vsx-step vsx-step--2">
+            <div class="vsx-step-head"><b>2</b>Multi-Cursor <kbd class="vsx-kbd vsx-kbd--blue">&#8984;D</kbd></div>
+            <p>Each press selects the next match. Type once and it lands in every spot.</p>
+          </div>
+          <div class="vsx-step vsx-step--3">
+            <div class="vsx-step-head"><b>3</b>Search &amp; Replace <kbd class="vsx-kbd vsx-kbd--amber">&#8984;H</kbd></div>
+            <p>Matches light up as you type; Replace All swaps them in one go.</p>
+          </div>
+          <div class="vsx-step vsx-step--4">
+            <div class="vsx-step-head"><b>4</b>Terminal <kbd class="vsx-kbd vsx-kbd--green">&#8963;`</kbd></div>
+            <p>A shell slides up under your code &mdash; run commands without leaving the window.</p>
+          </div>
+        </div>
+
+        <p class="vsx-note">On Windows and Linux swap <code>&#8984;</code> for <code>Ctrl</code> and <code>&#8997;</code> for <code>Alt</code>. The pattern never changes: a shortcut you can press in a second replaces a mouse journey you would otherwise repeat all day.</p>
+      </div>
+    </section>
+
     <!-- Getting Started -->
     <section id="getting-started">
       <h2>Getting Started</h2>
+
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--violet vsx-kbd--press">&#8984;&#8679;P</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-mpal">
+            <div class="vsx-mpal__in">&gt; <span>form</span><span class="vsx-caret"></span></div>
+            <div class="vsx-prow vsx-prow--1">Format Document</div>
+            <div class="vsx-prow vsx-prow--2">Toggle Word Wrap</div>
+            <div class="vsx-prow vsx-prow--3">Go to Symbol</div>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>One box for everything.</b> Press the shortcut, type a few letters of a command, hit <code>Enter</code>. <code>Cmd/Ctrl+P</code> does the same for files.</p>
+      </div>
 
       <div class="block-desc">
         <span>Essential commands to navigate, configure, and control VS Code's interface.</span>
@@ -90,6 +585,19 @@
     <!-- Editing -->
     <section id="editing">
       <h2>Editing</h2>
+
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--amber vsx-kbd--press">&#8997;&uarr;</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-lines">
+            <span class="vsx-ln vsx-ln--a"></span>
+            <span class="vsx-ln vsx-ln--b"></span>
+            <span class="vsx-ln vsx-ln--c"></span>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>Lines are movable blocks.</b> <code>Alt/Option + &uarr;&darr;</code> lifts the current line up or down &mdash; no cut and paste, no lost indentation.</p>
+      </div>
 
       <div class="block-desc">
         <span>Basic clipboard operations and undo/redo for everyday editing.</span>
@@ -208,6 +716,19 @@
     <section id="multi-cursor">
       <h2>Multi-Cursor</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--blue vsx-kbd--press">&#8984;D</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-mc">
+            <div class="vsx-mrow"><i style="width:30px"></i><span class="vsx-mtyped">.name</span><span class="vsx-mcur"></span></div>
+            <div class="vsx-mrow"><i style="width:44px"></i><span class="vsx-mtyped">.name</span><span class="vsx-mcur"></span></div>
+            <div class="vsx-mrow"><i style="width:22px"></i><span class="vsx-mtyped">.name</span><span class="vsx-mcur"></span></div>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>Many cursors, one keyboard.</b> Every <code>Cmd/Ctrl+D</code> adds the next match; whatever you type appears at all of them at once.</p>
+      </div>
+
       <div class="block-desc">
         <span>Edit multiple locations simultaneously with multi-cursor shortcuts.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -246,6 +767,15 @@
     <!-- Search & Replace -->
     <section id="search">
       <h2>Search &amp; Replace</h2>
+
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--amber vsx-kbd--press">&#8984;H</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-srow"><span class="vsx-sw vsx-sw--1"><span class="vsx-old">foo</span><span class="vsx-new">bar</span></span>(a); <span class="vsx-sw vsx-sw--2"><span class="vsx-old">foo</span><span class="vsx-new">bar</span></span>(b); <span class="vsx-sw vsx-sw--3"><span class="vsx-old">foo</span><span class="vsx-new">bar</span></span>(c);</div>
+        </div>
+        <p class="vsx-fig__cap"><b>Find once, fix everywhere.</b> Matches light up as you type; <b>Replace All</b> swaps them together &mdash; in this file (<code>Cmd/Ctrl+H</code>) or the whole project (<code>+Shift</code>).</p>
+      </div>
 
       <div class="block-desc">
         <span>Find and replace text in a single file or across the entire project.</span>
@@ -286,6 +816,16 @@
     <section id="terminal">
       <h2>Terminal</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--green vsx-kbd--press">&#8963;`</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <code class="vsx-chip"><span class="vsx-prompt">$</span><span class="vsx-typed">npm run dev</span><span class="vsx-caret"></span></code>
+          <span class="vsx-result">ready on :3000</span>
+        </div>
+        <p class="vsx-fig__cap"><b>No window switching.</b> The terminal lives under your code: toggle it, run a command, read the result, keep typing.</p>
+      </div>
+
       <div class="block-desc">
         <span>Manage integrated terminal instances with keyboard shortcuts.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -322,6 +862,19 @@
     <!-- Tabs & Windows -->
     <section id="tabs">
       <h2>Tabs &amp; Windows</h2>
+
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--blue vsx-kbd--press3">&#8963;Tab</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-tabs">
+            <span class="vsx-tab vsx-tab--1">app.js</span>
+            <span class="vsx-tab vsx-tab--2">style.css</span>
+            <span class="vsx-tab vsx-tab--3">index.html</span>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>Tabs are a stack.</b> <code>Ctrl+Tab</code> cycles through recent files; <code>Cmd/Ctrl+1&ndash;9</code> jumps straight to one; <code>Cmd/Ctrl+W</code> closes it.</p>
+      </div>
 
       <div class="block-desc">
         <span>Navigate and manage editor tabs and windows efficiently.</span>
@@ -367,6 +920,19 @@
     <section id="sidebar">
       <h2>Sidebar &amp; Panels</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--violet vsx-kbd--press2">&#8984;B</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-win">
+            <div class="vsx-win__act"><i style="background:#7aa2f7"></i><i style="background:#e0b366"></i><i style="background:#e8808f"></i><i style="background:#9ece6a"></i></div>
+            <div class="vsx-win__side"><i style="width:80%"></i><i style="width:60%"></i><i style="width:70%"></i><i style="width:45%"></i></div>
+            <div class="vsx-win__ed"><i style="width:60%"></i><i style="width:85%"></i><i style="width:40%"></i><i style="width:70%"></i></div>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>Show it when you need it.</b> <code>Cmd/Ctrl+B</code> hides the sidebar for focus; <code>Cmd/Ctrl+Shift+E / F / G / X</code> jumps to Explorer, Search, Git or Extensions.</p>
+      </div>
+
       <div class="block-desc">
         <span>Toggle sidebar views and panels to navigate your project.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -409,6 +975,19 @@
     <section id="debug">
       <h2>Debug</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--amber vsx-kbd--press3b">F10</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-dbg">
+            <span class="vsx-bp"></span>
+            <span class="vsx-ptr"></span>
+            <i style="width:70%"></i><i style="width:85%"></i><i style="width:55%"></i><i style="width:75%"></i>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>Pause and step.</b> Click the gutter to set a breakpoint (the red dot); <code>F5</code> runs until it stops there, then <code>F10</code> walks one line at a time.</p>
+      </div>
+
       <div class="block-desc">
         <span>Control the debugger with keyboard shortcuts for stepping and breakpoints.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -445,6 +1024,20 @@
     <section id="git">
       <h2>Git</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <div class="vsx-flow">
+            <span class="vsx-node vsx-node--1">edit</span>
+            <span class="vsx-track"><i></i></span>
+            <span class="vsx-node vsx-node--2">stage</span>
+            <span class="vsx-track vsx-track--2"><i></i></span>
+            <span class="vsx-node vsx-node--3">commit</span>
+          </div>
+          <kbd class="vsx-kbd vsx-kbd--green vsx-kbd--pressLate">&#8984;&#8629;</kbd>
+        </div>
+        <p class="vsx-fig__cap"><b>Changes flow in three steps.</b> Edit a file, stage the lines you want to keep, then <code>Cmd/Ctrl+Enter</code> commits them with a message &mdash; all inside the Source Control view.</p>
+      </div>
+
       <div class="block-desc">
         <span>Integrated Git commands for source control workflows.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -480,6 +1073,17 @@
     <section id="settings">
       <h2>Settings &amp; Config</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--blue vsx-kbd--press">&#8984;,</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <span class="vsx-toggle"><i></i></span>
+          <span class="vsx-arrow">=</span>
+          <code class="vsx-json"><span class="vsx-key">"editor.wordWrap"</span>: <span class="vsx-sw2"><span class="vsx-v1">"off"</span><span class="vsx-v2">"on"</span></span></code>
+        </div>
+        <p class="vsx-fig__cap"><b>Two views of the same thing.</b> Flip a switch in the Settings UI and the matching line in <code>settings.json</code> changes &mdash; edit whichever you prefer.</p>
+      </div>
+
       <div class="block-desc">
         <span>Access and modify VS Code settings, themes, and keybindings.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -511,6 +1115,17 @@
     <!-- Extensions -->
     <section id="extensions">
       <h2>Extensions</h2>
+
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <kbd class="vsx-kbd vsx-kbd--violet vsx-kbd--press">&#8984;&#8679;X</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <span class="vsx-puzzle">&#10010;</span>
+          <span class="vsx-bar"><i></i></span>
+          <span class="vsx-installed">Installed &#10003;</span>
+        </div>
+        <p class="vsx-fig__cap"><b>Add features in one click.</b> Search the marketplace, press <b>Install</b>, and the editor learns a new language, linter or theme &mdash; no restart needed.</p>
+      </div>
 
       <div class="block-desc">
         <span>Browse, install, and manage extensions to customize VS Code.</span>
@@ -546,6 +1161,20 @@
     <section id="snippets">
       <h2>Snippets</h2>
 
+      <div class="vsx-fig">
+        <div class="vsx-fig__art">
+          <code class="vsx-chip">for</code>
+          <kbd class="vsx-kbd vsx-kbd--amber vsx-kbd--pressTab">Tab</kbd>
+          <span class="vsx-arrow">&rarr;</span>
+          <div class="vsx-snipbody">
+            <div class="vsx-sl vsx-sl--1"><i style="width:18px"></i><span class="vsx-ts vsx-ts--1">$1</span><i style="width:26px"></i><span class="vsx-ts vsx-ts--2">$2</span></div>
+            <div class="vsx-sl vsx-sl--2"><i style="width:12px"></i><i style="width:50px"></i><span class="vsx-ts vsx-ts--0">$0</span></div>
+            <div class="vsx-sl vsx-sl--3"><i style="width:10px"></i></div>
+          </div>
+        </div>
+        <p class="vsx-fig__cap"><b>Type a prefix, press Tab.</b> A short trigger expands into a whole block; <code>Tab</code> then hops between the <code>$1</code>, <code>$2</code> &hellip; <code>$0</code> placeholders.</p>
+      </div>
+
       <div class="block-desc">
         <span>Create and use code snippets with tab-stop positions and prefix triggers.</span>
         <a class="w3-link" href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank">Keybindings →</a>
@@ -578,7 +1207,7 @@
     <p>VS Code Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

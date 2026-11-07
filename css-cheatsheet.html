@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     .live-output .swatch-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .live-output .swatch { width: 60px; height: 60px; border-radius: 6px; border: 1px solid #ddd; display: grid; place-items: center; font-size: 0.6rem; color: #fff; text-align: center; }
@@ -14,6 +14,269 @@
     .live-output .grid-demo div { background: #8ca0ff; color: #fff; padding: 4px; border-radius: 3px; font-size: 0.7rem; display: grid; place-items: center; }
     .live-output .box-demo { background: #eef0f5; padding: 4px; border-radius: 4px; }
     .box-demo .inner { background: #7aa2f7; color: #fff; padding: 8px; border-radius: 3px; font-size: 0.75rem; text-align: center; }
+  </style>
+  <style>
+    /* ============================================================
+       Per-section concept animations  —  prefix "cssx2-"
+       Multi-colour accents for the moving/graphic parts; all
+       text + surfaces stay on theme variables so light AND dark
+       both work. Calm (one gentle motion at a time) and fully
+       disabled under prefers-reduced-motion.
+       (Separate from the top "How CSS Works" explainer, prefix cssx-.)
+       ============================================================ */
+    :root {
+      --cssx2-amber:  #e0b366;
+      --cssx2-rose:   #e8808f;
+      --cssx2-blue:   #7aa2f7;
+      --cssx2-green:  #9ece6a;
+      --cssx2-violet: #bb9af7;
+    }
+    .cssx2-viz {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 0.95rem;
+      margin: 0 0 1.15rem;
+    }
+    .cssx2-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      flex: 0 0 auto;
+    }
+    .cssx2-stage {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      min-height: 40px;
+    }
+    .cssx2-cap {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      flex: 1 1 150px;
+      min-width: 130px;
+      line-height: 1.45;
+    }
+    .cssx2-arrow { color: var(--accent); font-size: 1.05rem; line-height: 1; font-weight: 700; }
+
+    /* -- Getting Started: three ways to attach CSS -> one styled element -- */
+    .cssx2-chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.66rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      color: #fff;
+      opacity: 0.4;
+    }
+    .cssx2-chip-1 { background: var(--cssx2-blue);   animation: cssx2-chip 8s ease-in-out infinite; }
+    .cssx2-chip-2 { background: var(--cssx2-violet); animation: cssx2-chip 8s ease-in-out infinite 2.66s; }
+    .cssx2-chip-3 { background: var(--cssx2-amber); color: #3b2d0e; animation: cssx2-chip 8s ease-in-out infinite 5.33s; }
+    @keyframes cssx2-chip {
+      0%, 33.33%, 100% { opacity: 0.4; transform: translateY(0); }
+      8%, 25%          { opacity: 1;  transform: translateY(-2px); }
+    }
+    .cssx2-target {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.22rem 0.7rem;
+      border-radius: var(--radius-xs);
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: inset 0 0 0 2px var(--border);
+      animation: cssx2-restyle 8s ease-in-out infinite;
+    }
+    @keyframes cssx2-restyle {
+      0%, 100% { box-shadow: inset 0 0 0 2px var(--cssx2-blue);   color: var(--cssx2-blue); }
+      33.33%   { box-shadow: inset 0 0 0 2px var(--cssx2-violet); color: var(--cssx2-violet); }
+      66.66%   { box-shadow: inset 0 0 0 2px var(--cssx2-amber);  color: var(--cssx2-amber); }
+    }
+
+    /* -- Selectors: a selector matches elements one after another -- */
+    .cssx2-sel-tag {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .cssx2-node {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: inset 0 0 0 1px var(--border);
+      animation: cssx2-match 7s ease-in-out infinite;
+    }
+    .cssx2-n1 { color: var(--cssx2-blue);   animation-delay: 0s; }
+    .cssx2-n2 { color: var(--cssx2-green);  animation-delay: 1.4s; }
+    .cssx2-n3 { color: var(--cssx2-violet); animation-delay: 2.8s; }
+    .cssx2-n4 { color: var(--cssx2-rose);   animation-delay: 4.2s; }
+    @keyframes cssx2-match {
+      0%, 20%, 100% { box-shadow: inset 0 0 0 1px var(--border); background: var(--surface); transform: translateY(0); }
+      8%            { box-shadow: inset 0 0 0 2px currentColor; background: color-mix(in srgb, currentColor 22%, var(--surface)); transform: translateY(-2px); }
+    }
+
+    /* -- Fonts: weight, size, slant and colour reshape the same text -- */
+    .cssx2-type {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      line-height: 1;
+      display: inline-block;
+      animation: cssx2-type 11s ease-in-out infinite;
+    }
+    @keyframes cssx2-type {
+      0%, 100% { font-weight: 400; font-style: normal; color: var(--cssx2-blue);   transform: scale(1);    letter-spacing: 0; }
+      20%      { font-weight: 800; font-style: normal; color: var(--cssx2-rose);   transform: scale(1.12); letter-spacing: 0.02em; }
+      45%      { font-weight: 400; font-style: italic; color: var(--cssx2-amber);  transform: scale(1); }
+      70%      { font-weight: 700; font-style: italic; color: var(--cssx2-green);  transform: scale(1.06); }
+      88%      { font-weight: 300; font-style: normal; color: var(--cssx2-violet); transform: scale(0.95); }
+    }
+
+    /* -- Colors: one swatch cycles through a palette of values -- */
+    .cssx2-swatch {
+      width: 56px; height: 32px;
+      border-radius: 6px;
+      box-shadow: inset 0 0 0 1px var(--border);
+      animation: cssx2-hue 10s ease-in-out infinite;
+    }
+    @keyframes cssx2-hue {
+      0%, 100% { background: var(--cssx2-amber); }
+      20%      { background: var(--cssx2-rose); }
+      40%      { background: var(--cssx2-blue); }
+      60%      { background: var(--cssx2-green); }
+      80%      { background: var(--cssx2-violet); }
+    }
+
+    /* -- Backgrounds: a multi-stop gradient slides across -- */
+    .cssx2-grad {
+      width: 100%;
+      max-width: 220px;
+      height: 34px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--cssx2-amber), var(--cssx2-rose), var(--cssx2-blue), var(--cssx2-green), var(--cssx2-violet), var(--cssx2-amber));
+      background-size: 300% 100%;
+      animation: cssx2-slide 16s linear infinite;
+    }
+    @keyframes cssx2-slide {
+      from { background-position: 0% 50%; }
+      to   { background-position: 300% 50%; }
+    }
+
+    /* -- Box Model: coloured margin/border/padding wrap the content -- */
+    .cssx2-bm {
+      display: inline-block;
+      border-radius: 7px;
+      background: color-mix(in srgb, var(--cssx2-amber) 55%, var(--surface));
+      padding: 7px;
+    }
+    .cssx2-bm-b {
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--cssx2-rose) 60%, var(--surface));
+      padding: 7px;
+      animation: cssx2-breathe 7s ease-in-out infinite;
+    }
+    .cssx2-bm-p {
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--cssx2-blue) 62%, var(--surface));
+      padding: 7px;
+    }
+    .cssx2-bm-c {
+      width: 38px; height: 16px;
+      border-radius: 4px;
+      background: var(--cssx2-green);
+    }
+    @keyframes cssx2-breathe {
+      0%, 100% { padding: 4px; }
+      50%      { padding: 12px; }
+    }
+
+    /* -- Flexbox: items gather to centre then spread apart -- */
+    .cssx2-flex { display: flex; align-items: center; gap: 6px; }
+    .cssx2-fi { width: 22px; height: 28px; border-radius: 5px; }
+    .cssx2-fi-1 { background: var(--cssx2-blue);   animation: cssx2-fl 6s ease-in-out infinite; }
+    .cssx2-fi-2 { background: var(--cssx2-violet); }
+    .cssx2-fi-3 { background: var(--cssx2-amber);  animation: cssx2-fr 6s ease-in-out infinite; }
+    @keyframes cssx2-fl { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-14px); } }
+    @keyframes cssx2-fr { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(14px); } }
+
+    /* -- Grid: cells fill in across rows and columns -- */
+    .cssx2-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 24px);
+      grid-auto-rows: 24px;
+      gap: 5px;
+    }
+    .cssx2-cell {
+      border-radius: 5px;
+      background: var(--surface);
+      box-shadow: inset 0 0 0 1px var(--border);
+      animation: cssx2-fill 8.4s ease-in-out infinite;
+    }
+    .cssx2-cell:nth-child(1) { color: var(--cssx2-blue);   animation-delay: 0s; }
+    .cssx2-cell:nth-child(2) { color: var(--cssx2-green);  animation-delay: 0.6s; }
+    .cssx2-cell:nth-child(3) { color: var(--cssx2-amber);  animation-delay: 1.2s; }
+    .cssx2-cell:nth-child(4) { color: var(--cssx2-rose);   animation-delay: 1.8s; }
+    .cssx2-cell:nth-child(5) { color: var(--cssx2-violet); animation-delay: 2.4s; }
+    .cssx2-cell:nth-child(6) { color: var(--cssx2-blue);   animation-delay: 3s; }
+    @keyframes cssx2-fill {
+      0%, 55%, 100% { background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+      12%, 40%      { background: color-mix(in srgb, currentColor 45%, var(--surface)); box-shadow: inset 0 0 0 2px currentColor; }
+    }
+
+    /* -- Dynamic: one custom property drives many elements together -- */
+    .cssx2-token {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.66rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 5px;
+      color: #10140f;
+      animation: cssx2-var 9s ease-in-out infinite;
+    }
+    .cssx2-vbox {
+      width: 22px; height: 22px;
+      border-radius: 5px;
+      animation: cssx2-var 9s ease-in-out infinite;
+    }
+    @keyframes cssx2-var {
+      0%, 100% { background: var(--cssx2-blue); }
+      25%      { background: var(--cssx2-green); }
+      50%      { background: var(--cssx2-amber); }
+      75%      { background: var(--cssx2-rose); }
+    }
+
+    /* -- Modern CSS: two colours blend via color-mix -- */
+    .cssx2-mix-sw { width: 34px; height: 30px; border-radius: 6px; box-shadow: inset 0 0 0 1px var(--border); }
+    .cssx2-mix-a { background: var(--cssx2-rose); }
+    .cssx2-mix-b { background: var(--cssx2-blue); }
+    .cssx2-mix-r { animation: cssx2-mix 8s ease-in-out infinite alternate; }
+    @keyframes cssx2-mix {
+      0%   { background: var(--cssx2-rose); }
+      50%  { background: color-mix(in oklch, var(--cssx2-rose), var(--cssx2-blue)); }
+      100% { background: var(--cssx2-blue); }
+    }
+
+    /* -- Respect users who prefer reduced motion: freeze every visual -- */
+    @media (prefers-reduced-motion: reduce) {
+      .cssx2-chip-1, .cssx2-chip-2, .cssx2-chip-3, .cssx2-target,
+      .cssx2-node, .cssx2-cell, .cssx2-type, .cssx2-swatch, .cssx2-grad,
+      .cssx2-bm-b, .cssx2-fi-1, .cssx2-fi-3, .cssx2-token, .cssx2-vbox, .cssx2-mix-r {
+        animation: none !important;
+      }
+      .cssx2-chip-1, .cssx2-chip-2, .cssx2-chip-3 { opacity: 1; }
+      .cssx2-target { box-shadow: inset 0 0 0 2px var(--cssx2-blue); color: var(--cssx2-blue); }
+      .cssx2-node   { box-shadow: inset 0 0 0 2px currentColor; background: color-mix(in srgb, currentColor 22%, var(--surface)); }
+      .cssx2-cell   { box-shadow: inset 0 0 0 2px currentColor; background: color-mix(in srgb, currentColor 42%, var(--surface)); }
+      .cssx2-type   { color: var(--cssx2-blue); font-weight: 700; }
+      .cssx2-swatch { background: var(--cssx2-blue); }
+      .cssx2-vbox, .cssx2-token { background: var(--cssx2-blue); }
+      .cssx2-mix-r  { background: color-mix(in oklch, var(--cssx2-rose), var(--cssx2-blue)); }
+    }
   </style>
 </head>
 <body>
@@ -33,15 +296,16 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=8"></script>
 <script>renderHeader('CSS')</script>
 <script>renderSourceLink('CSS')</script>
   <main>
   <div class="page-header">
     <h1>CSS</h1>
-    <p class="subtitle">Quick reference with live previews</p>
+    <p class="subtitle">A beginner's guide to styling web pages &mdash; with live examples you can see.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#how-css-works">How it works</a>
       <a href="#getting-started">Start</a>
       <a href="#selectors">Selectors</a>
       <a href="#fonts">Fonts</a>
@@ -56,10 +320,199 @@
     </nav>
   </div>
 
+    <!-- How CSS Works (animated explainer) -->
+    <section id="how-css-works">
+      <style>
+        .cssx-wrap {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+        .cssx-card {
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 1.1rem 1.1rem 1rem;
+        }
+        .cssx-card h3 {
+          font-family: var(--display);
+          margin: 0 0 0.9rem;
+          font-size: 1rem;
+          color: var(--text);
+        }
+        .cssx-note {
+          margin: 0.9rem 0 0;
+          font-size: 0.82rem;
+          color: var(--text-muted);
+          line-height: 1.5;
+        }
+
+        /* ---- Visual 1: a selector applying a style ---- */
+        .cssx-apply-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 0.9rem;
+        }
+        .cssx-code {
+          background: var(--code-bg);
+          color: var(--code-text);
+          border-radius: var(--radius-sm, 8px);
+          padding: 0.8rem 0.9rem;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+          font-size: 0.8rem;
+          line-height: 1.6;
+          white-space: pre;
+        }
+        .cssx-sel {
+          border-radius: 4px;
+          padding: 0 3px;
+          animation: cssx-sel 6s ease-in-out infinite;
+        }
+        .cssx-prop { color: var(--accent-2); }
+        .cssx-arrow {
+          font-size: 1.4rem;
+          color: var(--accent);
+          animation: cssx-arrow 6s ease-in-out infinite;
+        }
+        .cssx-stage {
+          min-width: 90px;
+          display: grid;
+          place-items: center;
+          padding: 0.4rem 0.2rem;
+        }
+        .cssx-target {
+          margin: 0;
+          font-weight: 700;
+          font-family: var(--display);
+          animation: cssx-apply 6s ease-in-out infinite;
+        }
+        @keyframes cssx-sel {
+          0%, 8% { background: transparent; color: var(--accent-2); }
+          16%, 30% { background: var(--accent-subtle-2); color: var(--accent); }
+          40%, 100% { background: transparent; color: var(--accent-2); }
+        }
+        @keyframes cssx-arrow {
+          0%, 20% { opacity: 0.3; transform: translateX(0); }
+          32%, 42% { opacity: 1; transform: translateX(3px); }
+          55%, 100% { opacity: 0.3; transform: translateX(0); }
+        }
+        @keyframes cssx-apply {
+          0%, 38% { color: var(--text-muted); transform: scale(1); }
+          55%, 90% { color: var(--accent); transform: scale(1.35); }
+          100% { color: var(--text-muted); transform: scale(1); }
+        }
+
+        /* ---- Visual 2: the box model ---- */
+        .cssx-bm {
+          max-width: 300px;
+          margin: 0 auto;
+        }
+        .cssx-layer {
+          position: relative;
+          border-radius: var(--radius-sm, 8px);
+          padding: 1.6rem 0.9rem 0.9rem;
+          outline: 2px solid transparent;
+          animation: cssx-bmpulse 8s ease-in-out infinite;
+        }
+        .cssx-tag {
+          position: absolute;
+          top: 5px;
+          left: 9px;
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.03em;
+          color: var(--text-muted);
+        }
+        .cssx-margin  { background: color-mix(in srgb, var(--accent) 7%,  var(--surface)); }
+        .cssx-border  { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); animation-delay: 2s; }
+        .cssx-padding { background: color-mix(in srgb, var(--accent) 26%, var(--surface)); animation-delay: 4s; }
+        .cssx-content {
+          background: var(--surface);
+          border-radius: var(--radius-sm, 8px);
+          padding: 0.75rem;
+          text-align: center;
+          font-size: 0.78rem;
+          font-weight: 700;
+          color: var(--text);
+          outline: 2px solid transparent;
+          animation: cssx-bmpulse 8s ease-in-out infinite;
+          animation-delay: 6s;
+        }
+        @keyframes cssx-bmpulse {
+          0% { outline-color: transparent; box-shadow: 0 0 0 0 var(--accent-subtle-2); }
+          4% { outline-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-subtle-2); }
+          22% { outline-color: var(--accent); box-shadow: 0 0 0 6px var(--accent-subtle-2); }
+          30%, 100% { outline-color: transparent; box-shadow: 0 0 0 0 var(--accent-subtle-2); }
+        }
+
+        /* Respect users who prefer no motion */
+        @media (prefers-reduced-motion: reduce) {
+          .cssx-sel, .cssx-arrow, .cssx-target, .cssx-layer, .cssx-content {
+            animation: none !important;
+          }
+          .cssx-target { color: var(--accent); }
+          .cssx-arrow { opacity: 1; }
+          .cssx-sel { background: var(--accent-subtle-2); color: var(--accent); }
+          .cssx-layer, .cssx-content { outline-color: var(--accent-subtle-2); }
+        }
+      </style>
+
+      <h2>How CSS Works</h2>
+      <p style="color:var(--text-muted);margin-bottom:1rem;">HTML builds the page; CSS decides how it looks. You write a <strong>rule</strong> that picks an element (a <em>selector</em>) and gives it <strong>properties</strong> like color or size.</p>
+
+      <div class="cssx-wrap">
+
+        <div class="cssx-card">
+          <h3>1. A rule finds an element and styles it</h3>
+          <div class="cssx-apply-row">
+            <div class="cssx-code"><span class="cssx-sel">.hello</span> {
+  <span class="cssx-prop">color</span>: teal;
+  <span class="cssx-prop">font-size</span>: 2rem;
+}</div>
+            <div class="cssx-arrow" aria-hidden="true">&rarr;</div>
+            <div class="cssx-stage">
+              <p class="cssx-target">Hello!</p>
+            </div>
+          </div>
+          <p class="cssx-note">The selector <code>.hello</code> picks the element, then the properties apply &mdash; watch the word turn teal and grow.</p>
+        </div>
+
+        <div class="cssx-card">
+          <h3>2. Every element is a set of boxes</h3>
+          <div class="cssx-bm">
+            <div class="cssx-layer cssx-margin"><span class="cssx-tag">margin</span>
+              <div class="cssx-layer cssx-border"><span class="cssx-tag">border</span>
+                <div class="cssx-layer cssx-padding"><span class="cssx-tag">padding</span>
+                  <div class="cssx-content">content</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="cssx-note">The box model: <strong>content</strong> sits inside <strong>padding</strong>, wrapped by a <strong>border</strong>, with <strong>margin</strong> as space outside &mdash; each lights up in turn.</p>
+        </div>
+
+      </div>
+    </section>
+
     <!-- Getting Started -->
     <section id="getting-started">
       <h2>Getting Started</h2>
-      <p style="color:#666;margin-bottom:1rem;">CSS is rich in capabilities and is more than simply laying out pages.</p>
+      <p style="color:var(--text-muted);margin-bottom:1rem;">CSS is the language that controls how a web page looks &mdash; its colors, sizes, spacing, and layout.</p>
+
+      <div class="cssx2-viz">
+        <span class="cssx2-label">How CSS applies</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-chip cssx2-chip-1">link</span>
+          <span class="cssx2-chip cssx2-chip-2">style</span>
+          <span class="cssx2-chip cssx2-chip-3">inline</span>
+          <span class="cssx2-arrow" aria-hidden="true">&rarr;</span>
+          <span class="cssx2-target">Aa</span>
+        </div>
+        <span class="cssx2-cap">Three ways to attach CSS, each lighting up as it styles one element.</span>
+      </div>
 
       <div class="block-desc">
         <span>Link an external CSS file from HTML using <code>&lt;link&gt;</code> in the <code>&lt;head&gt;</code>.</span>
@@ -159,6 +612,19 @@
     <section id="selectors">
       <h2>CSS Selectors</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Matching</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-sel-tag">.item</span>
+          <span class="cssx2-arrow" aria-hidden="true">&rarr;</span>
+          <span class="cssx2-node cssx2-n1"></span>
+          <span class="cssx2-node cssx2-n2"></span>
+          <span class="cssx2-node cssx2-n3"></span>
+          <span class="cssx2-node cssx2-n4"></span>
+        </div>
+        <span class="cssx2-cap">A selector sweeps across the page, highlighting each matching element in turn.</span>
+      </div>
+
       <div class="block-desc">
         <span>Group multiple selectors with a comma or chain them to target elements more specifically.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css_selectors.asp" target="_blank">W3Schools →</a>
@@ -250,6 +716,14 @@ input:focus { border-color: blue; }</pre>
     <section id="fonts">
       <h2>CSS Fonts</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Font</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-type">Aa</span>
+        </div>
+        <span class="cssx2-cap">Weight, size, slant and colour all reshape the very same letters.</span>
+      </div>
+
       <div class="block-desc">
         <span>Control font appearance using <code>font-weight</code>, <code>font-size</code>, and <code>font-family</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css_font.asp" target="_blank">W3Schools →</a>
@@ -327,6 +801,14 @@ input:focus { border-color: blue; }</pre>
     <section id="colors">
       <h2>CSS Colors</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Color</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-swatch"></span>
+        </div>
+        <span class="cssx2-cap">One <code>color</code> value, many results &mdash; the swatch cycles a palette.</span>
+      </div>
+
       <div class="block-desc">
         <span>Define colors using named values, hex, <code>rgb()</code>, <code>rgba()</code>, <code>hsl()</code>, and <code>hsla()</code> formats.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css_colors.asp" target="_blank">W3Schools →</a>
@@ -378,6 +860,14 @@ color: currentcolor;</pre>
     <section id="backgrounds">
       <h2>CSS Backgrounds</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Gradient</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-grad"></span>
+        </div>
+        <span class="cssx2-cap">A multi-stop gradient drifts slowly across the background.</span>
+      </div>
+
       <div class="block-desc">
         <span>Apply solid colors or gradients as element backgrounds using the <code>background</code> shorthand property.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css_background.asp" target="_blank">W3Schools →</a>
@@ -416,6 +906,20 @@ color: currentcolor;</pre>
     <!-- Box Model -->
     <section id="box-model">
       <h2>The Box Model</h2>
+
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Box model</span>
+        <div class="cssx2-stage">
+          <div class="cssx2-bm">
+            <div class="cssx2-bm-b">
+              <div class="cssx2-bm-p">
+                <div class="cssx2-bm-c"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="cssx2-cap">Margin, border and padding wrap the content &mdash; watch the spacing breathe.</span>
+      </div>
 
       <div class="block-desc">
         <span>Control element spacing using <code>margin</code>, <code>padding</code>, and <code>border</code> properties.</span>
@@ -549,6 +1053,18 @@ animation: 3s slidein;</pre>
     <section id="flexbox">
       <h2>CSS Flexbox</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Flex</span>
+        <div class="cssx2-stage">
+          <div class="cssx2-flex">
+            <span class="cssx2-fi cssx2-fi-1"></span>
+            <span class="cssx2-fi cssx2-fi-2"></span>
+            <span class="cssx2-fi cssx2-fi-3"></span>
+          </div>
+        </div>
+        <span class="cssx2-cap">Items gather toward the centre, then spread as the container shares space.</span>
+      </div>
+
       <div class="block-desc">
         <span>Create a flex container with <code>display: flex</code> and distribute child items using the <code>flex</code> property.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank">W3Schools →</a>
@@ -628,6 +1144,21 @@ animation: 3s slidein;</pre>
     <section id="grid">
       <h2>CSS Grid Layout</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Grid</span>
+        <div class="cssx2-stage">
+          <div class="cssx2-grid">
+            <span class="cssx2-cell"></span>
+            <span class="cssx2-cell"></span>
+            <span class="cssx2-cell"></span>
+            <span class="cssx2-cell"></span>
+            <span class="cssx2-cell"></span>
+            <span class="cssx2-cell"></span>
+          </div>
+        </div>
+        <span class="cssx2-cap">Cells fill in across rows and columns, one track at a time.</span>
+      </div>
+
       <div class="block-desc">
         <span>Create a grid container with <code>display: grid</code> and define rows and columns using the <code>grid</code> shorthand.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css_grid.asp" target="_blank">W3Schools →</a>
@@ -706,6 +1237,18 @@ animation: 3s slidein;</pre>
     <section id="dynamic">
       <h2>Dynamic Content</h2>
 
+      <div class="cssx2-viz">
+        <span class="cssx2-label">Variables</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-token">--accent</span>
+          <span class="cssx2-arrow" aria-hidden="true">&rarr;</span>
+          <span class="cssx2-vbox"></span>
+          <span class="cssx2-vbox"></span>
+          <span class="cssx2-vbox"></span>
+        </div>
+        <span class="cssx2-cap">Change one custom property and every element using it updates together.</span>
+      </div>
+
       <div class="block-desc">
         <span>Define custom properties on <code>:root</code> and reuse them throughout stylesheets with the <code>var()</code> function.</span>
         <a class="w3-link" href="https://www.w3schools.com/css/css3_variables.asp" target="_blank">W3Schools →</a>
@@ -760,6 +1303,18 @@ h3::before {
     <!-- Modern CSS -->
     <section id="modern">
       <h2>Modern CSS</h2>
+
+      <div class="cssx2-viz">
+        <span class="cssx2-label">color-mix</span>
+        <div class="cssx2-stage">
+          <span class="cssx2-mix-sw cssx2-mix-a"></span>
+          <span class="cssx2-arrow" aria-hidden="true">+</span>
+          <span class="cssx2-mix-sw cssx2-mix-b"></span>
+          <span class="cssx2-arrow" aria-hidden="true">=</span>
+          <span class="cssx2-mix-sw cssx2-mix-r"></span>
+        </div>
+        <span class="cssx2-cap">Two colours blend into a new one that eases between them.</span>
+      </div>
 
       <div class="block-desc">
         <span>Use the <code>:has()</code> pseudo-class to style a parent element based on its children.</span>
@@ -957,7 +1512,7 @@ background: color-mix(in oklch, red, blue 50%);</pre>
     <p>CSS Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

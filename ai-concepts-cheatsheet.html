@@ -4,10 +4,320 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Concepts &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .ai-section { margin-bottom: 2rem; }
     .ai-section h3 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--text); }
+  </style>
+  <style>
+    /* ═══ aix2-: compact per-concept animations + the whole-workflow picture ═══
+       Text / surfaces stay on theme variables; moving parts use fixed accents. */
+    .aix2-mini, .aix2-wf{
+      --amber:#e0b366; --rose:#e8808f; --blue:#7aa2f7; --green:#9ece6a; --violet:#bb9af7;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: .8rem 1rem .9rem;
+      margin: 0 0 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .block-desc + .aix2-mini{ border-top-left-radius: 0; border-top-right-radius: 0; }
+    .aix2-mini-label{
+      font: 600 .66rem/1 var(--display); letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-muted); margin: 0 0 .5rem;
+    }
+    .aix2-svg{ width: 100%; max-width: 580px; height: auto; display: block; margin: 0 auto; overflow: visible; }
+    .aix2-cap{ font-size: .76rem; color: var(--text-muted); line-height: 1.6; margin: .55rem 0 0; }
+    .aix2-cap strong{ color: var(--text); }
+    .aix2-legend{ display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .72rem; color: var(--text-muted); margin-top: .55rem; }
+    .aix2-sw{ display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; margin-right: 5px; }
+
+    /* shared SVG text + surfaces (theme) */
+    .aix2-t { fill: var(--text); font: 600 12px var(--display); }
+    .aix2-ts{ fill: var(--text-muted); font: 400 10.5px 'Inter', sans-serif; }
+    .aix2-tm{ fill: var(--text-muted); font: 500 10px 'JetBrains Mono', monospace; }
+    .aix2-surf{ fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.5; }
+    .aix2-axis{ fill: none; stroke: var(--border-strong); stroke-width: 1.4; }
+    .aix2-link{ fill: none; stroke: var(--border-strong); stroke-width: 1.5; }
+    .aix2-mk-mu{ fill: var(--text-muted); } .aix2-mk-am{ fill: var(--amber); } .aix2-mk-vi{ fill: var(--violet); }
+    .aix2-mk-gr{ fill: var(--green); } .aix2-mk-ro{ fill: var(--rose); } .aix2-mk-ac{ fill: var(--accent); }
+    .aix2-ph{ opacity: 0; }
+
+    /* ── WORKFLOW: the whole picture ── */
+    .aix2-wf{ padding: 1rem 1.1rem 1.1rem; }
+    .aix2-wf-svg{ width: 100%; height: auto; display: block; overflow: visible; }
+    .aix2-wf-box{ fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.6; }
+    .aix2-wf-box-agent{ stroke-dasharray: 6 5; }
+    .aix2-wf-title{ fill: var(--text); font: 600 14px var(--display); }
+    .aix2-wf-sub{ fill: var(--text-muted); font: 400 10px 'Inter', sans-serif; }
+    .aix2-wf-tiny{ fill: var(--text-muted); font: 400 9px 'Inter', sans-serif; }
+    .aix2-wf-chip{ fill: var(--surface); stroke-width: 1.4; }
+    .aix2-wf-chipt{ fill: var(--text); font: 500 10px 'JetBrains Mono', monospace; }
+    .aix2-wf-node{ fill: var(--surface-2); stroke: var(--violet); stroke-width: 1.6; }
+    .aix2-wf-nodet{ fill: var(--text); font: 600 11px var(--display); }
+    .aix2-wf-win{ fill: none; stroke: var(--amber); stroke-width: 1.3; stroke-dasharray: 4 3; }
+    .aix2-wf-net{ stroke: var(--blue); stroke-width: 1; opacity: .5; }
+    .aix2-wf-glow{ fill: none; stroke-width: 3.2; opacity: 0; }
+    .aix2-wf-g-user{ stroke: var(--amber); } .aix2-wf-g-llm{ stroke: var(--blue); }
+    .aix2-wf-g-think, .aix2-wf-g-act, .aix2-wf-g-observe{ stroke: var(--violet); }
+    .aix2-wf-g-skill, .aix2-wf-g-client, .aix2-wf-g-server, .aix2-wf-g-tool{ stroke: var(--green); }
+    .aix2-wf-g-store, .aix2-wf-g-retrieve, .aix2-wf-g-augment{ stroke: var(--rose); }
+    .aix2-wf-pkt{
+      fill: var(--amber); offset-path: path('M100,185 L180,185 L200,178 L360,178 L390,205 L440,205 L545,168 A50,50 0 0 1 588,243 L650,165 L700,84 L754,91 L700,84 L650,165 L588,243 A50,50 0 0 1 502,243 A50,50 0 0 1 545,168 A50,50 0 0 1 588,243 L650,222 L700,222 L747,222 L845,222 L943,222 L845,222 L747,222 L700,222 L650,222 L588,243 A50,50 0 0 1 502,243 L500,300 L500,345 L500,388 L500,402 L410,402 L310,402 L310,345 L310,300 L290,250 L180,228 L130,228 L100,228'); offset-rotate: 0deg; opacity: 0;
+      transform-box: view-box; transform-origin: 0 0;
+      animation: aix2-wf-move 40s linear infinite, aix2-wf-col 40s linear infinite, aix2-wf-vis 40s linear infinite;
+    }
+    @supports not (offset-path: path('M0,0 L1,1')){ .aix2-wf-pkt{ display: none; } }
+    @keyframes aix2-wf-move{0.00%{offset-distance:0.000%} 1.25%{offset-distance:0.000%} 2.68%{offset-distance:2.760%} 3.06%{offset-distance:3.490%} 5.91%{offset-distance:9.010%} 7.41%{offset-distance:9.010%} 8.13%{offset-distance:10.402%} 9.03%{offset-distance:12.127%} 11.02%{offset-distance:15.967%} 14.52%{offset-distance:15.967%} 16.39%{offset-distance:19.579%} 18.64%{offset-distance:19.579%} 20.41%{offset-distance:23.016%} 22.11%{offset-distance:26.299%} 23.09%{offset-distance:28.178%} 26.09%{offset-distance:28.178%} 27.06%{offset-distance:30.056%} 28.76%{offset-distance:33.340%} 30.54%{offset-distance:36.777%} 31.04%{offset-distance:36.777%} 32.91%{offset-distance:40.389%} 36.16%{offset-distance:40.389%} 38.03%{offset-distance:44.001%} 41.28%{offset-distance:44.001%} 43.15%{offset-distance:47.613%} 44.40%{offset-distance:47.613%} 45.57%{offset-distance:49.871%} 46.46%{offset-distance:51.596%} 47.30%{offset-distance:53.217%} 49.30%{offset-distance:53.217%} 51.05%{offset-distance:56.598%} 53.05%{offset-distance:56.598%} 54.80%{offset-distance:59.978%} 57.80%{offset-distance:59.978%} 59.55%{offset-distance:63.359%} 60.30%{offset-distance:63.359%} 62.05%{offset-distance:66.739%} 62.80%{offset-distance:66.739%} 63.64%{offset-distance:68.360%} 64.53%{offset-distance:70.085%} 65.70%{offset-distance:72.343%} 66.20%{offset-distance:72.343%} 68.07%{offset-distance:75.955%} 71.07%{offset-distance:75.955%} 72.09%{offset-distance:77.923%} 72.89%{offset-distance:79.475%} 73.66%{offset-distance:80.958%} 76.16%{offset-distance:80.958%} 76.41%{offset-distance:81.441%} 78.02%{offset-distance:84.545%} 80.52%{offset-distance:84.545%} 82.30%{offset-distance:87.995%} 84.80%{offset-distance:87.995%} 85.82%{offset-distance:89.961%} 86.62%{offset-distance:91.513%} 87.59%{offset-distance:93.371%} 91.34%{offset-distance:93.371%} 93.34%{offset-distance:97.240%} 94.23%{offset-distance:98.965%} 94.77%{offset-distance:100.000%} 98.77%{offset-distance:100.000%} 100.00%{offset-distance:100.000%}}
+    @keyframes aix2-wf-col{0.00%{fill:var(--amber)} 2.18%{fill:var(--amber)} 3.06%{fill:var(--blue)} 10.14%{fill:var(--blue)} 11.02%{fill:var(--violet)} 15.51%{fill:var(--violet)} 16.39%{fill:var(--green)} 32.03%{fill:var(--green)} 32.91%{fill:var(--violet)} 37.15%{fill:var(--violet)} 38.03%{fill:var(--violet)} 45.59%{fill:var(--violet)} 46.46%{fill:var(--green)} 67.20%{fill:var(--green)} 68.07%{fill:var(--rose)} 77.14%{fill:var(--rose)} 78.02%{fill:var(--rose)} 86.71%{fill:var(--rose)} 87.59%{fill:var(--accent)} 100.00%{fill:var(--accent)}}
+    @keyframes aix2-wf-vis{0%{opacity:0}0.75%{opacity:1}98.77%{opacity:1}99.75%{opacity:0}100%{opacity:0}}
+    .aix2-wf-g-user{animation:aix2-wf-g-user 40.0s linear infinite}
+    @keyframes aix2-wf-g-user{0.00%{opacity:1} 1.25%{opacity:1} 2.00%{opacity:0} 94.02%{opacity:0} 94.77%{opacity:1} 98.77%{opacity:1} 99.52%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-llm{animation:aix2-wf-g-llm 40.0s linear infinite}
+    @keyframes aix2-wf-g-llm{0.00%{opacity:0} 2.31%{opacity:0} 3.06%{opacity:1} 7.42%{opacity:1} 8.16%{opacity:0} 86.84%{opacity:0} 87.59%{opacity:1} 91.34%{opacity:1} 92.09%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-think{animation:aix2-wf-g-think 40.0s linear infinite}
+    @keyframes aix2-wf-g-think{0.00%{opacity:0} 10.26%{opacity:0} 11.02%{opacity:1} 14.52%{opacity:1} 15.27%{opacity:0} 37.28%{opacity:0} 38.03%{opacity:1} 41.28%{opacity:1} 42.03%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-act{animation:aix2-wf-g-act 40.0s linear infinite}
+    @keyframes aix2-wf-g-act{0.00%{opacity:0} 15.63%{opacity:0} 16.38%{opacity:1} 18.63%{opacity:1} 19.38%{opacity:0} 29.79%{opacity:0} 30.54%{opacity:1} 31.04%{opacity:1} 31.79%{opacity:0} 42.40%{opacity:0} 43.15%{opacity:1} 44.40%{opacity:1} 45.15%{opacity:0} 64.95%{opacity:0} 65.70%{opacity:1} 66.20%{opacity:1} 66.95%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-skill{animation:aix2-wf-g-skill 40.0s linear infinite}
+    @keyframes aix2-wf-g-skill{0.00%{opacity:0} 22.34%{opacity:0} 23.09%{opacity:1} 26.09%{opacity:1} 26.84%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-observe{animation:aix2-wf-g-observe 40.0s linear infinite}
+    @keyframes aix2-wf-g-observe{0.00%{opacity:0} 32.16%{opacity:0} 32.91%{opacity:1} 36.16%{opacity:1} 36.91%{opacity:0} 67.32%{opacity:0} 68.07%{opacity:1} 71.07%{opacity:1} 71.82%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-client{animation:aix2-wf-g-client 40.0s linear infinite}
+    @keyframes aix2-wf-g-client{0.00%{opacity:0} 46.55%{opacity:0} 47.30%{opacity:1} 49.30%{opacity:1} 50.05%{opacity:0} 61.30%{opacity:0} 62.05%{opacity:1} 62.80%{opacity:1} 63.55%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-server{animation:aix2-wf-g-server 40.0s linear infinite}
+    @keyframes aix2-wf-g-server{0.00%{opacity:0} 50.30%{opacity:0} 51.05%{opacity:1} 53.05%{opacity:1} 53.80%{opacity:0} 58.80%{opacity:0} 59.55%{opacity:1} 60.30%{opacity:1} 61.05%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-tool{animation:aix2-wf-g-tool 40.0s linear infinite}
+    @keyframes aix2-wf-g-tool{0.00%{opacity:0} 54.05%{opacity:0} 54.80%{opacity:1} 57.80%{opacity:1} 58.55%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-store{animation:aix2-wf-g-store 40.0s linear infinite}
+    @keyframes aix2-wf-g-store{0.00%{opacity:0} 72.91%{opacity:0} 73.66%{opacity:1} 76.41%{opacity:1} 77.16%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-retrieve{animation:aix2-wf-g-retrieve 40.0s linear infinite}
+    @keyframes aix2-wf-g-retrieve{0.00%{opacity:0} 77.27%{opacity:0} 78.02%{opacity:1} 80.52%{opacity:1} 81.27%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-g-augment{animation:aix2-wf-g-augment 40.0s linear infinite}
+    @keyframes aix2-wf-g-augment{0.00%{opacity:0} 81.55%{opacity:0} 82.30%{opacity:1} 84.80%{opacity:1} 85.55%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-caps{ display: grid; min-height: 3.4em; margin-top: .6rem; }
+    .aix2-wf-cap{ grid-area: 1 / 1; opacity: 0; font-size: .8rem; line-height: 1.55; color: var(--text-muted); }
+    .aix2-wf-cap b{ color: var(--text); font-weight: 600; }
+    .aix2-wf-num{
+      display: inline-block; min-width: 1.45em; height: 1.45em; line-height: 1.45em; text-align: center;
+      border-radius: 50%; font: 700 .7rem/1.45em var(--display); color: var(--code-bg); margin-right: .4em; vertical-align: 1px;
+    }
+    .aix2-wf-cap-0{animation:aix2-wf-cap-0 40.0s linear infinite}
+    @keyframes aix2-wf-cap-0{0.00%{opacity:0} 0.87%{opacity:1} 2.18%{opacity:1} 3.06%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-1{animation:aix2-wf-cap-1 40.0s linear infinite}
+    @keyframes aix2-wf-cap-1{0.00%{opacity:0} 3.03%{opacity:0} 3.93%{opacity:1} 10.14%{opacity:1} 11.02%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-2{animation:aix2-wf-cap-2 40.0s linear infinite}
+    @keyframes aix2-wf-cap-2{0.00%{opacity:0} 10.99%{opacity:0} 11.89%{opacity:1} 15.51%{opacity:1} 16.38%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-3{animation:aix2-wf-cap-3 40.0s linear infinite}
+    @keyframes aix2-wf-cap-3{0.00%{opacity:0} 16.36%{opacity:0} 17.26%{opacity:1} 32.03%{opacity:1} 32.91%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-4{animation:aix2-wf-cap-4 40.0s linear infinite}
+    @keyframes aix2-wf-cap-4{0.00%{opacity:0} 32.88%{opacity:0} 33.78%{opacity:1} 37.15%{opacity:1} 38.03%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-5{animation:aix2-wf-cap-5 40.0s linear infinite}
+    @keyframes aix2-wf-cap-5{0.00%{opacity:0} 38.00%{opacity:0} 38.90%{opacity:1} 45.59%{opacity:1} 46.46%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-6{animation:aix2-wf-cap-6 40.0s linear infinite}
+    @keyframes aix2-wf-cap-6{0.00%{opacity:0} 46.44%{opacity:0} 47.34%{opacity:1} 67.20%{opacity:1} 68.07%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-7{animation:aix2-wf-cap-7 40.0s linear infinite}
+    @keyframes aix2-wf-cap-7{0.00%{opacity:0} 68.05%{opacity:0} 68.95%{opacity:1} 77.14%{opacity:1} 78.02%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-8{animation:aix2-wf-cap-8 40.0s linear infinite}
+    @keyframes aix2-wf-cap-8{0.00%{opacity:0} 77.99%{opacity:0} 78.89%{opacity:1} 86.71%{opacity:1} 87.59%{opacity:0} 100.00%{opacity:0}}
+    .aix2-wf-cap-9{animation:aix2-wf-cap-9 40.0s linear infinite}
+    @keyframes aix2-wf-cap-9{0.00%{opacity:0} 87.56%{opacity:0} 88.46%{opacity:1} 99.12%{opacity:1} 100.00%{opacity:0}}
+
+    /* ── MCP mini: one client, many servers ── */
+    .aix2-mcp-cli{ fill: var(--surface-2); stroke: var(--accent); stroke-width: 2; }
+    .aix2-mcp-srv{ fill: var(--surface-2); stroke-width: 1.6; animation: aix2-mcp-glow 9s ease-in-out infinite; }
+    .aix2-mcp-tool{ fill: var(--surface-2); stroke-width: 1.4; opacity: .6; animation: aix2-mcp-tool 9s ease-in-out infinite; }
+    @keyframes aix2-mcp-glow{ 0%,10%{ stroke-width:1.6; fill:var(--surface-2) } 13%,18%{ stroke-width:3.4; fill:var(--accent-subtle) } 24%,100%{ stroke-width:1.6; fill:var(--surface-2) } }
+    @keyframes aix2-mcp-tool{ 0%,12%{ opacity:.6; stroke-width:1.4 } 14%,18%{ opacity:1; stroke-width:2.6 } 24%,100%{ opacity:.6; stroke-width:1.4 } }
+    .aix2-mcp-pkt{ offset-rotate: 0deg; opacity: 0; transform-box: view-box; transform-origin: 0 0; animation: aix2-mcp-pkt 9s ease-in-out infinite; }
+    .aix2-mcp-p1{ offset-path: path('M134,75 C200,75 200,29 260,29'); }
+    .aix2-mcp-p2{ offset-path: path('M134,75 L260,75'); }
+    .aix2-mcp-p3{ offset-path: path('M134,75 C200,75 200,121 260,121'); }
+    @keyframes aix2-mcp-pkt{ 0%{ offset-distance:0%; opacity:0 } 2%{ opacity:1 } 12%,19%{ offset-distance:100%; opacity:1 } 29%{ offset-distance:0%; opacity:1 } 31%,100%{ offset-distance:0%; opacity:0 } }
+    @supports not (offset-path: path('M0,0 L1,1')){ .aix2-mcp-pkt{ display: none; } }
+    .aix2-mcp-d2{ animation-delay: 3s; } .aix2-mcp-d3{ animation-delay: 6s; }  /* after the shorthands so the delay survives */
+
+    /* ── Agents mini: loop + goal progress (12s) ── */
+    .aix2-ag-orbit{ transform-box: view-box; transform-origin: 110px 80px; animation: aix2-ag-spin 12s linear infinite; }
+    @keyframes aix2-ag-spin{ 0%{ transform: rotate(0deg) } 75%,100%{ transform: rotate(1080deg) } }
+    .aix2-ag-node{ fill: var(--surface-2); stroke-width: 1.6; }
+    .aix2-ag-n1{ animation: aix2-ag-n1 12s linear infinite; } .aix2-ag-n2{ animation: aix2-ag-n2 12s linear infinite; } .aix2-ag-n3{ animation: aix2-ag-n3 12s linear infinite; }
+    @keyframes aix2-ag-n1{ 0%{stroke-width:3.4} 3%,24%{stroke-width:1.6} 25%{stroke-width:3.4} 28%,49%{stroke-width:1.6} 50%{stroke-width:3.4} 53%,100%{stroke-width:1.6} }
+    @keyframes aix2-ag-n2{ 0%,7%{stroke-width:1.6} 8.3%{stroke-width:3.4} 11.5%,32%{stroke-width:1.6} 33.3%{stroke-width:3.4} 36.5%,57%{stroke-width:1.6} 58.3%{stroke-width:3.4} 61.5%,100%{stroke-width:1.6} }
+    @keyframes aix2-ag-n3{ 0%,15.5%{stroke-width:1.6} 16.7%{stroke-width:3.4} 20%,40.5%{stroke-width:1.6} 41.7%{stroke-width:3.4} 45%,65.5%{stroke-width:1.6} 66.7%{stroke-width:3.4} 70%,100%{stroke-width:1.6} }
+    .aix2-ag-bar{ transform-box: view-box; transform-origin: 210px 48px; animation: aix2-ag-bar 12s ease-out infinite; }
+    @keyframes aix2-ag-bar{ 0%,16%{ transform: scaleX(.04) } 19%,41%{ transform: scaleX(.37) } 44%,66%{ transform: scaleX(.70) } 69%,97%{ transform: scaleX(1) } 100%{ transform: scaleX(.04) } }
+    .aix2-ag-s1{ animation: aix2-ag-s1 12s linear infinite; } .aix2-ag-s2{ animation: aix2-ag-s2 12s linear infinite; } .aix2-ag-s3{ animation: aix2-ag-s3 12s linear infinite; }
+    @keyframes aix2-ag-s1{ 0%,16%{opacity:0} 19%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes aix2-ag-s2{ 0%,41%{opacity:0} 44%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes aix2-ag-s3{ 0%,66%{opacity:0} 69%,96%{opacity:1} 100%{opacity:0} }
+    .aix2-ag-done{ animation: aix2-ag-done 12s ease-in-out infinite; }
+    @keyframes aix2-ag-done{ 0%,74%{opacity:0; transform:translateY(4px)} 78%,96%{opacity:1; transform:translateY(0)} 100%{opacity:0} }
+    .aix2-ag-donet{ fill: var(--code-bg); font: 700 11px var(--display); }
+
+    /* ── Key-concepts mini: text → tokens → ids → embeddings (10s) ── */
+    .aix2-kc-sent{ animation: aix2-kc-sent 10s ease-in-out infinite; }
+    @keyframes aix2-kc-sent{ 0%,18%{opacity:1} 24%,100%{opacity:0} }
+    .aix2-kc-chip{ fill: var(--surface-2); stroke-width: 1.6; }
+    .aix2-kc-tok, .aix2-kc-id, .aix2-kc-vec{ opacity: 0; }
+    .aix2-kc-tok{ animation: aix2-kc-tok 10s ease-out infinite; }
+    @keyframes aix2-kc-tok{ 0%,20%{opacity:0; transform:translateY(6px)} 27%,96%{opacity:1; transform:translateY(0)} 100%{opacity:0} }
+    .aix2-kc-id{ animation: aix2-kc-id 10s ease-out infinite; }
+    @keyframes aix2-kc-id{ 0%,45%{opacity:0} 51%,96%{opacity:1} 100%{opacity:0} }
+    .aix2-kc-vec{ animation: aix2-kc-vec 10s ease-out infinite; }
+    @keyframes aix2-kc-vec{ 0%,70%{opacity:0} 76%,96%{opacity:1} 100%{opacity:0} }
+    .aix2-kc-l1{ animation: aix2-kc-l1 10s linear infinite; } .aix2-kc-l2{ animation: aix2-kc-l2 10s linear infinite; } .aix2-kc-l3{ animation: aix2-kc-l3 10s linear infinite; }
+    @keyframes aix2-kc-l1{ 0%,20%{opacity:0} 24%,43%{opacity:1} 46%,100%{opacity:0} }
+    @keyframes aix2-kc-l2{ 0%,45%{opacity:0} 49%,68%{opacity:1} 71%,100%{opacity:0} }
+    @keyframes aix2-kc-l3{ 0%,70%{opacity:0} 74%,96%{opacity:1} 100%{opacity:0} }
+
+    /* ── ML mini: fit a line, loss goes down (8s) ── */
+    .aix2-ml-fit{ transform-box: view-box; transform-origin: 180px 74px; animation: aix2-ml-fit 8s ease-in-out infinite; }
+    @keyframes aix2-ml-fit{ 0%{opacity:0; transform:translateY(22px) rotate(17deg)} 4%,10%{opacity:1; transform:translateY(22px) rotate(17deg)} 55%,90%{opacity:1; transform:none} 96%{opacity:0; transform:none} 100%{opacity:0; transform:translateY(22px) rotate(17deg)} }
+    .aix2-ml-line{ stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; }
+    .aix2-ml-loss{ fill: none; stroke: var(--rose); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 240; animation: aix2-ml-loss 8s ease-in-out infinite; }
+    @keyframes aix2-ml-loss{ 0%,10%{stroke-dashoffset:240; opacity:1} 55%,90%{stroke-dashoffset:0; opacity:1} 96%,100%{stroke-dashoffset:0; opacity:0} }
+    .aix2-ml-pred{ animation: aix2-ml-pred 8s ease-out infinite; }
+    @keyframes aix2-ml-pred{ 0%,58%{opacity:0} 63%,90%{opacity:1} 96%,100%{opacity:0} }
+    .aix2-ml-p1{ animation: aix2-ml-p1 8s linear infinite; } .aix2-ml-p2{ animation: aix2-ml-p2 8s linear infinite; } .aix2-ml-p3{ animation: aix2-ml-p3 8s linear infinite; }
+    @keyframes aix2-ml-p1{ 0%{opacity:0} 3%,9%{opacity:1} 12%,100%{opacity:0} }
+    @keyframes aix2-ml-p2{ 0%,11%{opacity:0} 14%,52%{opacity:1} 55%,100%{opacity:0} }
+    @keyframes aix2-ml-p3{ 0%,56%{opacity:0} 60%,92%{opacity:1} 96%,100%{opacity:0} }
+
+    /* ── Linear-algebra mini: dot product & projection (12s) ── */
+    .aix2-la-vec{ fill: none; stroke-width: 3; stroke-linecap: round; }
+    .aix2-la-b{ transform-box: view-box; transform-origin: 150px 120px; animation: aix2-la-b 12s ease-in-out infinite; }
+    @keyframes aix2-la-b{ 0%,8%{transform:rotate(-25deg)} 26%,36%{transform:rotate(-90deg)} 54%,64%{transform:rotate(-155deg)} 82%,100%{transform:rotate(-25deg)} }
+    .aix2-la-shadow{ stroke: var(--amber); stroke-width: 7; stroke-linecap: butt; opacity: .85; transform-box: view-box; transform-origin: 150px 120px; animation: aix2-la-shadow 12s ease-in-out infinite; }
+    @keyframes aix2-la-shadow{ 0%,8%{transform:scaleX(.906)} 26%,36%{transform:scaleX(0)} 54%,64%{transform:scaleX(-.906)} 82%,100%{transform:scaleX(.906)} }
+    .aix2-la-drop{ stroke: var(--text-muted); stroke-width: 1.2; stroke-dasharray: 3 3; opacity: .7; transform-box: view-box; transform-origin: 250px 120px; animation: aix2-la-drop 12s ease-in-out infinite; }
+    @keyframes aix2-la-drop{ 0%,8%{transform:translateX(-9.4px) scaleY(.423)} 26%,36%{transform:translateX(-100px) scaleY(1)} 54%,64%{transform:translateX(-190.6px) scaleY(.423)} 82%,100%{transform:translateX(-9.4px) scaleY(.423)} }
+    .aix2-la-val{ transform-box: view-box; transform-origin: 430px 112px; animation: aix2-la-val 12s ease-in-out infinite; }
+    @keyframes aix2-la-val{ 0%,8%{transform:scaleX(.9)} 26%,36%{transform:scaleX(0)} 54%,64%{transform:scaleX(-.9)} 82%,100%{transform:scaleX(.9)} }
+    .aix2-la-l1{ animation: aix2-la-l1 12s linear infinite; } .aix2-la-l2{ animation: aix2-la-l2 12s linear infinite; } .aix2-la-l3{ animation: aix2-la-l3 12s linear infinite; }
+    @keyframes aix2-la-l1{ 0%,10%{opacity:1} 14%,80%{opacity:0} 86%,100%{opacity:1} }
+    @keyframes aix2-la-l2{ 0%,24%{opacity:0} 28%,36%{opacity:1} 40%,100%{opacity:0} }
+    @keyframes aix2-la-l3{ 0%,52%{opacity:0} 56%,64%{opacity:1} 68%,100%{opacity:0} }
+
+    /* ── Probability mini: samples → distribution → E[X], σ (10s) ── */
+    .aix2-pr-dot{ transform-box: view-box; }
+    .aix2-pr-d0{animation:aix2-pr-d0 10s ease-in infinite}
+    @keyframes aix2-pr-d0{0%,3.0%{opacity:0;transform:translateY(-112px)} 3.6%{opacity:1} 7.0%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d1{animation:aix2-pr-d1 10s ease-in infinite}
+    @keyframes aix2-pr-d1{0%,8.5%{opacity:0;transform:translateY(-112px)} 9.1%{opacity:1} 12.5%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d2{animation:aix2-pr-d2 10s ease-in infinite}
+    @keyframes aix2-pr-d2{0%,14.0%{opacity:0;transform:translateY(-112px)} 14.6%{opacity:1} 18.0%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d3{animation:aix2-pr-d3 10s ease-in infinite}
+    @keyframes aix2-pr-d3{0%,19.5%{opacity:0;transform:translateY(-97px)} 20.1%{opacity:1} 23.5%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d4{animation:aix2-pr-d4 10s ease-in infinite}
+    @keyframes aix2-pr-d4{0%,25.0%{opacity:0;transform:translateY(-112px)} 25.6%{opacity:1} 29.0%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d5{animation:aix2-pr-d5 10s ease-in infinite}
+    @keyframes aix2-pr-d5{0%,30.5%{opacity:0;transform:translateY(-112px)} 31.1%{opacity:1} 34.5%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d6{animation:aix2-pr-d6 10s ease-in infinite}
+    @keyframes aix2-pr-d6{0%,36.0%{opacity:0;transform:translateY(-82px)} 36.6%{opacity:1} 40.0%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-d7{animation:aix2-pr-d7 10s ease-in infinite}
+    @keyframes aix2-pr-d7{0%,41.5%{opacity:0;transform:translateY(-97px)} 42.1%{opacity:1} 45.5%,95%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0;transform:translateY(0)}}
+    .aix2-pr-curve{ fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 380; animation: aix2-pr-curve 10s ease-in-out infinite; }
+    @keyframes aix2-pr-curve{ 0%,50%{stroke-dashoffset:380; opacity:1} 65%,95%{stroke-dashoffset:0; opacity:1} 98%,100%{stroke-dashoffset:0; opacity:0} }
+    .aix2-pr-mean{ animation: aix2-pr-mean 10s ease-out infinite; }
+    @keyframes aix2-pr-mean{ 0%,66%{opacity:0} 71%,95%{opacity:1} 98%,100%{opacity:0} }
+    .aix2-pr-sd{ animation: aix2-pr-sd 10s ease-out infinite; }
+    @keyframes aix2-pr-sd{ 0%,77%{opacity:0} 82%,95%{opacity:1} 98%,100%{opacity:0} }
+    .aix2-pr-l1{ animation: aix2-pr-l1 10s linear infinite; } .aix2-pr-l2{ animation: aix2-pr-l2 10s linear infinite; }
+    .aix2-pr-l3{ animation: aix2-pr-l3 10s linear infinite; } .aix2-pr-l4{ animation: aix2-pr-l4 10s linear infinite; }
+    @keyframes aix2-pr-l1{ 0%{opacity:0} 3%,47%{opacity:1} 50%,100%{opacity:0} }
+    @keyframes aix2-pr-l2{ 0%,50%{opacity:0} 53%,64%{opacity:1} 67%,100%{opacity:0} }
+    @keyframes aix2-pr-l3{ 0%,67%{opacity:0} 70%,75%{opacity:1} 78%,100%{opacity:0} }
+    @keyframes aix2-pr-l4{ 0%,78%{opacity:0} 81%,95%{opacity:1} 98%,100%{opacity:0} }
+
+    /* ── Vectors mini: random → pull → push → converge (12s) ── */
+    .aix2-ve-w{ transform-box: view-box; }
+    .aix2-ve-cat{ animation: aix2-ve-cat 12s ease-in-out infinite; }
+    .aix2-ve-dog{ animation: aix2-ve-dog 12s ease-in-out infinite; }
+    .aix2-ve-apple{ animation: aix2-ve-apple 12s ease-in-out infinite; }
+    .aix2-ve-king{ animation: aix2-ve-king 12s ease-in-out infinite; }
+    @keyframes aix2-ve-cat{ 0%{opacity:0; transform:translate(145px,53px)} 3%,15%{opacity:1; transform:translate(145px,53px)} 45%,96%{opacity:1; transform:none} 100%{opacity:0; transform:none} }
+    @keyframes aix2-ve-dog{ 0%{opacity:0; transform:translate(-72px,58px)} 3%,15%{opacity:1; transform:translate(-72px,58px)} 45%,96%{opacity:1; transform:none} 100%{opacity:0; transform:none} }
+    @keyframes aix2-ve-apple{ 0%{opacity:0; transform:translate(-55px,-25px)} 3%,50%{opacity:1; transform:translate(-55px,-25px)} 75%,96%{opacity:1; transform:none} 100%{opacity:0; transform:none} }
+    @keyframes aix2-ve-king{ 0%{opacity:0; transform:translate(-85px,-8px)} 3%,50%{opacity:1; transform:translate(-85px,-8px)} 75%,96%{opacity:1; transform:none} 100%{opacity:0; transform:none} }
+    .aix2-ve-halo{ fill: none; stroke-width: 1.5; stroke-dasharray: 5 5; animation: aix2-ve-halo 12s ease-out infinite; }
+    @keyframes aix2-ve-halo{ 0%,76%{opacity:0} 81%,96%{opacity:1} 100%{opacity:0} }
+    .aix2-ve-l1{ animation: aix2-ve-l1 12s linear infinite; } .aix2-ve-l2{ animation: aix2-ve-l2 12s linear infinite; }
+    .aix2-ve-l3{ animation: aix2-ve-l3 12s linear infinite; } .aix2-ve-l4{ animation: aix2-ve-l4 12s linear infinite; }
+    @keyframes aix2-ve-l1{ 0%{opacity:0} 3%,14%{opacity:1} 17%,100%{opacity:0} }
+    @keyframes aix2-ve-l2{ 0%,17%{opacity:0} 20%,47%{opacity:1} 50%,100%{opacity:0} }
+    @keyframes aix2-ve-l3{ 0%,50%{opacity:0} 53%,74%{opacity:1} 77%,100%{opacity:0} }
+    @keyframes aix2-ve-l4{ 0%,77%{opacity:0} 80%,96%{opacity:1} 100%{opacity:0} }
+
+    /* ── Bitness mini: each bit doubles the range (10s) ── */
+    .aix2-bt-cell{ fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.4; }
+    .aix2-bt-on{ opacity: 0; }
+    .aix2-bt-b0{animation:aix2-bt-b0 10s ease-out infinite}
+    @keyframes aix2-bt-b0{0%,2%{opacity:0} 3%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r0{animation:aix2-bt-r0 10s linear infinite}
+    @keyframes aix2-bt-r0{0%,2%{opacity:0} 2.5%,6.5%{opacity:1} 7%,100%{opacity:0}}
+    .aix2-bt-b1{animation:aix2-bt-b1 10s ease-out infinite}
+    @keyframes aix2-bt-b1{0%,7%{opacity:0} 8%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r1{animation:aix2-bt-r1 10s linear infinite}
+    @keyframes aix2-bt-r1{0%,7%{opacity:0} 7.5%,11.5%{opacity:1} 12%,100%{opacity:0}}
+    .aix2-bt-b2{animation:aix2-bt-b2 10s ease-out infinite}
+    @keyframes aix2-bt-b2{0%,12%{opacity:0} 13%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r2{animation:aix2-bt-r2 10s linear infinite}
+    @keyframes aix2-bt-r2{0%,12%{opacity:0} 12.5%,16.5%{opacity:1} 17%,100%{opacity:0}}
+    .aix2-bt-b3{animation:aix2-bt-b3 10s ease-out infinite}
+    @keyframes aix2-bt-b3{0%,17%{opacity:0} 18%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r3{animation:aix2-bt-r3 10s linear infinite}
+    @keyframes aix2-bt-r3{0%,17%{opacity:0} 17.5%,21.5%{opacity:1} 22%,100%{opacity:0}}
+    .aix2-bt-b4{animation:aix2-bt-b4 10s ease-out infinite}
+    @keyframes aix2-bt-b4{0%,22%{opacity:0} 23%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r4{animation:aix2-bt-r4 10s linear infinite}
+    @keyframes aix2-bt-r4{0%,22%{opacity:0} 22.5%,26.5%{opacity:1} 27%,100%{opacity:0}}
+    .aix2-bt-b5{animation:aix2-bt-b5 10s ease-out infinite}
+    @keyframes aix2-bt-b5{0%,27%{opacity:0} 28%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r5{animation:aix2-bt-r5 10s linear infinite}
+    @keyframes aix2-bt-r5{0%,27%{opacity:0} 27.5%,31.5%{opacity:1} 32%,100%{opacity:0}}
+    .aix2-bt-b6{animation:aix2-bt-b6 10s ease-out infinite}
+    @keyframes aix2-bt-b6{0%,32%{opacity:0} 33%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r6{animation:aix2-bt-r6 10s linear infinite}
+    @keyframes aix2-bt-r6{0%,32%{opacity:0} 32.5%,36.5%{opacity:1} 37%,100%{opacity:0}}
+    .aix2-bt-b7{animation:aix2-bt-b7 10s ease-out infinite}
+    @keyframes aix2-bt-b7{0%,37%{opacity:0} 38%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-r7{animation:aix2-bt-r7 10s linear infinite}
+    @keyframes aix2-bt-r7{0%,37%{opacity:0} 37.5%,96%{opacity:1} 100%{opacity:0}}
+    .aix2-bt-bar{ transform-box: view-box; transform-origin: 110px 0; animation: aix2-bt-bar1 10s ease-out infinite; }
+    .aix2-bt-bar1{ animation-name: aix2-bt-bar1 } .aix2-bt-bar2{ animation-name: aix2-bt-bar2 } .aix2-bt-bar3{ animation-name: aix2-bt-bar3 } .aix2-bt-bar4{ animation-name: aix2-bt-bar4 }
+    @keyframes aix2-bt-bar1{ 0%,44%{transform:scaleX(0)} 49%,96%{transform:scaleX(1)} 100%{transform:scaleX(0)} }
+    @keyframes aix2-bt-bar2{ 0%,51%{transform:scaleX(0)} 56%,96%{transform:scaleX(1)} 100%{transform:scaleX(0)} }
+    @keyframes aix2-bt-bar3{ 0%,58%{transform:scaleX(0)} 65%,96%{transform:scaleX(1)} 100%{transform:scaleX(0)} }
+    @keyframes aix2-bt-bar4{ 0%,67%{transform:scaleX(0)} 77%,96%{transform:scaleX(1)} 100%{transform:scaleX(0)} }
+    .aix2-bt-lab{ animation: aix2-bt-lab1 10s linear infinite; }
+    .aix2-bt-lab1{ animation-name: aix2-bt-lab1 } .aix2-bt-lab2{ animation-name: aix2-bt-lab2 } .aix2-bt-lab3{ animation-name: aix2-bt-lab3 } .aix2-bt-lab4{ animation-name: aix2-bt-lab4 }
+    @keyframes aix2-bt-lab1{ 0%,47%{opacity:0} 50%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes aix2-bt-lab2{ 0%,54%{opacity:0} 57%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes aix2-bt-lab3{ 0%,63%{opacity:0} 66%,96%{opacity:1} 100%{opacity:0} }
+    @keyframes aix2-bt-lab4{ 0%,75%{opacity:0} 78%,96%{opacity:1} 100%{opacity:0} }
+
+    /* shared fixed-accent strokes / fills — last, so they win over component defaults */
+    .aix2-s-am{ stroke: var(--amber); } .aix2-s-ro{ stroke: var(--rose); } .aix2-s-bl{ stroke: var(--blue); }
+    .aix2-s-gr{ stroke: var(--green); } .aix2-s-vi{ stroke: var(--violet); } .aix2-s-ac{ stroke: var(--accent); }
+    .aix2-f-am{ fill: var(--amber); } .aix2-f-ro{ fill: var(--rose); } .aix2-f-bl{ fill: var(--blue); }
+    .aix2-f-gr{ fill: var(--green); } .aix2-f-vi{ fill: var(--violet); } .aix2-f-ac{ fill: var(--accent); }
+
+    /* ── Reduced motion: freeze everything in a sensible static state ── */
+    @media (prefers-reduced-motion: reduce){
+      .aix2-mini *, .aix2-wf *{ animation: none !important; }
+      .aix2-ph{ opacity: 0 !important; } .aix2-ph-end{ opacity: 1 !important; }
+      .aix2-wf-pkt{ opacity: 1 !important; }
+      .aix2-wf-caps{ display: block; }
+      .aix2-wf-cap{ opacity: 1; margin: .25rem 0; }
+      .aix2-mcp-pkt{ opacity: 0 !important; }
+      .aix2-ag-s1, .aix2-ag-s2, .aix2-ag-s3, .aix2-ag-done, .aix2-kc-tok, .aix2-kc-id, .aix2-kc-vec,
+      .aix2-ml-fit, .aix2-ml-pred, .aix2-pr-dot, .aix2-pr-mean, .aix2-pr-sd, .aix2-ve-w, .aix2-ve-halo, .aix2-bt-on,
+      .aix2-kc-l1, .aix2-kc-l2, .aix2-kc-l3, .aix2-bt-lab{ opacity: 1 !important; transform: none !important; }
+      .aix2-kc-sent{ opacity: 0 !important; }
+      .aix2-ag-bar, .aix2-bt-bar{ transform: scaleX(1) !important; }
+      .aix2-ml-loss, .aix2-pr-curve{ stroke-dashoffset: 0 !important; }
+    }
   </style>
 </head>
 <body>
@@ -27,7 +337,7 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=7"></script>
 <script>renderHeader('AI Concepts')</script>
 <script>renderSourceLink('AI Concepts')</script>
 
@@ -35,9 +345,14 @@
 
   <div class="page-header">
     <h1>AI Concepts</h1>
-    <p class="subtitle">Machine Learning, Math &amp; Data Foundations</p>
+    <p class="subtitle">A beginner's guide to building AI apps — agents, MCP, and the ideas underneath.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#connect">How it connects</a>
+      <a href="#workflow">Whole workflow</a>
+      <a href="#mcp">MCP</a>
+      <a href="#agents">AI Agents</a>
+      <a href="#key-concepts">Key concepts</a>
       <a href="#ml">Machine Learning</a>
       <a href="#linear-algebra">Linear Algebra</a>
       <a href="#probability">Probability</a>
@@ -47,6 +362,640 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 0: ANIMATED EXPLAINER — HOW AN AI APP CONNECTS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="connect" class="ai-section">
+    <style>
+      /* All styles scoped with the aix- prefix to avoid collisions. */
+      .aix-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.1rem 1.1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-sm);
+      }
+      .aix-flow { width: 100%; height: auto; display: block; }
+      .aix-split {
+        display: flex; flex-wrap: wrap;
+        align-items: center; gap: 1rem 1.4rem;
+        margin-top: 0.6rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid var(--border);
+      }
+      .aix-loop { width: 230px; max-width: 100%; height: auto; flex: 0 0 auto; }
+      .aix-note {
+        flex: 1 1 220px; min-width: 200px;
+        color: var(--text-muted); font-size: 0.84rem; line-height: 1.7;
+      }
+      .aix-note strong { color: var(--text); }
+      .aix-caption {
+        color: var(--text-muted); font-size: 0.82rem;
+        line-height: 1.65; margin: 0.55rem 0 0;
+      }
+      .aix-caption strong { color: var(--text); }
+      .aix-legend {
+        display: flex; gap: 1.1rem; flex-wrap: wrap;
+        font-size: 0.76rem; color: var(--text-muted); margin-top: 0.45rem;
+      }
+      .aix-swatch {
+        display: inline-block; width: 10px; height: 10px;
+        border-radius: 50%; vertical-align: middle; margin-right: 5px;
+      }
+      .aix-sw-req { background: var(--accent); }
+      .aix-sw-resp { background: var(--accent-2); }
+
+      /* ── SVG theming (reuses the page's CSS variables) ── */
+      .aix-box { fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.5; }
+      .aix-box-mcp { fill: var(--surface-2); stroke: var(--accent); stroke-width: 2.5; }
+      .aix-box-title { fill: var(--text); font: 600 16px var(--display); }
+      .aix-box-sub { fill: var(--text-muted); font: 400 11px 'Inter', sans-serif; }
+      .aix-lane { fill: none; stroke-width: 2; }
+      .aix-req { stroke: var(--accent); }
+      .aix-resp { stroke: var(--accent-2); }
+      .aix-dot-req { fill: var(--accent); opacity: 1; }
+      .aix-dot-resp { fill: var(--accent-2); opacity: 1; }
+      .aix-lane-label { fill: var(--text-muted); font: italic 400 11px 'Inter', sans-serif; }
+      .aix-node-c { fill: var(--surface-2); stroke: var(--accent); stroke-width: 1.5; }
+      .aix-node-t { fill: var(--text); font: 600 14px var(--display); }
+      .aix-loop-center { fill: var(--text-muted); font: 600 9px 'Inter', sans-serif; letter-spacing: 1.5px; }
+      .aix-arrow { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 7; }
+
+      /* ── Motion (calm, slow, continuous) ── */
+      .aix-dot-req  { animation: aix-flow-r 2s ease-in-out infinite; }
+      .aix-dot-resp { animation: aix-flow-l 2s ease-in-out infinite; }
+      .aix-d2 { animation-delay: 1s; }
+      @keyframes aix-flow-r {
+        0%   { transform: translateX(0);    opacity: 0; }
+        12%  { opacity: 1; }
+        88%  { opacity: 1; }
+        100% { transform: translateX(90px); opacity: 0; }
+      }
+      @keyframes aix-flow-l {
+        0%   { transform: translateX(0);     opacity: 0; }
+        12%  { opacity: 1; }
+        88%  { opacity: 1; }
+        100% { transform: translateX(-90px); opacity: 0; }
+      }
+      .aix-arrow { animation: aix-dash 1.2s linear infinite; }
+      @keyframes aix-dash { to { stroke-dashoffset: -24; } }
+      .aix-n1 .aix-node-c { animation: aix-glow 3.6s ease-in-out infinite; }
+      .aix-n2 .aix-node-c { animation: aix-glow 3.6s ease-in-out infinite 1.2s; }
+      .aix-n3 .aix-node-c { animation: aix-glow 3.6s ease-in-out infinite 2.4s; }
+      @keyframes aix-glow {
+        0%        { stroke: var(--accent);   stroke-width: 1.5; fill: var(--surface-2); }
+        12%, 28%  { stroke: var(--accent-2); stroke-width: 3;   fill: var(--accent-subtle-2); }
+        40%, 100% { stroke: var(--accent);   stroke-width: 1.5; fill: var(--surface-2); }
+      }
+
+      /* ── Respect reduced-motion: freeze everything into a calm static state ── */
+      @media (prefers-reduced-motion: reduce) {
+        .aix-dot-req, .aix-dot-resp, .aix-arrow, .aix-node-c { animation: none !important; }
+        .aix-dot-req, .aix-dot-resp { opacity: 1 !important; }
+      }
+    </style>
+
+    <h2>How an AI app connects</h2>
+    <div class="block-desc">
+      <span>An <strong>AI agent</strong> reaches real tools and data by connecting through an <strong>MCP server</strong>: it sends a <code>request</code> and gets a <code>response</code> back.</span>
+      <a class="w3-link" href="https://modelcontextprotocol.io" target="_blank">Docs →</a>
+    </div>
+
+    <div class="aix-card">
+      <!-- Main connection flow: [Model / Agent] ⇄ [MCP server] ⇄ [Tool / Data] -->
+      <svg class="aix-flow" viewBox="0 0 760 175" role="img"
+           aria-label="An AI agent connects to tools and data through an MCP server, sending a request and receiving a response.">
+        <defs>
+          <marker id="aixHeadFlow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="context-stroke" />
+          </marker>
+        </defs>
+
+        <!-- lane labels -->
+        <text class="aix-lane-label" x="244" y="42" text-anchor="middle">request →</text>
+        <text class="aix-lane-label" x="244" y="150" text-anchor="middle">← response</text>
+
+        <!-- boxes -->
+        <rect class="aix-box" x="18" y="55" width="180" height="80" rx="12" />
+        <text class="aix-box-title" x="108" y="90" text-anchor="middle">Model / Agent</text>
+        <text class="aix-box-sub"   x="108" y="108" text-anchor="middle">your app + LLM</text>
+
+        <rect class="aix-box-mcp" x="290" y="55" width="180" height="80" rx="12" />
+        <text class="aix-box-title" x="380" y="90" text-anchor="middle">MCP server</text>
+        <text class="aix-box-sub"   x="380" y="108" text-anchor="middle">the connector</text>
+
+        <rect class="aix-box" x="562" y="55" width="180" height="80" rx="12" />
+        <text class="aix-box-title" x="652" y="90" text-anchor="middle">Tool / Data</text>
+        <text class="aix-box-sub"   x="652" y="108" text-anchor="middle">API · DB · files</text>
+
+        <!-- request lanes (top, left → right) -->
+        <path class="aix-lane aix-req" d="M198,82 L286,82" marker-end="url(#aixHeadFlow)" />
+        <path class="aix-lane aix-req" d="M470,82 L560,82" marker-end="url(#aixHeadFlow)" />
+        <!-- response lanes (bottom, right → left) -->
+        <path class="aix-lane aix-resp" d="M290,112 L202,112" marker-end="url(#aixHeadFlow)" />
+        <path class="aix-lane aix-resp" d="M562,112 L472,112" marker-end="url(#aixHeadFlow)" />
+
+        <!-- travelling packets -->
+        <circle class="aix-dot-req"  cx="196" cy="82"  r="5" />
+        <circle class="aix-dot-req aix-d2" cx="468" cy="82" r="5" />
+        <circle class="aix-dot-resp" cx="562" cy="112" r="5" />
+        <circle class="aix-dot-resp aix-d2" cx="292" cy="112" r="5" />
+      </svg>
+
+      <p class="aix-caption">The <strong>agent</strong> never touches the tool directly. It asks the <strong>MCP server</strong>, the server runs the <strong>tool</strong>, and the result flows back — one request, one response.</p>
+      <div class="aix-legend">
+        <span><span class="aix-swatch aix-sw-req"></span>request (agent → tool)</span>
+        <span><span class="aix-swatch aix-sw-resp"></span>response (tool → agent)</span>
+      </div>
+
+      <!-- Agent loop: think → act → observe -->
+      <div class="aix-split">
+        <svg class="aix-loop" viewBox="0 0 300 240" role="img"
+             aria-label="The agent loop cycles through think, act, and observe, then repeats.">
+          <defs>
+            <marker id="aixHeadLoop" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="context-stroke" />
+            </marker>
+          </defs>
+
+          <!-- cycle arrows (think → act → observe → think) -->
+          <path class="aix-arrow" d="M180,46 A80,80 0 0 1 229,131" marker-end="url(#aixHeadLoop)" />
+          <path class="aix-arrow" d="M199,183 A80,80 0 0 1 101,183" marker-end="url(#aixHeadLoop)" />
+          <path class="aix-arrow" d="M71,131 A80,80 0 0 1 120,46"  marker-end="url(#aixHeadLoop)" />
+
+          <text class="aix-loop-center" x="150" y="124" text-anchor="middle">AGENT LOOP</text>
+
+          <!-- nodes -->
+          <g class="aix-node aix-n1">
+            <circle class="aix-node-c" cx="150" cy="40" r="34" />
+            <text class="aix-node-t" x="150" y="45" text-anchor="middle">Think</text>
+          </g>
+          <g class="aix-node aix-n2">
+            <circle class="aix-node-c" cx="219" cy="160" r="34" />
+            <text class="aix-node-t" x="219" y="165" text-anchor="middle">Act</text>
+          </g>
+          <g class="aix-node aix-n3">
+            <circle class="aix-node-c" cx="81" cy="160" r="34" />
+            <text class="aix-node-t" x="81" y="165" text-anchor="middle">Observe</text>
+          </g>
+        </svg>
+        <div class="aix-note">
+          <strong>Think</strong> — the model plans its next step.<br />
+          <strong>Act</strong> — it calls a tool through MCP (search, read a file, query a DB).<br />
+          <strong>Observe</strong> — it reads the result, then loops again until the goal is met.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 0a: THE WHOLE AI WORKFLOW IN ONE PICTURE (aix2-)
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="workflow" class="ai-section">
+    <h2>The whole AI workflow in one picture</h2>
+    <div class="block-desc">
+      <span>How the pieces fit: a <strong>prompt</strong> goes into the <strong>LLM</strong>, the <strong>agent loop</strong> thinks → acts → observes using <strong>skills / tools</strong> and <strong>MCP servers</strong>, <strong>memory / RAG</strong> feeds context back in, and the <strong>answer</strong> returns to you. Follow the moving dot.</span>
+      <a class="w3-link" href="https://modelcontextprotocol.io" target="_blank">Docs →</a>
+    </div>
+
+    <div class="aix2-wf">
+      <svg class="aix2-wf-svg" viewBox="0 0 1000 460" role="img"
+           aria-label="A request flows from the user into the LLM, through the agent loop of think, act and observe, out to skills, tools and MCP servers, into memory and RAG, and back to the user as the final answer.">
+        <defs>
+          <marker id="aix2mkMu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="aix2-mk-mu" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="aix2mkAm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="aix2-mk-am" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="aix2mkVi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="aix2-mk-vi" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="aix2mkGr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="aix2-mk-gr" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="aix2mkRo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="aix2-mk-ro" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="aix2mkAc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="aix2-mk-ac" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+
+        <!-- ── static links (coloured by stage) ── -->
+        <path class="aix2-link aix2-s-am" d="M130,185 L178,185" marker-end="url(#aix2mkAm)"/>
+        <text class="aix2-wf-tiny" x="154" y="178" text-anchor="middle">prompt</text>
+        <path class="aix2-link aix2-s-ac" d="M180,228 L132,228" marker-end="url(#aix2mkAc)"/>
+        <text class="aix2-wf-tiny" x="156" y="242" text-anchor="middle">answer</text>
+        <path class="aix2-link aix2-s-vi" d="M390,205 L438,205" marker-end="url(#aix2mkVi)"/>
+        <path class="aix2-link aix2-s-gr" d="M650,165 L698,86" marker-end="url(#aix2mkGr)"/>
+        <path class="aix2-link aix2-s-gr" d="M650,216 L698,216" marker-end="url(#aix2mkGr)"/>
+        <path class="aix2-link aix2-s-gr" d="M700,228 L652,228" marker-end="url(#aix2mkGr)"/>
+        <path class="aix2-link aix2-s-ro" d="M500,300 L500,343" marker-end="url(#aix2mkRo)"/>
+        <text class="aix2-wf-tiny" x="507" y="326">store</text>
+        <path class="aix2-link aix2-s-ro" d="M310,388 L310,302" marker-end="url(#aix2mkRo)"/>
+        <text class="aix2-wf-tiny" x="317" y="330">into context</text>
+
+        <!-- ── You ── -->
+        <rect class="aix2-wf-box aix2-s-am" x="20" y="170" width="110" height="70" rx="12"/>
+        <rect class="aix2-wf-glow aix2-wf-g-user" x="17" y="167" width="116" height="76" rx="14"/>
+        <text class="aix2-wf-title" x="75" y="200" text-anchor="middle">You</text>
+        <text class="aix2-wf-sub" x="75" y="216" text-anchor="middle">prompt → answer</text>
+
+        <!-- ── LLM ── -->
+        <rect class="aix2-wf-box aix2-s-bl" x="180" y="110" width="210" height="190" rx="14"/>
+        <rect class="aix2-wf-glow aix2-wf-g-llm" x="177" y="107" width="216" height="196" rx="16"/>
+        <text class="aix2-wf-title" x="285" y="132" text-anchor="middle">LLM</text>
+        <text class="aix2-wf-sub" x="285" y="146" text-anchor="middle">large language model</text>
+        <text class="aix2-wf-tiny" x="192" y="163">tokens</text>
+        <rect class="aix2-wf-win" x="190" y="164" width="190" height="29" rx="6"/>
+        <rect class="aix2-f-am" x="196" y="169" width="24" height="18" rx="4" opacity=".55"/>
+            <rect class="aix2-f-am" x="226" y="169" width="24" height="18" rx="4" opacity=".7"/>
+            <rect class="aix2-f-am" x="256" y="169" width="24" height="18" rx="4" opacity=".85"/>
+            <rect class="aix2-f-am" x="286" y="169" width="24" height="18" rx="4" opacity="1"/>
+            <rect class="aix2-f-am" x="316" y="169" width="24" height="18" rx="4" opacity=".85"/>
+            <rect class="aix2-f-am" x="346" y="169" width="24" height="18" rx="4" opacity=".7"/>
+        <text class="aix2-wf-tiny" x="285" y="206" text-anchor="middle">context window — what it can see at once</text>
+        <g>
+            <line class="aix2-wf-net" x1="205" y1="236" x2="245" y2="229"/>
+            <line class="aix2-wf-net" x1="205" y1="236" x2="245" y2="246"/>
+            <line class="aix2-wf-net" x1="205" y1="236" x2="245" y2="263"/>
+            <line class="aix2-wf-net" x1="205" y1="236" x2="245" y2="280"/>
+            <line class="aix2-wf-net" x1="205" y1="254" x2="245" y2="229"/>
+            <line class="aix2-wf-net" x1="205" y1="254" x2="245" y2="246"/>
+            <line class="aix2-wf-net" x1="205" y1="254" x2="245" y2="263"/>
+            <line class="aix2-wf-net" x1="205" y1="254" x2="245" y2="280"/>
+            <line class="aix2-wf-net" x1="205" y1="272" x2="245" y2="229"/>
+            <line class="aix2-wf-net" x1="205" y1="272" x2="245" y2="246"/>
+            <line class="aix2-wf-net" x1="205" y1="272" x2="245" y2="263"/>
+            <line class="aix2-wf-net" x1="205" y1="272" x2="245" y2="280"/>
+            <line class="aix2-wf-net" x1="245" y1="229" x2="285" y2="245"/>
+            <line class="aix2-wf-net" x1="245" y1="229" x2="285" y2="265"/>
+            <line class="aix2-wf-net" x1="245" y1="246" x2="285" y2="245"/>
+            <line class="aix2-wf-net" x1="245" y1="246" x2="285" y2="265"/>
+            <line class="aix2-wf-net" x1="245" y1="263" x2="285" y2="245"/>
+            <line class="aix2-wf-net" x1="245" y1="263" x2="285" y2="265"/>
+            <line class="aix2-wf-net" x1="245" y1="280" x2="285" y2="245"/>
+            <line class="aix2-wf-net" x1="245" y1="280" x2="285" y2="265"/>
+            <circle class="aix2-f-bl" cx="205" cy="236" r="3.4"/>
+            <circle class="aix2-f-bl" cx="205" cy="254" r="3.4"/>
+            <circle class="aix2-f-bl" cx="205" cy="272" r="3.4"/>
+            <circle class="aix2-f-bl" cx="245" cy="229" r="3.4"/>
+            <circle class="aix2-f-bl" cx="245" cy="246" r="3.4"/>
+            <circle class="aix2-f-bl" cx="245" cy="263" r="3.4"/>
+            <circle class="aix2-f-bl" cx="245" cy="280" r="3.4"/>
+            <circle class="aix2-f-bl" cx="285" cy="245" r="3.4"/>
+            <circle class="aix2-f-bl" cx="285" cy="265" r="3.4"/>
+        </g>
+        <text class="aix2-wf-tiny" x="245" y="294" text-anchor="middle">parameters · weights</text>
+        <text class="aix2-wf-tiny" x="345" y="229" text-anchor="middle">temperature</text>
+        <line class="aix2-axis" x1="315" y1="252" x2="375" y2="252" stroke-width="4" stroke-linecap="round"/>
+        <circle class="aix2-f-ro" cx="336" cy="252" r="6"/>
+        <text class="aix2-wf-tiny" x="315" y="270" text-anchor="middle">0 · exact</text>
+        <text class="aix2-wf-tiny" x="375" y="270" text-anchor="middle">1 · creative</text>
+
+        <!-- ── Agent loop ── -->
+        <rect class="aix2-wf-box aix2-wf-box-agent aix2-s-vi" x="440" y="110" width="210" height="190" rx="14"/>
+        <text class="aix2-wf-title" x="545" y="132" text-anchor="middle">Agent loop</text>
+        <text class="aix2-wf-sub" x="545" y="146" text-anchor="middle">LLM + tools, repeated until done</text>
+        <circle class="aix2-axis" cx="545" cy="218" r="50"/>
+        <text class="aix2-wf-tiny" x="545" y="222" text-anchor="middle">repeat</text>
+        <circle class="aix2-wf-node" cx="545" cy="168" r="20"/>
+        <circle class="aix2-wf-glow aix2-wf-g-think" cx="545" cy="168" r="24"/>
+        <text class="aix2-wf-nodet" x="545" y="172" text-anchor="middle">Think</text>
+        <circle class="aix2-wf-node" cx="588" cy="243" r="20"/>
+        <circle class="aix2-wf-glow aix2-wf-g-act" cx="588" cy="243" r="24"/>
+        <text class="aix2-wf-nodet" x="588" y="247" text-anchor="middle">Act</text>
+        <circle class="aix2-wf-node" cx="502" cy="243" r="20"/>
+        <circle class="aix2-wf-glow aix2-wf-g-observe" cx="502" cy="243" r="24"/>
+        <text class="aix2-wf-nodet" x="502" y="247" text-anchor="middle">Observe</text>
+
+        <!-- ── Skills / Tools ── -->
+        <rect class="aix2-wf-box aix2-s-gr" x="700" y="40" width="290" height="70" rx="12"/>
+        <text class="aix2-wf-title" x="845" y="60" text-anchor="middle">Skills / Tools</text>
+        <text class="aix2-wf-sub" x="845" y="73" text-anchor="middle">functions the agent may call</text>
+        <rect class="aix2-wf-chip aix2-s-gr" x="712" y="81" width="84" height="20" rx="5"/>
+        <rect class="aix2-wf-glow aix2-wf-g-skill" x="709" y="78" width="90" height="26" rx="7"/>
+        <text class="aix2-wf-chipt" x="754" y="95" text-anchor="middle">web_search</text>
+        <rect class="aix2-wf-chip aix2-s-am" x="806" y="81" width="76" height="20" rx="5"/>
+        <text class="aix2-wf-chipt" x="844" y="95" text-anchor="middle">read_file</text>
+        <rect class="aix2-wf-chip aix2-s-bl" x="892" y="81" width="70" height="20" rx="5"/>
+        <text class="aix2-wf-chipt" x="927" y="95" text-anchor="middle">run_sql</text>
+
+        <!-- ── MCP ── -->
+        <rect class="aix2-wf-box aix2-s-gr" x="700" y="150" width="290" height="120" rx="12"/>
+        <text class="aix2-wf-title" x="845" y="170" text-anchor="middle">MCP</text>
+        <text class="aix2-wf-sub" x="845" y="184" text-anchor="middle">Model Context Protocol</text>
+        <rect class="aix2-wf-chip aix2-s-gr" x="712" y="199" width="70" height="46" rx="8"/>
+        <rect class="aix2-wf-glow aix2-wf-g-client" x="709" y="196" width="76" height="52" rx="10"/>
+        <text class="aix2-wf-chipt" x="747" y="219" text-anchor="middle">client</text>
+        <text class="aix2-wf-tiny" x="747" y="233" text-anchor="middle">in the app</text>
+        <path class="aix2-link" d="M782,214 L808,214" marker-end="url(#aix2mkMu)"/>
+        <path class="aix2-link" d="M810,230 L784,230" marker-end="url(#aix2mkMu)"/>
+        <rect class="aix2-wf-chip aix2-s-gr" x="810" y="199" width="70" height="46" rx="8"/>
+        <rect class="aix2-wf-glow aix2-wf-g-server" x="807" y="196" width="76" height="52" rx="10"/>
+        <text class="aix2-wf-chipt" x="845" y="219" text-anchor="middle">server</text>
+        <text class="aix2-wf-tiny" x="845" y="233" text-anchor="middle">wraps a tool</text>
+        <path class="aix2-link" d="M880,214 L906,214" marker-end="url(#aix2mkMu)"/>
+        <path class="aix2-link" d="M908,230 L882,230" marker-end="url(#aix2mkMu)"/>
+        <rect class="aix2-wf-chip aix2-s-gr" x="908" y="199" width="70" height="46" rx="8"/>
+        <rect class="aix2-wf-glow aix2-wf-g-tool" x="905" y="196" width="76" height="52" rx="10"/>
+        <text class="aix2-wf-chipt" x="943" y="219" text-anchor="middle">tool / data</text>
+        <text class="aix2-wf-tiny" x="943" y="233" text-anchor="middle">API · DB · files</text>
+        <text class="aix2-wf-tiny" x="845" y="261" text-anchor="middle">transport: stdio (local) or HTTP (remote)</text>
+
+        <!-- ── Memory / RAG ── -->
+        <rect class="aix2-wf-box aix2-s-ro" x="255" y="345" width="395" height="95" rx="12"/>
+        <text class="aix2-wf-title" x="635" y="364" text-anchor="end">Memory / RAG</text>
+        <text class="aix2-wf-sub" x="635" y="377" text-anchor="end">retrieval-augmented generation</text>
+        <!-- store (cylinder) -->
+        <rect class="aix2-wf-chip aix2-s-ro" x="486" y="391" width="28" height="22"/>
+        <ellipse class="aix2-wf-chip aix2-s-ro" cx="500" cy="413" rx="14" ry="5"/>
+        <ellipse class="aix2-wf-chip aix2-s-ro" cx="500" cy="391" rx="14" ry="5"/>
+        <rect class="aix2-wf-glow aix2-wf-g-store" x="482" y="383" width="36" height="38" rx="10"/>
+        <text class="aix2-wf-tiny" x="500" y="431" text-anchor="middle">memory · docs · vectors</text>
+        <path class="aix2-link aix2-s-ro" d="M484,402 L452,402" marker-end="url(#aix2mkRo)"/>
+        <rect class="aix2-wf-chip aix2-s-ro" x="372" y="390" width="76" height="24" rx="6"/>
+        <rect class="aix2-wf-glow aix2-wf-g-retrieve" x="369" y="387" width="82" height="30" rx="8"/>
+        <text class="aix2-wf-chipt" x="410" y="406" text-anchor="middle">retrieve</text>
+        <path class="aix2-link aix2-s-ro" d="M370,402 L352,402" marker-end="url(#aix2mkRo)"/>
+        <rect class="aix2-wf-chip aix2-s-ro" x="272" y="390" width="76" height="24" rx="6"/>
+        <rect class="aix2-wf-glow aix2-wf-g-augment" x="269" y="387" width="82" height="30" rx="8"/>
+        <text class="aix2-wf-chipt" x="310" y="406" text-anchor="middle">augment</text>
+
+        <!-- ── the travelling request ── -->
+        <circle class="aix2-wf-pkt" cx="0" cy="0" r="6.5"/>
+      </svg>
+
+      <div class="aix2-wf-caps" aria-live="off">
+        <p class="aix2-wf-cap aix2-wf-cap-0"><span class="aix2-wf-num" style="background:var(--amber)">1</span><b>You</b> type a prompt &mdash; a question or a task. It is sent to the model as plain text.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-1"><span class="aix2-wf-num" style="background:var(--blue)">2</span>The <b>LLM</b> splits it into <b>tokens</b>. Everything it can see must fit in its <b>context window</b>; <b>temperature</b> sets how random its wording is; its <b>parameters / weights</b> are what it learned in training.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-2"><span class="aix2-wf-num" style="background:var(--violet)">3</span><b>Think</b> &mdash; run as an <b>agent</b>, the model plans the next step instead of answering straight away.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-3"><span class="aix2-wf-num" style="background:var(--green)">4</span><b>Act</b> &mdash; it calls a <b>skill / tool</b> directly, e.g. <code>web_search</code>.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-4"><span class="aix2-wf-num" style="background:var(--violet)">5</span><b>Observe</b> &mdash; the result goes back into the context, and the loop continues.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-5"><span class="aix2-wf-num" style="background:var(--violet)">6</span><b>Think</b> again &mdash; it still needs live data, so this time it reaches for an <b>MCP server</b>.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-6"><span class="aix2-wf-num" style="background:var(--green)">7</span><b>MCP</b>: the <b>client</b> (inside the app) sends the request, the <b>server</b> runs the tool or reads the data, and the result travels back the same way.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-7"><span class="aix2-wf-num" style="background:var(--rose)">8</span><b>Observe &rarr; store</b>: tool results and documents are kept in <b>memory</b> (often as embeddings).</p>
+        <p class="aix2-wf-cap aix2-wf-cap-8"><span class="aix2-wf-num" style="background:var(--rose)">9</span><b>RAG</b>: <b>retrieve</b> the most relevant pieces and <b>augment</b> the context the LLM reads.</p>
+        <p class="aix2-wf-cap aix2-wf-cap-9"><span class="aix2-wf-num" style="background:var(--accent)">10</span>With everything in context, the <b>LLM</b> writes the <b>final answer</b> &mdash; and it flows back to you.</p>
+      </div>
+
+      <div class="aix2-legend">
+        <span><span class="aix2-sw" style="background:var(--amber)"></span>prompt · tokens</span>
+        <span><span class="aix2-sw" style="background:var(--blue)"></span>LLM</span>
+        <span><span class="aix2-sw" style="background:var(--violet)"></span>agent loop</span>
+        <span><span class="aix2-sw" style="background:var(--green)"></span>skills · tools · MCP</span>
+        <span><span class="aix2-sw" style="background:var(--rose)"></span>memory · RAG</span>
+        <span><span class="aix2-sw" style="background:var(--accent)"></span>final answer</span>
+      </div>
+      <p class="aix2-cap"><strong>One sentence:</strong> an <strong>agent</strong> is an LLM in a loop; <strong>skills / tools</strong> are the functions it may call; <strong>MCP</strong> is the standard plug that connects it to those tools and data; <strong>memory / RAG</strong> keeps the right context in front of the model; the <strong>LLM</strong> does the thinking and writes the answer.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 0b: MCP (MODEL CONTEXT PROTOCOL)
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="mcp" class="ai-section">
+    <h2>MCP (Model Context Protocol)</h2>
+    <div class="block-desc">
+      <span><strong>MCP</strong> is an open standard that lets an AI app connect to outside tools and data through small programs called <code>servers</code> — like a USB-C port for AI.</span>
+      <a class="w3-link" href="https://modelcontextprotocol.io" target="_blank">Docs →</a>
+    </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · one client, many servers</div>
+      <svg class="aix2-svg" viewBox="0 0 560 150" role="img" aria-label="One MCP client sends a request to each of three MCP servers in turn; each server runs its tool and the response returns.">
+        <defs><marker id="aix2mkMcp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="aix2-mk-mu" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <path class="aix2-link" d="M134,75 C200,75 200,29 260,29"/>
+        <path class="aix2-link" d="M134,75 L260,75"/>
+        <path class="aix2-link" d="M134,75 C200,75 200,121 260,121"/>
+        <rect class="aix2-mcp-cli" x="14" y="50" width="120" height="50" rx="10"/>
+        <text class="aix2-t" x="74" y="71" text-anchor="middle">MCP client</text>
+        <text class="aix2-ts" x="74" y="88" text-anchor="middle">your AI app / agent</text>
+        <rect class="aix2-mcp-srv aix2-s-bl" x="260" y="12" width="120" height="34" rx="8"/>
+        <text class="aix2-t" x="320" y="33" text-anchor="middle">filesystem server</text>
+        <rect class="aix2-mcp-srv aix2-s-vi aix2-mcp-d2" x="260" y="58" width="120" height="34" rx="8"/>
+        <text class="aix2-t" x="320" y="79" text-anchor="middle">GitHub server</text>
+        <rect class="aix2-mcp-srv aix2-s-gr aix2-mcp-d3" x="260" y="104" width="120" height="34" rx="8"/>
+        <text class="aix2-t" x="320" y="125" text-anchor="middle">Postgres server</text>
+        <path class="aix2-link" d="M380,29 L436,29" marker-end="url(#aix2mkMcp)" stroke-dasharray="3 3"/>
+        <path class="aix2-link" d="M380,75 L436,75" marker-end="url(#aix2mkMcp)" stroke-dasharray="3 3"/>
+        <path class="aix2-link" d="M380,121 L436,121" marker-end="url(#aix2mkMcp)" stroke-dasharray="3 3"/>
+        <rect class="aix2-mcp-tool aix2-s-bl" x="440" y="12" width="104" height="34" rx="8"/>
+        <text class="aix2-ts" x="492" y="33" text-anchor="middle">files on disk</text>
+        <rect class="aix2-mcp-tool aix2-s-vi aix2-mcp-d2" x="440" y="58" width="104" height="34" rx="8"/>
+        <text class="aix2-ts" x="492" y="79" text-anchor="middle">repos · issues</text>
+        <rect class="aix2-mcp-tool aix2-s-gr aix2-mcp-d3" x="440" y="104" width="104" height="34" rx="8"/>
+        <text class="aix2-ts" x="492" y="125" text-anchor="middle">tables · rows</text>
+        <circle class="aix2-mcp-pkt aix2-mcp-p1 aix2-f-bl" cx="0" cy="0" r="5"/>
+        <circle class="aix2-mcp-pkt aix2-mcp-p2 aix2-f-vi aix2-mcp-d2" cx="0" cy="0" r="5"/>
+        <circle class="aix2-mcp-pkt aix2-mcp-p3 aix2-f-gr aix2-mcp-d3" cx="0" cy="0" r="5"/>
+      </svg>
+      <p class="aix2-cap">One <strong>client</strong>, many <strong>servers</strong>: each server wraps one tool or data source. The client sends a <strong>request</strong>, the server runs the tool, and the <strong>response</strong> flows back — one at a time. Add a server to the config and the agent gains that ability.</p>
+    </div>
+
+    <!-- Client vs Server -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Client vs Server</div>
+        <pre><span class="lcm"># ── Two roles in MCP ──</span>
+
+<span class="ls">MCP Client:</span>   Lives inside the AI app (the agent).
+             Discovers tools and calls them.
+             Examples: Claude Desktop, an IDE, your code.
+
+<span class="ls">MCP Server:</span>   A small program that exposes capabilities.
+             Wraps a tool, API, database, or files.
+             Examples: filesystem, GitHub, Postgres.
+
+<span class="lcm"># ── The flow ──</span>
+<span class="lcm"># client  ──request──▶  server  ──runs──▶  tool/data</span>
+<span class="lcm"># client  ◀─response──  server  ◀─result─  tool/data</span>
+
+<span class="lcm"># One client can connect to many servers at once.</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Who does what</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Client</strong> — asks for tools &amp; calls them (the agent side)</div>
+          <div><strong>Server</strong> — provides the tools (the data side)</div>
+          <div style="margin-top:0.3rem;"><strong>Transport</strong> — stdio (local) or HTTP (remote)</div>
+          <div style="margin-top:0.3rem;">Think of a server as a universal adapter: write it once, any MCP client can use it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to connect -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">How to connect — mcpServers config (JSON)</div>
+        <pre><span class="lcm">// A client reads this config, then launches each server.</span>
+{
+  <span class="ls">"mcpServers"</span>: {
+    <span class="ls">"filesystem"</span>: {
+      <span class="ls">"command"</span>: <span class="ls">"npx"</span>,
+      <span class="ls">"args"</span>: [
+        <span class="ls">"-y"</span>,
+        <span class="ls">"@modelcontextprotocol/server-filesystem"</span>,
+        <span class="ls">"/Users/me/projects"</span>
+      ]
+    }
+  }
+}</pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ What happens next</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>1.</strong> The client starts the <code>filesystem</code> server.</div>
+          <div><strong>2.</strong> It asks the server: "what tools do you have?"</div>
+          <div><strong>3.</strong> The agent can now call those tools (read/list files).</div>
+          <div style="margin-top:0.4rem;font-family:monospace;font-size:0.68rem;">
+            <code>client connects → tools appear → agent uses them</code>
+          </div>
+          <div style="margin-top:0.3rem;">Add more servers under <code>mcpServers</code> to grant more abilities.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 0c: AI AGENTS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="agents" class="ai-section">
+    <h2>AI Agents</h2>
+    <div class="block-desc">
+      <span>An <strong>AI agent</strong> is an LLM that runs in a loop: it <code>thinks</code> about the goal, <code>acts</code> by calling a tool, <code>observes</code> the result, and repeats until it is done.</span>
+      <a class="w3-link" href="https://docs.anthropic.com" target="_blank">Docs →</a>
+    </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · the loop finishes a goal</div>
+      <svg class="aix2-svg" viewBox="0 0 560 160" role="img" aria-label="An agent loops through think, act and observe; each lap completes one step of the goal until it is done.">
+        <circle class="aix2-axis" cx="110" cy="80" r="46"/>
+        <g class="aix2-ag-orbit"><circle class="aix2-f-vi" cx="110" cy="34" r="5.5"/></g>
+        <circle class="aix2-ag-node aix2-ag-n1 aix2-s-am" cx="110" cy="34" r="18"/>
+        <text class="aix2-t" x="110" y="38" text-anchor="middle" style="font-size:11px">Think</text>
+        <circle class="aix2-ag-node aix2-ag-n2 aix2-s-bl" cx="150" cy="103" r="18"/>
+        <text class="aix2-t" x="150" y="107" text-anchor="middle" style="font-size:11px">Act</text>
+        <circle class="aix2-ag-node aix2-ag-n3 aix2-s-gr" cx="70" cy="103" r="18"/>
+        <text class="aix2-t" x="70" y="107" text-anchor="middle" style="font-size:11px">Observe</text>
+        <text class="aix2-ts" x="110" y="84" text-anchor="middle">loop</text>
+        <text class="aix2-t" x="210" y="30">Goal: book me a flight to Goa</text>
+        <rect class="aix2-surf" x="210" y="42" width="320" height="12" rx="6"/>
+        <rect class="aix2-ag-bar aix2-f-gr" x="210" y="42" width="320" height="12" rx="6"/>
+        <g class="aix2-ag-s1"><circle class="aix2-f-bl" cx="217" cy="76" r="5"/><text class="aix2-ts" x="230" y="80">lap 1 · act: <tspan class="aix2-tm">search_flights()</tspan> → observe: 3 options found</text></g>
+        <g class="aix2-ag-s2"><circle class="aix2-f-am" cx="217" cy="100" r="5"/><text class="aix2-ts" x="230" y="104">lap 2 · act: <tspan class="aix2-tm">compare_prices()</tspan> → observe: cheapest is ₹4,200</text></g>
+        <g class="aix2-ag-s3"><circle class="aix2-f-gr" cx="217" cy="124" r="5"/><text class="aix2-ts" x="230" y="128">lap 3 · act: <tspan class="aix2-tm">book_ticket()</tspan> → observe: confirmed</text></g>
+        <g class="aix2-ag-done"><rect class="aix2-f-ro" x="440" y="136" width="90" height="22" rx="11"/><text class="aix2-ag-donet" x="485" y="151" text-anchor="middle">Done ✓</text></g>
+      </svg>
+      <p class="aix2-cap">Each lap of the loop finishes one step of the goal: <strong>think</strong> what to do next, <strong>act</strong> by calling a tool, <strong>observe</strong> the result. When the goal is met, the agent stops looping and answers.</p>
+    </div>
+
+    <!-- The agent loop -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">The think → act → observe loop (pseudo-code)</div>
+        <pre><span class="lcm"># ── A minimal agent loop ──</span>
+history = [goal]
+
+<span class="lk">while</span> <span class="lk">not</span> done:
+    <span class="lcm"># THINK — the model plans using the goal + history</span>
+    thought = model.<span class="lm">think</span>(history)
+
+    <span class="lk">if</span> thought.wants_tool:
+        <span class="lcm"># ACT — call a tool (often through an MCP server)</span>
+        result = tools.<span class="lm">run</span>(thought.tool, thought.args)
+
+        <span class="lcm"># OBSERVE — feed the result back in</span>
+        history.<span class="lm">append</span>(result)
+    <span class="lk">else</span>:
+        <span class="lcm"># model decided it has the final answer</span>
+        answer = thought.text
+        done = <span class="ln">True</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ The loop, in words</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div><strong>Think</strong> — decide the next step toward the goal</div>
+          <div><strong>Act</strong> — call a tool (search, read, write, query)</div>
+          <div><strong>Observe</strong> — read the result and learn from it</div>
+          <div style="margin-top:0.3rem;">Repeat until the goal is met. The tools usually come from MCP servers.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tools an agent can call -->
+    <div class="cheat-block">
+      <div class="code-panel">
+        <div class="panel-label">Tools: the agent's hands</div>
+        <pre><span class="lcm"># ── A tool is a function the model may call ──</span>
+<span class="lcm"># The model is given each tool's name, description,</span>
+<span class="lcm"># and the shape of its inputs. It chooses when to use one.</span>
+
+<span class="ls">Typical tools:</span>
+  search_web(query)        <span class="lcm"># look something up</span>
+  read_file(path)          <span class="lcm"># inspect a file</span>
+  run_sql(query)           <span class="lcm"># query a database</span>
+  send_email(to, body)     <span class="lcm"># take an action</span>
+
+<span class="lcm"># With MCP, you don't hand-write these — a server</span>
+<span class="lcm"># advertises its tools and the agent discovers them.</span></pre>
+      </div>
+      <div class="live-panel">
+        <div class="panel-label">▶ Why tools matter</div>
+        <div class="live-output" style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+          <div>An LLM alone can only produce text.</div>
+          <div><strong>Tools</strong> let it read fresh data and change the world.</div>
+          <div style="margin-top:0.3rem;"><strong>MCP</strong> is how tools get plugged in without custom glue code.</div>
+          <div style="margin-top:0.3rem;font-family:monospace;font-size:0.68rem;">
+            <code>LLM + tools (via MCP) = agent</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 0d: KEY CONCEPTS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="key-concepts" class="ai-section">
+    <h2>Key concepts</h2>
+    <div class="block-desc">
+      <span>Five words you'll meet everywhere when building AI apps — here's the one-line version of each.</span>
+      <a class="w3-link" href="https://docs.anthropic.com" target="_blank">Docs →</a>
+    </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · text → tokens → ids → embeddings</div>
+      <svg class="aix2-svg" viewBox="0 0 560 150" role="img" aria-label="A sentence is split into coloured tokens, each token becomes an id number, and each id becomes an embedding vector.">
+        <text class="aix2-t aix2-kc-sent" x="20" y="34" style="font-size:14px">"Agents call tools via MCP"</text>
+        <g class="aix2-kc-tok" style="animation-delay:0s"><rect class="aix2-kc-chip aix2-s-am" x="20" y="18" width="70" height="24" rx="6"/><text class="aix2-t" x="55" y="34" text-anchor="middle">Agents</text></g>
+        <g class="aix2-kc-tok" style="animation-delay:.12s"><rect class="aix2-kc-chip aix2-s-ro" x="98" y="18" width="50" height="24" rx="6"/><text class="aix2-t" x="123" y="34" text-anchor="middle">call</text></g>
+        <g class="aix2-kc-tok" style="animation-delay:.24s"><rect class="aix2-kc-chip aix2-s-bl" x="156" y="18" width="58" height="24" rx="6"/><text class="aix2-t" x="185" y="34" text-anchor="middle">tools</text></g>
+        <g class="aix2-kc-tok" style="animation-delay:.36s"><rect class="aix2-kc-chip aix2-s-gr" x="222" y="18" width="46" height="24" rx="6"/><text class="aix2-t" x="245" y="34" text-anchor="middle">via</text></g>
+        <g class="aix2-kc-tok" style="animation-delay:.48s"><rect class="aix2-kc-chip aix2-s-vi" x="276" y="18" width="54" height="24" rx="6"/><text class="aix2-t" x="303" y="34" text-anchor="middle">MCP</text></g>
+        <g class="aix2-kc-id">
+          <text class="aix2-tm" x="55" y="70" text-anchor="middle">#4821</text>
+          <text class="aix2-tm" x="123" y="70" text-anchor="middle">#1190</text>
+          <text class="aix2-tm" x="185" y="70" text-anchor="middle">#7730</text>
+          <text class="aix2-tm" x="245" y="70" text-anchor="middle">#302</text>
+          <text class="aix2-tm" x="303" y="70" text-anchor="middle">#9951</text>
+        </g>
+        <g class="aix2-kc-vec">
+          <rect class="aix2-f-am" x="40" y="96" width="5" height="22" rx="1"/><rect class="aix2-f-am" x="47" y="104" width="5" height="14" rx="1"/><rect class="aix2-f-am" x="54" y="90" width="5" height="28" rx="1"/><rect class="aix2-f-am" x="61" y="108" width="5" height="10" rx="1"/><rect class="aix2-f-am" x="68" y="100" width="5" height="18" rx="1"/>
+          <rect class="aix2-f-ro" x="108" y="102" width="5" height="16" rx="1"/><rect class="aix2-f-ro" x="115" y="94" width="5" height="24" rx="1"/><rect class="aix2-f-ro" x="122" y="110" width="5" height="8" rx="1"/><rect class="aix2-f-ro" x="129" y="98" width="5" height="20" rx="1"/><rect class="aix2-f-ro" x="136" y="106" width="5" height="12" rx="1"/>
+          <rect class="aix2-f-bl" x="170" y="92" width="5" height="26" rx="1"/><rect class="aix2-f-bl" x="177" y="106" width="5" height="12" rx="1"/><rect class="aix2-f-bl" x="184" y="98" width="5" height="20" rx="1"/><rect class="aix2-f-bl" x="191" y="90" width="5" height="28" rx="1"/><rect class="aix2-f-bl" x="198" y="110" width="5" height="8" rx="1"/>
+          <rect class="aix2-f-gr" x="230" y="108" width="5" height="10" rx="1"/><rect class="aix2-f-gr" x="237" y="100" width="5" height="18" rx="1"/><rect class="aix2-f-gr" x="244" y="104" width="5" height="14" rx="1"/><rect class="aix2-f-gr" x="251" y="96" width="5" height="22" rx="1"/><rect class="aix2-f-gr" x="258" y="112" width="5" height="6" rx="1"/>
+          <rect class="aix2-f-vi" x="288" y="94" width="5" height="24" rx="1"/><rect class="aix2-f-vi" x="295" y="90" width="5" height="28" rx="1"/><rect class="aix2-f-vi" x="302" y="104" width="5" height="14" rx="1"/><rect class="aix2-f-vi" x="309" y="98" width="5" height="20" rx="1"/><rect class="aix2-f-vi" x="316" y="108" width="5" height="10" rx="1"/>
+          <text class="aix2-tm" x="20" y="138">[0.21, −0.74, 0.90, …]  ← numbers that carry meaning</text>
+        </g>
+        <text class="aix2-ts aix2-ph aix2-kc-l1" x="360" y="34"><tspan x="360" dy="0">1 · <tspan class="aix2-t">tokenize</tspan></tspan><tspan x="360" dy="14">split the prompt into chunks</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-kc-l2" x="360" y="70"><tspan x="360" dy="0">2 · <tspan class="aix2-t">token → id</tspan></tspan><tspan x="360" dy="14">each chunk is a number</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-ph-end aix2-kc-l3" x="360" y="106"><tspan x="360" dy="0">3 · <tspan class="aix2-t">id → embedding</tspan></tspan><tspan x="360" dy="14">a vector: similar meaning,</tspan><tspan x="360" dy="14">similar numbers</tspan></text>
+      </svg>
+      <p class="aix2-cap">A <strong>prompt</strong> is text. The model cuts it into <strong>tokens</strong>, maps each to an id, and turns each id into an <strong>embedding</strong> — a list of numbers where similar meanings land close together. <strong>RAG</strong> searches those embeddings for relevant context; <strong>tool use</strong> lets the model act (see the workflow picture above).</p>
+    </div>
+
+    <div class="attr-table">
+      <table>
+        <tr><th>Term</th><th>In one line</th></tr>
+        <tr><td>Token</td><td>A chunk of text (roughly ¾ of a word) that the model reads and generates.</td></tr>
+        <tr><td>Embedding</td><td>A list of numbers that captures meaning, so similar text lands close together.</td></tr>
+        <tr><td>Prompt</td><td>The instructions and context you send to the model.</td></tr>
+        <tr><td>RAG</td><td>Retrieval-Augmented Generation — fetch relevant documents first, then answer using them.</td></tr>
+        <tr><td>Tool use</td><td>Letting the model call functions or APIs (often via MCP) to act in the world.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
        SECTION 1: MACHINE LEARNING
        ═══════════════════════════════════════════════════════════════ -->
   <section id="ml" class="ai-section">
@@ -54,6 +1003,26 @@
     <div class="block-desc">
       <span><strong>Machine Learning (ML)</strong> is a subset of AI that provides machines the ability to learn automatically and improve from experience without being explicitly programmed. Core building blocks: <code>Algorithms</code>, <code>Models</code>, <code>Features</code>, and <code>Data</code>.</span>
       <a class="w3-link" href="https://www.w3schools.com/python/python_ml_getting_started.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · learning = fitting a line</div>
+      <svg class="aix2-svg" viewBox="0 0 560 160" role="img" aria-label="A regression line starts as a bad guess and rotates to fit the data points while the loss curve falls; then a new point is predicted.">
+        <path class="aix2-axis" d="M30,20 L30,130 L330,130"/>
+        <text class="aix2-ts" x="332" y="134">x · hours</text>
+        <text class="aix2-ts" x="36" y="18">y · score</text>
+        <circle class="aix2-f-am" cx="60" cy="110" r="4.5"/><circle class="aix2-f-am" cx="95" cy="99" r="4.5"/><circle class="aix2-f-am" cx="130" cy="93" r="4.5"/><circle class="aix2-f-am" cx="165" cy="73" r="4.5"/>
+        <circle class="aix2-f-am" cx="200" cy="67" r="4.5"/><circle class="aix2-f-am" cx="235" cy="53" r="4.5"/><circle class="aix2-f-am" cx="270" cy="46" r="4.5"/><circle class="aix2-f-am" cx="305" cy="31" r="4.5"/>
+        <g class="aix2-ml-fit"><line class="aix2-ml-line" x1="40" y1="120" x2="320" y2="28"/></g>
+        <g class="aix2-ml-pred"><line class="aix2-axis" x1="290" y1="38" x2="290" y2="130" stroke-dasharray="3 3"/><circle class="aix2-f-gr" cx="290" cy="38" r="5.5"/><text class="aix2-ts" x="298" y="56">predict ŷ</text></g>
+        <text class="aix2-ts aix2-ph aix2-ml-p1" x="48" y="38">1 · <tspan class="aix2-t">random guess</tspan> — far from the data</text>
+        <text class="aix2-ts aix2-ph aix2-ml-p2" x="48" y="38">2 · <tspan class="aix2-t">training</tspan> — nudge the line, error shrinks</text>
+        <text class="aix2-ts aix2-ph aix2-ph-end aix2-ml-p3" x="48" y="38">3 · <tspan class="aix2-t">fitted</tspan> — now it can predict</text>
+        <path class="aix2-axis" d="M390,30 L390,130 L540,130"/>
+        <text class="aix2-ts" x="465" y="146" text-anchor="middle">training steps →</text>
+        <text class="aix2-ts" x="396" y="28">loss ↓</text>
+        <path class="aix2-ml-loss" d="M392,40 C420,44 435,100 462,112 S515,122 538,124"/>
+      </svg>
+      <p class="aix2-cap"><strong>Learning</strong> = adjusting a model&rsquo;s parameters so its predictions miss the data by a little less each step. Watch the line swing toward the points as the <strong>loss</strong> falls; once fitted, it can <strong>predict</strong> unseen values. Supervised, unsupervised and reinforcement learning differ only in what counts as &ldquo;error&rdquo;.</p>
     </div>
 
     <!-- Key Concepts -->
@@ -284,6 +1253,31 @@ accuracy = (TP + TN) / (TP + TN + FP + FN)
       <span><strong>Algebra</strong> is the language of science, engineering, and economics. <strong>Linear Algebra</strong> focuses on linear equations and matrices — the data structures powering every ML algorithm. <code>NumPy</code> is the standard library.</span>
       <a class="w3-link" href="https://www.w3schools.com/python/numpy/default.asp" target="_blank">W3Schools →</a>
     </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · the dot product</div>
+      <svg class="aix2-svg" viewBox="0 0 560 170" role="img" aria-label="Vector b rotates relative to vector a; its projection onto a and the dot product shrink from positive, to zero when perpendicular, to negative when opposite.">
+        <defs><marker id="aix2mkLa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <path class="aix2-axis" d="M20,120 L290,120"/>
+        <path class="aix2-axis" d="M150,150 L150,15"/>
+        <line class="aix2-la-shadow" x1="150" y1="120" x2="250" y2="120"/>
+        <line class="aix2-la-drop" x1="250" y1="120" x2="250" y2="20"/>
+        <line class="aix2-la-vec aix2-s-bl" x1="150" y1="120" x2="260" y2="120" marker-end="url(#aix2mkLa)"/>
+        <text class="aix2-t aix2-f-bl" x="268" y="116">a</text>
+        <g class="aix2-la-b"><line class="aix2-la-vec aix2-s-ro" x1="150" y1="120" x2="250" y2="120" marker-end="url(#aix2mkLa)"/><text class="aix2-t aix2-f-ro" x="256" y="124">b</text></g>
+        <text class="aix2-ts" x="156" y="146">projection of b onto a (amber) = |b| cos θ</text>
+        <text class="aix2-t" x="330" y="34">a · b = |a| |b| cos θ</text>
+        <text class="aix2-ts" x="330" y="52">sum of aᵢ × bᵢ → one number</text>
+        <line class="aix2-axis" x1="330" y1="112" x2="530" y2="112"/>
+        <line class="aix2-axis" x1="430" y1="104" x2="430" y2="120"/>
+        <text class="aix2-tm" x="330" y="134">−</text><text class="aix2-tm" x="430" y="134" text-anchor="middle">0</text><text class="aix2-tm" x="530" y="134" text-anchor="end">+</text>
+        <rect class="aix2-la-val aix2-f-vi" x="430" y="107" width="100" height="10" rx="3"/>
+        <text class="aix2-ts aix2-ph aix2-ph-end aix2-la-l1" x="330" y="82"><tspan class="aix2-t" style="fill:var(--green)">a · b &gt; 0</tspan> — similar direction</text>
+        <text class="aix2-ts aix2-ph aix2-la-l2" x="330" y="82"><tspan class="aix2-t" style="fill:var(--amber)">a · b = 0</tspan> — perpendicular, unrelated</text>
+        <text class="aix2-ts aix2-ph aix2-la-l3" x="330" y="82"><tspan class="aix2-t" style="fill:var(--rose)">a · b &lt; 0</tspan> — opposite direction</text>
+        <text class="aix2-ts" x="330" y="158">used in: neurons · SVM kernels · cosine similarity</text>
+      </svg>
+      <p class="aix2-cap">A <strong>vector</strong> is an arrow with length and direction; a <strong>matrix</strong> is a grid of them. The <strong>dot product</strong> a·b measures how much two vectors point the same way (the amber shadow is b <strong>projected</strong> onto a): positive = similar, zero = unrelated, negative = opposite. That single number is the heart of neurons, SVMs and embedding similarity.</p>
+    </div>
 
     <!-- Core Algebra Components -->
     <div class="cheat-block">
@@ -505,6 +1499,32 @@ y_hat = <span class="ln">25</span> - <span class="ln">0.5</span> * x   <span cla
     <div class="block-desc">
       <span>Probability theory underpins all of ML — from <code>Bayes' theorem</code> in classifiers to <code>cross-entropy loss</code> in neural networks. Models are fundamentally probability distributions.</span>
       <a class="w3-link" href="https://www.w3schools.com/python/python_probability_statistics.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · from samples to a distribution</div>
+      <svg class="aix2-svg" viewBox="0 0 560 160" role="img" aria-label="Samples of a random variable drop into bins and build a distribution; a curve is drawn over it, then the expected value and standard deviation are marked.">
+        <path class="aix2-axis" d="M30,130 L290,130"/>
+        <text class="aix2-tm" x="70" y="146" text-anchor="middle">1</text><text class="aix2-tm" x="115" y="146" text-anchor="middle">2</text><text class="aix2-tm" x="160" y="146" text-anchor="middle">3</text><text class="aix2-tm" x="205" y="146" text-anchor="middle">4</text><text class="aix2-tm" x="250" y="146" text-anchor="middle">5</text>
+        <text class="aix2-ts" x="296" y="146">X</text>
+                <circle class="aix2-pr-dot aix2-pr-d0" cx="160" cy="122" r="7" style="fill:var(--amber)"/>
+        <circle class="aix2-pr-dot aix2-pr-d1" cx="205" cy="122" r="7" style="fill:var(--violet)"/>
+        <circle class="aix2-pr-dot aix2-pr-d2" cx="115" cy="122" r="7" style="fill:var(--green)"/>
+        <circle class="aix2-pr-dot aix2-pr-d3" cx="160" cy="107" r="7" style="fill:var(--amber)"/>
+        <circle class="aix2-pr-dot aix2-pr-d4" cx="250" cy="122" r="7" style="fill:var(--rose)"/>
+        <circle class="aix2-pr-dot aix2-pr-d5" cx="70" cy="122" r="7" style="fill:var(--blue)"/>
+        <circle class="aix2-pr-dot aix2-pr-d6" cx="160" cy="92" r="7" style="fill:var(--amber)"/>
+        <circle class="aix2-pr-dot aix2-pr-d7" cx="205" cy="107" r="7" style="fill:var(--violet)"/>
+        <path class="aix2-pr-curve" d="M30,127 C80,120 120,70 160,70 C200,70 240,120 290,127"/>
+        <g class="aix2-pr-mean"><line class="aix2-axis aix2-s-ac" x1="166" y1="24" x2="166" y2="130" stroke-dasharray="4 4" stroke-width="1.6"/><text class="aix2-t aix2-f-ac" x="172" y="30">E[X] ≈ 3.1</text></g>
+        <g class="aix2-pr-sd"><path class="aix2-axis aix2-s-ro" d="M113,50 L113,42 L219,42 L219,50" stroke-width="1.6"/><text class="aix2-t aix2-f-ro" x="166" y="60" text-anchor="middle">± σ ≈ 1.2</text></g>
+        <text class="aix2-ts aix2-ph aix2-pr-l1" x="330" y="60"><tspan x="330" dy="0">1 · <tspan class="aix2-t">sample</tspan> a random variable X</tspan><tspan x="330" dy="14">each draw is a chance outcome</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-pr-l2" x="330" y="60"><tspan x="330" dy="0">2 · the samples form a <tspan class="aix2-t">distribution</tspan></tspan><tspan x="330" dy="14">P(X = 3) = 3 / 8</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-pr-l3" x="330" y="60"><tspan x="330" dy="0">3 · <tspan class="aix2-t">E[X]</tspan> — the centre</tspan><tspan x="330" dy="14">the long-run average</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-ph-end aix2-pr-l4" x="330" y="60"><tspan x="330" dy="0">4 · <tspan class="aix2-t">σ</tspan> — the spread</tspan><tspan x="330" dy="14">how far values wander from E[X]</tspan></text>
+        <text class="aix2-tm" x="330" y="112">P(label | features)</text>
+        <text class="aix2-ts" x="330" y="128">a classifier is a distribution too</text>
+      </svg>
+      <p class="aix2-cap">A <strong>random variable</strong> takes values by chance. Collect enough samples and a <strong>distribution</strong> appears; its <strong>expected value</strong> E[X] is the centre and <strong>σ</strong> the spread. Models are distributions as well: a classifier outputs P(label | features), and an LLM outputs P(next token | previous tokens).</p>
     </div>
 
     <!-- Random Variables -->
@@ -800,6 +1820,28 @@ loss = loss_fn(logits, labels)
     <div class="block-desc">
       <span>Word vectors map discrete tokens into continuous geometric space where <code>distance = similarity</code>. The <code>Distributional Hypothesis</code>: "You shall know a word by the company it keeps." Semantic understanding in AI is an emergent property of geometric alignment.</span>
       <a class="w3-link" href="https://www.w3schools.com/python/numpy/default.asp" target="_blank">W3Schools →</a>
+    </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · how embeddings learn meaning</div>
+      <svg class="aix2-svg" viewBox="0 0 560 170" role="img" aria-label="Word vectors start at random positions; cat and dog are pulled together, apple and king are pushed away, and clusters form.">
+        <rect class="aix2-surf" x="20" y="12" width="320" height="146" rx="10"/>
+        <text class="aix2-tm" x="30" y="152">distance = similarity</text>
+        <circle class="aix2-ve-halo aix2-s-gr" cx="118" cy="72" r="38"/>
+        <text class="aix2-ts aix2-ph aix2-ph-end aix2-ve-halo" x="118" y="124" text-anchor="middle" style="fill:var(--green);stroke:none">animals</text>
+        <circle class="aix2-ve-halo aix2-s-ro" cx="285" cy="125" r="22"/>
+        <text class="aix2-ts aix2-ve-halo" x="285" y="100" text-anchor="middle" style="fill:var(--rose);stroke:none">food</text>
+        <g class="aix2-ve-w aix2-ve-cat"><circle class="aix2-f-am" cx="105" cy="62" r="7"/><text class="aix2-t" x="116" y="66">cat</text></g>
+        <g class="aix2-ve-w aix2-ve-dog"><circle class="aix2-f-bl" cx="132" cy="82" r="7"/><text class="aix2-t" x="143" y="86">dog</text></g>
+        <g class="aix2-ve-w aix2-ve-apple"><circle class="aix2-f-ro" cx="285" cy="125" r="7"/><text class="aix2-t" x="296" y="129">apple</text></g>
+        <g class="aix2-ve-w aix2-ve-king"><circle class="aix2-f-vi" cx="235" cy="38" r="7"/><text class="aix2-t" x="246" y="42">king</text></g>
+        <text class="aix2-ts aix2-ph aix2-ve-l1" x="360" y="40"><tspan x="360" dy="0">1 · <tspan class="aix2-t">random init</tspan></tspan><tspan x="360" dy="14">every word starts anywhere —</tspan><tspan x="360" dy="14">cat may sit next to apple</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-ve-l2" x="360" y="40"><tspan x="360" dy="0">2 · <tspan class="aix2-t" style="fill:var(--green)">pull</tspan></tspan><tspan x="360" dy="14">shared contexts (“chased”, “fur”)</tspan><tspan x="360" dy="14">drag cat and dog together</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-ve-l3" x="360" y="40"><tspan x="360" dy="0">3 · <tspan class="aix2-t" style="fill:var(--rose)">push</tspan></tspan><tspan x="360" dy="14">negative samples repel words</tspan><tspan x="360" dy="14">that never share a context</tspan></text>
+        <text class="aix2-ts aix2-ph aix2-ph-end aix2-ve-l4" x="360" y="40"><tspan x="360" dy="0">4 · <tspan class="aix2-t">converge</tspan></tspan><tspan x="360" dy="14">clusters = meaning;</tspan><tspan x="360" dy="14">cos(cat, dog) ≈ 1, cos(cat, apple) ≈ −1</tspan></text>
+        <text class="aix2-ts" x="360" y="120"><tspan class="aix2-f-am">●</tspan> cat  <tspan class="aix2-f-bl">●</tspan> dog  <tspan class="aix2-f-ro">●</tspan> apple  <tspan class="aix2-f-vi">●</tspan> king</text>
+        <text class="aix2-tm" x="360" y="152">king − man + woman ≈ queen</text>
+      </svg>
+      <p class="aix2-cap"><strong>Embeddings</strong> start random. Training <strong>pulls</strong> words that share contexts together and <strong>pushes</strong> unrelated ones apart. After millions of tiny nudges, <strong>distance = similarity</strong>: cat and dog sit together, apple lands far away — and directions like “gender” become consistent arrows.</p>
     </div>
 
     <!-- The Fundamental Problem -->
@@ -1148,6 +2190,33 @@ X = vec.<span class="lm">fit_transform</span>(docs)
     <div class="block-desc">
       <span>Bitness defines a CPU's <code>address width</code> — how many bits it uses to reference memory. 1 Address = 1 Byte (byte-addressable memory). Bit-depth defines address length, not data size.</span>
     </div>
+    <div class="aix2-mini">
+      <div class="aix2-mini-label">In motion · each bit doubles the range</div>
+      <svg class="aix2-svg" viewBox="0 0 560 150" role="img" aria-label="Eight bit cells light up one by one, doubling the range each time; then bars compare 8, 16, 32 and 64-bit widths.">
+        <rect class="aix2-bt-cell" x="20" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b0"><rect class="aix2-f-am" x="20" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="34" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="54" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b1"><rect class="aix2-f-am" x="54" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="68" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="88" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b2"><rect class="aix2-f-am" x="88" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="102" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="122" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b3"><rect class="aix2-f-am" x="122" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="136" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="156" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b4"><rect class="aix2-f-am" x="156" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="170" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="190" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b5"><rect class="aix2-f-am" x="190" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="204" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="224" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b6"><rect class="aix2-f-am" x="224" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="238" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <rect class="aix2-bt-cell" x="258" y="18" width="28" height="28" rx="5"/><g class="aix2-bt-on aix2-bt-b7"><rect class="aix2-f-am" x="258" y="18" width="28" height="28" rx="5"/><text class="aix2-t" x="272" y="37" text-anchor="middle" style="fill:var(--code-bg)">1</text></g>
+        <text class="aix2-t aix2-ph aix2-bt-r0" x="300" y="37">1 bit → 0 … 1</text>
+        <text class="aix2-t aix2-ph aix2-bt-r1" x="300" y="37">2 bits → 0 … 3</text>
+        <text class="aix2-t aix2-ph aix2-bt-r2" x="300" y="37">3 bits → 0 … 7</text>
+        <text class="aix2-t aix2-ph aix2-bt-r3" x="300" y="37">4 bits → 0 … 15</text>
+        <text class="aix2-t aix2-ph aix2-bt-r4" x="300" y="37">5 bits → 0 … 31</text>
+        <text class="aix2-t aix2-ph aix2-bt-r5" x="300" y="37">6 bits → 0 … 63</text>
+        <text class="aix2-t aix2-ph aix2-bt-r6" x="300" y="37">7 bits → 0 … 127</text>
+        <text class="aix2-t aix2-ph aix2-bt-r7 aix2-ph-end" x="300" y="37">8 bits → 0 … 255</text>
+        <text class="aix2-ts" x="20" y="62">each extra bit <tspan class="aix2-t">doubles</tspan> the number of values (2ⁿ) — address width = how much memory a CPU can point at</text>
+        <text class="aix2-ts" x="100" y="80" text-anchor="end">8-bit</text><rect class="aix2-bt-bar aix2-bt-bar1 aix2-f-bl" x="110" y="71" width="40" height="12" rx="4"/><text class="aix2-ts aix2-ph aix2-bt-lab aix2-bt-lab1" x="158" y="81">0 … 255 · one byte, an ASCII char</text>
+        <text class="aix2-ts" x="100" y="98" text-anchor="end">16-bit</text><rect class="aix2-bt-bar aix2-bt-bar2 aix2-f-gr" x="110" y="89" width="80" height="12" rx="4"/><text class="aix2-ts aix2-ph aix2-bt-lab aix2-bt-lab2" x="198" y="99">0 … 65,535</text>
+        <text class="aix2-ts" x="100" y="116" text-anchor="end">32-bit</text><rect class="aix2-bt-bar aix2-bt-bar3 aix2-f-vi" x="110" y="107" width="160" height="12" rx="4"/><text class="aix2-ts aix2-ph aix2-bt-lab aix2-bt-lab3" x="278" y="117">≈ 4.29 billion · 4 GB of RAM max</text>
+        <text class="aix2-ts" x="100" y="134" text-anchor="end">64-bit</text><rect class="aix2-bt-bar aix2-bt-bar4 aix2-f-ro" x="110" y="125" width="320" height="12" rx="4"/><text class="aix2-ts aix2-ph aix2-ph-end aix2-bt-lab aix2-bt-lab4" x="438" y="135">≈ 18.4 quintillion</text>
+      </svg>
+      <p class="aix2-cap">Every extra <strong>bit</strong> doubles how many values fit: 8 bits give 256, 64 bits give 18.4 quintillion. A CPU&rsquo;s <strong>bitness</strong> is the width of a memory <strong>address</strong>: 32-bit can point at 4 GB, 64-bit at far more than any machine holds — it says nothing about how many cores it has.</p>
+    </div>
 
     <!-- Bit Progression -->
     <div class="cheat-block">
@@ -1409,7 +2478,7 @@ sys.byteorder   <span class="lcm"># → "little" on most modern CPUs</span></pre
   <p>AI Concepts Cheatsheet — ML · Linear Algebra · Probability · Vectors · Bitness</p>
 </footer>
 
-<script src="js/script.js"></script>
+<script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const applyTheme = dark => {
     document.body.classList.toggle('dark-theme', dark);
     localStorage.setItem('theme', dark ? 'dark' : 'light');
-    if (themeBtn) themeBtn.textContent = dark ? '☀️' : '🌙';
+    if (themeBtn) themeBtn.innerHTML = dark ? svgIcon('sun') : svgIcon('moon');
   };
   applyTheme(localStorage.getItem('theme') === 'dark');
   themeBtn?.addEventListener('click', () =>
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Index sections on the current page
   const currentPageName = document.querySelector('.page-header h1')?.textContent?.trim() || '';
-  const currentPageIcon = LANGUAGES.find(l => l.id === currentPageName)?.icon || '📄';
+  const currentPageIcon = LANGUAGES.find(l => l.id === currentPageName)?.icon || 'doc';
   const currentHrefBase = location.pathname.replace(/[^/]*$/, '');
 
   document.querySelectorAll('section[id]').forEach(sec => {
@@ -323,11 +323,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   slFilters.innerHTML =
     `<button class="sl-pill sl-pill-active" data-filter="all" role="option" aria-selected="true">
-      <span aria-hidden="true">📚</span>All
+      <span aria-hidden="true">${svgIcon('layers')}</span>All
     </button>` +
     LANGUAGES.map(l =>
       `<button class="sl-pill" data-filter="${l.id}" role="option" aria-selected="false">
-        <span aria-hidden="true">${l.icon}</span>${l.id}
+        <span aria-hidden="true">${svgIcon(l.icon)}</span>${l.id}
       </button>`
     ).join('');
 
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const idx = hist.length + i;
       const act = !hist.length && i===0 ? ' sl-active' : '';
       return `<a href="${l.href}" class="sl-result${act}" data-idx="${idx}" role="option" aria-selected="${!hist.length&&i===0}">
-        <span class="sl-ri">${l.icon}</span>
+        <span class="sl-ri">${svgIcon(l.icon)}</span>
         <div class="sl-rb">
           <span class="sl-rt">${l.id}</span>
         </div>
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
       html += pages.map(r => {
         const i=gi++; const act=i===0?' sl-active':'';
         return `<a href="${getHref(r)}" class="sl-result${act}" data-idx="${i}" role="option" aria-selected="${i===0}">
-          <span class="sl-ri">${r.icon}</span>
+          <span class="sl-ri">${svgIcon(r.icon)}</span>
           <div class="sl-rb"><span class="sl-rt">${hl(escHtml(r.section))}</span></div>
           <span class="sl-rtype">page</span>
         </a>`;
@@ -459,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const i=gi++; const act=(i===0&&!pages.length)?' sl-active':'';
         const snip = hl((r.snippet||'').slice(0,90));
         return `<a href="${getHref(r)}" class="sl-result${act}" data-idx="${i}" role="option" aria-selected="${i===0&&!pages.length}">
-          <span class="sl-ri">${r.icon}</span>
+          <span class="sl-ri">${svgIcon(r.icon)}</span>
           <div class="sl-rb">
             <span class="sl-rt">${hl(escHtml(r.section))}</span>
             <span class="sl-rs">${escHtml(r.page)} &middot; ${snip}…</span>
@@ -570,7 +570,77 @@ document.addEventListener('DOMContentLoaded', () => {
     panel.appendChild(btn);
   });
 
-  // ── 7. BACK TO TOP ────────────────────────────────────────
+  // ── Guided tour: spotlight each section with an explanation card ──
+  (function setupTour() {
+    const reduceMo = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const secs = [...document.querySelectorAll('main section[id]')];
+    if (!secs.length) return;
+
+    const fab = document.createElement('button');
+    fab.className = 'tour-fab';
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M10 8.5 15.5 12 10 15.5 Z" fill="currentColor" stroke="none"></path></svg><span>Guided tour</span>';
+    document.body.appendChild(fab);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'tour-overlay';
+    overlay.innerHTML = '<div class="tour-spot"></div><div class="tour-card"></div>';
+    document.body.appendChild(overlay);
+    const spot = overlay.querySelector('.tour-spot');
+    const card = overlay.querySelector('.tour-card');
+    let i = 0;
+
+    function titleOf(sec) { const h = sec.querySelector('h2'); return (h ? h.textContent : sec.id).replace(/[▾▸]/g, '').trim(); }
+    function blurbOf(sec) {
+      const d = sec.querySelector('.block-desc span');
+      const t = d && d.textContent.trim();
+      return t || 'Browse the examples in this section — the code is on the left and a live preview on the right.';
+    }
+
+    function place() {
+      const sec = secs[i];
+      sec.scrollIntoView({ behavior: reduceMo() ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(() => {
+        const r = sec.getBoundingClientRect();
+        const pad = 8;
+        const top = Math.max(8, r.top - pad);
+        const h = Math.min(window.innerHeight - 16, r.height + pad * 2);
+        spot.style.left = Math.max(4, r.left - pad) + 'px';
+        spot.style.top = top + 'px';
+        spot.style.width = (r.width + pad * 2) + 'px';
+        spot.style.height = h + 'px';
+        const cardW = Math.min(340, window.innerWidth * 0.86);
+        const belowOk = top + h + 14 < window.innerHeight - 170;
+        card.style.top = (belowOk ? top + h + 14 : Math.max(12, top - 180)) + 'px';
+        card.style.left = Math.min(window.innerWidth - cardW - 12, Math.max(12, r.left)) + 'px';
+        card.innerHTML =
+          '<div class="tc-step">Step ' + (i + 1) + ' of ' + secs.length + '</div>'
+          + '<h4>' + escHtml(titleOf(sec)) + '</h4>'
+          + '<p>' + escHtml(blurbOf(sec)) + '</p>'
+          + '<div class="tc-progress">' + secs.map((_, n) => '<span class="tc-dot' + (n === i ? ' on' : '') + '"></span>').join('') + '</div>'
+          + '<div class="tc-controls">'
+          + '<button class="tc-prev"' + (i === 0 ? ' disabled' : '') + '>Back</button>'
+          + '<button class="tc-next">' + (i === secs.length - 1 ? 'Finish' : 'Next →') + '</button>'
+          + '<button class="tc-end">Skip</button></div>';
+        card.querySelector('.tc-next').onclick = () => { if (i >= secs.length - 1) end(); else { i++; place(); } };
+        card.querySelector('.tc-prev').onclick = () => { if (i > 0) { i--; place(); } };
+        card.querySelector('.tc-end').onclick = end;
+      }, reduceMo() ? 0 : 380);
+    }
+    function start() { i = 0; overlay.classList.add('active'); place(); }
+    function end() { overlay.classList.remove('active'); }
+
+    fab.addEventListener('click', start);
+    overlay.addEventListener('click', e => { if (e.target === overlay) end(); });
+    document.addEventListener('keydown', e => {
+      if (!overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') end();
+      else if (e.key === 'ArrowRight') { if (i < secs.length - 1) { i++; place(); } else end(); }
+      else if (e.key === 'ArrowLeft') { if (i > 0) { i--; place(); } }
+    });
+    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) place(); });
+  })();
+
+  // ── Back to top ──
   const backToTop = document.createElement('button');
   backToTop.className = 'back-to-top';
   backToTop.innerHTML = '↑';

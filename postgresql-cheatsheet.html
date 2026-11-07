@@ -4,13 +4,179 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PostgreSQL &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .pg-kw { color:#bb9af7; }
     .pg-fn { color:#7aa2f7; }
     .pg-str { color:#9ece6a; }
     .pg-cm { color:#565f89; }
     .pg-op { color:#e0af68; }
+  </style>
+  <style>
+    /* ===== sqlx2: compact multi-colour concept animations, organisation diagram, join Venns ===== */
+    .sqlx2-fig, .sqlx2-card{
+      --sx-amber:#e0b366; --sx-rose:#e8808f; --sx-blue:#7aa2f7;
+      --sx-green:#9ece6a; --sx-violet:#bb9af7; --sx-ink:#0a1315;
+    }
+    .sqlx2-fig{
+      display:flex; align-items:center; gap:.9rem; flex-wrap:wrap;
+      margin:.8rem 0 0; padding:.6rem .8rem;
+      background:var(--surface-2); border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+    }
+    .sqlx2-fig-wide{ margin:0 0 1.25rem; padding:.8rem 1rem; background:var(--surface); border-radius:var(--radius); }
+    .sqlx2-art{ flex:none; display:block; }
+    .sqlx2-cap{ flex:1 1 150px; min-width:0; font-size:.78rem; color:var(--text-muted); line-height:1.5; margin:0; }
+    .sqlx2-cap b{ color:var(--text); font-weight:600; }
+    .sqlx2-cap code{ font-family:'JetBrains Mono',monospace; font-size:.92em; color:var(--accent); }
+    .sqlx2-ln{ stroke:var(--border-strong); stroke-width:1.5; stroke-dasharray:3 3; fill:none; }
+    .sqlx2-frame{ fill:none; stroke:var(--border-strong); stroke-width:1; stroke-dasharray:3 3; }
+    .sqlx2-lbl{ font-family:'JetBrains Mono',monospace; font-size:8px; fill:var(--text-muted); }
+    .sqlx2-cell{ fill:var(--surface); stroke:var(--border-strong); stroke-width:1; }
+    .sqlx2-null{ color:var(--text-subtle); font-style:italic; }
+
+    /* card that hangs under a .block-desc (organisation diagram, Venns) */
+    .sqlx2-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.1rem; margin-bottom:1.25rem; box-shadow:var(--shadow-sm); }
+    .block-desc + .sqlx2-card{ border-radius:0 0 var(--radius) var(--radius); }
+
+    /* organisation diagram: machine > database > schema > table > row */
+    .sqlx2-orgwrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .sqlx2-org{ width:100%; min-width:560px; max-width:780px; height:auto; display:block; margin:0 auto; font-family:var(--display); }
+    .sqlx2-org text{ fill:var(--text); font-size:12px; }
+    .sqlx2-org .sqlx2-o-mono{ font-family:'JetBrains Mono',monospace; font-size:10.5px; }
+    .sqlx2-org .sqlx2-o-muted{ fill:var(--text-muted); font-size:10.5px; }
+    .sqlx2-org .sqlx2-o-tag{ fill:var(--sx-ink); font-size:8.5px; font-weight:700; letter-spacing:.06em; }
+    .sqlx2-org .sqlx2-o-name{ font-weight:600; font-size:12px; }
+    .sqlx2-org .sqlx2-o-cell{ fill:var(--surface); stroke:var(--border-strong); stroke-width:.8; }
+    .sqlx2-org .sqlx2-o-hd{ font-weight:600; }
+    .sqlx2-org .sqlx2-o-ghost{ fill:var(--border-strong); }
+    .sqlx2-drill{ fill:var(--accent); fill-opacity:.07; stroke:var(--accent); stroke-width:2.5; opacity:0; animation:sqlx2-drill 15s ease-in-out infinite; animation-delay:var(--d); }
+    @keyframes sqlx2-drill{ 0%{opacity:0;} 3%{opacity:1;} 17%{opacity:1;} 20%,100%{opacity:0;} }
+    .sqlx2-steps{ display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:.35rem .45rem; margin-top:.8rem; font-size:.74rem; color:var(--text-muted); }
+    .sqlx2-step{ padding:.2rem .6rem; border-radius:999px; border:1px solid var(--border-strong); background:var(--surface-2); color:var(--text-muted); font-family:var(--display); font-weight:600; animation:sqlx2-steplit 15s ease-in-out infinite; animation-delay:var(--d); }
+    @keyframes sqlx2-steplit{
+      0%{ background:var(--surface-2); color:var(--text-muted); border-color:var(--border-strong); }
+      3%,17%{ background:var(--sc); color:var(--sx-ink); border-color:var(--sc); }
+      20%,100%{ background:var(--surface-2); color:var(--text-muted); border-color:var(--border-strong); }
+    }
+
+    /* join Venn diagrams */
+    .sqlx2-venns{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:.8rem; }
+    .sqlx2-venn{ background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:.7rem .75rem .8rem; text-align:center; }
+    .sqlx2-venn h4{ margin:0 0 .3rem; font-family:'JetBrains Mono',monospace; font-size:.76rem; font-weight:600; color:var(--text); letter-spacing:.02em; }
+    .sqlx2-venn h4 i{ display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:.4rem; vertical-align:-1px; background:var(--vc); }
+    .sqlx2-vsvg{ width:100%; max-width:170px; height:auto; display:block; margin:0 auto; }
+    .sqlx2-vring{ fill:none; stroke:var(--text-muted); stroke-width:1.4; }
+    .sqlx2-vlbl{ font-family:'JetBrains Mono',monospace; font-size:9.5px; fill:var(--text-muted); text-anchor:middle; }
+    .sqlx2-vshade{ fill-opacity:.32; animation:sqlx2-vpulse 6s ease-in-out infinite; animation-delay:var(--vd); }
+    @keyframes sqlx2-vpulse{ 0%,100%{fill-opacity:.32;} 8%,20%{fill-opacity:.82;} 30%{fill-opacity:.32;} }
+    .sqlx2-vnote{ margin:.35rem 0 0; font-size:.74rem; line-height:1.45; color:var(--text-muted); }
+    .sqlx2-vnote code{ font-family:'JetBrains Mono',monospace; font-size:.92em; }
+
+    /* terminal — Getting Started */
+    .sqlx2-term{ width:158px; border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; background:var(--code-bg); font-family:'JetBrains Mono',monospace; font-size:.66rem; }
+    .sqlx2-term-bar{ display:flex; gap:4px; padding:5px 7px; background:rgba(127,127,127,.16); }
+    .sqlx2-tdot{ width:7px; height:7px; border-radius:50%; }
+    .sqlx2-tdot-r{ background:var(--sx-rose); } .sqlx2-tdot-a{ background:var(--sx-amber); } .sqlx2-tdot-g{ background:var(--sx-green); }
+    .sqlx2-term-body{ padding:7px 9px; color:var(--code-text); line-height:1.6; white-space:nowrap; }
+    .sqlx2-tprompt{ color:var(--sx-green); }
+    .sqlx2-ttype{ display:inline-block; overflow:hidden; vertical-align:bottom; white-space:nowrap; max-width:0; animation:sqlx2-type 6s steps(14,end) infinite; }
+    @keyframes sqlx2-type{ 0%,8%{max-width:0;} 45%,100%{max-width:120px;} }
+    .sqlx2-tcaret{ display:inline-block; width:6px; height:11px; background:var(--sx-blue); vertical-align:-1px; margin-left:1px; animation:sqlx2-blink 1.1s steps(1) infinite; }
+    @keyframes sqlx2-blink{ 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+    .sqlx2-tout{ color:var(--sx-amber); margin-top:3px; opacity:0; animation:sqlx2-tshow 6s steps(1) infinite; }
+    @keyframes sqlx2-tshow{ 0%,55%{opacity:0;} 56%,100%{opacity:1;} }
+
+    /* travelling packet — Connection */
+    .sqlx2-pkt{ animation:sqlx2-travel 3.6s ease-in-out infinite; }
+    @keyframes sqlx2-travel{ 0%,8%{transform:translateX(0);} 50%{transform:translateX(60px);} 92%,100%{transform:translateX(0);} }
+
+    /* database selector ring — Databases */
+    .sqlx2-dbring{ animation:sqlx2-dbmove 4.5s steps(1) infinite; }
+    @keyframes sqlx2-dbmove{ 0%,33%{transform:translateX(0);} 34%,66%{transform:translateX(50px);} 67%,100%{transform:translateX(100px);} }
+
+    /* table row sweep — Tables */
+    .sqlx2-tbl{ width:142px; border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; font-family:'JetBrains Mono',monospace; font-size:.68rem; background:var(--surface); }
+    .sqlx2-tr{ display:grid; grid-template-columns:32px 1fr; }
+    .sqlx2-tr>span{ padding:3px 8px; border-top:1px solid var(--border); color:var(--text); }
+    .sqlx2-thd>span{ border-top:0; font-weight:600; background:var(--surface-2); }
+    .sqlx2-thd>span:first-child{ color:var(--sx-rose); } .sqlx2-thd>span:last-child{ color:var(--sx-blue); }
+    .sqlx2-tbl .sqlx2-tr:not(.sqlx2-thd){ animation:sqlx2-sweep 4.2s ease-in-out infinite; animation-delay:calc(var(--i)*.5s); }
+    @keyframes sqlx2-sweep{ 0%,18%,100%{background:transparent;} 7%{background:rgba(158,206,106,.28);} }
+
+    /* add-column glow — Columns */
+    .sqlx2-cols{ display:flex; border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; font-family:'JetBrains Mono',monospace; font-size:.68rem; background:var(--surface); }
+    .sqlx2-col{ display:flex; flex-direction:column; }
+    .sqlx2-col + .sqlx2-col{ border-left:1px solid var(--border); }
+    .sqlx2-col>span{ padding:3px 9px; color:var(--text); }
+    .sqlx2-col>span:first-child{ background:var(--surface-2); font-weight:600; }
+    .sqlx2-col:nth-child(1)>span:first-child{ color:var(--sx-rose); }
+    .sqlx2-col:nth-child(2)>span:first-child{ color:var(--sx-blue); }
+    .sqlx2-colnew>span:first-child{ color:var(--sx-amber); }
+    .sqlx2-colnew{ animation:sqlx2-colglow 3.2s ease-in-out infinite; }
+    @keyframes sqlx2-colglow{ 0%,100%{background:transparent;} 50%{background:rgba(224,179,102,.26);} }
+
+    /* CRUD chips — Data */
+    .sqlx2-crud{ display:flex; gap:7px; }
+    .sqlx2-chip{ width:30px; height:30px; border-radius:8px; display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:.92rem; border:2px solid; background:var(--surface); animation:sqlx2-crudcy 4s steps(1) infinite; animation-delay:calc(var(--i)*1s); }
+    .sqlx2-c-c{ --gc:var(--sx-green); border-color:var(--sx-green); color:var(--sx-green); }
+    .sqlx2-c-r{ --gc:var(--sx-blue); border-color:var(--sx-blue); color:var(--sx-blue); }
+    .sqlx2-c-u{ --gc:var(--sx-amber); border-color:var(--sx-amber); color:var(--sx-amber); }
+    .sqlx2-c-d{ --gc:var(--sx-rose); border-color:var(--sx-rose); color:var(--sx-rose); }
+    @keyframes sqlx2-crudcy{ 0%,22%{ transform:translateY(-3px); box-shadow:0 0 9px var(--gc); } 24%,100%{ transform:none; box-shadow:none; } }
+
+    /* grant / unlock — Users */
+    .sqlx2-shackle{ animation:sqlx2-unlock 3.8s ease-in-out infinite; }
+    @keyframes sqlx2-unlock{ 0%,22%{transform:translateY(0);} 42%,88%{transform:translateY(-4px);} 100%{transform:translateY(0);} }
+    .sqlx2-grantchk{ stroke-dasharray:28; stroke-dashoffset:28; animation:sqlx2-check 3.8s ease-in-out infinite; }
+    @keyframes sqlx2-check{ 0%,42%{stroke-dashoffset:28;} 62%,88%{stroke-dashoffset:0;} 100%{stroke-dashoffset:28;} }
+
+    /* schema selector — Schema */
+    .sqlx2-schsel{ animation:sqlx2-schmove 4.5s steps(1) infinite; }
+    @keyframes sqlx2-schmove{ 0%,33%{transform:translateX(0);} 34%,66%{transform:translateX(50px);} 67%,100%{transform:translateX(100px);} }
+
+    /* calendar marker — Dates */
+    .sqlx2-calhd{ font-family:var(--display); font-weight:700; font-size:7.5px; fill:var(--sx-ink); letter-spacing:.08em; }
+    .sqlx2-calsel{ animation:sqlx2-calmove 5s steps(1) infinite; }
+    @keyframes sqlx2-calmove{ 0%{transform:translateX(0);} 20%{transform:translateX(29.5px);} 40%{transform:translateX(59px);} 60%{transform:translateX(88.5px);} 80%,100%{transform:translateX(118px);} }
+
+    /* backup packet — Backup & Restore */
+    .sqlx2-bkpkt{ animation:sqlx2-bktravel 3.2s ease-in-out infinite; }
+    @keyframes sqlx2-bktravel{ 0%{transform:translateX(0);opacity:0;} 12%{opacity:1;} 76%{transform:translateX(60px);opacity:1;} 86%,100%{transform:translateX(60px);opacity:0;} }
+
+    /* network waves — Remote Access */
+    .sqlx2-wv{ opacity:0; animation:sqlx2-wave 3s ease-out infinite; }
+    .sqlx2-wv2{ animation-delay:1s; } .sqlx2-wv3{ animation-delay:2s; }
+    @keyframes sqlx2-wave{ 0%{opacity:0; transform:translateX(-3px);} 30%{opacity:1;} 70%,100%{opacity:0; transform:translateX(5px);} }
+
+    /* csv packet — Import/Export CSV */
+    .sqlx2-csvpkt{ animation:sqlx2-csvtravel 3s ease-in-out infinite; }
+    @keyframes sqlx2-csvtravel{ 0%{transform:translateX(0);opacity:0;} 14%{opacity:1;} 78%{transform:translateX(44px);opacity:1;} 88%,100%{transform:translateX(44px);opacity:0;} }
+
+    /* meta-command cycle — psql Reference */
+    .sqlx2-meta{ display:flex; align-items:center; gap:7px; background:var(--code-bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 11px; font-family:'JetBrains Mono',monospace; font-size:.74rem; }
+    .sqlx2-mprompt{ color:var(--sx-green); }
+    .sqlx2-mstack{ position:relative; width:34px; height:1.15em; }
+    .sqlx2-mc{ position:absolute; left:0; top:0; white-space:nowrap; color:var(--sx-blue); opacity:0; animation:sqlx2-metacy 6s steps(1) infinite; animation-delay:calc(var(--i)*1.5s); }
+    .sqlx2-mc:first-child{ opacity:1; }
+    .sqlx2-mc b{ color:var(--sx-amber); font-weight:700; }
+    @keyframes sqlx2-metacy{ 0%,25%{opacity:1;} 26%,100%{opacity:0;} }
+
+    /* byte bars — Numeric Types */
+    .sqlx2-bytes{ display:flex; flex-direction:column; gap:6px; font-family:'JetBrains Mono',monospace; font-size:.66rem; }
+    .sqlx2-brow{ display:flex; align-items:center; gap:8px; }
+    .sqlx2-blab{ width:60px; text-align:right; color:var(--text-muted); }
+    .sqlx2-bnum{ color:var(--text-muted); }
+    .sqlx2-bar{ height:12px; width:var(--w); border-radius:3px; background:var(--bc); opacity:.85; animation:sqlx2-byglow 4.5s ease-in-out infinite; animation-delay:calc(var(--i)*1.5s); }
+    @keyframes sqlx2-byglow{ 0%,8%{opacity:.85;box-shadow:none;} 18%{opacity:1;box-shadow:0 0 9px var(--bc);} 33%,100%{opacity:.85;box-shadow:none;} }
+
+    @media (prefers-reduced-motion: reduce){
+      .sqlx2-fig *, .sqlx2-card *{ animation:none !important; transition:none !important; }
+      .sqlx2-ttype{ max-width:none; } .sqlx2-tout{ opacity:1; }
+      .sqlx2-drill-last{ opacity:1; }
+      .sqlx2-wv{ opacity:.7; }
+      .sqlx2-step{ background:var(--sc); color:var(--sx-ink); border-color:var(--sc); }
+    }
   </style>
 </head>
 <body>
@@ -30,21 +196,23 @@
     </div>
   </aside>
   <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-  <script src="js/header.js"></script>
+  <script src="js/header.js?v=7"></script>
   <script>renderHeader('SQL')</script>
   <script>renderSourceLink('SQL')</script>
   <main>
     <div class="page-header">
       <h1>SQL</h1>
-      <p class="subtitle">Quick reference with psql commands</p>
+      <p class="subtitle">A friendly starting point for SQL and PostgreSQL, with examples you can watch run.</p>
       <span id="source-link"></span>
       <nav class="toc">
+        <a href="#db-structure">Structure</a>
         <a href="#getting-started">Start</a>
         <a href="#connect">Connect</a>
         <a href="#databases">Databases</a>
         <a href="#tables">Tables</a>
         <a href="#columns">Columns</a>
         <a href="#data">Data</a>
+        <a href="#joins">Joins</a>
         <a href="#users">Users</a>
         <a href="#schema">Schema</a>
         <a href="#dates">Dates</a>
@@ -54,6 +222,465 @@
         <a href="#numeric-types">Numeric Types</a>
       </nav>
     </div>
+
+    <!-- Animated beginner explainer: step through SQL statements -->
+    <section id="first-lesson">
+      <style>
+        .sqlx-stage{
+          display:grid;
+          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+          gap:1rem;
+          margin-top:.5rem;
+          align-items:stretch;
+        }
+        @media (max-width:720px){ .sqlx-stage{ grid-template-columns:1fr; } }
+
+        .sqlx-left,.sqlx-right{
+          background:var(--surface);
+          border:1px solid var(--border);
+          border-radius:var(--radius);
+          padding:1rem 1.1rem;
+          display:flex;
+          flex-direction:column;
+        }
+
+        .sqlx-badge{
+          display:inline-flex;
+          align-items:center;
+          gap:.45rem;
+          align-self:flex-start;
+          font-family:var(--display);
+          font-weight:600;
+          font-size:.8rem;
+          color:var(--accent);
+          background:var(--accent-subtle);
+          border:1px solid var(--accent-subtle-2);
+          padding:.25rem .65rem;
+          border-radius:999px;
+          letter-spacing:.02em;
+        }
+        .sqlx-dot{
+          width:8px;height:8px;border-radius:50%;
+          background:var(--accent-2);
+          animation:sqlx-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes sqlx-pulse{ 0%,100%{opacity:.4;} 50%{opacity:1;} }
+
+        .sqlx-code{
+          margin:.8rem 0;
+          background:var(--code-bg);
+          color:var(--code-text);
+          border-radius:var(--radius-sm);
+          padding:.85rem 1rem;
+          font-family:'JetBrains Mono',monospace;
+          font-size:.82rem;
+          line-height:1.65;
+          white-space:pre;
+          overflow-x:auto;
+          min-height:5.2rem;
+        }
+        .sqlx-code.sqlx-fade{ animation:sqlx-fadein .4s ease both; }
+        @keyframes sqlx-fadein{ from{opacity:.25;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
+
+        .sqlx-caption{
+          color:var(--text-muted);
+          font-size:.88rem;
+          line-height:1.55;
+          margin:.1rem 0 .95rem;
+          min-height:3.2rem;
+        }
+        .sqlx-caption b{ color:var(--text); font-weight:600; }
+
+        .sqlx-controls{ display:flex; gap:.55rem; margin-top:auto; }
+        .sqlx-btn{
+          font-family:var(--display);
+          font-weight:600;
+          font-size:.85rem;
+          padding:.5rem 1rem;
+          border-radius:var(--radius-sm);
+          border:1px solid var(--border-strong);
+          background:var(--surface-2);
+          color:var(--text);
+          cursor:pointer;
+          transition:transform .15s ease, background .15s ease;
+        }
+        .sqlx-btn:not(:disabled):hover{ background:var(--bg-tint); }
+        .sqlx-btn:not(:disabled):active{ transform:translateY(1px); }
+        .sqlx-btn-primary{ background:var(--accent); color:var(--bg); border-color:transparent; }
+        .sqlx-btn-primary:not(:disabled):hover{ background:var(--accent-hover); }
+        .sqlx-btn:disabled{ opacity:.45; cursor:default; }
+
+        .sqlx-progress{ display:flex; gap:.4rem; margin-top:.95rem; }
+        .sqlx-pdot{
+          height:6px; flex:1; border-radius:3px;
+          background:var(--border-strong);
+          transition:background .45s ease;
+        }
+        .sqlx-pdot.sqlx-done{ background:var(--accent-2); }
+
+        .sqlx-tablelabel{
+          font-family:var(--display);
+          font-weight:600;
+          font-size:.82rem;
+          color:var(--text-muted);
+          margin-bottom:.75rem;
+          display:flex; align-items:center; gap:.5rem;
+        }
+        .sqlx-tablelabel svg{ flex:none; }
+        .sqlx-empty{
+          color:var(--text-subtle);
+          font-size:.85rem;
+          font-style:italic;
+          text-align:center;
+          padding:1.75rem .5rem;
+          border:1px dashed var(--border-strong);
+          border-radius:var(--radius-sm);
+        }
+        .sqlx-tablewrap{ display:none; }
+        .sqlx-tablewrap.sqlx-on{ display:block; }
+
+        .sqlx-table{
+          width:100%;
+          border-collapse:collapse;
+          font-family:'JetBrains Mono',monospace;
+          font-size:.85rem;
+        }
+        .sqlx-table th,.sqlx-table td{
+          text-align:left;
+          padding:.5rem .7rem;
+          border-bottom:1px solid var(--border);
+          color:var(--text);
+        }
+        .sqlx-table thead th{
+          background:var(--surface-2);
+          color:var(--text-muted);
+          font-weight:600;
+          border-bottom:2px solid var(--border-strong);
+        }
+        .sqlx-tablewrap.sqlx-on .sqlx-th{ animation:sqlx-colin .45s ease both; }
+        .sqlx-tablewrap.sqlx-on .sqlx-th:nth-child(2){ animation-delay:.1s; }
+        .sqlx-tablewrap.sqlx-on .sqlx-th:nth-child(3){ animation-delay:.2s; }
+        @keyframes sqlx-colin{ from{opacity:0;transform:translateY(-6px);} to{opacity:1;transform:translateY(0);} }
+
+        .sqlx-row{ display:none; }
+        .sqlx-row.sqlx-in{ display:table-row; }
+        .sqlx-row.sqlx-enter{ animation:sqlx-rowin .5s ease both; }
+        .sqlx-row.sqlx-enter[data-id="2"]{ animation-delay:.15s; }
+        @keyframes sqlx-rowin{ from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+        .sqlx-table tbody.sqlx-reading .sqlx-row.sqlx-in{ animation:sqlx-read 1.1s ease; }
+        .sqlx-table tbody.sqlx-reading .sqlx-row.sqlx-in[data-id="2"]{ animation-delay:.18s; }
+        @keyframes sqlx-read{ 0%{background:transparent;} 35%{background:var(--accent-subtle);} 100%{background:transparent;} }
+
+        .sqlx-age{ display:inline-block; border-radius:var(--radius-xs); padding:0 .25rem; }
+        .sqlx-age.sqlx-flash{ animation:sqlx-flash .95s ease; }
+        @keyframes sqlx-flash{
+          0%{ background:transparent; transform:scale(1); }
+          30%{ background:var(--accent-subtle-2); transform:scale(1.12); }
+          100%{ background:transparent; transform:scale(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce){
+          .sqlx-dot,.sqlx-code.sqlx-fade,.sqlx-th,.sqlx-row.sqlx-enter,
+          .sqlx-table tbody.sqlx-reading .sqlx-row.sqlx-in,.sqlx-age.sqlx-flash,
+          .sqlx-btn,.sqlx-pdot{ animation:none !important; transition:none !important; }
+          .sqlx-th{ opacity:1; transform:none; }
+          .sqlx-row.sqlx-in{ display:table-row; opacity:1; transform:none; }
+          .sqlx-code.sqlx-fade{ opacity:1; transform:none; }
+        }
+      </style>
+
+      <h2>Your First SQL, Step by Step</h2>
+
+      <div class="block-desc">
+        <span>A calm, guided walk-through: press <b>Next</b> to "run" one line at a time and watch a tiny <code>users</code> table come to life. Nothing is really run &mdash; it just shows what each statement does.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_intro.asp" target="_blank">W3Schools &rarr;</a>
+      </div>
+
+      <div class="sqlx-stage">
+        <div class="sqlx-left">
+          <div class="sqlx-badge"><span class="sqlx-dot"></span><span id="sqlx-stepname">Ready</span></div>
+          <pre class="sqlx-code" id="sqlx-code"></pre>
+          <p class="sqlx-caption" id="sqlx-caption"></p>
+          <div class="sqlx-controls">
+            <button type="button" class="sqlx-btn sqlx-btn-primary" id="sqlx-next">Next &#9654;</button>
+            <button type="button" class="sqlx-btn" id="sqlx-reset">Reset</button>
+          </div>
+          <div class="sqlx-progress" id="sqlx-progress"></div>
+        </div>
+
+        <div class="sqlx-right">
+          <div class="sqlx-tablelabel">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <ellipse cx="8" cy="3.4" rx="5.4" ry="2.2" stroke="#1b9e86" stroke-width="1.3"/>
+              <path d="M2.6 3.4v9.2c0 1.2 2.4 2.2 5.4 2.2s5.4-1 5.4-2.2V3.4" stroke="#1b9e86" stroke-width="1.3"/>
+              <path d="M2.6 8c0 1.2 2.4 2.2 5.4 2.2s5.4-1 5.4-2.2" stroke="#1b9e86" stroke-width="1.3"/>
+            </svg>
+            Table: <code>users</code>
+          </div>
+          <div class="sqlx-empty" id="sqlx-empty">No table yet &mdash; press Next to create one.</div>
+          <div class="sqlx-tablewrap" id="sqlx-tablewrap">
+            <table class="sqlx-table">
+              <thead>
+                <tr>
+                  <th class="sqlx-th">id</th>
+                  <th class="sqlx-th">name</th>
+                  <th class="sqlx-th">age</th>
+                </tr>
+              </thead>
+              <tbody id="sqlx-tbody">
+                <tr class="sqlx-row" data-id="1"><td>1</td><td>Ava</td><td><span class="sqlx-age" id="sqlx-age1">30</span></td></tr>
+                <tr class="sqlx-row" data-id="2"><td>2</td><td>Ben</td><td><span class="sqlx-age">25</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function(){
+          var steps = [
+            {
+              name:'Ready',
+              code:'<span class="pg-cm">-- Press &ldquo;Next&rdquo; to run your first statement</span>',
+              cap:'This is a guided first lesson. Press <b>Next</b> to run each line and watch the tiny <code>users</code> table change. Nothing is really run.'
+            },
+            {
+              name:'CREATE TABLE',
+              code:'<span class="pg-kw">CREATE TABLE</span> users (\n  id   <span class="pg-kw">INT</span>,\n  name <span class="pg-kw">TEXT</span>,\n  age  <span class="pg-kw">INT</span>\n);',
+              cap:'<b>CREATE TABLE</b> makes an empty table. The three columns appear &mdash; but there are no rows of data yet.'
+            },
+            {
+              name:'INSERT',
+              code:'<span class="pg-kw">INSERT INTO</span> users <span class="pg-kw">VALUES</span>\n  (<span class="pg-op">1</span>, <span class="pg-str">&#39;Ava&#39;</span>, <span class="pg-op">30</span>),\n  (<span class="pg-op">2</span>, <span class="pg-str">&#39;Ben&#39;</span>, <span class="pg-op">25</span>);',
+              cap:'<b>INSERT</b> adds rows of data. Two people slide into the table.'
+            },
+            {
+              name:'SELECT',
+              code:'<span class="pg-kw">SELECT</span> <span class="pg-op">*</span> <span class="pg-kw">FROM</span> users;',
+              cap:'<b>SELECT *</b> reads the rows back out (<code>*</code> means &ldquo;all columns&rdquo;). Nothing changes &mdash; we are just looking.'
+            },
+            {
+              name:'UPDATE',
+              code:'<span class="pg-kw">UPDATE</span> users\n<span class="pg-kw">SET</span> age <span class="pg-op">=</span> <span class="pg-op">31</span>\n<span class="pg-kw">WHERE</span> id <span class="pg-op">=</span> <span class="pg-op">1</span>;',
+              cap:'<b>UPDATE</b> changes data that is already there. Ava had a birthday &mdash; watch her age cell flash from 30 to 31.'
+            }
+          ];
+
+          var idx = 0, max = steps.length - 1;
+          var $ = function(id){ return document.getElementById(id); };
+          var codeEl=$('sqlx-code'), capEl=$('sqlx-caption'), nameEl=$('sqlx-stepname'),
+              nextBtn=$('sqlx-next'), resetBtn=$('sqlx-reset'), emptyEl=$('sqlx-empty'),
+              wrap=$('sqlx-tablewrap'), tbody=$('sqlx-tbody'), age1=$('sqlx-age1'), progEl=$('sqlx-progress');
+          var rows = Array.prototype.slice.call(tbody.querySelectorAll('.sqlx-row'));
+
+          var segs = [];
+          for (var i=0; i<max; i++){
+            var d = document.createElement('span');
+            d.className = 'sqlx-pdot';
+            progEl.appendChild(d);
+            segs.push(d);
+          }
+
+          function reflow(el){ void el.offsetWidth; }
+          function replay(el, cls){ el.classList.remove(cls); reflow(el); el.classList.add(cls); }
+
+          function renderText(){
+            var s = steps[idx];
+            codeEl.innerHTML = s.code;
+            capEl.innerHTML = s.cap;
+            nameEl.textContent = s.name;
+            nextBtn.disabled = idx >= max;
+            nextBtn.innerHTML = idx >= max ? 'Done &#10003;' : 'Next &#9654;';
+            segs.forEach(function(seg, i){ seg.classList.toggle('sqlx-done', idx > i); });
+            replay(codeEl, 'sqlx-fade');
+          }
+
+          function next(){
+            if (idx >= max) return;
+            idx++;
+            renderText();
+            if (idx === 1){
+              emptyEl.style.display = 'none';
+              wrap.classList.add('sqlx-on');
+            }
+            if (idx === 2){
+              rows.forEach(function(r){ r.classList.add('sqlx-in'); replay(r, 'sqlx-enter'); });
+              setTimeout(function(){ rows.forEach(function(r){ r.classList.remove('sqlx-enter'); }); }, 750);
+            }
+            if (idx === 3){
+              replay(tbody, 'sqlx-reading');
+              setTimeout(function(){ tbody.classList.remove('sqlx-reading'); }, 1500);
+            }
+            if (idx === 4){
+              age1.textContent = '31';
+              replay(age1, 'sqlx-flash');
+              setTimeout(function(){ age1.classList.remove('sqlx-flash'); }, 1000);
+            }
+          }
+
+          function reset(){
+            idx = 0;
+            rows.forEach(function(r){ r.classList.remove('sqlx-in', 'sqlx-enter'); });
+            tbody.classList.remove('sqlx-reading');
+            age1.classList.remove('sqlx-flash');
+            age1.textContent = '30';
+            wrap.classList.remove('sqlx-on');
+            emptyEl.style.display = '';
+            renderText();
+          }
+
+          nextBtn.addEventListener('click', next);
+          resetBtn.addEventListener('click', reset);
+          renderText();
+        })();
+      </script>
+    </section>
+
+    <!-- How a database is organised -->
+    <section id="db-structure">
+      <h2>How a Database Is Organised</h2>
+
+      <div class="block-desc">
+        <span>One <b>machine</b> runs the PostgreSQL server; it hosts one or more <b>databases</b>; each database holds <b>schemas</b> (named folders); schemas hold <b>tables</b>; a table is <b>rows</b> of <b>columns</b>. Watch the highlight drill from the machine down to a single row, and note how <code>orders.user_id</code> points back at <code>users.id</code>.</span>
+        <a class="w3-link" href="https://www.postgresql.org/docs/current/ddl-schemas.html" target="_blank">PostgreSQL Docs &rarr;</a>
+      </div>
+      <div class="sqlx2-card">
+        <div class="sqlx2-orgwrap">
+        <svg class="sqlx2-org" viewBox="0 0 680 420" role="img" aria-labelledby="sqlx2-org-title">
+          <title id="sqlx2-org-title">Nested boxes: one machine runs the server, which holds databases, each with schemas, which hold tables made of rows and columns; users.id is linked to orders.user_id</title>
+          <defs>
+            <marker id="sqlx2-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0L10 5L0 10z" fill="#e8808f"/>
+            </marker>
+          </defs>
+
+          <!-- machine / server -->
+          <rect x="8" y="8" width="664" height="404" rx="14" fill="#7aa2f7" fill-opacity=".05" stroke="#7aa2f7" stroke-width="1.6"/>
+          <rect x="22" y="16" width="56" height="14" rx="4" fill="#7aa2f7"/><text class="sqlx2-o-tag" x="50" y="26" text-anchor="middle">MACHINE</text>
+          <text class="sqlx2-o-name" x="86" y="27">my-server</text>
+          <text class="sqlx2-o-muted" x="158" y="27">one PostgreSQL service, listening on port 5432</text>
+          <g fill="none" stroke="#7aa2f7" stroke-width="1.4">
+            <rect x="630" y="14" width="30" height="9" rx="2"/><rect x="630" y="26" width="30" height="9" rx="2"/>
+          </g>
+          <circle cx="636" cy="18.5" r="1.6" fill="#9ece6a"/><circle cx="636" cy="30.5" r="1.6" fill="#9ece6a"/>
+
+          <!-- database: shop_db -->
+          <rect x="24" y="46" width="500" height="354" rx="12" fill="#bb9af7" fill-opacity=".06" stroke="#bb9af7" stroke-width="1.5"/>
+          <rect x="36" y="54" width="62" height="14" rx="4" fill="#bb9af7"/><text class="sqlx2-o-tag" x="67" y="64" text-anchor="middle">DATABASE</text>
+          <text class="sqlx2-o-name" x="106" y="65">shop_db</text>
+
+          <!-- database: analytics_db (a second one on the same server) -->
+          <rect x="540" y="46" width="120" height="354" rx="12" fill="none" stroke="#bb9af7" stroke-width="1.3" stroke-dasharray="4 3"/>
+          <rect x="550" y="54" width="62" height="14" rx="4" fill="#bb9af7"/><text class="sqlx2-o-tag" x="581" y="64" text-anchor="middle">DATABASE</text>
+          <text class="sqlx2-o-mono" x="550" y="84">analytics_db</text>
+          <text class="sqlx2-o-muted" x="550" y="102">another database</text>
+          <text class="sqlx2-o-muted" x="550" y="116">on this server</text>
+          <rect x="550" y="128" width="100" height="250" rx="8" fill="none" stroke="#e0b366" stroke-width="1" stroke-dasharray="3 3"/>
+          <text class="sqlx2-o-muted" x="560" y="146">public</text>
+          <rect class="sqlx2-o-ghost" x="560" y="158" width="80" height="9" rx="2"/>
+          <rect class="sqlx2-o-ghost" x="560" y="172" width="80" height="9" rx="2"/>
+          <rect class="sqlx2-o-ghost" x="560" y="186" width="80" height="9" rx="2"/>
+          <text class="sqlx2-o-muted" x="600" y="214" text-anchor="middle">&#8230;</text>
+
+          <!-- schema: public -->
+          <rect x="40" y="84" width="468" height="300" rx="10" fill="#e0b366" fill-opacity=".06" stroke="#e0b366" stroke-width="1.5"/>
+          <rect x="52" y="92" width="52" height="14" rx="4" fill="#e0b366"/><text class="sqlx2-o-tag" x="78" y="102" text-anchor="middle">SCHEMA</text>
+          <text class="sqlx2-o-name" x="112" y="103">public</text>
+
+          <!-- table: users -->
+          <rect x="58" y="118" width="44" height="14" rx="4" fill="#9ece6a"/><text class="sqlx2-o-tag" x="80" y="128" text-anchor="middle">TABLE</text>
+          <text class="sqlx2-o-name" x="108" y="129">users</text>
+          <rect class="sqlx2-o-cell" style="fill:#9ece6a;fill-opacity:.28" x="58" y="140" width="40" height="20"/>
+            <text class="sqlx2-o-mono sqlx2-o-hd" x="64" y="154">id</text>
+            <rect x="77" y="144" width="18" height="12" rx="3" fill="#e8808f"/>
+            <text class="sqlx2-o-tag" x="86" y="153" text-anchor="middle" style="font-size:7.5px">PK</text>
+            <rect class="sqlx2-o-cell" style="fill:#9ece6a;fill-opacity:.28" x="98" y="140" width="66" height="20"/>
+            <text class="sqlx2-o-mono sqlx2-o-hd" x="104" y="154">name</text>
+            <rect class="sqlx2-o-cell" style="fill:#9ece6a;fill-opacity:.28" x="164" y="140" width="84" height="20"/>
+            <text class="sqlx2-o-mono sqlx2-o-hd" x="170" y="154">email</text>
+            <rect class="sqlx2-o-cell" x="58" y="160" width="40" height="20"/>
+            <text class="sqlx2-o-mono" x="64" y="174">1</text>
+            <rect class="sqlx2-o-cell" x="98" y="160" width="66" height="20"/>
+            <text class="sqlx2-o-mono" x="104" y="174">Ava</text>
+            <rect class="sqlx2-o-cell" x="164" y="160" width="84" height="20"/>
+            <text class="sqlx2-o-mono" x="170" y="174">ava@x.io</text>
+            <rect class="sqlx2-o-cell" x="58" y="180" width="40" height="20"/>
+            <text class="sqlx2-o-mono" x="64" y="194">2</text>
+            <rect class="sqlx2-o-cell" x="98" y="180" width="66" height="20"/>
+            <text class="sqlx2-o-mono" x="104" y="194">Ben</text>
+            <rect class="sqlx2-o-cell" x="164" y="180" width="84" height="20"/>
+            <text class="sqlx2-o-mono" x="170" y="194">ben@x.io</text>
+            <rect class="sqlx2-o-cell" x="58" y="200" width="40" height="20"/>
+            <text class="sqlx2-o-mono" x="64" y="214">3</text>
+            <rect class="sqlx2-o-cell" x="98" y="200" width="66" height="20"/>
+            <text class="sqlx2-o-mono" x="104" y="214">Cy</text>
+            <rect class="sqlx2-o-cell" x="164" y="200" width="84" height="20"/>
+            <text class="sqlx2-o-mono" x="170" y="214">cy@x.io</text>
+          <text class="sqlx2-o-muted" x="254" y="174" style="font-size:9.5px">&#8592; row</text>
+
+          <!-- table: orders -->
+          <rect x="300" y="118" width="44" height="14" rx="4" fill="#e8808f"/><text class="sqlx2-o-tag" x="322" y="128" text-anchor="middle">TABLE</text>
+          <text class="sqlx2-o-name" x="350" y="129">orders</text>
+          <rect class="sqlx2-o-cell" style="fill:#e8808f;fill-opacity:.28" x="300" y="140" width="46" height="20"/>
+            <text class="sqlx2-o-mono sqlx2-o-hd" x="306" y="154">id</text>
+            <rect x="325" y="144" width="18" height="12" rx="3" fill="#e8808f"/>
+            <text class="sqlx2-o-tag" x="334" y="153" text-anchor="middle" style="font-size:7.5px">PK</text>
+            <rect class="sqlx2-o-cell" style="fill:#e8808f;fill-opacity:.28" x="346" y="140" width="72" height="20"/>
+            <text class="sqlx2-o-mono sqlx2-o-hd" x="352" y="154">user_id</text>
+            <rect x="397" y="144" width="18" height="12" rx="3" fill="#e8808f"/>
+            <text class="sqlx2-o-tag" x="406" y="153" text-anchor="middle" style="font-size:7.5px">FK</text>
+            <rect class="sqlx2-o-cell" style="fill:#e8808f;fill-opacity:.28" x="418" y="140" width="72" height="20"/>
+            <text class="sqlx2-o-mono sqlx2-o-hd" x="424" y="154">total</text>
+            <rect class="sqlx2-o-cell" x="300" y="160" width="46" height="20"/>
+            <text class="sqlx2-o-mono" x="306" y="174">101</text>
+            <rect class="sqlx2-o-cell" x="346" y="160" width="72" height="20"/>
+            <text class="sqlx2-o-mono" x="352" y="174">1</text>
+            <rect class="sqlx2-o-cell" x="418" y="160" width="72" height="20"/>
+            <text class="sqlx2-o-mono" x="424" y="174">40.00</text>
+            <rect class="sqlx2-o-cell" x="300" y="180" width="46" height="20"/>
+            <text class="sqlx2-o-mono" x="306" y="194">102</text>
+            <rect class="sqlx2-o-cell" x="346" y="180" width="72" height="20"/>
+            <text class="sqlx2-o-mono" x="352" y="194">2</text>
+            <rect class="sqlx2-o-cell" x="418" y="180" width="72" height="20"/>
+            <text class="sqlx2-o-mono" x="424" y="194">15.50</text>
+            <rect class="sqlx2-o-cell" x="300" y="200" width="46" height="20"/>
+            <text class="sqlx2-o-mono" x="306" y="214">103</text>
+            <rect class="sqlx2-o-cell" x="346" y="200" width="72" height="20"/>
+            <text class="sqlx2-o-mono" x="352" y="214">1</text>
+            <rect class="sqlx2-o-cell" x="418" y="200" width="72" height="20"/>
+            <text class="sqlx2-o-mono" x="424" y="214">72.00</text>
+
+          <!-- relation: PRIMARY KEY -> FOREIGN KEY -->
+          <circle cx="78" cy="220" r="3" fill="#e8808f"/>
+          <path d="M78 220V242H382V226" fill="none" stroke="#e8808f" stroke-width="1.8" marker-end="url(#sqlx2-arrow)"/>
+          <text class="sqlx2-o-muted" x="230" y="258" text-anchor="middle">PRIMARY KEY <tspan style="fill:#e8808f;font-weight:600">users.id</tspan> &#8594; FOREIGN KEY <tspan style="fill:#e8808f;font-weight:600">orders.user_id</tspan></text>
+
+          <!-- rows & columns callout -->
+          <rect x="58" y="272" width="432" height="100" rx="8" fill="#e8808f" fill-opacity=".05" stroke="#e8808f" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <rect x="68" y="265" width="96" height="14" rx="4" fill="#e8808f"/><text class="sqlx2-o-tag" x="116" y="275" text-anchor="middle">ROWS &amp; COLUMNS</text>
+          <text class="sqlx2-o-muted" x="70" y="297"><tspan style="font-weight:600">Row</tspan> &#8594; one record, read across: <tspan class="sqlx2-o-mono" style="fill:#e8808f">(1, 'Ava', 'ava@x.io')</tspan></text>
+          <text class="sqlx2-o-muted" x="70" y="319"><tspan style="font-weight:600">Column</tspan> &#8595; one attribute every row shares: <tspan class="sqlx2-o-mono" style="fill:#9ece6a">id &#183; name &#183; email</tspan></text>
+          <text class="sqlx2-o-muted" x="70" y="341"><tspan style="font-weight:600">Relation</tspan> &#8594; orders.user_id points at users.id (Ava owns orders 101 and 103)</text>
+          <text class="sqlx2-o-muted" x="70" y="362">Full name of the table: <tspan class="sqlx2-o-mono" style="fill:#bb9af7">shop_db</tspan>.<tspan class="sqlx2-o-mono" style="fill:#e0b366">public</tspan>.<tspan class="sqlx2-o-mono" style="fill:#9ece6a">users</tspan></text>
+
+          <!-- drill-down highlight: machine > database > schema > table > row -->
+          <rect class="sqlx2-drill" style="--d:0s" x="8" y="8" width="664" height="404" rx="14"/>
+          <rect class="sqlx2-drill" style="--d:3s" x="24" y="46" width="500" height="354" rx="12"/>
+          <rect class="sqlx2-drill" style="--d:6s" x="40" y="84" width="468" height="300" rx="10"/>
+          <rect class="sqlx2-drill" style="--d:9s" x="54" y="113" width="198" height="111" rx="8"/>
+          <rect class="sqlx2-drill sqlx2-drill-last" style="--d:12s" x="58" y="160" width="190" height="20" rx="3"/>
+        </svg>
+        </div>
+        <div class="sqlx2-steps" aria-hidden="true">
+          <span class="sqlx2-step" style="--d:0s;--sc:var(--sx-blue)">Machine</span><span>&rarr;</span>
+          <span class="sqlx2-step" style="--d:3s;--sc:var(--sx-violet)">Database</span><span>&rarr;</span>
+          <span class="sqlx2-step" style="--d:6s;--sc:var(--sx-amber)">Schema</span><span>&rarr;</span>
+          <span class="sqlx2-step" style="--d:9s;--sc:var(--sx-green)">Table</span><span>&rarr;</span>
+          <span class="sqlx2-step" style="--d:12s;--sc:var(--sx-rose)">Row</span>
+        </div>
+      </div>
+    </section>
 
     <!-- Getting Started -->
     <section id="getting-started">
@@ -74,6 +701,13 @@ psql <span class="pg-op">--</span>version</pre>
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#9ece6a;">psql (PostgreSQL) 16.2</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <div class="sqlx2-term sqlx2-art" aria-hidden="true">
+              <div class="sqlx2-term-bar"><span class="sqlx2-tdot sqlx2-tdot-r"></span><span class="sqlx2-tdot sqlx2-tdot-a"></span><span class="sqlx2-tdot sqlx2-tdot-g"></span></div>
+              <div class="sqlx2-term-body"><span class="sqlx2-tprompt">$</span> <span class="sqlx2-ttype">psql --version</span><span class="sqlx2-tcaret"></span><div class="sqlx2-tout">psql (PostgreSQL) 16.2</div></div>
+            </div>
+            <p class="sqlx2-cap"><b>psql</b> is the terminal client: type a command, press Enter, read the reply. Everything in this section happens at that prompt.</p>
           </div>
         </div>
       </div>
@@ -241,6 +875,17 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;">in directory "/var/lib/postgresql".</span>
             </div>
           </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="150" height="44" viewBox="0 0 150 44" aria-hidden="true">
+              <rect x="4" y="9" width="30" height="20" rx="3" fill="#7aa2f7" fill-opacity=".25" stroke="#7aa2f7" stroke-width="1.5"/>
+              <rect x="0" y="31" width="38" height="3" rx="1.5" fill="#7aa2f7"/>
+              <line class="sqlx2-ln" x1="42" y1="22" x2="110" y2="22"/>
+              <circle class="sqlx2-pkt" cx="46" cy="22" r="4" fill="#e0b366"/>
+              <ellipse cx="130" cy="12" rx="14" ry="5" fill="#bb9af7" fill-opacity=".3" stroke="#bb9af7" stroke-width="1.5"/>
+              <path d="M116 12v20c0 2.8 6.3 5 14 5s14-2.2 14-5V12" fill="#bb9af7" fill-opacity=".15" stroke="#bb9af7" stroke-width="1.5"/>
+            </svg>
+            <p class="sqlx2-cap">A <b>connection</b> is one open line between your client and the server, tied to a database and a user. <code>\conninfo</code> describes the line you are on.</p>
+          </div>
         </div>
       </div>
 
@@ -323,6 +968,16 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;"> mydb      | myuser | UTF8     | en_US</span><br />
               <span style="color:#9ece6a;"> postgres  | postgres | UTF8   | en_US</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="160" height="54" viewBox="0 0 160 54" aria-hidden="true">
+              <rect class="sqlx2-frame" x="1" y="1" width="158" height="52" rx="8"/>
+              <g transform="translate(12,8)"><ellipse cx="18" cy="5" rx="16" ry="5" fill="#7aa2f7" fill-opacity=".3" stroke="#7aa2f7" stroke-width="1.4"/><path d="M2 5v14c0 2.8 7.2 5 16 5s16-2.2 16-5V5" fill="#7aa2f7" fill-opacity=".15" stroke="#7aa2f7" stroke-width="1.4"/><text class="sqlx2-lbl" x="18" y="36" text-anchor="middle">mydb</text></g>
+              <g transform="translate(62,8)"><ellipse cx="18" cy="5" rx="16" ry="5" fill="#bb9af7" fill-opacity=".3" stroke="#bb9af7" stroke-width="1.4"/><path d="M2 5v14c0 2.8 7.2 5 16 5s16-2.2 16-5V5" fill="#bb9af7" fill-opacity=".15" stroke="#bb9af7" stroke-width="1.4"/><text class="sqlx2-lbl" x="18" y="36" text-anchor="middle">postgres</text></g>
+              <g transform="translate(112,8)"><ellipse cx="18" cy="5" rx="16" ry="5" fill="#9ece6a" fill-opacity=".3" stroke="#9ece6a" stroke-width="1.4"/><path d="M2 5v14c0 2.8 7.2 5 16 5s16-2.2 16-5V5" fill="#9ece6a" fill-opacity=".15" stroke="#9ece6a" stroke-width="1.4"/><text class="sqlx2-lbl" x="18" y="36" text-anchor="middle">app</text></g>
+              <rect class="sqlx2-dbring" x="7" y="4" width="46" height="46" rx="8" fill="none" stroke="#e8808f" stroke-width="2"/>
+            </svg>
+            <p class="sqlx2-cap">One server hosts <b>many databases</b>, each a separate world of tables. <code>\l</code> lists them and <code>\c</code> steps into one.</p>
           </div>
         </div>
       </div>
@@ -443,6 +1098,15 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;"> public | users | table | postgres</span><br />
               <span style="color:#9ece6a;"> public | posts | table | postgres</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <div class="sqlx2-tbl sqlx2-art" aria-hidden="true">
+              <div class="sqlx2-tr sqlx2-thd"><span>id</span><span>name</span></div>
+              <div class="sqlx2-tr" style="--i:0"><span>1</span><span>Ava</span></div>
+              <div class="sqlx2-tr" style="--i:1"><span>2</span><span>Ben</span></div>
+              <div class="sqlx2-tr" style="--i:2"><span>3</span><span>Cy</span></div>
+            </div>
+            <p class="sqlx2-cap">A <b>table</b> is a grid: fixed columns across, one row per record down. <code>\dt</code> lists the tables, <code>\d</code> shows one table's columns.</p>
           </div>
         </div>
       </div>
@@ -575,6 +1239,14 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;">ALTER TABLE</span>
             </div>
           </div>
+          <div class="sqlx2-fig">
+            <div class="sqlx2-cols sqlx2-art" aria-hidden="true">
+              <div class="sqlx2-col"><span>id</span><span>1</span><span>2</span></div>
+              <div class="sqlx2-col"><span>name</span><span>Ava</span><span>Ben</span></div>
+              <div class="sqlx2-col sqlx2-colnew"><span>+ age</span><span class="sqlx2-null">NULL</span><span class="sqlx2-null">NULL</span></div>
+            </div>
+            <p class="sqlx2-cap">A <b>column</b> is one attribute every row shares. <code>ALTER TABLE</code> adds, retypes or drops a column across the whole table at once &mdash; a new column starts out <code>NULL</code>.</p>
+          </div>
         </div>
       </div>
 
@@ -679,6 +1351,15 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;">  1 | Alice | alice@example.com</span><br />
               <span style="color:#9ece6a;">  2 | Bob   | bob@example.com</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <div class="sqlx2-crud sqlx2-art" aria-hidden="true">
+              <span class="sqlx2-chip sqlx2-c-c" style="--i:0">C</span>
+              <span class="sqlx2-chip sqlx2-c-r" style="--i:1">R</span>
+              <span class="sqlx2-chip sqlx2-c-u" style="--i:2">U</span>
+              <span class="sqlx2-chip sqlx2-c-d" style="--i:3">D</span>
+            </div>
+            <p class="sqlx2-cap">Four verbs cover all data work: <b>C</b>reate (<code>INSERT</code>), <b>R</b>ead (<code>SELECT</code>), <b>U</b>pdate (<code>UPDATE</code>) and <b>D</b>elete (<code>DELETE</code>).</p>
           </div>
         </div>
       </div>
@@ -804,6 +1485,89 @@ psql <span class="pg-op">--</span>version</pre>
       </div>
     </section>
 
+    <!-- Joins -->
+    <section id="joins">
+      <h2>Joins</h2>
+
+      <div class="block-desc">
+        <span>A <code>JOIN</code> combines rows from two tables where a condition holds &mdash; usually a foreign key equal to a primary key, as in <code>orders.user_id = users.id</code>.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_join.asp" target="_blank">W3Schools &rarr;</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">INNER JOIN</div>
+          <pre><span class="pg-kw">SELECT</span> u<span class="pg-op">.</span>name<span class="pg-op">,</span> o<span class="pg-op">.</span>total
+  <span class="pg-kw">FROM</span> users u
+  <span class="pg-kw">JOIN</span> orders o <span class="pg-kw">ON</span> o<span class="pg-op">.</span>user_id <span class="pg-op">=</span> u<span class="pg-op">.</span>id<span class="pg-op">;</span></pre>
+        </div>
+        <div class="live-panel">
+          <div class="live-output">
+            <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
+              <span style="color:#565f89;"> name | total</span><br />
+              <span style="color:#565f89;">------+-------</span><br />
+              <span style="color:#9ece6a;"> Ava  | 40.00</span><br />
+              <span style="color:#9ece6a;"> Ben  | 15.50</span><br />
+              <span style="color:#9ece6a;"> Ava  | 72.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-desc">
+        <span>Which rows survive depends on the join type. In each Venn the left circle is <b>users</b>, the right is <b>orders</b>, and the shaded area is what the query returns.</span>
+        <a class="w3-link" href="https://www.w3schools.com/sql/sql_join.asp" target="_blank">W3Schools &rarr;</a>
+      </div>
+      <div class="sqlx2-card">
+        <div class="sqlx2-venns">
+          <div class="sqlx2-venn" style="--vc:#9ece6a">
+            <h4><i></i>INNER JOIN</h4>
+            <svg class="sqlx2-vsvg" viewBox="0 0 160 100" aria-hidden="true">
+              <defs><clipPath id="sqlx2-clip-inner"><circle cx="60" cy="56" r="34"/></clipPath></defs>
+              <circle class="sqlx2-vshade" style="--vd:0s" cx="100" cy="56" r="34" fill="#9ece6a" clip-path="url(#sqlx2-clip-inner)"/>
+              <circle class="sqlx2-vring" cx="60" cy="56" r="34"/>
+              <circle class="sqlx2-vring" cx="100" cy="56" r="34"/>
+              <text class="sqlx2-vlbl" x="50" y="13">users</text>
+              <text class="sqlx2-vlbl" x="110" y="13">orders</text>
+            </svg>
+            <p class="sqlx2-vnote">Only rows that match on <b>both</b> sides &mdash; users who have placed an order.</p>
+          </div>
+          <div class="sqlx2-venn" style="--vc:#7aa2f7">
+            <h4><i></i>LEFT JOIN</h4>
+            <svg class="sqlx2-vsvg" viewBox="0 0 160 100" aria-hidden="true">
+              <circle class="sqlx2-vshade" style="--vd:1.5s" cx="60" cy="56" r="34" fill="#7aa2f7"/>
+              <circle class="sqlx2-vring" cx="60" cy="56" r="34"/>
+              <circle class="sqlx2-vring" cx="100" cy="56" r="34"/>
+              <text class="sqlx2-vlbl" x="50" y="13">users</text>
+              <text class="sqlx2-vlbl" x="110" y="13">orders</text>
+            </svg>
+            <p class="sqlx2-vnote"><b>All</b> users, matched or not; a user with no order gets <code>NULL</code> order columns.</p>
+          </div>
+          <div class="sqlx2-venn" style="--vc:#e0b366">
+            <h4><i></i>RIGHT JOIN</h4>
+            <svg class="sqlx2-vsvg" viewBox="0 0 160 100" aria-hidden="true">
+              <circle class="sqlx2-vshade" style="--vd:3s" cx="100" cy="56" r="34" fill="#e0b366"/>
+              <circle class="sqlx2-vring" cx="60" cy="56" r="34"/>
+              <circle class="sqlx2-vring" cx="100" cy="56" r="34"/>
+              <text class="sqlx2-vlbl" x="50" y="13">users</text>
+              <text class="sqlx2-vlbl" x="110" y="13">orders</text>
+            </svg>
+            <p class="sqlx2-vnote"><b>All</b> orders, matched or not; an order with no user gets <code>NULL</code> user columns.</p>
+          </div>
+          <div class="sqlx2-venn" style="--vc:#bb9af7">
+            <h4><i></i>FULL OUTER JOIN</h4>
+            <svg class="sqlx2-vsvg" viewBox="0 0 160 100" aria-hidden="true">
+              <g class="sqlx2-vshade" style="--vd:4.5s" fill="#bb9af7"><circle cx="60" cy="56" r="34"/><circle cx="100" cy="56" r="34"/></g>
+              <circle class="sqlx2-vring" cx="60" cy="56" r="34"/>
+              <circle class="sqlx2-vring" cx="100" cy="56" r="34"/>
+              <text class="sqlx2-vlbl" x="50" y="13">users</text>
+              <text class="sqlx2-vlbl" x="110" y="13">orders</text>
+            </svg>
+            <p class="sqlx2-vnote"><b>Every</b> row from both tables; <code>NULL</code> fills whichever side has no match.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Users & Permissions -->
     <section id="users">
       <h2>Users &amp; Permissions</h2>
@@ -825,6 +1589,22 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;"> postgres</span><br />
               <span style="color:#9ece6a;"> myuser</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="150" height="50" viewBox="0 0 150 50" aria-hidden="true">
+              <circle cx="20" cy="17" r="8" fill="#7aa2f7" fill-opacity=".3" stroke="#7aa2f7" stroke-width="1.5"/>
+              <path d="M6 40c0-8 6-12 14-12s14 4 14 12" fill="#7aa2f7" fill-opacity=".2" stroke="#7aa2f7" stroke-width="1.5"/>
+              <line class="sqlx2-ln" x1="42" y1="26" x2="60" y2="26"/>
+              <path class="sqlx2-shackle" d="M69 24v-7a7 7 0 0 1 14 0v7" fill="none" stroke="#e0b366" stroke-width="2.2" stroke-linecap="round"/>
+              <rect x="64" y="23" width="24" height="18" rx="4" fill="#e0b366" fill-opacity=".35" stroke="#e0b366" stroke-width="1.5"/>
+              <circle cx="76" cy="32" r="2.4" fill="#e0b366"/>
+              <text class="sqlx2-lbl" x="76" y="49" text-anchor="middle">GRANT</text>
+              <rect x="104" y="12" width="40" height="26" rx="3" fill="#9ece6a" fill-opacity=".2" stroke="#9ece6a" stroke-width="1.5"/>
+              <line x1="104" y1="21" x2="144" y2="21" stroke="#9ece6a" stroke-width="1.2"/>
+              <line x1="104" y1="30" x2="144" y2="30" stroke="#9ece6a" stroke-width="1.2"/>
+              <path class="sqlx2-grantchk" d="M114 26l6 6 12-12" fill="none" stroke="#9ece6a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p class="sqlx2-cap">A <b>role</b> (user) starts with no rights; <code>GRANT</code> unlocks specific actions on specific objects. <code>\du</code> and <code>\dp</code> show who may do what.</p>
           </div>
         </div>
       </div>
@@ -993,6 +1773,15 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#9ece6a;"> public | postgres</span>
             </div>
           </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="150" height="48" viewBox="0 0 150 48" aria-hidden="true">
+              <g transform="translate(5,8)"><path d="M0 6a3 3 0 0 1 3-3h10l4 4h20a3 3 0 0 1 3 3v19a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3z" fill="#e0b366" fill-opacity=".3" stroke="#e0b366" stroke-width="1.4"/><text class="sqlx2-lbl" x="20" y="24" text-anchor="middle">public</text></g>
+              <g transform="translate(55,8)"><path d="M0 6a3 3 0 0 1 3-3h10l4 4h20a3 3 0 0 1 3 3v19a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3z" fill="#7aa2f7" fill-opacity=".3" stroke="#7aa2f7" stroke-width="1.4"/><text class="sqlx2-lbl" x="20" y="24" text-anchor="middle">sales</text></g>
+              <g transform="translate(105,8)"><path d="M0 6a3 3 0 0 1 3-3h10l4 4h20a3 3 0 0 1 3 3v19a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3z" fill="#9ece6a" fill-opacity=".3" stroke="#9ece6a" stroke-width="1.4"/><text class="sqlx2-lbl" x="20" y="24" text-anchor="middle">hr</text></g>
+              <rect class="sqlx2-schsel" x="2" y="5" width="46" height="38" rx="7" fill="none" stroke="#bb9af7" stroke-width="2"/>
+            </svg>
+            <p class="sqlx2-cap">A <b>schema</b> is a named folder of tables inside one database &mdash; <code>public</code> is the default. <code>\dn</code> lists them; <code>sales.orders</code> names a table by its folder.</p>
+          </div>
         </div>
       </div>
 
@@ -1053,6 +1842,15 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#565f89;">--------------</span><br />
               <span style="color:#9ece6a;"> 2026-07-05</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="150" height="48" viewBox="0 0 150 48" aria-hidden="true">
+              <rect x="1" y="1" width="148" height="12" rx="4" fill="#e8808f"/>
+              <text class="sqlx2-calhd" x="75" y="10" text-anchor="middle">JULY 2026</text>
+              <rect class="sqlx2-cell" x="2" y="17" width="28" height="28" rx="4"/><text class="sqlx2-lbl" x="16" y="35" text-anchor="middle">1</text><rect class="sqlx2-cell" x="31.5" y="17" width="28" height="28" rx="4"/><text class="sqlx2-lbl" x="45.5" y="35" text-anchor="middle">2</text><rect class="sqlx2-cell" x="61" y="17" width="28" height="28" rx="4"/><text class="sqlx2-lbl" x="75" y="35" text-anchor="middle">3</text><rect class="sqlx2-cell" x="90.5" y="17" width="28" height="28" rx="4"/><text class="sqlx2-lbl" x="104.5" y="35" text-anchor="middle">4</text><rect class="sqlx2-cell" x="120" y="17" width="28" height="28" rx="4"/><text class="sqlx2-lbl" x="134" y="35" text-anchor="middle">5</text>
+              <rect class="sqlx2-calsel" x="2" y="17" width="28" height="28" rx="4" fill="#e0b366" fill-opacity=".35" stroke="#e0b366" stroke-width="1.6"/>
+            </svg>
+            <p class="sqlx2-cap"><b>Dates</b> are real values, not text: <code>current_date</code> reads today, <code>age()</code> measures the gap between two dates, <code>make_date()</code> builds one from parts.</p>
           </div>
         </div>
       </div>
@@ -1138,6 +1936,21 @@ psql <span class="pg-op">--</span>version</pre>
               <span style="color:#565f89;">Dumps all databases to all.sql</span><br />
               <span style="color:#9ece6a;">(no output on success)</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="160" height="50" viewBox="0 0 160 50" aria-hidden="true">
+              <ellipse cx="24" cy="12" rx="16" ry="5" fill="#7aa2f7" fill-opacity=".3" stroke="#7aa2f7" stroke-width="1.4"/>
+              <path d="M8 12v18c0 2.8 7.2 5 16 5s16-2.2 16-5V12" fill="#7aa2f7" fill-opacity=".15" stroke="#7aa2f7" stroke-width="1.4"/>
+              <text class="sqlx2-lbl" x="24" y="47" text-anchor="middle">mydb</text>
+              <line class="sqlx2-ln" x1="48" y1="24" x2="112" y2="24"/>
+              <text class="sqlx2-lbl" x="80" y="16" text-anchor="middle">pg_dump &#8594;</text>
+              <text class="sqlx2-lbl" x="80" y="38" text-anchor="middle">&#8592; psql / pg_restore</text>
+              <rect class="sqlx2-bkpkt" x="48" y="19" width="12" height="10" rx="2" fill="#9ece6a"/>
+              <path d="M122 8h18l10 10v24a2 2 0 0 1-2 2h-26a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="#e0b366" fill-opacity=".3" stroke="#e0b366" stroke-width="1.4"/>
+              <path d="M140 8v10h10" fill="none" stroke="#e0b366" stroke-width="1.4"/>
+              <text class="sqlx2-lbl" x="135" y="34" text-anchor="middle">.sql</text>
+            </svg>
+            <p class="sqlx2-cap">A <b>backup</b> is the database written out as a file: <code>pg_dump</code> produces it, and <code>psql</code> or <code>pg_restore</code> replays it into a server.</p>
           </div>
         </div>
       </div>
@@ -1280,6 +2093,20 @@ pg_restore <span class="pg-op">-</span>F c      <span class="pg-cm">-- custom fo
               <span style="color:#9ece6a;"> /etc/postgresql/16/main/postgresql.conf</span>
             </div>
           </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="160" height="50" viewBox="0 0 160 50" aria-hidden="true">
+              <rect x="4" y="11" width="30" height="20" rx="3" fill="#9ece6a" fill-opacity=".25" stroke="#9ece6a" stroke-width="1.5"/>
+              <rect x="0" y="33" width="38" height="3" rx="1.5" fill="#9ece6a"/>
+              <text class="sqlx2-lbl" x="19" y="47" text-anchor="middle">client</text>
+              <path class="sqlx2-wv" d="M60 15a13 13 0 0 1 0 20" fill="none" stroke="#7aa2f7" stroke-width="2" stroke-linecap="round"/>
+              <path class="sqlx2-wv sqlx2-wv2" d="M72 10a20 20 0 0 1 0 30" fill="none" stroke="#7aa2f7" stroke-width="2" stroke-linecap="round"/>
+              <path class="sqlx2-wv sqlx2-wv3" d="M84 5a27 27 0 0 1 0 40" fill="none" stroke="#7aa2f7" stroke-width="2" stroke-linecap="round"/>
+              <ellipse cx="136" cy="12" rx="14" ry="5" fill="#bb9af7" fill-opacity=".3" stroke="#bb9af7" stroke-width="1.5"/>
+              <path d="M122 12v20c0 2.8 6.3 5 14 5s14-2.2 14-5V12" fill="#bb9af7" fill-opacity=".15" stroke="#bb9af7" stroke-width="1.5"/>
+              <text class="sqlx2-lbl" x="136" y="47" text-anchor="middle">:5432</text>
+            </svg>
+            <p class="sqlx2-cap"><b>Remote access</b> lets clients on other machines connect: <code>listen_addresses</code> opens the port, <code>pg_hba.conf</code> decides which hosts and users get in.</p>
+          </div>
         </div>
       </div>
 
@@ -1360,6 +2187,24 @@ host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
               <span style="color:#9ece6a;">COPY 3</span><br />
               <span style="color:#565f89;">Exports table to CSV file</span>
             </div>
+          </div>
+          <div class="sqlx2-fig">
+            <svg class="sqlx2-art" width="160" height="52" viewBox="0 0 160 52" aria-hidden="true">
+              <g fill="none" stroke="#7aa2f7" stroke-width="1.3">
+                <rect x="4" y="6" width="48" height="32" rx="3" fill="#7aa2f7" fill-opacity=".15"/>
+                <line x1="4" y1="17" x2="52" y2="17"/><line x1="4" y1="27" x2="52" y2="27"/>
+                <line x1="20" y1="6" x2="20" y2="38"/><line x1="36" y1="6" x2="36" y2="38"/>
+              </g>
+              <text class="sqlx2-lbl" x="28" y="49" text-anchor="middle">table</text>
+              <line class="sqlx2-ln" x1="60" y1="24" x2="104" y2="24"/>
+              <text class="sqlx2-lbl" x="82" y="15" text-anchor="middle">\copy</text>
+              <text class="sqlx2-lbl" x="82" y="38" text-anchor="middle">TO / FROM</text>
+              <rect class="sqlx2-csvpkt" x="60" y="19" width="12" height="10" rx="2" fill="#e0b366"/>
+              <path d="M114 6h18l10 10v24a2 2 0 0 1-2 2h-26a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" fill="#9ece6a" fill-opacity=".3" stroke="#9ece6a" stroke-width="1.4"/>
+              <path d="M132 6v10h10" fill="none" stroke="#9ece6a" stroke-width="1.4"/>
+              <text class="sqlx2-lbl" x="127" y="32" text-anchor="middle">.csv</text>
+            </svg>
+            <p class="sqlx2-cap"><b>CSV</b> is the plain-text exchange format: <code>\copy &hellip; TO</code> streams rows out to a file, <code>\copy &hellip; FROM</code> loads them back in.</p>
           </div>
         </div>
       </div>
@@ -1484,6 +2329,18 @@ host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
           </tbody>
         </table>
       </div>
+      <div class="sqlx2-fig sqlx2-fig-wide">
+        <div class="sqlx2-meta sqlx2-art" aria-hidden="true">
+          <span class="sqlx2-mprompt">postgres=#</span>
+          <span class="sqlx2-mstack">
+            <span class="sqlx2-mc" style="--i:0"><b>\</b>dt</span>
+            <span class="sqlx2-mc" style="--i:1"><b>\</b>l</span>
+            <span class="sqlx2-mc" style="--i:2"><b>\</b>du</span>
+            <span class="sqlx2-mc" style="--i:3"><b>\</b>dn</span>
+          </span>
+        </div>
+        <p class="sqlx2-cap">Every <b>meta-command</b> starts with a backslash and is handled by <code>psql</code> itself, never sent to the server: the <code>\d</code> family describes things, <code>\c</code> connects, <code>\q</code> quits.</p>
+      </div>
     </section>
 
     <!-- Numeric Types -->
@@ -1514,6 +2371,14 @@ host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
           </tbody>
         </table>
       </div>
+      <div class="sqlx2-fig sqlx2-fig-wide">
+        <div class="sqlx2-bytes sqlx2-art" aria-hidden="true">
+          <div class="sqlx2-brow"><span class="sqlx2-blab">SMALLINT</span><span class="sqlx2-bar" style="--w:24px;--bc:#9ece6a;--i:0"></span><span class="sqlx2-bnum">2 bytes</span></div>
+          <div class="sqlx2-brow"><span class="sqlx2-blab">INTEGER</span><span class="sqlx2-bar" style="--w:48px;--bc:#7aa2f7;--i:1"></span><span class="sqlx2-bnum">4 bytes</span></div>
+          <div class="sqlx2-brow"><span class="sqlx2-blab">BIGINT</span><span class="sqlx2-bar" style="--w:96px;--bc:#bb9af7;--i:2"></span><span class="sqlx2-bnum">8 bytes</span></div>
+        </div>
+        <p class="sqlx2-cap">Each integer <b>type</b> reserves a fixed number of bytes per value: more bytes means a wider range of numbers, but more storage for every row.</p>
+      </div>
     </section>
 
   </main>
@@ -1522,7 +2387,7 @@ host    all    all    <span class="pg-op">0.0.0.0/0</span>         md5</pre>
     <p>PostgreSQL Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Types &mdash; Cheatsheet</title>
+  <link rel="stylesheet" href="css/style.css?v=8" />
+  <style>
+    /* ══════════════════════════════════════════════════════════════════
+       All animation + helper CSS for this page, prefixed dtx- to avoid
+       collisions. Text / surfaces use theme variables (light + dark);
+       moving parts use fixed multi-colour accents.
+       ══════════════════════════════════════════════════════════════════ */
+
+    /* Fixed accent palette for moving graphics */
+    /* amber #e0b366 · rose #e8808f · blue #7aa2f7 · green #9ece6a · violet #bb9af7 */
+
+    /* ── Hero panel (dark, like the code panel) ── */
+    .dtx-panel {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+    }
+    .dtx-hero-svg { width: 100%; min-width: 540px; display: block; }
+    .dtx-hero-note { fill: var(--code-text); opacity: 0.7; font-family: 'Inter', sans-serif; }
+    .dtx-hero-title { font-family: 'Inter', sans-serif; font-weight: 700; }
+
+    .dtx-legend {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.5rem 1.6rem;
+      font-size: 0.78rem; color: var(--text-muted);
+      margin: 0 0.15rem 1.4rem; line-height: 1.5;
+    }
+    .dtx-legend-item { display: inline-flex; align-items: center; gap: 0.45rem; }
+    .dtx-swatch { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Per-type live-panel animation + text ── */
+    .dtx-anim { margin: 0 0 0.65rem; display: flex; justify-content: center; }
+    .dtx-anim svg { width: 100%; max-width: 280px; height: auto; display: block; }
+    .dtx-why, .dtx-real {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; margin-top: 0.3rem;
+    }
+    .dtx-why strong, .dtx-real strong { color: var(--accent); font-weight: 700; }
+
+    /* SVG text helpers themed for the light live panel */
+    .dtx-txt   { fill: var(--text); font-family: 'Inter', sans-serif; }
+    .dtx-muted { fill: var(--text-muted); font-family: 'Inter', sans-serif; }
+    .dtx-mono  { font-family: 'JetBrains Mono', monospace; }
+    .dtx-rail  { stroke: var(--text-muted); opacity: 0.25; stroke-linecap: round; }
+
+    /* ════════ HERO: right type accepted vs wrong type rejected ════════ */
+    .dtx-box-ok  { fill: rgba(158,206,106,0.08); stroke: #9ece6a; stroke-width: 2;
+                   animation: dtx-glow-ok 5.5s ease infinite; }
+    .dtx-box-bad { fill: rgba(232,128,143,0.07); stroke: #e8808f; stroke-width: 2;
+                   animation: dtx-glow-bad 5.5s ease infinite; }
+    @keyframes dtx-glow-ok  { 0%,45%{stroke-opacity:.4} 55%{stroke-opacity:1} 100%{stroke-opacity:.6} }
+    @keyframes dtx-glow-bad { 0%,40%{stroke-opacity:.4} 50%{stroke-opacity:1} 100%{stroke-opacity:.6} }
+
+    .dtx-tok-ok  { opacity: 1; transform: translateY(0); animation: dtx-fall-in 5.5s ease-in infinite; }
+    @keyframes dtx-fall-in {
+      0%{transform:translateY(-120px);opacity:0}
+      12%{transform:translateY(-120px);opacity:1}
+      45%{transform:translateY(0);opacity:1}
+      49%{transform:translateY(-7px)}
+      53%{transform:translateY(0)}
+      100%{transform:translateY(0);opacity:1}
+    }
+    .dtx-tok-bad { opacity: 1; transform: translate(0,-8px); animation: dtx-bounce-off 5.5s ease-in-out infinite; }
+    @keyframes dtx-bounce-off {
+      0%{transform:translate(0,-120px);opacity:0}
+      12%{transform:translate(0,-120px);opacity:1}
+      40%{transform:translate(0,-8px);opacity:1}
+      55%{transform:translate(36px,-72px);opacity:1}
+      80%{transform:translate(74px,-6px);opacity:0}
+      100%{transform:translate(74px,-6px);opacity:0}
+    }
+    .dtx-check { opacity: 1; transform-box: fill-box; transform-origin: center; animation: dtx-pop 5.5s ease infinite; }
+    @keyframes dtx-pop  { 0%,45%{opacity:0;transform:scale(.4)} 55%{opacity:1;transform:scale(1.15)} 63%,100%{opacity:1;transform:scale(1)} }
+    .dtx-xmark { opacity: 1; transform-box: fill-box; transform-origin: center; animation: dtx-popx 5.5s ease infinite; }
+    @keyframes dtx-popx { 0%,40%{opacity:0;transform:scale(.4)} 50%{opacity:1;transform:scale(1.15)} 58%,100%{opacity:1;transform:scale(1)} }
+
+    /* ════════ INTEGER: dot hops tick to tick (whole numbers) ════════ */
+    .dtx-int-dot { animation: dtx-int-hop 5s ease-in-out infinite; }
+    @keyframes dtx-int-hop {
+      0%{transform:translate(0,0)}
+      8%{transform:translate(22px,-18px)} 16%{transform:translate(44px,0)}
+      24%{transform:translate(66px,-18px)} 32%{transform:translate(88px,0)}
+      40%{transform:translate(110px,-18px)} 48%{transform:translate(132px,0)}
+      56%{transform:translate(154px,-18px)} 64%{transform:translate(176px,0)}
+      74%{transform:translate(176px,0)} 100%{transform:translate(0,0)}
+    }
+
+    /* ════════ FLOAT: dot glides continuously (decimals) ════════ */
+    .dtx-float-dot { animation: dtx-float-glide 6s ease-in-out infinite; }
+    @keyframes dtx-float-glide { 0%{transform:translateX(0)} 50%{transform:translateX(176px)} 100%{transform:translateX(0)} }
+
+    /* ════════ BOOLEAN: toggle flips false↔true ════════ */
+    .dtx-bool-track { fill: #e8808f; animation: dtx-bool-tr 4.4s ease-in-out infinite; }
+    @keyframes dtx-bool-tr { 0%,42%{fill:#e8808f} 58%,100%{fill:#9ece6a} }
+    .dtx-bool-knob { transform: translateX(0); animation: dtx-bool-kn 4.4s ease-in-out infinite; }
+    @keyframes dtx-bool-kn { 0%,42%{transform:translateX(0)} 58%,100%{transform:translateX(64px)} }
+    .dtx-bool-false { opacity: 1; animation: dtx-fade-a 4.4s ease-in-out infinite; }
+    @keyframes dtx-fade-a { 0%,42%{opacity:1} 58%,100%{opacity:0} }
+    .dtx-bool-true  { opacity: 0; animation: dtx-fade-b 4.4s ease-in-out infinite; }
+    @keyframes dtx-fade-b { 0%,42%{opacity:0} 58%,100%{opacity:1} }
+
+    /* ════════ CHARACTER: highlight slides across single cells ════════ */
+    .dtx-char-hl { transform: translateX(0); animation: dtx-char 4.6s ease-in-out infinite; }
+    @keyframes dtx-char {
+      0%,18%{transform:translateX(0)}
+      30%,51%{transform:translateX(55px)}
+      63%,84%{transform:translateX(110px)}
+      100%{transform:translateX(0)}
+    }
+
+    /* ════════ STRING: letters appear one by one ════════ */
+    .dtx-ltr { opacity: 1; animation: dtx-ltr-in 5s ease-in-out infinite; animation-fill-mode: backwards; }
+    @keyframes dtx-ltr-in { 0%{opacity:0;transform:translateY(8px)} 12%{opacity:1;transform:translateY(0)} 86%{opacity:1} 100%{opacity:0} }
+    .dtx-ltr.l1{animation-delay:0s} .dtx-ltr.l2{animation-delay:.28s} .dtx-ltr.l3{animation-delay:.56s}
+    .dtx-ltr.l4{animation-delay:.84s} .dtx-ltr.l5{animation-delay:1.12s}
+
+    /* ════════ DATE & TIME: clock hands rotate ════════ */
+    .dtx-sec { transform-box: view-box; transform-origin: 52px 55px; animation: dtx-spin 6s linear infinite; }
+    .dtx-min { transform-box: view-box; transform-origin: 52px 55px; animation: dtx-spin 36s linear infinite; }
+    @keyframes dtx-spin { to { transform: rotate(360deg); } }
+
+    /* ════════ ARRAY: index pointer slides across boxes ════════ */
+    .dtx-arr-ptr { transform: translateX(0); animation: dtx-arr 5s ease-in-out infinite; }
+    @keyframes dtx-arr {
+      0%,15%{transform:translateX(0)}
+      25%,40%{transform:translateX(52px)}
+      50%,65%{transform:translateX(104px)}
+      75%,90%{transform:translateX(156px)}
+      100%{transform:translateX(0)}
+    }
+
+    /* ════════ MAP: a dot travels from key to value ════════ */
+    .dtx-map-dot { opacity: 1; animation: dtx-map-travel 5s ease-in-out infinite; }
+    @keyframes dtx-map-travel {
+      0%{transform:translateX(0);opacity:0}
+      10%{opacity:1}
+      68%{transform:translateX(70px);opacity:1}
+      84%{transform:translateX(70px);opacity:0}
+      100%{transform:translateX(70px);opacity:0}
+    }
+    .dtx-map-dot.row2 { animation-delay: 2.5s; }
+
+    /* ════════ NULL: the empty slot pulses ════════ */
+    .dtx-null-empty { opacity: .8; animation: dtx-null-pulse 3s ease-in-out infinite; }
+    @keyframes dtx-null-pulse { 0%,100%{opacity:.45} 50%{opacity:1} }
+
+    @media (max-width: 600px) {
+      .dtx-legend { font-size: .73rem; gap: .4rem 1rem; }
+    }
+
+    /* ── Respect reduced-motion: freeze everything on a readable state ── */
+    @media (prefers-reduced-motion: reduce) {
+      .dtx-box-ok,.dtx-box-bad,.dtx-tok-ok,.dtx-tok-bad,.dtx-check,.dtx-xmark,
+      .dtx-int-dot,.dtx-float-dot,.dtx-bool-track,.dtx-bool-knob,.dtx-bool-false,.dtx-bool-true,
+      .dtx-char-hl,.dtx-ltr,.dtx-sec,.dtx-min,.dtx-arr-ptr,.dtx-map-dot,.dtx-null-empty {
+        animation: none !important;
+      }
+      .dtx-tok-ok { transform: translateY(0) !important; opacity: 1 !important; }
+      .dtx-tok-bad { transform: translate(0,-8px) !important; opacity: 1 !important; }
+      .dtx-check, .dtx-xmark { opacity: 1 !important; transform: none !important; }
+      .dtx-bool-true { opacity: 0 !important; }
+      .dtx-map-dot { opacity: 1 !important; }
+      .dtx-null-empty { opacity: .85 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">📚 Cheatsheets</div>
+    <div class="search-wrap">
+      <input type="search" id="search" placeholder="Search..." />
+      <kbd class="shortcut-hint">/</kbd>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-hide-btn" id="sidebar-hide-btn" title="Hide sidebar">◀</button>
+      <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </aside>
+  <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
+  <script src="js/header.js?v=8"></script>
+  <script>renderHeader('Data Types')</script>
+  <script>renderSourceLink('Data Types')</script>
+
+  <main>
+
+    <div class="page-header">
+      <h1>Data Types</h1>
+      <p class="subtitle">What each kind of value holds, why it exists, and where you meet it — explained from zero</p>
+      <span id="source-link"></span>
+      <nav class="toc">
+        <a href="#intro">What is it?</a>
+        <a href="#integer">Integer</a>
+        <a href="#float">Float / Decimal</a>
+        <a href="#boolean">Boolean</a>
+        <a href="#character">Character</a>
+        <a href="#string">String</a>
+        <a href="#datetime">Date &amp; Time</a>
+        <a href="#array">Array / List</a>
+        <a href="#map">Map / Dict</a>
+        <a href="#null">Null / None</a>
+      </nav>
+    </div>
+
+    <!-- ══ ANIMATED EXPLAINER: what is a data type? ═════════════════════ -->
+    <section id="intro">
+      <h2>What Is a Data Type?</h2>
+
+      <div class="block-desc">
+        <span>A data type is the <strong>kind of value a box can hold</strong> — a value of the right kind drops in and is accepted, a value of the wrong kind is rejected.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures" target="_blank">Docs →</a>
+      </div>
+
+      <div class="dtx-panel">
+        <svg class="dtx-hero-svg" viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="Left: the number 42 drops into an integer box and is accepted with a green check. Right: the text hi bounces off the same integer box and is rejected with a red cross.">
+          <!-- scene titles -->
+          <text x="170" y="26" text-anchor="middle" class="dtx-hero-title" font-size="12" fill="#9ece6a">Right type → accepted</text>
+          <text x="510" y="26" text-anchor="middle" class="dtx-hero-title" font-size="12" fill="#e8808f">Wrong type → rejected</text>
+
+          <!-- LEFT: accepted -->
+          <rect class="dtx-box-ok" x="96" y="118" width="148" height="74" rx="14"/>
+          <text x="170" y="214" text-anchor="middle" class="dtx-hero-note" font-size="10.5">an <tspan font-family="JetBrains Mono,monospace">int</tspan> box — holds whole numbers</text>
+          <g class="dtx-tok-ok">
+            <rect x="146" y="140" width="48" height="30" rx="8" fill="#7aa2f7"/>
+            <text x="170" y="160" text-anchor="middle" class="dtx-mono" font-size="14" font-weight="600" fill="#0a1315">42</text>
+          </g>
+          <g class="dtx-check">
+            <circle cx="232" cy="130" r="15" fill="rgba(158,206,106,0.18)"/>
+            <polyline points="225,130 230,135 240,124" fill="none" stroke="#9ece6a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <!-- RIGHT: rejected -->
+          <rect class="dtx-box-bad" x="436" y="118" width="148" height="74" rx="14"/>
+          <text x="510" y="214" text-anchor="middle" class="dtx-hero-note" font-size="10.5">same <tspan font-family="JetBrains Mono,monospace">int</tspan> box — text does not fit</text>
+          <g class="dtx-tok-bad">
+            <rect x="482" y="140" width="56" height="30" rx="8" fill="#bb9af7"/>
+            <text x="510" y="160" text-anchor="middle" class="dtx-mono" font-size="13" font-weight="600" fill="#0a1315">"hi"</text>
+          </g>
+          <g class="dtx-xmark">
+            <circle cx="572" cy="130" r="15" fill="rgba(232,128,143,0.18)"/>
+            <line x1="565" y1="123" x2="579" y2="137" stroke="#e8808f" stroke-width="2.6" stroke-linecap="round"/>
+            <line x1="579" y1="123" x2="565" y2="137" stroke="#e8808f" stroke-width="2.6" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="dtx-legend">
+        <span class="dtx-legend-item"><span class="dtx-swatch" style="background:#9ece6a"></span> Matching value → stored safely</span>
+        <span class="dtx-legend-item"><span class="dtx-swatch" style="background:#e8808f"></span> Mismatched value → error / rejected</span>
+      </div>
+
+      <div class="block-desc">
+        <span>Declaring the type tells the computer how much memory to reserve, what operations are allowed (you can add numbers but not <em>add</em> two dates), and catches mistakes early.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Variables" target="_blank">Docs →</a>
+      </div>
+    </section>
+
+    <!-- ══ INTEGER ══════════════════════════════════════════════════════ -->
+    <section id="integer">
+      <h2>Integer</h2>
+
+      <div class="block-desc">
+        <span>A whole number with no fractional part — positive, negative, or zero.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C</span>
+int count = 42;
+
+<span class="c">// Java</span>
+int count = 42;
+
+<span class="c"># Python</span>
+count = 42
+
+<span class="c">// JavaScript</span>
+let count = 42;
+
+<span class="c">-- SQL</span>
+count INTEGER</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 240 92" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A dot hopping from one whole-number tick to the next on a number line.">
+                <line class="dtx-rail" x1="24" y1="58" x2="216" y2="58" stroke-width="2"/>
+                <!-- ticks + labels -->
+                <g>
+                  <line x1="36"  y1="52" x2="36"  y2="64" stroke="#e0b366" stroke-width="2"/>
+                  <line x1="80"  y1="52" x2="80"  y2="64" stroke="#7aa2f7" stroke-width="2"/>
+                  <line x1="124" y1="52" x2="124" y2="64" stroke="#9ece6a" stroke-width="2"/>
+                  <line x1="168" y1="52" x2="168" y2="64" stroke="#bb9af7" stroke-width="2"/>
+                  <line x1="212" y1="52" x2="212" y2="64" stroke="#e8808f" stroke-width="2"/>
+                  <text x="36"  y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">0</text>
+                  <text x="80"  y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">1</text>
+                  <text x="124" y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">2</text>
+                  <text x="168" y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">3</text>
+                  <text x="212" y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">4</text>
+                </g>
+                <circle class="dtx-int-dot" cx="36" cy="58" r="9" fill="#7aa2f7"/>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> counting things that can't be split.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a shopping cart holding <em>3</em> items, never 3.5.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FLOATING-POINT / DECIMAL ════════════════════════════════════ -->
+    <section id="float">
+      <h2>Floating-point / Decimal</h2>
+
+      <div class="block-desc">
+        <span>A number that can carry a fractional part after the decimal point.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C</span>
+double price = 19.99;
+
+<span class="c">// Java</span>
+double price = 19.99;
+
+<span class="c"># Python</span>
+price = 19.99
+
+<span class="c">// JavaScript</span>
+let price = 19.99;
+
+<span class="c">-- SQL</span>
+price DECIMAL(10,2)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 240 92" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A dot gliding smoothly along a line, stopping at any point between whole numbers.">
+                <line class="dtx-rail" x1="24" y1="58" x2="216" y2="58" stroke-width="2" stroke-dasharray="2,4"/>
+                <text x="36"  y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">0</text>
+                <text x="212" y="80" text-anchor="middle" class="dtx-muted dtx-mono" font-size="10">4</text>
+                <g class="dtx-float-dot">
+                  <rect x="18" y="26" width="40" height="18" rx="6" fill="#bb9af7"/>
+                  <text x="38" y="39" text-anchor="middle" class="dtx-mono" font-size="10" font-weight="600" fill="#0a1315">3.14</text>
+                  <line x1="38" y1="44" x2="38" y2="54" stroke="#bb9af7" stroke-width="1.5"/>
+                  <circle cx="38" cy="58" r="9" fill="#bb9af7"/>
+                </g>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> measuring amounts that fall between whole numbers.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a price tag of <em>$19.99</em> or a body temperature of 36.6&deg;C.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ BOOLEAN ══════════════════════════════════════════════════════ -->
+    <section id="boolean">
+      <h2>Boolean</h2>
+
+      <div class="block-desc">
+        <span>A value that is only ever <code>true</code> or <code>false</code> — a yes/no switch.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C  (needs &lt;stdbool.h&gt;)</span>
+bool is_active = true;
+
+<span class="c">// Java</span>
+boolean isActive = true;
+
+<span class="c"># Python</span>
+is_active = True
+
+<span class="c">// JavaScript</span>
+let isActive = true;
+
+<span class="c">-- SQL</span>
+is_active BOOLEAN</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A toggle switch flipping between false in red and true in green.">
+                <rect class="dtx-bool-track" x="40" y="30" width="100" height="36" rx="18"/>
+                <circle class="dtx-bool-knob" cx="58" cy="48" r="14" fill="#ffffff"/>
+                <text class="dtx-bool-false dtx-mono" x="100" y="82" text-anchor="middle" font-size="12" font-weight="600" fill="#e8808f">false</text>
+                <text class="dtx-bool-true dtx-mono"  x="100" y="82" text-anchor="middle" font-size="12" font-weight="600" fill="#9ece6a">true</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> storing an on/off decision to branch logic.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a "Remember me" checkbox, or whether a user is logged in.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CHARACTER ════════════════════════════════════════════════════ -->
+    <section id="character">
+      <h2>Character</h2>
+
+      <div class="block-desc">
+        <span>A single letter, digit, or symbol — one slot holding exactly one character.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C</span>
+char grade = 'A';
+
+<span class="c">// Java</span>
+char grade = 'A';
+
+<span class="c"># Python (no char type: length-1 str)</span>
+grade = 'A'
+
+<span class="c">// JavaScript (no char type: length-1 string)</span>
+let grade = 'A';
+
+<span class="c">-- SQL</span>
+grade CHAR(1)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 200 92" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three single-letter cells A, B and C, each holding exactly one character, with a highlight sliding across them.">
+                <rect x="25"  y="24" width="46" height="46" rx="8" fill="none" stroke="var(--text-muted)" stroke-opacity="0.3" stroke-width="1.5"/>
+                <rect x="80"  y="24" width="46" height="46" rx="8" fill="none" stroke="var(--text-muted)" stroke-opacity="0.3" stroke-width="1.5"/>
+                <rect x="135" y="24" width="46" height="46" rx="8" fill="none" stroke="var(--text-muted)" stroke-opacity="0.3" stroke-width="1.5"/>
+                <rect class="dtx-char-hl" x="25" y="24" width="46" height="46" rx="8" fill="rgba(122,162,247,0.12)" stroke="#7aa2f7" stroke-width="2"/>
+                <text x="48"  y="55" text-anchor="middle" class="dtx-mono" font-size="20" font-weight="600" fill="#e0b366">A</text>
+                <text x="103" y="55" text-anchor="middle" class="dtx-mono" font-size="20" font-weight="600" fill="#7aa2f7">B</text>
+                <text x="158" y="55" text-anchor="middle" class="dtx-mono" font-size="20" font-weight="600" fill="#9ece6a">C</text>
+                <text x="103" y="86" text-anchor="middle" class="dtx-muted" font-size="9">one cell = one character</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> handling a value that is a single symbol.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a letter grade <em>'A'</em>, or 'Y'/'N' for a one-key answer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ STRING / TEXT ════════════════════════════════════════════════ -->
+    <section id="string">
+      <h2>String / Text</h2>
+
+      <div class="block-desc">
+        <span>A sequence of characters strung together to form words and sentences.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C  (array of chars)</span>
+char name[] = "Ada";
+
+<span class="c">// Java</span>
+String name = "Ada";
+
+<span class="c"># Python</span>
+name = "Ada"
+
+<span class="c">// JavaScript</span>
+let name = "Ada";
+
+<span class="c">-- SQL</span>
+name VARCHAR(50)</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The letters H, E, L, L, O appearing one after another to spell a word.">
+                <text class="dtx-ltr l1 dtx-mono" x="30"  y="48" text-anchor="middle" font-size="26" font-weight="600" fill="#e0b366">H</text>
+                <text class="dtx-ltr l2 dtx-mono" x="70"  y="48" text-anchor="middle" font-size="26" font-weight="600" fill="#7aa2f7">E</text>
+                <text class="dtx-ltr l3 dtx-mono" x="110" y="48" text-anchor="middle" font-size="26" font-weight="600" fill="#9ece6a">L</text>
+                <text class="dtx-ltr l4 dtx-mono" x="150" y="48" text-anchor="middle" font-size="26" font-weight="600" fill="#bb9af7">L</text>
+                <text class="dtx-ltr l5 dtx-mono" x="190" y="48" text-anchor="middle" font-size="26" font-weight="600" fill="#e8808f">O</text>
+                <line x1="18" y1="62" x2="202" y2="62" class="dtx-rail" stroke-width="2"/>
+                <text x="110" y="76" text-anchor="middle" class="dtx-muted" font-size="9">a string = many characters in order</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> storing any human-readable text.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a username, an email address, or this sentence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ DATE & TIME ══════════════════════════════════════════════════ -->
+    <section id="datetime">
+      <h2>Date &amp; Time</h2>
+
+      <div class="block-desc">
+        <span>A value representing a point in time — a date, a clock time, or both.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C  (seconds since 1970)</span>
+time_t now = time(NULL);
+
+<span class="c">// Java</span>
+LocalDate d = LocalDate.now();
+
+<span class="c"># Python</span>
+import datetime
+d = datetime.date.today()
+
+<span class="c">// JavaScript</span>
+let now = new Date();
+
+<span class="c">-- SQL</span>
+created_at TIMESTAMP</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 250 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A clock with turning hands next to a date label.">
+                <circle cx="52" cy="55" r="40" fill="none" stroke="var(--text-muted)" stroke-opacity="0.3" stroke-width="2"/>
+                <circle cx="52" cy="17" r="2" fill="#e0b366"/>
+                <circle cx="90" cy="55" r="2" fill="#7aa2f7"/>
+                <circle cx="52" cy="93" r="2" fill="#9ece6a"/>
+                <circle cx="14" cy="55" r="2" fill="#bb9af7"/>
+                <!-- hour hand (static, green) -->
+                <line x1="52" y1="55" x2="70" y2="55" stroke="#9ece6a" stroke-width="3.5" stroke-linecap="round"/>
+                <!-- minute hand (slow, blue) -->
+                <g class="dtx-min"><line x1="52" y1="55" x2="52" y2="28" stroke="#7aa2f7" stroke-width="3" stroke-linecap="round"/></g>
+                <!-- second hand (fast, rose) -->
+                <g class="dtx-sec"><line x1="52" y1="55" x2="52" y2="22" stroke="#e8808f" stroke-width="1.6" stroke-linecap="round"/></g>
+                <circle cx="52" cy="55" r="3.2" fill="#e0b366"/>
+                <!-- date chip -->
+                <rect x="118" y="38" width="118" height="30" rx="8" fill="rgba(187,154,247,0.14)" stroke="#bb9af7" stroke-width="1.5"/>
+                <text x="177" y="58" text-anchor="middle" class="dtx-mono" font-size="12" font-weight="600" fill="#bb9af7">2026-10-26</text>
+                <text x="177" y="86" text-anchor="middle" class="dtx-muted" font-size="9">date + time together</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> recording and comparing when things happen.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> an order's timestamp, or a calendar event's start.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ARRAY / LIST ═════════════════════════════════════════════════ -->
+    <section id="array">
+      <h2>Array / List</h2>
+
+      <div class="block-desc">
+        <span>An ordered collection of values, reached by position (its index).</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C</span>
+int nums[3] = {1, 2, 3};
+
+<span class="c">// Java</span>
+int[] nums = {1, 2, 3};
+
+<span class="c"># Python (list)</span>
+nums = [1, 2, 3]
+
+<span class="c">// JavaScript</span>
+let nums = [1, 2, 3];
+
+<span class="c">-- SQL (Postgres array)</span>
+nums INTEGER[]</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four boxes in a row with values and index numbers, a pointer sliding across them.">
+                <!-- pointer -->
+                <g class="dtx-arr-ptr">
+                  <polygon points="44,18 36,30 52,30" fill="#e8808f"/>
+                </g>
+                <!-- boxes -->
+                <rect x="22"  y="36" width="44" height="40" rx="7" fill="rgba(224,179,102,0.1)"  stroke="#e0b366" stroke-width="1.8"/>
+                <rect x="74"  y="36" width="44" height="40" rx="7" fill="rgba(122,162,247,0.1)" stroke="#7aa2f7" stroke-width="1.8"/>
+                <rect x="126" y="36" width="44" height="40" rx="7" fill="rgba(158,206,106,0.1)" stroke="#9ece6a" stroke-width="1.8"/>
+                <rect x="178" y="36" width="44" height="40" rx="7" fill="rgba(187,154,247,0.1)" stroke="#bb9af7" stroke-width="1.8"/>
+                <text x="44"  y="61" text-anchor="middle" class="dtx-mono" font-size="14" font-weight="600" fill="#e0b366">10</text>
+                <text x="96"  y="61" text-anchor="middle" class="dtx-mono" font-size="14" font-weight="600" fill="#7aa2f7">20</text>
+                <text x="148" y="61" text-anchor="middle" class="dtx-mono" font-size="14" font-weight="600" fill="#9ece6a">30</text>
+                <text x="200" y="61" text-anchor="middle" class="dtx-mono" font-size="14" font-weight="600" fill="#bb9af7">40</text>
+                <text x="44"  y="92" text-anchor="middle" class="dtx-muted dtx-mono" font-size="9">[0]</text>
+                <text x="96"  y="92" text-anchor="middle" class="dtx-muted dtx-mono" font-size="9">[1]</text>
+                <text x="148" y="92" text-anchor="middle" class="dtx-muted dtx-mono" font-size="9">[2]</text>
+                <text x="200" y="92" text-anchor="middle" class="dtx-muted dtx-mono" font-size="9">[3]</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> keeping many related values in a known order.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a to-do list, or the songs in a playlist.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MAP / DICTIONARY ═════════════════════════════════════════════ -->
+    <section id="map">
+      <h2>Map / Dictionary (key-value)</h2>
+
+      <div class="block-desc">
+        <span>A collection that looks up a value by a unique key, like a word in a dictionary.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C  (no built-in: use a struct / library)</span>
+
+<span class="c">// Java</span>
+Map&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+ages.put("Ada", 36);
+
+<span class="c"># Python (dict)</span>
+ages = {"Ada": 36}
+
+<span class="c">// JavaScript (object / Map)</span>
+let ages = { "Ada": 36 };
+
+<span class="c">-- SQL (key-value via JSONB)</span>
+ages JSONB</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 250 108" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two key boxes each pointing to a value box, with a dot travelling from key to value.">
+                <!-- row 1 -->
+                <rect x="14" y="18" width="78" height="30" rx="7" fill="rgba(122,162,247,0.12)" stroke="#7aa2f7" stroke-width="1.6"/>
+                <text x="53" y="38" text-anchor="middle" class="dtx-mono" font-size="12" font-weight="600" fill="#7aa2f7">"Ada"</text>
+                <line x1="96" y1="33" x2="150" y2="33" stroke="#bb9af7" stroke-width="1.6" stroke-dasharray="3,3"/>
+                <polygon points="150,33 143,29 143,37" fill="#bb9af7"/>
+                <rect x="156" y="18" width="80" height="30" rx="7" fill="rgba(158,206,106,0.12)" stroke="#9ece6a" stroke-width="1.6"/>
+                <text x="196" y="38" text-anchor="middle" class="dtx-mono" font-size="12" font-weight="600" fill="#9ece6a">36</text>
+                <circle class="dtx-map-dot" cx="98" cy="33" r="5" fill="#bb9af7"/>
+                <!-- row 2 -->
+                <rect x="14" y="60" width="78" height="30" rx="7" fill="rgba(122,162,247,0.12)" stroke="#7aa2f7" stroke-width="1.6"/>
+                <text x="53" y="80" text-anchor="middle" class="dtx-mono" font-size="12" font-weight="600" fill="#7aa2f7">"Lin"</text>
+                <line x1="96" y1="75" x2="150" y2="75" stroke="#bb9af7" stroke-width="1.6" stroke-dasharray="3,3"/>
+                <polygon points="150,75 143,71 143,79" fill="#bb9af7"/>
+                <rect x="156" y="60" width="80" height="30" rx="7" fill="rgba(158,206,106,0.12)" stroke="#9ece6a" stroke-width="1.6"/>
+                <text x="196" y="80" text-anchor="middle" class="dtx-mono" font-size="12" font-weight="600" fill="#9ece6a">29</text>
+                <circle class="dtx-map-dot row2" cx="98" cy="75" r="5" fill="#bb9af7"/>
+                <text x="53"  y="104" text-anchor="middle" class="dtx-muted" font-size="9">key</text>
+                <text x="196" y="104" text-anchor="middle" class="dtx-muted" font-size="9">value</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> instant lookup of a value by a meaningful name.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a phone's contacts — a name maps to a number.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ NULL / NONE ══════════════════════════════════════════════════ -->
+    <section id="null">
+      <h2>Null / None</h2>
+
+      <div class="block-desc">
+        <span>A special value meaning "no value here" — an empty, deliberately-unset box.</span>
+        <a class="w3-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null" target="_blank">Docs →</a>
+      </div>
+      <div class="cheat-block">
+        <div class="code-panel">
+          <div class="panel-label">same type, five languages</div>
+          <pre><span class="c">// C  (null pointer)</span>
+char *name = NULL;
+
+<span class="c">// Java</span>
+String name = null;
+
+<span class="c"># Python</span>
+name = None
+
+<span class="c">// JavaScript (null or undefined)</span>
+let name = null;
+
+<span class="c">-- SQL</span>
+name VARCHAR NULL</pre>
+        </div>
+        <div class="live-panel">
+          <div class="panel-label">&#9654; In action</div>
+          <div class="live-output">
+            <div class="dtx-anim">
+              <svg viewBox="0 0 230 94" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A filled box holding 42 next to an empty box marked null.">
+                <!-- filled slot -->
+                <rect x="24" y="22" width="68" height="46" rx="9" fill="rgba(158,206,106,0.12)" stroke="#9ece6a" stroke-width="2"/>
+                <text x="58" y="51" text-anchor="middle" class="dtx-mono" font-size="16" font-weight="600" fill="#9ece6a">42</text>
+                <text x="58" y="84" text-anchor="middle" class="dtx-muted" font-size="9">has a value</text>
+                <!-- empty slot -->
+                <g class="dtx-null-empty">
+                  <rect x="138" y="22" width="68" height="46" rx="9" fill="none" stroke="#e8808f" stroke-width="2" stroke-dasharray="5,4"/>
+                  <line x1="155" y1="59" x2="189" y2="31" stroke="#e8808f" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="172" cy="45" r="13" fill="none" stroke="#e8808f" stroke-width="2"/>
+                </g>
+                <text x="172" y="84" text-anchor="middle" class="dtx-mono" font-size="10" font-weight="600" fill="#e8808f">null</text>
+              </svg>
+            </div>
+            <p class="dtx-why"><strong>Why you need it:</strong> marking "unknown" or "not filled in yet" distinctly from zero.</p>
+            <p class="dtx-real"><strong>Real-world:</strong> a profile with no middle name, or a form field left blank.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>Data Types cheatsheet &mdash; what every value is made of &mdash; open in any browser</footer>
+
+  <div class="notes-overlay" id="notes-overlay"></div>
+  <div class="notes-panel" id="notes-panel">
+    <div class="notes-panel-header">
+      <h3 id="notes-panel-title">Source Notes</h3>
+      <button class="notes-panel-close" id="notes-panel-close">✕</button>
+    </div>
+    <div class="notes-panel-body" id="notes-panel-body"></div>
+  </div>
+
+  <script src="js/script.js?v=8"></script>
+</body>
+</html>

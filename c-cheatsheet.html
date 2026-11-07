@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>C &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .c-kw { color:#bb9af7; }
     .c-fn { color:#7aa2f7; }
@@ -12,6 +12,178 @@
     .c-cm { color:#565f89; }
     .c-num { color:#ff9e64; }
     .c-pre { color:#e0af68; }
+  </style>
+  <style>
+    /* ===== cx2- : per-section inline animations + pointer/memory diagrams ===== */
+    .cx2-mini{ margin-top:.85rem; padding-top:.7rem; border-top:1px dashed var(--border); }
+    .cx2-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem 1rem; margin:.4rem 0 1.1rem; box-shadow:var(--shadow-sm); }
+    .block-desc + .cx2-card{ border-radius:0 0 var(--radius) var(--radius); margin-top:0; }
+    .cx2-cap{ font-family:var(--display); font-weight:600; color:var(--text); font-size:.8rem; margin:0 0 .15rem; display:flex; align-items:center; gap:.45rem; }
+    .cx2-dot{ width:8px; height:8px; border-radius:2px; background:var(--accent); flex:0 0 auto; display:inline-block; }
+    .cx2-sub{ color:var(--text-muted); font-size:.72rem; margin:0 0 .55rem; line-height:1.45; }
+    .cx2-stage{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .cx2-svg{ display:block; width:100%; height:auto; max-width:460px; min-width:340px; }
+    .cx2-svg.cx2-wide{ max-width:780px; min-width:600px; }
+    .cx2-legend{ display:flex; flex-wrap:wrap; gap:.4rem .9rem; margin:.55rem 0 0; padding:0; list-style:none; font-size:.7rem; color:var(--text-muted); }
+    .cx2-legend li{ display:flex; align-items:center; gap:.35rem; }
+    .cx2-legend i{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+    .cx2-bg-amber{ background:#e0b366; } .cx2-bg-rose{ background:#e8808f; } .cx2-bg-blue{ background:#7aa2f7; }
+    .cx2-bg-green{ background:#9ece6a; } .cx2-bg-violet{ background:#bb9af7; } .cx2-bg-acc{ background:var(--accent); }
+
+    /* theme-aware SVG primitives (text + surfaces follow light/dark) */
+    .cx2-t{ font-family:var(--display); font-size:10.5px; fill:var(--text-muted); }
+    .cx2-tt{ fill:var(--text); }
+    .cx2-m{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:11px; fill:var(--text); }
+    .cx2-ms{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:9px; fill:var(--text-muted); }
+    .cx2-mid{ text-anchor:middle; } .cx2-end{ text-anchor:end; } .cx2-b{ font-weight:600; }
+    .cx2-box{ fill:var(--surface-2); stroke:var(--border); stroke-width:1; }
+    .cx2-term{ fill:var(--code-bg); stroke:var(--border); stroke-width:1; }
+    .cx2-ln{ stroke:var(--text-muted); stroke-width:1.4; fill:none; }
+    .cx2-ah{ fill:var(--text-muted); }
+    .cx2-hl{ fill:none; stroke-width:2.5; }
+    .cx2-sw2{ stroke-width:2; }
+
+    /* fixed multi-colour accents for the moving parts (same in both themes) */
+    .cx2-f-amber{ fill:#e0b366; } .cx2-f-rose{ fill:#e8808f; } .cx2-f-blue{ fill:#7aa2f7; }
+    .cx2-f-green{ fill:#9ece6a; } .cx2-f-violet{ fill:#bb9af7; } .cx2-f-acc{ fill:var(--accent); }
+    .cx2-k-amber{ stroke:#e0b366; } .cx2-k-rose{ stroke:#e8808f; } .cx2-k-blue{ stroke:#7aa2f7; }
+    .cx2-k-green{ stroke:#9ece6a; } .cx2-k-violet{ stroke:#bb9af7; } .cx2-k-acc{ stroke:var(--accent); }
+    .cx2-ink{ fill:#14201e; } /* text printed on a coloured chip */
+
+    /* --- sequences: one slot = 1.8s, --i picks the slot (only one lit at a time) --- */
+    .cx2-s3{ opacity:0; animation:cx2-seq3 5.4s ease-in-out infinite; animation-delay:calc(var(--i,0)*1.8s); }
+    .cx2-s4{ opacity:0; animation:cx2-seq4 7.2s ease-in-out infinite; animation-delay:calc(var(--i,0)*1.8s); }
+    .cx2-s5{ opacity:0; animation:cx2-seq5 9s ease-in-out infinite; animation-delay:calc(var(--i,0)*1.8s); }
+    .cx2-s6{ opacity:0; animation:cx2-seq6 10.8s ease-in-out infinite; animation-delay:calc(var(--i,0)*1.8s); }
+    .cx2-s6h{ opacity:0; animation:cx2-seq6h 10.8s ease-in-out infinite; animation-delay:calc(var(--i,0)*1.8s); }
+    @keyframes cx2-seq3{ 0%{opacity:0} 4%{opacity:1} 29%{opacity:1} 33.3%{opacity:0} 100%{opacity:0} }
+    @keyframes cx2-seq4{ 0%{opacity:0} 3%{opacity:1} 22%{opacity:1} 25%{opacity:0} 100%{opacity:0} }
+    @keyframes cx2-seq5{ 0%{opacity:0} 2.5%{opacity:1} 17.5%{opacity:1} 20%{opacity:0} 100%{opacity:0} }
+    @keyframes cx2-seq6{ 0%{opacity:0} 2%{opacity:1} 14.5%{opacity:1} 16.6%{opacity:0} 100%{opacity:0} }
+    @keyframes cx2-seq6h{ 0%{opacity:0} 1.5%{opacity:1} 31%{opacity:1} 33.3%{opacity:0} 100%{opacity:0} }
+    /* appear at slot k and stay until the cycle restarts */
+    .cx2-h3-0{ opacity:0; animation:cx2-h3-0 5.4s ease-in-out infinite; }
+    @keyframes cx2-h3-0{ 0%{opacity:0} 3%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h3-1{ opacity:0; animation:cx2-h3-1 5.4s ease-in-out infinite; }
+    @keyframes cx2-h3-1{ 0%,33.3%{opacity:0} 35.8%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h3-2{ opacity:0; animation:cx2-h3-2 5.4s ease-in-out infinite; }
+    @keyframes cx2-h3-2{ 0%,66.7%{opacity:0} 69.2%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h4-0{ opacity:0; animation:cx2-h4-0 7.2s ease-in-out infinite; }
+    @keyframes cx2-h4-0{ 0%{opacity:0} 3%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h4-1{ opacity:0; animation:cx2-h4-1 7.2s ease-in-out infinite; }
+    @keyframes cx2-h4-1{ 0%,25.0%{opacity:0} 27.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h4-2{ opacity:0; animation:cx2-h4-2 7.2s ease-in-out infinite; }
+    @keyframes cx2-h4-2{ 0%,50.0%{opacity:0} 52.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h4-3{ opacity:0; animation:cx2-h4-3 7.2s ease-in-out infinite; }
+    @keyframes cx2-h4-3{ 0%,75.0%{opacity:0} 77.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h5-0{ opacity:0; animation:cx2-h5-0 9s ease-in-out infinite; }
+    @keyframes cx2-h5-0{ 0%{opacity:0} 3%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h5-1{ opacity:0; animation:cx2-h5-1 9s ease-in-out infinite; }
+    @keyframes cx2-h5-1{ 0%,20.0%{opacity:0} 22.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h5-2{ opacity:0; animation:cx2-h5-2 9s ease-in-out infinite; }
+    @keyframes cx2-h5-2{ 0%,40.0%{opacity:0} 42.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h5-3{ opacity:0; animation:cx2-h5-3 9s ease-in-out infinite; }
+    @keyframes cx2-h5-3{ 0%,60.0%{opacity:0} 62.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h5-4{ opacity:0; animation:cx2-h5-4 9s ease-in-out infinite; }
+    @keyframes cx2-h5-4{ 0%,80.0%{opacity:0} 82.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h6-0{ opacity:0; animation:cx2-h6-0 10.8s ease-in-out infinite; }
+    @keyframes cx2-h6-0{ 0%{opacity:0} 3%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h6-1{ opacity:0; animation:cx2-h6-1 10.8s ease-in-out infinite; }
+    @keyframes cx2-h6-1{ 0%,16.7%{opacity:0} 19.2%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h6-2{ opacity:0; animation:cx2-h6-2 10.8s ease-in-out infinite; }
+    @keyframes cx2-h6-2{ 0%,33.3%{opacity:0} 35.8%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h6-3{ opacity:0; animation:cx2-h6-3 10.8s ease-in-out infinite; }
+    @keyframes cx2-h6-3{ 0%,50.0%{opacity:0} 52.5%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h6-4{ opacity:0; animation:cx2-h6-4 10.8s ease-in-out infinite; }
+    @keyframes cx2-h6-4{ 0%,66.7%{opacity:0} 69.2%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-h6-5{ opacity:0; animation:cx2-h6-5 10.8s ease-in-out infinite; }
+    @keyframes cx2-h6-5{ 0%,83.3%{opacity:0} 85.8%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+
+    /* --- alternating two states (6s) --- */
+    .cx2-alt-a{ opacity:0; animation:cx2-alt 6s ease-in-out infinite; }
+    .cx2-alt-b{ opacity:0; animation:cx2-alt 6s ease-in-out infinite; animation-delay:3s; }
+    @keyframes cx2-alt{ 0%{opacity:0} 5%{opacity:1} 42%{opacity:1} 47%{opacity:0} 100%{opacity:0} }
+    .cx2-galt-a{ transform-box:fill-box; transform-origin:left center; opacity:0; animation:cx2-galt 6s ease-in-out infinite; }
+    .cx2-galt-b{ transform-box:fill-box; transform-origin:right center; opacity:0; animation:cx2-galt 6s ease-in-out infinite; animation-delay:3s; }
+    .cx2-altl-a{ opacity:0; animation:cx2-altl 6s ease-in-out infinite; }
+    .cx2-altl-b{ opacity:0; animation:cx2-altl 6s ease-in-out infinite; animation-delay:3s; }
+    @keyframes cx2-altl{ 0%,22%{opacity:0} 27%{opacity:1} 42%{opacity:1} 47%{opacity:0} 100%{opacity:0} }
+    @keyframes cx2-galt{ 0%{transform:scaleX(0);opacity:0} 4%{opacity:1} 25%{transform:scaleX(1)} 44%{transform:scaleX(1);opacity:1} 49%{transform:scaleX(1);opacity:0} 100%{transform:scaleX(1);opacity:0} }
+
+    /* --- travelling tokens --- */
+    .cx2-flow{ opacity:0; animation:cx2-flow 4.8s ease-in-out infinite; }
+    @keyframes cx2-flow{ 0%{transform:translateX(0);opacity:0} 10%{opacity:1} 60%{transform:translateX(var(--d,120px));opacity:1} 68%{opacity:0} 100%{transform:translateX(var(--d,120px));opacity:0} }
+    .cx2-late{ opacity:0; animation:cx2-late 4.8s ease-in-out infinite; }
+    @keyframes cx2-late{ 0%,58%{opacity:0} 66%{opacity:1} 94%{opacity:1} 100%{opacity:0} }
+    .cx2-flow3{ opacity:0; animation:cx2-flow3 5.4s ease-in-out infinite; }
+    @keyframes cx2-flow3{ 0%,36%{transform:translateX(0);opacity:0} 39%{opacity:1} 60%{transform:translateX(var(--d,120px));opacity:1} 64%{opacity:0} 100%{transform:translateX(var(--d,120px));opacity:0} }
+    .cx2-deref{ opacity:0; animation:cx2-deref 6s ease-in-out infinite; }
+    @keyframes cx2-deref{ 0%,56%{transform:translateX(0);opacity:0} 58%{opacity:1} 78%{transform:translateX(var(--d,120px));opacity:1} 90%{opacity:1} 93%{opacity:0} 100%{transform:translateX(var(--d,120px));opacity:0} }
+    .cx2-call{ opacity:0; animation:cx2-call 7.2s ease-in-out infinite; }
+    @keyframes cx2-call{ 0%{transform:translateX(0);opacity:0} 5%{opacity:1} 30%{transform:translateX(var(--d,100px))} 42%{transform:translateX(var(--d,100px));opacity:1} 47%{opacity:0} 100%{transform:translateX(var(--d,100px));opacity:0} }
+    .cx2-mid7{ opacity:0; animation:cx2-mid7 7.2s ease-in-out infinite; }
+    @keyframes cx2-mid7{ 0%,40%{opacity:0} 45%{opacity:1} 60%{opacity:1} 65%{opacity:0} 100%{opacity:0} }
+    .cx2-ret{ opacity:0; animation:cx2-ret 7.2s ease-in-out infinite; }
+    @keyframes cx2-ret{ 0%,58%{transform:translateX(0);opacity:0} 62%{opacity:1} 82%{transform:translateX(var(--d,-100px))} 90%{transform:translateX(var(--d,-100px));opacity:1} 95%{opacity:0} 100%{transform:translateX(var(--d,-100px));opacity:0} }
+    .cx2-late7{ opacity:0; animation:cx2-late7 7.2s ease-in-out infinite; }
+    @keyframes cx2-late7{ 0%,84%{opacity:0} 88%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+
+    /* --- stepping cursor over 6 cells (--w = cell pitch) --- */
+    .cx2-cur6{ opacity:0; animation:cx2-cur6 9s ease-in-out infinite; }
+    @keyframes cx2-cur6{
+      0%{transform:translateX(0);opacity:0} 2%{opacity:1} 13%{transform:translateX(0)}
+      16.7%{transform:translateX(calc(var(--w,50px)*1))} 30%{transform:translateX(calc(var(--w,50px)*1))}
+      33.3%{transform:translateX(calc(var(--w,50px)*2))} 46.6%{transform:translateX(calc(var(--w,50px)*2))}
+      50%{transform:translateX(calc(var(--w,50px)*3))} 63.3%{transform:translateX(calc(var(--w,50px)*3))}
+      66.7%{transform:translateX(calc(var(--w,50px)*4))} 80%{transform:translateX(calc(var(--w,50px)*4))}
+      83.3%{transform:translateX(calc(var(--w,50px)*5))} 96%{transform:translateX(calc(var(--w,50px)*5));opacity:1}
+      100%{transform:translateX(calc(var(--w,50px)*5));opacity:0} }
+
+    /* --- byte bars growing in (data types) --- */
+    .cx2-g3-0{ transform-box:fill-box; transform-origin:left center; animation:cx2-g3-0 5.4s ease-in-out infinite; }
+    @keyframes cx2-g3-0{ 0%{transform:scaleX(0);opacity:1} 15%{transform:scaleX(1)} 96%{transform:scaleX(1);opacity:1} 100%{transform:scaleX(1);opacity:0} }
+    .cx2-g3-1{ transform-box:fill-box; transform-origin:left center; animation:cx2-g3-1 5.4s ease-in-out infinite; }
+    @keyframes cx2-g3-1{ 0%,33.3%{transform:scaleX(0);opacity:1} 48.3%{transform:scaleX(1)} 96%{transform:scaleX(1);opacity:1} 100%{transform:scaleX(1);opacity:0} }
+    .cx2-g3-2{ transform-box:fill-box; transform-origin:left center; animation:cx2-g3-2 5.4s ease-in-out infinite; }
+    @keyframes cx2-g3-2{ 0%,66.7%{transform:scaleX(0);opacity:1} 81.7%{transform:scaleX(1)} 96%{transform:scaleX(1);opacity:1} 100%{transform:scaleX(1);opacity:0} }
+
+    /* --- gentle emphasis + dashed flow --- */
+    .cx2-glow{ animation:cx2-glow 3.4s ease-in-out infinite; }
+    @keyframes cx2-glow{ 0%,100%{opacity:.2} 50%{opacity:.95} }
+    .cx2-dash{ fill:none; stroke-width:2; stroke-dasharray:3 9; stroke-linecap:round; animation:cx2-dashmove 2.4s linear infinite; }
+    @keyframes cx2-dashmove{ to{ stroke-dashoffset:-12; } }
+
+    /* --- pointer & memory deep-dive (10.8s cycle, six 1.8s slots) --- */
+    .cx2-pm-drop{ opacity:0; animation:cx2-pm-drop 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-drop{ 0%{transform:translateY(-30px);opacity:0} 3%{opacity:1} 12%{transform:translateY(0)} 97%{transform:translateY(0);opacity:1} 100%{transform:translateY(0);opacity:0} }
+    .cx2-pm-q{ animation:cx2-pm-q 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-q{ 0%{opacity:1} 30%{opacity:1} 33%{opacity:0} 100%{opacity:0} }
+    .cx2-pm-addr{ opacity:0; animation:cx2-pm-addr 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-addr{ 0%,18%{transform:translate(0,0);opacity:0} 20%{opacity:1} 31%{transform:translate(-278px,-36px);opacity:1} 33%{opacity:0} 100%{transform:translate(-278px,-36px);opacity:0} }
+    .cx2-pm-pval{ opacity:0; animation:cx2-pm-pval 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-pval{ 0%,31%{opacity:0} 33%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-pm-draw{ fill:none; stroke-width:2.5; stroke-dasharray:172; stroke-dashoffset:172; opacity:0; animation:cx2-pm-draw 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-draw{ 0%,34%{stroke-dashoffset:172;opacity:0} 35%{opacity:1} 48%{stroke-dashoffset:0} 97%{stroke-dashoffset:0;opacity:1} 100%{stroke-dashoffset:0;opacity:0} }
+    .cx2-pm-head{ opacity:0; animation:cx2-pm-head 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-head{ 0%,46%{opacity:0} 48%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+    .cx2-pm-follow{ opacity:0; animation:cx2-pm-follow 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-follow{ 0%,51%{transform:translateX(0);opacity:0} 53%{opacity:1} 64%{transform:translateX(172px);opacity:1} 67%{opacity:0} 100%{transform:translateX(172px);opacity:0} }
+    .cx2-pm-val{ opacity:0; animation:cx2-pm-val 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-val{ 0%,68%{transform:translate(0,0);opacity:0} 70%{opacity:1} 81%{transform:translate(-72px,89px);opacity:1} 83.5%{opacity:0} 100%{transform:translate(-72px,89px);opacity:0} }
+    .cx2-pm-out{ opacity:0; animation:cx2-pm-out 10.8s ease-in-out infinite; }
+    @keyframes cx2-pm-out{ 0%,81%{opacity:0} 83%{opacity:1} 97%{opacity:1} 100%{opacity:0} }
+
+    /* --- reduced motion: freeze everything on a readable static frame --- */
+    @media (prefers-reduced-motion: reduce){
+      .cx2-mini *, .cx2-card *{ animation:none !important; }
+      .cx2-s3,.cx2-s4,.cx2-s5,.cx2-s6,.cx2-s6h,.cx2-alt-a,.cx2-alt-b,.cx2-altl-a,.cx2-altl-b,.cx2-galt-a,.cx2-galt-b,
+      .cx2-flow,.cx2-flow3,.cx2-late,.cx2-late7,.cx2-deref,.cx2-call,.cx2-ret,.cx2-mid7,.cx2-cur6,.cx2-pm-q,
+      .cx2-pm-drop,.cx2-pm-addr,.cx2-pm-pval,.cx2-pm-draw,.cx2-pm-head,.cx2-pm-follow,.cx2-pm-val,.cx2-pm-out,
+      [class*="cx2-h3-"],[class*="cx2-h4-"],[class*="cx2-h5-"],[class*="cx2-h6-"]{ opacity:0 !important; transform:none !important; }
+      .cx2-rm{ opacity:1 !important; }
+      .cx2-glow{ opacity:.6 !important; }
+      .cx2-pm-draw{ stroke-dashoffset:0 !important; }
+    }
   </style>
 </head>
 <body>
@@ -31,15 +203,16 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=7"></script>
 <script>renderHeader('C')</script>
 <script>renderSourceLink('C')</script>
   <main>
   <div class="page-header">
     <h1>C</h1>
-    <p class="subtitle">Quick reference with live previews</p>
+    <p class="subtitle">Learn C step by step &mdash; plain examples you can see run.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#how-c-runs">How C Runs</a>
       <a href="#getting-started">Start</a>
       <a href="#variables">Variables</a>
       <a href="#strings">Strings</a>
@@ -49,6 +222,7 @@
       <a href="#enum">Enum</a>
       <a href="#input">Input</a>
       <a href="#pointers">Pointers</a>
+      <a href="#pointer-memory">Pointers &amp; Memory</a>
       <a href="#operators">Operators</a>
       <a href="#data-types">Data Types</a>
       <a href="#preprocessor">Preprocessor</a>
@@ -57,6 +231,198 @@
       <a href="#file-io">File I/O</a>
     </nav>
   </div>
+
+    <!-- How C Runs (beginner animated explainer) -->
+    <section id="how-c-runs">
+      <h2>How C Runs: From Code to Output</h2>
+
+      <div class="block-desc">
+        <span>A C program is just text you write; the compiler turns it into a file the computer can run &mdash; follow the journey below.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_getstarted.php" target="_blank">W3Schools &rarr;</a>
+      </div>
+
+      <style>
+        .cx-wrap{
+          background:var(--surface);
+          border:1px solid var(--border);
+          border-radius:var(--radius);
+          padding:1.1rem 1.1rem 1.25rem;
+          margin:0.4rem 0 0.6rem;
+          box-shadow:var(--shadow-sm);
+        }
+        .cx-caption{
+          font-family:var(--display);
+          font-weight:600;
+          color:var(--text);
+          font-size:0.9rem;
+          margin:0 0 0.15rem;
+        }
+        .cx-sub{
+          color:var(--text-muted);
+          font-size:0.78rem;
+          margin:0 0 0.75rem;
+          line-height:1.5;
+        }
+        .cx-pipe{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .cx-svg{ display:block; width:100%; min-width:600px; height:auto; }
+
+        /* --- SVG styling (theme aware) --- */
+        .cx-box{ fill:var(--surface-2); stroke:var(--border); stroke-width:1; }
+        .cx-bt{ fill:var(--text); font-family:ui-monospace,Menlo,Consolas,monospace; font-size:15px; font-weight:600; text-anchor:middle; }
+        .cx-bs{ fill:var(--accent); font-family:var(--display); font-size:10.5px; text-anchor:middle; letter-spacing:.3px; }
+        .cx-note{ fill:var(--text-muted); font-family:var(--display); font-size:10.5px; text-anchor:middle; }
+        .cx-step{ fill:var(--text); font-family:var(--display); font-size:11px; font-weight:600; text-anchor:middle; }
+        .cx-cmd{ fill:var(--accent-2); font-family:ui-monospace,Menlo,Consolas,monospace; font-size:11px; text-anchor:middle; }
+        .cx-arrow{ stroke:var(--text-muted); stroke-width:1.6; }
+        .cx-ahead{ fill:var(--text-muted); }
+        .cx-lane{ stroke:var(--border); stroke-width:3; stroke-linecap:round; }
+        .cx-laneflow{ stroke:var(--accent-2); stroke-width:3; stroke-linecap:round; stroke-dasharray:2 10; opacity:.55; animation:cx-laneflow 1.8s linear infinite; }
+        .cx-active{ fill:var(--accent); opacity:0; animation:cx-boxon 16s ease-in-out infinite; }
+        .cx-a2{ animation-delay:3.36s; }
+        .cx-a3{ animation-delay:7.04s; }
+        .cx-a4{ animation-delay:10.72s; }
+        .cx-a5{ animation-delay:14.32s; }
+        .cx-token{ animation:cx-travel 16s ease-in-out infinite; }
+        .cx-token-halo{ fill:var(--accent-2); opacity:.35; animation:cx-breathe 2.6s ease-in-out infinite; }
+        .cx-token-core{ fill:var(--accent); }
+
+        @keyframes cx-laneflow{ to{ stroke-dashoffset:-12; } }
+        @keyframes cx-breathe{ 0%,100%{ opacity:.3; } 50%{ opacity:.6; } }
+        @keyframes cx-boxon{ 0%{ opacity:0; } 3%{ opacity:.16; } 11%{ opacity:0; } 100%{ opacity:0; } }
+        @keyframes cx-travel{
+          0%{ transform:translateX(85px); opacity:0; }
+          4%{ opacity:1; }
+          5%{ transform:translateX(85px); }
+          20%{ transform:translateX(295px); }
+          28%{ transform:translateX(295px); }
+          43%{ transform:translateX(505px); }
+          51%{ transform:translateX(505px); }
+          66%{ transform:translateX(715px); }
+          74%{ transform:translateX(715px); }
+          89%{ transform:translateX(915px); }
+          92%{ opacity:1; }
+          97%{ transform:translateX(915px); opacity:0; }
+          100%{ transform:translateX(915px); opacity:0; }
+        }
+
+        /* --- tiny memory-box visual --- */
+        .cx-mem{
+          display:flex; flex-wrap:wrap; align-items:center; gap:0.75rem;
+          margin-top:1rem; padding-top:0.9rem; border-top:1px dashed var(--border);
+        }
+        .cx-mem-code{
+          font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.85rem;
+          color:var(--text); background:var(--surface-2); border:1px solid var(--border);
+          border-radius:var(--radius-sm); padding:0.4rem 0.6rem;
+        }
+        .cx-mem-kw{ color:var(--accent); font-weight:600; }
+        .cx-mem-num{ color:var(--accent-2); }
+        .cx-mem-link{ color:var(--text-muted); font-size:0.9rem; }
+        .cx-mem-cell{ text-align:center; }
+        .cx-mem-name{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.72rem; color:var(--accent); margin-bottom:0.2rem; }
+        .cx-mem-box{
+          min-width:58px; padding:0.5rem 0.7rem; display:inline-block;
+          border:2px solid var(--accent); border-radius:var(--radius-sm);
+          background:var(--surface);
+          font-family:ui-monospace,Menlo,Consolas,monospace; font-size:1.05rem; font-weight:600; color:var(--text);
+          animation:cx-memglow 3s ease-in-out infinite;
+        }
+        .cx-mem-addr{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.68rem; color:var(--text-muted); margin-top:0.2rem; }
+        .cx-mem-cap{ flex:1 1 170px; min-width:160px; color:var(--text-muted); font-size:0.78rem; line-height:1.5; }
+        @keyframes cx-memglow{ 0%,100%{ box-shadow:0 0 0 0 var(--accent-subtle); } 50%{ box-shadow:0 0 0 5px var(--accent-subtle); } }
+
+        @media (prefers-reduced-motion: reduce){
+          .cx-laneflow,.cx-active,.cx-token,.cx-token-halo,.cx-mem-box{ animation:none !important; }
+          .cx-token{ transform:translateX(85px); opacity:1; }
+          .cx-laneflow{ opacity:.45; }
+        }
+      </style>
+
+      <div class="cx-wrap">
+        <p class="cx-caption">The build-and-run pipeline</p>
+        <p class="cx-sub">Each box is a file; each arrow is a step the compiler does. The glowing dot shows your code moving through, one stage at a time.</p>
+
+        <div class="cx-pipe">
+          <svg class="cx-svg" viewBox="0 0 1000 150" role="img" aria-label="C pipeline: main.c is preprocessed, compiled, and linked into an executable, then run to produce output.">
+            <defs>
+              <marker id="cxArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path class="cx-ahead" d="M0,0 L10,5 L0,10 z"></path>
+              </marker>
+            </defs>
+
+            <!-- boxes -->
+            <rect class="cx-box" x="20"  y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-box" x="230" y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-box" x="440" y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-box" x="650" y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-box" x="850" y="24" width="130" height="56" rx="10"></rect>
+
+            <!-- active-stage highlight overlays -->
+            <rect class="cx-active cx-a1" x="20"  y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-active cx-a2" x="230" y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-active cx-a3" x="440" y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-active cx-a4" x="650" y="24" width="130" height="56" rx="10"></rect>
+            <rect class="cx-active cx-a5" x="850" y="24" width="130" height="56" rx="10"></rect>
+
+            <!-- box labels -->
+            <text class="cx-bt" x="85"  y="49">main.c</text>
+            <text class="cx-bs" x="85"  y="66">source</text>
+            <text class="cx-bt" x="295" y="49">main.i</text>
+            <text class="cx-bs" x="295" y="66">expanded</text>
+            <text class="cx-bt" x="505" y="49">main.o</text>
+            <text class="cx-bs" x="505" y="66">object code</text>
+            <text class="cx-bt" x="715" y="49">app</text>
+            <text class="cx-bs" x="715" y="66">executable</text>
+            <text class="cx-bt" x="915" y="49">Output</text>
+            <text class="cx-bs" x="915" y="66">on screen</text>
+
+            <!-- arrows + step labels + commands -->
+            <line class="cx-arrow" x1="158" y1="54" x2="222" y2="54" marker-end="url(#cxArrow)"></line>
+            <text class="cx-step" x="190" y="38">preprocess</text>
+            <text class="cx-cmd"  x="190" y="72">gcc -E</text>
+
+            <line class="cx-arrow" x1="368" y1="54" x2="432" y2="54" marker-end="url(#cxArrow)"></line>
+            <text class="cx-step" x="400" y="38">compile</text>
+            <text class="cx-cmd"  x="400" y="72">gcc -c</text>
+
+            <line class="cx-arrow" x1="578" y1="54" x2="642" y2="54" marker-end="url(#cxArrow)"></line>
+            <text class="cx-step" x="610" y="38">link</text>
+            <text class="cx-cmd"  x="610" y="72">gcc -o app</text>
+
+            <line class="cx-arrow" x1="788" y1="54" x2="842" y2="54" marker-end="url(#cxArrow)"></line>
+            <text class="cx-step" x="815" y="38">run</text>
+            <text class="cx-cmd"  x="815" y="72">./app</text>
+
+            <!-- one-line plain note per stage -->
+            <text class="cx-note" x="85"  y="98">Your code, as text.</text>
+            <text class="cx-note" x="295" y="98">Includes pulled in.</text>
+            <text class="cx-note" x="505" y="98">Machine code made.</text>
+            <text class="cx-note" x="715" y="98">Libraries joined in.</text>
+            <text class="cx-note" x="915" y="98">It prints the result.</text>
+
+            <!-- travel lane + moving token -->
+            <line class="cx-lane"     x1="20" y1="128" x2="980" y2="128"></line>
+            <line class="cx-laneflow" x1="20" y1="128" x2="980" y2="128"></line>
+            <g class="cx-token">
+              <circle class="cx-token-halo" cx="0" cy="128" r="9"></circle>
+              <circle class="cx-token-core" cx="0" cy="128" r="4"></circle>
+            </g>
+          </svg>
+        </div>
+
+        <!-- tiny memory-box hint -->
+        <div class="cx-mem">
+          <div class="cx-mem-code"><span class="cx-mem-kw">int</span> age = <span class="cx-mem-num">25</span>;</div>
+          <span class="cx-mem-link">stores &rarr;</span>
+          <div class="cx-mem-cell">
+            <div class="cx-mem-name">age</div>
+            <div class="cx-mem-box">25</div>
+            <div class="cx-mem-addr">0x7ffe</div>
+          </div>
+          <p class="cx-mem-cap">A variable is just a labelled box in memory. The name <code>age</code> remembers where the value <code>25</code> is kept.</p>
+        </div>
+      </div>
+    </section>
 
     <!-- Getting Started -->
     <section id="getting-started">
@@ -82,6 +448,25 @@
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#565f89;">$ gcc -Wall -g hello.c -o hello && ./hello</span><br />
               <span style="color:#9ece6a;">Hello World!</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>What printf does</p>
+            <p class="cx2-sub">Your program hands the text to the terminal (stdout), which prints it.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 96" role="img" aria-label="printf sends the text Hello World! from your program to the terminal screen.">
+                <defs><marker id="cx2ah-gs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs>
+                <rect class="cx2-box" x="8" y="26" width="178" height="44" rx="8"></rect>
+                <text class="cx2-ms" x="16" y="40">main.c</text>
+                <text class="cx2-m" x="16" y="58"><tspan class="cx2-f-blue">printf</tspan>(<tspan class="cx2-f-green">"Hello World!\n"</tspan>);</text>
+                <line class="cx2-ln" x1="194" y1="48" x2="256" y2="48" marker-end="url(#cx2ah-gs)"></line>
+                <text class="cx2-t cx2-mid" x="225" y="40">stdout</text>
+                <rect class="cx2-term" x="264" y="14" width="168" height="68" rx="8"></rect>
+                <circle class="cx2-f-rose" cx="278" cy="26" r="3"></circle><circle class="cx2-f-amber" cx="289" cy="26" r="3"></circle><circle class="cx2-f-green" cx="300" cy="26" r="3"></circle>
+                <text class="cx2-m" x="276" y="50" style="fill:#565f89">$ ./hello</text>
+                <text class="cx2-m cx2-f-green cx2-late cx2-rm" x="276" y="68">Hello World!</text>
+                <g class="cx2-flow" style="--d:62px"><circle class="cx2-f-green" cx="194" cy="48" r="5"></circle></g>
+              </svg>
             </div>
           </div>
         </div>
@@ -168,6 +553,36 @@ myNum2 = <span class="c-num">15</span>;
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#9ece6a;">sum = 5 + 6 = 11</span><br />
               <span style="color:#565f89;">Variables must be declared before use</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>A variable is a named box</p>
+            <p class="cx2-sub">The box keeps the latest value; a <code>const</code> box is locked after it is filled.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 112" role="img" aria-label="A variable is a named box in memory whose value can change; a const box is locked.">
+                <rect class="cx2-box" x="8" y="8" width="160" height="26" rx="6"></rect>
+                <g class="cx2-s3 cx2-rm" style="--i:0"><rect class="cx2-f-amber" opacity=".25" x="8" y="8" width="160" height="26" rx="6"></rect></g>
+                <text class="cx2-m" x="16" y="25"><tspan class="cx2-f-violet">int</tspan> myNum = <tspan class="cx2-f-amber">15</tspan>;</text>
+                <rect class="cx2-box" x="8" y="42" width="160" height="26" rx="6"></rect>
+                <g class="cx2-s3" style="--i:1"><rect class="cx2-f-amber" opacity=".25" x="8" y="42" width="160" height="26" rx="6"></rect></g>
+                <text class="cx2-m" x="16" y="59">myNum = <tspan class="cx2-f-amber">20</tspan>;</text>
+                <rect class="cx2-box" x="8" y="76" width="160" height="26" rx="6"></rect>
+                <g class="cx2-s3" style="--i:2"><rect class="cx2-f-rose" opacity=".25" x="8" y="76" width="160" height="26" rx="6"></rect></g>
+                <text class="cx2-m" x="16" y="93">PI = 3; <tspan class="cx2-f-rose">// error</tspan></text>
+                <text class="cx2-ms cx2-mid" x="236" y="22">myNum</text>
+                <rect class="cx2-box cx2-k-amber cx2-sw2" x="200" y="28" width="72" height="38" rx="7"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-s3 cx2-rm" style="--i:0;font-size:15px" x="236" y="53">15</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-h3-1" style="font-size:15px" x="236" y="53">20</text>
+                <text class="cx2-ms cx2-mid" x="236" y="82">at 0x7ffc</text>
+                <text class="cx2-t cx2-mid" x="236" y="104">a named box in RAM</text>
+                <text class="cx2-ms cx2-mid" x="340" y="22"><tspan class="cx2-f-violet">const</tspan> PI</text>
+                <rect class="cx2-box cx2-k-violet cx2-sw2" x="304" y="28" width="72" height="38" rx="7"></rect>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:15px" x="340" y="53">3.14</text>
+                <rect class="cx2-f-violet" x="378" y="20" width="12" height="9" rx="2"></rect>
+                <path class="cx2-ln cx2-k-violet" d="M380.5 20 v-3 a3.5 3.5 0 0 1 7 0 v3"></path>
+                <text class="cx2-ms cx2-mid" x="340" y="82">at 0x7ff8</text>
+                <g class="cx2-s3" style="--i:2"><text class="cx2-m cx2-b cx2-mid cx2-f-rose" style="font-size:16px" x="398" y="53">&#x2715;</text><text class="cx2-ms cx2-mid cx2-f-rose" x="340" y="104">read-only: cannot assign</text></g>
+              </svg>
             </div>
           </div>
         </div>
@@ -294,6 +709,45 @@ myNum2 = <span class="c-num">15</span>;
               <span style="color:#565f89;">C has no String type — uses char arrays</span>
             </div>
           </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Inside a string</p>
+            <p class="cx2-sub">Each character sits in its own byte; a hidden <code>\0</code> tells printf where to stop.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 104" role="img" aria-label="A C string is an array of characters ending in a hidden null character; printf reads until it hits the null.">
+                <text class="cx2-m" x="8" y="16"><tspan class="cx2-f-violet">char</tspan> hello[] = <tspan class="cx2-f-green">"Hello"</tspan>;</text>
+                <rect class="cx2-box" x="8" y="28" width="46" height="34" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-tt" style="font-size:14px" x="31" y="50">H</text>
+                <text class="cx2-ms cx2-mid" x="31" y="76">[0]</text>
+                <rect class="cx2-box" x="58" y="28" width="46" height="34" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-tt" style="font-size:14px" x="81" y="50">e</text>
+                <text class="cx2-ms cx2-mid" x="81" y="76">[1]</text>
+                <rect class="cx2-box" x="108" y="28" width="46" height="34" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-tt" style="font-size:14px" x="131" y="50">l</text>
+                <text class="cx2-ms cx2-mid" x="131" y="76">[2]</text>
+                <rect class="cx2-box" x="158" y="28" width="46" height="34" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-tt" style="font-size:14px" x="181" y="50">l</text>
+                <text class="cx2-ms cx2-mid" x="181" y="76">[3]</text>
+                <rect class="cx2-box" x="208" y="28" width="46" height="34" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-tt" style="font-size:14px" x="231" y="50">o</text>
+                <text class="cx2-ms cx2-mid" x="231" y="76">[4]</text>
+                <rect class="cx2-box cx2-k-rose cx2-sw2" x="258" y="28" width="46" height="34" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-rose" style="font-size:14px" x="281" y="50">\0</text>
+                <text class="cx2-ms cx2-mid" x="281" y="76">[5]</text>
+                
+                <rect class="cx2-hl cx2-k-blue cx2-cur6 cx2-rm" style="--w:50px" x="8" y="28" width="46" height="34" rx="6"></rect>
+                <rect class="cx2-box" x="316" y="28" width="116" height="34" rx="6"></rect>
+                <text class="cx2-ms" x="322" y="40">printf("%s") &#8594;</text>
+                <text class="cx2-m cx2-mid cx2-f-green cx2-h6-1" style="font-size:12px" x="330" y="56">H</text>
+                <text class="cx2-m cx2-mid cx2-f-green cx2-h6-2" style="font-size:12px" x="343" y="56">e</text>
+                <text class="cx2-m cx2-mid cx2-f-green cx2-h6-3" style="font-size:12px" x="356" y="56">l</text>
+                <text class="cx2-m cx2-mid cx2-f-green cx2-h6-4" style="font-size:12px" x="369" y="56">l</text>
+                <text class="cx2-m cx2-mid cx2-f-green cx2-h6-5" style="font-size:12px" x="382" y="56">o</text>
+                
+                <text class="cx2-ms cx2-f-rose cx2-s6 cx2-rm" style="--i:5" x="316" y="78">\0 = stop reading here</text>
+                <text class="cx2-t" x="8" y="98">6 bytes for 5 letters: the hidden \0 marks the end.</text>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -359,6 +813,34 @@ time = <span class="c-num">22</span>;
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#9ece6a;">Good evening!</span><br />
               <span style="color:#9ece6a;">Good evening!</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>One branch at a time</p>
+            <p class="cx2-sub">The condition is checked, then exactly one path runs.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 118" role="img" aria-label="An if statement checks a condition and runs only one of two branches.">
+                <defs><marker id="cx2ah-if" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs>
+                <rect class="cx2-box" x="8" y="48" width="86" height="26" rx="6"></rect>
+                <text class="cx2-m cx2-mid cx2-alt-a cx2-rm" x="51" y="65">time = 10</text>
+                <text class="cx2-m cx2-mid cx2-alt-b" x="51" y="65">time = 20</text>
+                <line class="cx2-ln" x1="94" y1="61" x2="114" y2="61" marker-end="url(#cx2ah-if)"></line>
+                <path class="cx2-box" d="M172 30 L228 61 L172 92 L116 61 Z"></path>
+                <text class="cx2-m cx2-mid" style="font-size:10px" x="172" y="64">time &lt; 18 ?</text>
+                <path class="cx2-ln" d="M228 61 C 250 61, 250 36, 272 36" marker-end="url(#cx2ah-if)"></path>
+                <path class="cx2-ln" d="M228 61 C 250 61, 250 86, 272 86" marker-end="url(#cx2ah-if)"></path>
+                <path class="cx2-hl cx2-k-green cx2-alt-a cx2-rm" d="M228 61 C 250 61, 250 36, 272 36"></path>
+                <path class="cx2-hl cx2-k-rose cx2-alt-b" d="M228 61 C 250 61, 250 86, 272 86"></path>
+                <text class="cx2-ms cx2-f-green" x="236" y="44">true</text>
+                <text class="cx2-ms cx2-f-rose" x="236" y="100">false</text>
+                <rect class="cx2-box" x="280" y="22" width="152" height="28" rx="6"></rect>
+                <g class="cx2-alt-a cx2-rm"><rect class="cx2-f-green" opacity=".25" x="280" y="22" width="152" height="28" rx="6"></rect></g>
+                <text class="cx2-m" style="font-size:10px" x="288" y="40">printf("Goodbye!");</text>
+                <rect class="cx2-box" x="280" y="72" width="152" height="28" rx="6"></rect>
+                <g class="cx2-alt-b"><rect class="cx2-f-rose" opacity=".25" x="280" y="72" width="152" height="28" rx="6"></rect></g>
+                <text class="cx2-m" style="font-size:10px" x="288" y="90">printf("Good evening!");</text>
+                <text class="cx2-t" x="8" y="112">Only one branch runs each time the check happens.</text>
+              </svg>
             </div>
           </div>
         </div>
@@ -433,6 +915,35 @@ time = <span class="c-num">22</span>;
           <div class="live-output">
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#9ece6a;">0 1 2 3 4</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Going round the loop</p>
+            <p class="cx2-sub">Check, run the body, add one, repeat; each pass prints one more number.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 112" role="img" aria-label="A for loop goes round a ring: check i is less than 5, print i, add one, and repeat; each pass prints one more number.">
+                <rect class="cx2-ln" x="24" y="24" width="186" height="64" rx="18"></rect>
+                <rect class="cx2-dash cx2-k-blue" x="24" y="24" width="186" height="64" rx="18"></rect>
+                <text class="cx2-ms cx2-f-amber" x="28" y="16">i = 0</text>
+                <text class="cx2-ms cx2-f-blue cx2-end" x="210" y="16">i &lt; 5 ?</text>
+                <text class="cx2-ms cx2-f-violet cx2-mid" x="117" y="104">i++</text>
+                <text class="cx2-m cx2-b cx2-end" style="font-size:18px" x="112" y="58">i =</text>
+                <text class="cx2-m cx2-b cx2-f-amber cx2-s5 cx2-rm" style="--i:0;font-size:18px" x="120" y="58">0</text>
+                <text class="cx2-m cx2-b cx2-f-rose cx2-s5" style="--i:1;font-size:18px" x="120" y="58">1</text>
+                <text class="cx2-m cx2-b cx2-f-blue cx2-s5" style="--i:2;font-size:18px" x="120" y="58">2</text>
+                <text class="cx2-m cx2-b cx2-f-green cx2-s5" style="--i:3;font-size:18px" x="120" y="58">3</text>
+                <text class="cx2-m cx2-b cx2-f-violet cx2-s5" style="--i:4;font-size:18px" x="120" y="58">4</text>
+                
+                <text class="cx2-ms cx2-mid" x="117" y="76">printf("%d", i)</text>
+                <text class="cx2-ms" x="250" y="34">printed so far</text>
+                <g class="cx2-h5-0 cx2-rm"><rect class="cx2-box" x="250" y="42" width="26" height="26" rx="5"></rect><text class="cx2-m cx2-b cx2-mid cx2-f-amber" x="263" y="60">0</text></g>
+                <g class="cx2-h5-1"><rect class="cx2-box" x="284" y="42" width="26" height="26" rx="5"></rect><text class="cx2-m cx2-b cx2-mid cx2-f-rose" x="297" y="60">1</text></g>
+                <g class="cx2-h5-2"><rect class="cx2-box" x="318" y="42" width="26" height="26" rx="5"></rect><text class="cx2-m cx2-b cx2-mid cx2-f-blue" x="331" y="60">2</text></g>
+                <g class="cx2-h5-3"><rect class="cx2-box" x="352" y="42" width="26" height="26" rx="5"></rect><text class="cx2-m cx2-b cx2-mid cx2-f-green" x="365" y="60">3</text></g>
+                <g class="cx2-h5-4"><rect class="cx2-box" x="386" y="42" width="26" height="26" rx="5"></rect><text class="cx2-m cx2-b cx2-mid cx2-f-violet" x="399" y="60">4</text></g>
+                
+                <text class="cx2-ms cx2-f-green cx2-s5 cx2-rm" style="--i:4" x="250" y="88">next: 5 &lt; 5 is false &#8594; loop ends</text>
+              </svg>
             </div>
           </div>
         </div>
@@ -536,6 +1047,44 @@ nums[<span class="c-num">1</span>] = <span class="c-num">50</span>;</pre>
               <span style="color:#565f89;">Arrays are zero-indexed, fixed size</span>
             </div>
           </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Cells in a row</p>
+            <p class="cx2-sub">The index counts from 0 and picks one cell; the cells are contiguous in memory.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 108" role="img" aria-label="An array stores its elements side by side in memory, four bytes apart for ints; the index picks one cell.">
+                <text class="cx2-m" x="8" y="16"><tspan class="cx2-f-violet">int</tspan> myNumbers[] = {25, 50, 75, 100};</text>
+                <rect class="cx2-box" x="8" y="28" width="62" height="36" rx="6"></rect>
+                <g class="cx2-s4 cx2-rm" style="--i:0"><rect class="cx2-f-amber" opacity=".3" x="8" y="28" width="62" height="36" rx="6"></rect></g>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:13px" x="39" y="51">25</text>
+                <text class="cx2-ms cx2-mid" x="39" y="78">[0]</text>
+                <text class="cx2-ms cx2-mid" x="39" y="92">0x100</text>
+                <rect class="cx2-box" x="76" y="28" width="62" height="36" rx="6"></rect>
+                <g class="cx2-s4" style="--i:1"><rect class="cx2-f-rose" opacity=".3" x="76" y="28" width="62" height="36" rx="6"></rect></g>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:13px" x="107" y="51">50</text>
+                <text class="cx2-ms cx2-mid" x="107" y="78">[1]</text>
+                <text class="cx2-ms cx2-mid" x="107" y="92">0x104</text>
+                <rect class="cx2-box" x="144" y="28" width="62" height="36" rx="6"></rect>
+                <g class="cx2-s4" style="--i:2"><rect class="cx2-f-blue" opacity=".3" x="144" y="28" width="62" height="36" rx="6"></rect></g>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:13px" x="175" y="51">75</text>
+                <text class="cx2-ms cx2-mid" x="175" y="78">[2]</text>
+                <text class="cx2-ms cx2-mid" x="175" y="92">0x108</text>
+                <rect class="cx2-box" x="212" y="28" width="62" height="36" rx="6"></rect>
+                <g class="cx2-s4" style="--i:3"><rect class="cx2-f-green" opacity=".3" x="212" y="28" width="62" height="36" rx="6"></rect></g>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:13px" x="243" y="51">100</text>
+                <text class="cx2-ms cx2-mid" x="243" y="78">[3]</text>
+                <text class="cx2-ms cx2-mid" x="243" y="92">0x10c</text>
+                
+                <rect class="cx2-box" x="290" y="28" width="142" height="36" rx="6"></rect>
+                <text class="cx2-m cx2-mid cx2-f-amber cx2-s4 cx2-rm" style="--i:0;font-size:10px" x="361" y="51">myNumbers[0] &#8594; 25</text>
+                <text class="cx2-m cx2-mid cx2-f-rose cx2-s4" style="--i:1;font-size:10px" x="361" y="51">myNumbers[1] &#8594; 50</text>
+                <text class="cx2-m cx2-mid cx2-f-blue cx2-s4" style="--i:2;font-size:10px" x="361" y="51">myNumbers[2] &#8594; 75</text>
+                <text class="cx2-m cx2-mid cx2-f-green cx2-s4" style="--i:3;font-size:10px" x="361" y="51">myNumbers[3] &#8594; 100</text>
+                
+                <text class="cx2-t" x="290" y="80">side by side in RAM,</text>
+                <text class="cx2-t" x="290" y="94">each int 4 bytes apart</text>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -588,6 +1137,32 @@ nums[<span class="c-num">1</span>] = <span class="c-num">50</span>;</pre>
               <span style="color:#565f89;">Enum values auto-increment from the last assigned value</span>
             </div>
           </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Names for numbers</p>
+            <p class="cx2-sub">Set one value and the rest count up automatically.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 100" role="img" aria-label="An enum gives names to integers: Mon is 1, and each following name is the previous value plus one.">
+                <text class="cx2-m" x="8" y="16"><tspan class="cx2-f-violet">enum</tspan> week { Mon = 1, Tues, Wed, Thurs, ... };</text>
+                <rect class="cx2-box" x="8" y="30" width="98" height="32" rx="6"></rect>
+                <text class="cx2-m" x="16" y="50">Mon</text>
+                <text class="cx2-m cx2-b cx2-f-amber cx2-h4-0 cx2-rm" x="70" y="50">= 1</text>
+                <rect class="cx2-box" x="116" y="30" width="98" height="32" rx="6"></rect>
+                <text class="cx2-m" x="124" y="50">Tues</text>
+                <text class="cx2-m cx2-b cx2-f-rose cx2-h4-1" x="178" y="50">= 2</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4" style="--i:1" x="111" y="26">+1</text>
+                <rect class="cx2-box" x="224" y="30" width="98" height="32" rx="6"></rect>
+                <text class="cx2-m" x="232" y="50">Wed</text>
+                <text class="cx2-m cx2-b cx2-f-blue cx2-h4-2" x="286" y="50">= 3</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4" style="--i:2" x="219" y="26">+1</text>
+                <rect class="cx2-box" x="332" y="30" width="98" height="32" rx="6"></rect>
+                <text class="cx2-m" x="340" y="50">Thurs</text>
+                <text class="cx2-m cx2-b cx2-f-green cx2-h4-3" x="394" y="50">= 4</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4" style="--i:3" x="327" y="26">+1</text>
+                
+                <text class="cx2-t" x="8" y="88">Only Mon is given a value; every next name is the previous + 1.</text>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -621,6 +1196,39 @@ nums[<span class="c-num">1</span>] = <span class="c-num">50</span>;</pre>
               <span style="color:#565f89;">scanf reads formatted input from stdin</span><br />
               <span style="color:#7dcfff;">%d</span> — int, <span style="color:#7dcfff;">%f</span> — float, <span style="color:#7dcfff;">%s</span> — string<br />
               <span style="color:#565f89;">Use &amp; for non-array variables</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Where does the input go?</p>
+            <p class="cx2-sub">The <code>&amp;</code> gives scanf the address of the box to fill.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 112" role="img" aria-label="scanf takes the number typed on the keyboard and stores it at the address of myNum.">
+                <defs><marker id="cx2ah-in" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs>
+                <rect class="cx2-box" x="8" y="36" width="76" height="40" rx="6"></rect>
+                <rect class="cx2-ah" opacity=".45" x="14" y="44" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="27" y="44" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="40" y="44" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="53" y="44" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="66" y="44" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="18" y="54" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="31" y="54" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="44" y="54" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="57" y="54" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="70" y="54" width="8" height="6" rx="1"></rect>
+                <rect class="cx2-ah" opacity=".45" x="24" y="64" width="44" height="6" rx="1"></rect>
+                
+                <text class="cx2-ms cx2-mid" x="46" y="90">keyboard</text>
+                <line class="cx2-ln" x1="84" y1="55" x2="110" y2="55" marker-end="url(#cx2ah-in)"></line>
+                <rect class="cx2-box" x="112" y="40" width="176" height="30" rx="6"></rect>
+                <text class="cx2-m" x="120" y="59"><tspan class="cx2-f-blue">scanf</tspan>(<tspan class="cx2-f-green">"%d"</tspan>, <tspan class="cx2-f-amber">&amp;myNum</tspan>);</text>
+                <line class="cx2-ln" x1="288" y1="55" x2="332" y2="55" marker-end="url(#cx2ah-in)"></line>
+                <text class="cx2-ms cx2-mid" x="372" y="30">myNum</text>
+                <rect class="cx2-box cx2-k-amber cx2-sw2" x="336" y="36" width="72" height="40" rx="7"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-late cx2-rm" style="font-size:15px" x="372" y="61">42</text>
+                <text class="cx2-ms cx2-mid cx2-f-amber" x="372" y="90">at 0x7ffc</text>
+                <g class="cx2-flow" style="--d:326px"><circle class="cx2-f-amber" cx="46" cy="55" r="10"></circle><text class="cx2-m cx2-b cx2-mid cx2-ink" x="46" y="59">42</text></g>
+                <text class="cx2-t" x="8" y="106"><tspan class="cx2-f-amber">&amp;myNum</tspan> is the address, so scanf knows where to put the value.</text>
+              </svg>
             </div>
           </div>
         </div>
@@ -658,7 +1266,142 @@ nums[<span class="c-num">1</span>] = <span class="c-num">50</span>;</pre>
               <span style="color:#9ece6a;">*ptr = 43</span>
             </div>
           </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Address in, value out</p>
+            <p class="cx2-sub"><code>&amp;</code> gives an address; <code>*</code> follows an address to its value. The full walkthrough is in the next section.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 108" role="img" aria-label="ptr holds the address of myAge; the address-of operator gives that address and the star follows it back to the value 43.">
+                <defs><marker id="cx2ah-pt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-f-blue"></path></marker></defs>
+                <text class="cx2-ms cx2-mid" x="106" y="26"><tspan class="cx2-f-violet">int*</tspan> ptr</text>
+                <rect class="cx2-box cx2-k-blue cx2-sw2" x="60" y="32" width="92" height="40" rx="7"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-blue" style="font-size:13px" x="106" y="57">0x7ffe</text>
+                <text class="cx2-ms cx2-mid" x="106" y="88">at 0x7ff0</text>
+                <text class="cx2-ms cx2-mid" x="340" y="26"><tspan class="cx2-f-violet">int</tspan> myAge</text>
+                <rect class="cx2-box cx2-k-amber cx2-sw2" x="300" y="32" width="80" height="40" rx="7"></rect>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:15px" x="340" y="57">43</text>
+                <text class="cx2-ms cx2-mid cx2-f-amber" x="340" y="88">at 0x7ffe</text>
+                <line class="cx2-ln cx2-k-blue cx2-sw2" x1="152" y1="52" x2="298" y2="52" marker-end="url(#cx2ah-pt)"></line>
+                <g class="cx2-alt-a cx2-rm"><text class="cx2-m cx2-mid cx2-f-amber" x="226" y="44">&amp;myAge &#8594; 0x7ffe</text><text class="cx2-ms cx2-mid" x="226" y="104">&amp; asks: where does myAge live?</text></g>
+                <g class="cx2-alt-b"><text class="cx2-m cx2-mid cx2-f-green" x="226" y="44">*ptr &#8594; 43</text><text class="cx2-ms cx2-mid" x="226" y="104">* follows the address and reads the value</text></g>
+                <g class="cx2-deref" style="--d:146px"><circle class="cx2-f-green" cx="152" cy="52" r="5"></circle></g>
+              </svg>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Pointers & Memory (visual deep-dive) -->
+    <section id="pointer-memory">
+      <h2>Pointers &amp; Memory</h2>
+
+      <div class="block-desc">
+        <span>A pointer is a variable whose value is an <em>address</em>. Watch <code>&amp;</code> fetch the address of <code>age</code>, <code>p</code> store it, and <code>*p</code> follow it back to the value.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_pointers.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cx2-card">
+        <p class="cx2-cap"><span class="cx2-dot"></span>Following a pointer, one step at a time</p>
+        <p class="cx2-sub">Left: three lines of code; the lit line is the one running. Right: what RAM looks like while they run. The arrow is the pointer; the green dot follows it.</p>
+        <div class="cx2-stage">
+              <svg class="cx2-svg cx2-wide" viewBox="0 0 760 250" role="img" aria-label="Pointer walkthrough: age holds 25 at address 0x7ffe; p stores that address; dereferencing p follows the arrow to age and reads 25.">
+                <defs><marker id="cx2ah-pm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs><defs><marker id="cx2ah-pmb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-f-blue"></path></marker></defs>
+                <rect class="cx2-box" x="10" y="14" width="262" height="212" rx="10"></rect>
+                <text class="cx2-t cx2-b" x="22" y="34">main.c</text>
+                <g class="cx2-s6 cx2-rm" style="--i:0"><rect class="cx2-f-amber" opacity=".22" x="18" y="48" width="246" height="30" rx="6"></rect></g>
+                <g class="cx2-s6h" style="--i:1"><rect class="cx2-f-blue" opacity=".22" x="18" y="96" width="246" height="30" rx="6"></rect></g>
+                <g class="cx2-s6h" style="--i:3"><rect class="cx2-f-green" opacity=".22" x="18" y="144" width="246" height="30" rx="6"></rect></g>
+                <text class="cx2-m" style="font-size:13px" x="26" y="68"><tspan class="cx2-f-violet">int</tspan> age = <tspan class="cx2-f-amber cx2-b">25</tspan>;</text>
+                <text class="cx2-m" style="font-size:13px" x="26" y="116"><tspan class="cx2-f-violet">int</tspan> *p = <tspan class="cx2-f-amber cx2-b">&amp;age</tspan>;</text>
+                <text class="cx2-m" style="font-size:13px" x="26" y="164">printf("%d", <tspan class="cx2-f-green cx2-b">*p</tspan>);</text>
+                <line class="cx2-ln" x1="18" y1="186" x2="264" y2="186" style="stroke-dasharray:3 4;opacity:.6"></line>
+                <text class="cx2-t cx2-tt cx2-s6 cx2-rm" style="--i:0" x="22" y="204">1. int age = 25 stores 25 in a box called age</text>
+                <text class="cx2-t cx2-tt cx2-s6" style="--i:1" x="22" y="204">2. &amp;age is that box's address: 0x7ffe</text>
+                <text class="cx2-t cx2-tt cx2-s6" style="--i:2" x="22" y="204">3. p now holds 0x7ffe, so p points at age</text>
+                <text class="cx2-t cx2-tt cx2-s6" style="--i:3" x="22" y="204">4. *p: go to the address stored in p...</text>
+                <text class="cx2-t cx2-tt cx2-s6" style="--i:4" x="22" y="204">5. ...and read what is there: 25</text>
+                <text class="cx2-t cx2-tt cx2-s6" style="--i:5" x="22" y="204">then it starts again</text>
+                
+                <rect class="cx2-box" x="290" y="14" width="460" height="212" rx="10"></rect>
+                <text class="cx2-t cx2-b" x="302" y="34">RAM (memory)</text>
+                <text class="cx2-t cx2-end" x="738" y="34">each box = one variable, each has an address</text>
+                <text class="cx2-m cx2-mid" x="372" y="74"><tspan class="cx2-f-violet">int *</tspan>p</text>
+                <rect class="cx2-box cx2-k-blue cx2-sw2" x="322" y="84" width="100" height="46" rx="8"></rect>
+                <text class="cx2-m cx2-mid cx2-pm-q" x="372" y="112">?</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-blue cx2-pm-pval cx2-rm" style="font-size:14px" x="372" y="112">0x7ffe</text>
+                <text class="cx2-ms cx2-mid" x="372" y="146">address 0x7ff0</text>
+                <text class="cx2-ms cx2-mid cx2-f-blue" x="372" y="160">holds an address</text>
+                <text class="cx2-m cx2-mid" x="650" y="74"><tspan class="cx2-f-violet">int</tspan> age</text>
+                <rect class="cx2-box cx2-k-amber cx2-sw2" x="600" y="84" width="100" height="46" rx="8"></rect>
+                <g class="cx2-s6" style="--i:4"><rect class="cx2-f-amber" opacity=".3" x="600" y="84" width="100" height="46" rx="8"></rect></g>
+                <text class="cx2-m cx2-b cx2-mid cx2-pm-drop cx2-rm" style="font-size:16px" x="650" y="113">25</text>
+                <text class="cx2-ms cx2-mid cx2-f-amber" x="650" y="146">address 0x7ffe</text>
+                <text class="cx2-ms cx2-mid cx2-f-amber" x="650" y="160">holds a value</text>
+                <line class="cx2-ln" x1="424" y1="107" x2="596" y2="107" marker-end="url(#cx2ah-pm)" style="opacity:.35"></line>
+                <line class="cx2-pm-draw cx2-k-blue cx2-rm" x1="424" y1="107" x2="596" y2="107"></line>
+                <path class="cx2-f-blue cx2-pm-head cx2-rm" d="M590 101 L600 107 L590 113 Z"></path>
+                <text class="cx2-ms cx2-mid cx2-f-blue cx2-h6-2" x="510" y="98">p points to age</text>
+                <g class="cx2-pm-addr"><rect class="cx2-f-amber" x="622" y="136" width="56" height="18" rx="4"></rect><text class="cx2-m cx2-b cx2-mid cx2-ink" style="font-size:10px" x="650" y="149">0x7ffe</text></g>
+                <g class="cx2-pm-follow"><circle class="cx2-f-green" cx="424" cy="107" r="7"></circle><text class="cx2-ms cx2-mid cx2-f-green cx2-b" x="424" y="124">*p</text></g>
+                <g class="cx2-pm-val"><circle class="cx2-f-green" cx="650" cy="107" r="11"></circle><text class="cx2-m cx2-b cx2-mid cx2-ink" x="650" y="111">25</text></g>
+                <g class="cx2-h6-4"><rect class="cx2-box" x="420" y="180" width="180" height="32" rx="7"></rect><text class="cx2-ms" x="430" y="200">printf("%d", *p) prints:</text></g>
+                <text class="cx2-m cx2-b cx2-f-green cx2-pm-out" style="font-size:14px" x="570" y="201">25</text>
+              </svg>
+        </div>
+        <ul class="cx2-legend">
+          <li><i class="cx2-bg-amber"></i>the variable <code>age</code> and its address</li>
+          <li><i class="cx2-bg-blue"></i>the pointer <code>p</code> (holds an address)</li>
+          <li><i class="cx2-bg-green"></i>the value read through <code>*p</code></li>
+          <li><i class="cx2-bg-violet"></i>types</li>
+        </ul>
+      </div>
+
+      <div class="block-desc">
+        <span>Where do variables live? Locals such as <code>age</code> and <code>p</code> sit on the <strong>stack</strong>; memory from <code>malloc()</code> comes from the <strong>heap</strong>. They grow towards each other.</span>
+        <a class="w3-link" href="https://www.w3schools.com/c/c_memory_management.php" target="_blank">W3Schools →</a>
+      </div>
+
+      <div class="cx2-card">
+        <p class="cx2-cap"><span class="cx2-dot"></span>Stack vs heap: the memory layout</p>
+        <p class="cx2-sub">Addresses run from low (left) to high (right). A <code>malloc()</code> pushes the heap up; a function call pushes a new frame onto the stack.</p>
+        <div class="cx2-stage">
+              <svg class="cx2-svg cx2-wide" viewBox="0 0 760 160" role="img" aria-label="Memory layout strip from low to high addresses: code, data, heap growing upward, free space, and the stack growing downward.">
+                <text class="cx2-t cx2-b cx2-tt" x="20" y="16">Where things live: one program's address space</text>
+                <text class="cx2-ms" x="20" y="32">low addresses</text>
+                <text class="cx2-ms cx2-end" x="740" y="32">high addresses</text>
+                <rect class="cx2-k-violet cx2-sw2" style="fill:#bb9af7;fill-opacity:.22" x="20" y="40" width="110" height="48" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid" x="75" y="60">code</text>
+                <text class="cx2-ms cx2-mid" x="75" y="76">your functions</text>
+                <rect class="cx2-k-amber cx2-sw2" style="fill:#e0b366;fill-opacity:.22" x="130" y="40" width="110" height="48" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid" x="185" y="60">data</text>
+                <text class="cx2-ms cx2-mid" x="185" y="76">globals, static</text>
+                <rect class="cx2-k-green cx2-sw2" style="fill:#9ece6a;fill-opacity:.22" x="240" y="40" width="150" height="48" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid" x="315" y="60">heap</text>
+                <text class="cx2-ms cx2-mid" x="315" y="76">malloc / free</text>
+                <rect class="cx2-box" style="stroke-dasharray:4 4" x="390" y="40" width="150" height="48" rx="6"></rect>
+                <text class="cx2-ms cx2-mid" x="465" y="52">free</text>
+                <rect class="cx2-k-blue cx2-sw2" style="fill:#7aa2f7;fill-opacity:.22" x="540" y="40" width="200" height="48" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid" x="640" y="60">stack</text>
+                <text class="cx2-ms cx2-mid" x="640" y="76">locals: age at 0x7ffe, p at 0x7ff0</text>
+                <g class="cx2-galt-a cx2-rm"><rect class="cx2-f-green" x="390" y="56" width="64" height="28" rx="5"></rect></g>
+                <g class="cx2-altl-a cx2-rm"><text class="cx2-ms cx2-mid cx2-ink cx2-b" x="422" y="73">malloc(64)</text></g>
+                <g class="cx2-galt-b"><rect class="cx2-f-blue" x="476" y="56" width="64" height="28" rx="5"></rect></g>
+                <g class="cx2-altl-b"><text class="cx2-ms cx2-mid cx2-ink cx2-b" x="508" y="73">frame: f()</text></g>
+                <text class="cx2-ms cx2-f-green" x="240" y="104">heap grows upward &#8594;</text>
+                <text class="cx2-ms cx2-f-blue cx2-end" x="740" y="104">&#8592; stack grows downward</text>
+                <text class="cx2-ms" x="20" y="122">0x0000 0000</text>
+                <text class="cx2-ms" x="240" y="122">0x0060 0000</text>
+                <text class="cx2-ms cx2-mid" x="540" y="122">0x7ffe 5367 e044</text>
+                <text class="cx2-ms cx2-end" x="740" y="122">0x7fff ffff</text>
+                <text class="cx2-t" x="20" y="146">Stack: automatic - a function's locals appear on call and vanish on return. Heap: yours to manage with malloc() and free().</text>
+              </svg>
+        </div>
+        <ul class="cx2-legend">
+          <li><i class="cx2-bg-violet"></i>code</li>
+          <li><i class="cx2-bg-amber"></i>data (globals)</li>
+          <li><i class="cx2-bg-green"></i>heap - grows up</li>
+          <li><i class="cx2-bg-blue"></i>stack - grows down</li>
+        </ul>
       </div>
     </section>
 
@@ -691,6 +1434,40 @@ x %= <span class="c-num">3</span>;  <span class="c-cm">// x = x % 3</span></pre>
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#9ece6a;">100 + 50 = 150</span><br />
               <span style="color:#565f89;">x += 3  ⇔  x = x + 3</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Same operands, different operators</p>
+            <p class="cx2-sub">Watch the operator change and the result follow; comparisons give 1 or 0.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 96" role="img" aria-label="Operators combine x = 5 and y = 3: plus gives 8, minus 2, times 15, remainder 2; comparisons give 1 or 0.">
+                <text class="cx2-ms" x="8" y="16">int x = 5, y = 3;</text>
+                <rect class="cx2-box cx2-k-amber cx2-sw2" x="8" y="28" width="44" height="36" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:15px" x="30" y="53">5</text>
+                <text class="cx2-ms cx2-mid" x="30" y="80">x</text>
+                <rect class="cx2-box cx2-k-violet cx2-sw2" x="62" y="28" width="44" height="36" rx="6"></rect>
+                <rect class="cx2-box cx2-k-blue cx2-sw2" x="116" y="28" width="44" height="36" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid" style="font-size:15px" x="138" y="53">3</text>
+                <text class="cx2-ms cx2-mid" x="138" y="80">y</text>
+                <text class="cx2-m cx2-mid" style="font-size:15px" x="178" y="53">=</text>
+                <rect class="cx2-box cx2-k-green cx2-sw2" x="196" y="28" width="58" height="36" rx="6"></rect>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-violet cx2-s4 cx2-rm" style="--i:0;font-size:16px" x="84" y="53">+</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-green cx2-s4 cx2-rm" style="--i:0;font-size:15px" x="225" y="53">8</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4 cx2-rm" style="--i:0" x="84" y="80">add</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-violet cx2-s4" style="--i:1;font-size:16px" x="84" y="53">-</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-green cx2-s4" style="--i:1;font-size:15px" x="225" y="53">2</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4" style="--i:1" x="84" y="80">subtract</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-violet cx2-s4" style="--i:2;font-size:16px" x="84" y="53">*</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-green cx2-s4" style="--i:2;font-size:15px" x="225" y="53">15</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4" style="--i:2" x="84" y="80">multiply</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-violet cx2-s4" style="--i:3;font-size:16px" x="84" y="53">%</text>
+                <text class="cx2-m cx2-b cx2-mid cx2-f-green cx2-s4" style="--i:3;font-size:15px" x="225" y="53">2</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s4" style="--i:3" x="84" y="80">remainder</text>
+                
+                <text class="cx2-ms" x="282" y="40">x &gt; y  &#8594; <tspan class="cx2-f-green cx2-b">1</tspan> (true)</text>
+                <text class="cx2-ms" x="282" y="56">x == y &#8594; <tspan class="cx2-f-rose cx2-b">0</tspan> (false)</text>
+                <text class="cx2-ms" x="282" y="72">x &amp;&amp; y &#8594; <tspan class="cx2-f-green cx2-b">1</tspan> (both non-zero)</text>
+              </svg>
             </div>
           </div>
         </div>
@@ -788,6 +1565,28 @@ c = a &gt;&gt; <span class="c-num">2</span>;  <span class="c-cm">// 15 = 0000 11
               </div>
             </div>
           </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>How many bytes?</p>
+            <p class="cx2-sub">Each type reserves a fixed number of bytes; more bytes means a bigger range.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 104" role="img" aria-label="Each type takes a fixed number of bytes: char one, int four, double eight.">
+                <text class="cx2-m" x="8" y="26">char</text>
+                <g class="cx2-g3-0"><rect class="cx2-f-rose" opacity=".85" x="72" y="12" width="14" height="20" rx="3"></rect></g>
+                <text class="cx2-ms cx2-h3-0 cx2-rm" x="94" y="26">1 byte</text>
+                <text class="cx2-ms" x="270" y="26">-128 ... 127</text>
+                <text class="cx2-m" x="8" y="56">int</text>
+                <g class="cx2-g3-1"><rect class="cx2-f-amber" opacity=".85" x="72" y="42" width="14" height="20" rx="3"></rect><rect class="cx2-f-amber" opacity=".85" x="88" y="42" width="14" height="20" rx="3"></rect><rect class="cx2-f-amber" opacity=".85" x="104" y="42" width="14" height="20" rx="3"></rect><rect class="cx2-f-amber" opacity=".85" x="120" y="42" width="14" height="20" rx="3"></rect></g>
+                <text class="cx2-ms cx2-h3-1" x="142" y="56">4 bytes</text>
+                <text class="cx2-ms" x="270" y="56">about +-2.1 billion</text>
+                <text class="cx2-m" x="8" y="86">double</text>
+                <g class="cx2-g3-2"><rect class="cx2-f-blue" opacity=".85" x="72" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="88" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="104" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="120" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="136" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="152" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="168" y="72" width="14" height="20" rx="3"></rect><rect class="cx2-f-blue" opacity=".85" x="184" y="72" width="14" height="20" rx="3"></rect></g>
+                <text class="cx2-ms cx2-h3-2" x="206" y="86">8 bytes</text>
+                <text class="cx2-ms" x="270" y="86">about 15 digits of precision</text>
+                
+                <text class="cx2-t" x="8" y="100">Each square is one byte of memory. Bigger box = bigger range.</text>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -820,6 +1619,28 @@ c = a &gt;&gt; <span class="c-num">2</span>;  <span class="c-cm">// 15 = 0000 11
               <span style="color:#e0af68;">#define</span> — macro definition<br />
               <span style="color:#e0af68;">#include</span> — file inclusion<br />
               <span style="color:#e0af68;">#ifdef / #ifndef</span> — conditional compilation
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Text replacement before compiling</p>
+            <p class="cx2-sub">A macro is swapped for its text; the compiler only ever sees the result.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 92" role="img" aria-label="The preprocessor replaces the macro name MAX with 20 before the compiler ever sees the code.">
+                <defs><marker id="cx2ah-pp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs>
+                <rect class="cx2-box" x="8" y="8" width="150" height="24" rx="6"></rect>
+                <text class="cx2-m" x="16" y="24"><tspan class="cx2-f-amber">#define</tspan> MAX <tspan class="cx2-f-green">20</tspan></text>
+                <text class="cx2-ms" x="8" y="52">you write</text>
+                <rect class="cx2-box" x="8" y="56" width="150" height="26" rx="6"></rect>
+                <g class="cx2-alt-a cx2-rm"><rect class="cx2-f-amber" opacity=".32" x="54" y="60" width="24" height="18" rx="3"></rect></g>
+                <text class="cx2-m" x="16" y="74">int a[</text><text class="cx2-m cx2-b cx2-f-amber" x="56" y="74">MAX</text><text class="cx2-m" x="76" y="74">];</text>
+                <line class="cx2-ln" x1="166" y1="69" x2="258" y2="69" marker-end="url(#cx2ah-pp)"></line>
+                <text class="cx2-ms cx2-mid" x="212" y="62">preprocessor</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet" x="212" y="82">gcc -E</text>
+                <text class="cx2-ms" x="268" y="52">compiler sees</text>
+                <rect class="cx2-box" x="268" y="56" width="150" height="26" rx="6"></rect>
+                <g class="cx2-alt-b"><rect class="cx2-f-green" opacity=".32" x="314" y="60" width="17" height="18" rx="3"></rect></g>
+                <text class="cx2-m" x="276" y="74">int a[</text><text class="cx2-m cx2-b cx2-f-green" x="316" y="74">20</text><text class="cx2-m" x="329" y="74">];</text>
+              </svg>
             </div>
           </div>
         </div>
@@ -912,6 +1733,30 @@ c = a &gt;&gt; <span class="c-num">2</span>;  <span class="c-cm">// 15 = 0000 11
           <div class="live-output">
             <div style="background:#1a1b26;color:#a9b1d6;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.75rem;">
               <span style="color:#9ece6a;">Good evening!</span>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>Call and return</p>
+            <p class="cx2-sub">Arguments travel into the function; one value travels back.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 112" role="img" aria-label="main calls add with 5 and 3; the arguments travel into the function and the result 8 travels back.">
+                <defs><marker id="cx2ah-fn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs>
+                <rect class="cx2-box" x="8" y="22" width="134" height="68" rx="8"></rect>
+                <text class="cx2-ms cx2-b" x="16" y="36">main()</text>
+                <text class="cx2-m" style="font-size:10px" x="16" y="56">int r = <tspan class="cx2-f-violet">add</tspan>(<tspan class="cx2-f-amber">5</tspan>, <tspan class="cx2-f-blue">3</tspan>);</text>
+                <text class="cx2-m" style="font-size:10px" x="16" y="78">r &#8594; <tspan class="cx2-f-green cx2-b cx2-late7 cx2-rm">8</tspan></text>
+                <rect class="cx2-box" x="276" y="22" width="156" height="68" rx="8"></rect>
+                <text class="cx2-ms cx2-b" x="284" y="36">add(int x, int y)</text>
+                <text class="cx2-m" style="font-size:10px" x="284" y="58">return x + y;</text>
+                <text class="cx2-m cx2-f-green cx2-mid7 cx2-rm" style="font-size:10px" x="284" y="78">x + y = 5 + 3 = 8</text>
+                <line class="cx2-ln" x1="142" y1="46" x2="274" y2="46" marker-end="url(#cx2ah-fn)"></line>
+                <line class="cx2-ln" x1="276" y1="70" x2="144" y2="70" marker-end="url(#cx2ah-fn)"></line>
+                <text class="cx2-ms cx2-mid" x="209" y="40">call</text>
+                <text class="cx2-ms cx2-mid" x="209" y="86">return</text>
+                <g class="cx2-call" style="--d:96px"><circle class="cx2-f-amber" cx="156" cy="46" r="8"></circle><text class="cx2-m cx2-b cx2-mid cx2-ink" style="font-size:10px" x="156" y="50">5</text><circle class="cx2-f-blue" cx="176" cy="46" r="8"></circle><text class="cx2-m cx2-b cx2-mid cx2-ink" style="font-size:10px" x="176" y="50">3</text></g>
+                <g class="cx2-ret" style="--d:-110px"><circle class="cx2-f-green" cx="262" cy="70" r="8"></circle><text class="cx2-m cx2-b cx2-mid cx2-ink" style="font-size:10px" x="262" y="74">8</text></g>
+                <text class="cx2-t" x="8" y="108">Arguments go in; one value comes back to the caller.</text>
+              </svg>
             </div>
           </div>
         </div>
@@ -1031,6 +1876,36 @@ s1.myLetter = <span class="c-str">'B'</span>;
               <span style="color:#9ece6a;">s1.myString = "Some text"</span>
             </div>
           </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>One box, several fields</p>
+            <p class="cx2-sub">Each field has its own type and name; the dot reaches into the box.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 110" role="img" aria-label="A struct packs several named fields into one box; s1 dot field reaches each one.">
+                <rect class="cx2-box" x="8" y="12" width="216" height="92" rx="8"></rect>
+                <text class="cx2-ms cx2-b" x="16" y="26"><tspan class="cx2-f-violet">struct</tspan> MyStructure s1</text>
+                <rect class="cx2-box" x="16" y="34" width="200" height="18" rx="4"></rect>
+                <g class="cx2-s3 cx2-rm" style="--i:0"><rect class="cx2-f-amber" opacity=".3" x="16" y="34" width="200" height="18" rx="4"></rect></g>
+                <text class="cx2-ms" x="22" y="47">int myNum</text>
+                <text class="cx2-m cx2-f-amber" style="font-size:10px" x="140" y="47">13</text>
+                <g class="cx2-s3 cx2-rm" style="--i:0"><rect class="cx2-f-amber" opacity=".25" x="234" y="34" width="200" height="18" rx="4"></rect></g>
+                <text class="cx2-m" style="font-size:9.5px" x="240" y="47">s1.myNum = 13;</text>
+                <rect class="cx2-box" x="16" y="56" width="200" height="18" rx="4"></rect>
+                <g class="cx2-s3" style="--i:1"><rect class="cx2-f-rose" opacity=".3" x="16" y="56" width="200" height="18" rx="4"></rect></g>
+                <text class="cx2-ms" x="22" y="69">char myLetter</text>
+                <text class="cx2-m cx2-f-rose" style="font-size:10px" x="140" y="69">'B'</text>
+                <g class="cx2-s3" style="--i:1"><rect class="cx2-f-rose" opacity=".25" x="234" y="56" width="200" height="18" rx="4"></rect></g>
+                <text class="cx2-m" style="font-size:9.5px" x="240" y="69">s1.myLetter = 'B';</text>
+                <rect class="cx2-box" x="16" y="78" width="200" height="18" rx="4"></rect>
+                <g class="cx2-s3" style="--i:2"><rect class="cx2-f-blue" opacity=".3" x="16" y="78" width="200" height="18" rx="4"></rect></g>
+                <text class="cx2-ms" x="22" y="91">char myString[30]</text>
+                <text class="cx2-m cx2-f-blue" style="font-size:10px" x="140" y="91">"Some text"</text>
+                <g class="cx2-s3" style="--i:2"><rect class="cx2-f-blue" opacity=".25" x="234" y="78" width="200" height="18" rx="4"></rect></g>
+                <text class="cx2-m" style="font-size:9.5px" x="240" y="91">strcpy(s1.myString, "Some text");</text>
+                
+                <text class="cx2-ms cx2-b" x="240" y="26">set each field with .</text>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1094,6 +1969,35 @@ fp = <span class="c-fn">fopen</span>(<span class="c-str">"file.txt"</span>, <spa
                 <tr><td>a</td><td>Append</td></tr>
                 <tr><td>r+</td><td>Read &amp; Write</td></tr>
               </table>
+            </div>
+          </div>
+          <div class="cx2-mini">
+            <p class="cx2-cap"><span class="cx2-dot"></span>The file lifecycle</p>
+            <p class="cx2-sub">Open, write, close: fclose makes sure the bytes really land in the file.</p>
+            <div class="cx2-stage">
+              <svg class="cx2-svg" viewBox="0 0 440 112" role="img" aria-label="The program opens a file, writes text into it, then closes it so the data is saved.">
+                <defs><marker id="cx2ah-fi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="cx2-ah"></path></marker></defs>
+                <rect class="cx2-box" x="8" y="20" width="128" height="76" rx="8"></rect>
+                <text class="cx2-ms cx2-b" x="16" y="34">program</text>
+                <g class="cx2-s3 cx2-rm" style="--i:0"><rect class="cx2-f-green" opacity=".25" x="12" y="40" width="120" height="16" rx="3"></rect></g>
+                <g class="cx2-s3" style="--i:1"><rect class="cx2-f-amber" opacity=".25" x="12" y="58" width="120" height="16" rx="3"></rect></g>
+                <g class="cx2-s3" style="--i:2"><rect class="cx2-f-violet" opacity=".25" x="12" y="76" width="120" height="16" rx="3"></rect></g>
+                <text class="cx2-m" style="font-size:10px" x="16" y="52">fopen("file.txt", "w")</text>
+                <text class="cx2-m" style="font-size:10px" x="16" y="70">fprintf(fp, "Hello file!")</text>
+                <text class="cx2-m" style="font-size:10px" x="16" y="88">fclose(fp)</text>
+                <line class="cx2-ln" x1="136" y1="58" x2="288" y2="58" marker-end="url(#cx2ah-fi)"></line>
+                <text class="cx2-ms cx2-mid cx2-f-green cx2-s3 cx2-rm" style="--i:0" x="212" y="50">opens the file for writing</text>
+                <text class="cx2-ms cx2-mid cx2-f-amber cx2-s3" style="--i:1" x="212" y="50">writes the text</text>
+                <text class="cx2-ms cx2-mid cx2-f-violet cx2-s3" style="--i:2" x="212" y="50">closes: data saved</text>
+                <g class="cx2-flow3" style="--d:152px"><circle class="cx2-f-amber" cx="136" cy="58" r="5"></circle></g>
+                <path class="cx2-box" d="M294 16 H366 L392 42 V106 H294 Z"></path>
+                <path class="cx2-box" d="M366 16 V42 H392 Z"></path>
+                <g class="cx2-s3 cx2-rm" style="--i:0"><path class="cx2-hl cx2-k-green" d="M294 16 H366 L392 42 V106 H294 Z"></path></g>
+                <text class="cx2-ms" x="302" y="56">file.txt</text>
+                <text class="cx2-m cx2-f-amber cx2-h3-1" style="font-size:10px" x="302" y="76">Hello file!</text>
+                <text class="cx2-m cx2-f-amber cx2-h3-1" style="font-size:10px" x="302" y="90">a</text>
+                <g class="cx2-s3" style="--i:2"><circle class="cx2-f-violet" cx="412" cy="30" r="9"></circle><text class="cx2-m cx2-b cx2-mid cx2-ink" x="412" y="34">&#x2713;</text></g>
+              </svg>
             </div>
           </div>
         </div>
@@ -1173,7 +2077,7 @@ fp = <span class="c-fn">fopen</span>(<span class="c-str">"myfile.txt"</span>, <s
     <p>C Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

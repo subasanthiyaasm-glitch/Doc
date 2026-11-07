@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Apps &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .ai-kw { color:#bb9af7; }
     .ai-fn { color:#7aa2f7; }
@@ -18,6 +18,174 @@
     .badge-cg { background:#10a37f; color:#fff; }
     .badge-gm { background:#1a73e8; color:#fff; }
     .badge-cd { background:#d97706; color:#fff; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ANIMATED EXPLAINERS  (prefix: aiappsx-)
+       Added for the beginner "How an AI app works" intro + a small
+       diagram beside every section. Surfaces, text, rails and borders
+       all read from the theme CSS variables so light AND dark work;
+       only the moving / accent parts use a fixed multi-colour palette:
+         amber #e0b366 · rose #e8808f · blue #7aa2f7 · green #9ece6a
+         violet #bb9af7 · plus var(--accent).
+       Motion is calm (one thing at a time) and fully disabled under
+       prefers-reduced-motion (every element parks in a readable state).
+       ═══════════════════════════════════════════════════════════════ */
+    .aiappsx-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .aiappsx-flow { width: 100%; height: auto; display: block; }
+    .aiappsx-sub {
+      font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.7px; color: var(--text-muted);
+      margin: 1.3rem 0 0.4rem;
+    }
+    .aiappsx-sub:first-of-type { margin-top: 0.1rem; }
+    .aiappsx-num {
+      display:inline-block; min-width:1.15rem; height:1.15rem; line-height:1.15rem;
+      text-align:center; border-radius:50%; margin-right:0.45rem;
+      color:#1a1d2b; font-size:0.62rem; font-weight:700; padding:0 0.1rem;
+    }
+    .aiappsx-caption { color: var(--text-muted); font-size: 0.82rem; line-height: 1.65; margin: 0.5rem 0 0; }
+    .aiappsx-caption strong { color: var(--text); }
+    .aiappsx-legend { display:flex; gap:1.1rem; flex-wrap:wrap; font-size:0.74rem; color:var(--text-muted); margin-top:0.55rem; }
+    .aiappsx-swatch { display:inline-block; width:10px; height:10px; border-radius:50%; vertical-align:middle; margin-right:5px; }
+    .aiappsx-split { display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.4rem; margin-top:0.95rem; padding-top:0.95rem; border-top:1px solid var(--border); }
+    .aiappsx-loop { width: 230px; max-width:100%; height:auto; flex:0 0 auto; }
+    .aiappsx-note { flex:1 1 230px; min-width:210px; color:var(--text-muted); font-size:0.84rem; line-height:1.75; }
+    .aiappsx-note strong { color: var(--text); }
+
+    /* shared SVG structure (themed through variables) */
+    .aiappsx-box { fill: var(--surface-2); stroke: var(--border-strong); stroke-width:1.5; }
+    .aiappsx-bt  { fill: var(--text); font: 600 15px var(--display); }
+    .aiappsx-bs  { fill: var(--text-muted); font: 400 10.5px 'Inter', sans-serif; }
+    .aiappsx-lbl { fill: var(--text-muted); font: italic 400 11px 'Inter', sans-serif; }
+
+    /* per-section mini panels */
+    .aiappsx-mini {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 0.9rem 0.55rem;
+      margin: 0 0 1.15rem;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+    .aiappsx-mini svg { display:block; width:100%; max-width:600px; min-width:340px; margin:0 auto; height:auto; }
+    .aiappsx-mini figcaption { margin:0.4rem 0 0; font-size:0.74rem; color:var(--text-muted); line-height:1.5; text-align:center; }
+    .aiappsx-mini figcaption strong { color: var(--text); }
+    .aiappsx-mt { fill: var(--text); font: 600 12px var(--display); }
+    .aiappsx-ms { fill: var(--text-muted); font: 400 9.5px 'Inter', sans-serif; }
+    .aiappsx-rail { stroke: var(--border-strong); stroke-width: 2; stroke-linecap: round; opacity:0.75; }
+
+    /* fixed-hue stroke helpers for coloured shapes */
+    .aiappsx-amber  { stroke:#e0b366; }
+    .aiappsx-rose   { stroke:#e8808f; }
+    .aiappsx-blue   { stroke:#7aa2f7; }
+    .aiappsx-green  { stroke:#9ece6a; }
+    .aiappsx-violet { stroke:#bb9af7; }
+
+    /* ───────── MOTION ───────── */
+    /* main flow: prompt → LLM → response (one hop, then the other) */
+    .aiappsx-p1 { animation: aiappsx-hop1 4.4s ease-in-out infinite; }
+    .aiappsx-p2 { animation: aiappsx-hop2 4.4s ease-in-out infinite; }
+    @keyframes aiappsx-hop1 {
+      0%{ transform:translateX(0); opacity:0 } 6%{ opacity:1 }
+      38%{ transform:translateX(90px); opacity:1 } 45%{ transform:translateX(90px); opacity:0 } 100%{ opacity:0 }
+    }
+    @keyframes aiappsx-hop2 {
+      0%,50%{ transform:translateX(0); opacity:0 } 56%{ opacity:1 }
+      90%{ transform:translateX(90px); opacity:1 } 97%{ transform:translateX(90px); opacity:0 } 100%{ opacity:0 }
+    }
+    .aiappsx-llm { stroke:#bb9af7; stroke-width:2.5; animation: aiappsx-pulsebox 4.4s ease-in-out infinite; }
+    @keyframes aiappsx-pulsebox { 0%,40%{ stroke-width:2.5 } 48%{ stroke-width:5 } 58%,100%{ stroke-width:2.5 } }
+
+    /* RAG pipeline: three sequential hops across the four stages */
+    .aiappsx-r1 { animation: aiappsx-rag1 5.4s ease-in-out infinite; }
+    .aiappsx-r2 { animation: aiappsx-rag2 5.4s ease-in-out infinite; }
+    .aiappsx-r3 { animation: aiappsx-rag3 5.4s ease-in-out infinite; }
+    @keyframes aiappsx-rag1 { 0%{transform:translateX(0);opacity:0}4%{opacity:1}26%{transform:translateX(46px);opacity:1}31%{opacity:0}100%{opacity:0} }
+    @keyframes aiappsx-rag2 { 0%,33%{transform:translateX(0);opacity:0}37%{opacity:1}59%{transform:translateX(46px);opacity:1}64%{opacity:0}100%{opacity:0} }
+    @keyframes aiappsx-rag3 { 0%,66%{transform:translateX(0);opacity:0}70%{opacity:1}92%{transform:translateX(46px);opacity:1}97%{opacity:0}100%{opacity:0} }
+
+    /* agent loop: think → act → observe (halos glow one at a time) */
+    .aiappsx-arrow { fill:none; stroke-width:2; stroke-dasharray:5 7; animation: aiappsx-dash 1.3s linear infinite; }
+    @keyframes aiappsx-dash { to { stroke-dashoffset:-24 } }
+    .aiappsx-halo { transform-box: fill-box; transform-origin: center; opacity:0; }
+    .aiappsx-n1 .aiappsx-halo { animation: aiappsx-pulse 3.9s ease-in-out infinite; }
+    .aiappsx-n2 .aiappsx-halo { animation: aiappsx-pulse 3.9s ease-in-out infinite 1.3s; }
+    .aiappsx-n3 .aiappsx-halo { animation: aiappsx-pulse 3.9s ease-in-out infinite 2.6s; }
+    @keyframes aiappsx-pulse { 0%,100%{ transform:scale(0.72); opacity:0 } 12%{ opacity:0.85 } 30%{ transform:scale(1.32); opacity:0 } }
+
+    /* mini · OpenCode: the task dot hops read → edit → run */
+    .aiappsx-oc { animation: aiappsx-oc 6s ease-in-out infinite; }
+    @keyframes aiappsx-oc {
+      0%{transform:translateX(0);opacity:0}5%{opacity:1}22%{transform:translateX(0);opacity:1}
+      34%{transform:translateX(195px);opacity:1}50%{transform:translateX(195px);opacity:1}
+      62%{transform:translateX(390px);opacity:1}90%{transform:translateX(390px);opacity:1}100%{transform:translateX(390px);opacity:0}
+    }
+    /* mini · ChatGPT: two bubbles fade in, in turn */
+    .aiappsx-bu { animation: aiappsx-fin 5.2s ease-in-out infinite; }
+    .aiappsx-ba { opacity:0; animation: aiappsx-fin 5.2s ease-in-out infinite; animation-delay: 2.3s; }
+    @keyframes aiappsx-fin { 0%{opacity:0;transform:translateY(8px)}10%{opacity:1;transform:translateY(0)}86%{opacity:1}100%{opacity:0} }
+    /* mini · Gemini: modalities feed the model one at a time */
+    .aiappsx-g1 { animation: aiappsx-g1 6s ease-in-out infinite; }
+    .aiappsx-g2 { animation: aiappsx-g2 6s ease-in-out infinite; }
+    .aiappsx-g3 { animation: aiappsx-g3 6s ease-in-out infinite; }
+    @keyframes aiappsx-g1 { 0%{transform:translate(0,0);opacity:0}4%{opacity:1}26%{transform:translate(220px,38px);opacity:1}30%{opacity:0}100%{opacity:0} }
+    @keyframes aiappsx-g2 { 0%,33%{transform:translate(0,0);opacity:0}37%{opacity:1}59%{transform:translate(220px,0);opacity:1}63%{opacity:0}100%{opacity:0} }
+    @keyframes aiappsx-g3 { 0%,66%{transform:translate(0,0);opacity:0}70%{opacity:1}92%{transform:translate(220px,-38px);opacity:1}96%{opacity:0}100%{opacity:0} }
+    /* the model glows briefly each time an input arrives */
+    .aiappsx-gc { opacity:0; animation: aiappsx-gpulse 6s ease-in-out infinite; }
+    @keyframes aiappsx-gpulse { 0%,24%{opacity:0}28%{opacity:0.5}35%,57%{opacity:0}61%{opacity:0.5}68%,90%{opacity:0}94%{opacity:0.5}100%{opacity:0} }
+    /* mini · Claude: a scan line sweeps the doc, output lines fill in */
+    .aiappsx-scan { animation: aiappsx-scan 4.8s ease-in-out infinite; }
+    @keyframes aiappsx-scan { 0%{transform:translateY(0);opacity:0}8%{opacity:1}52%{transform:translateY(60px);opacity:1}60%{opacity:0}100%{transform:translateY(0);opacity:0} }
+    .aiappsx-ol1,.aiappsx-ol2,.aiappsx-ol3,.aiappsx-ol4 { opacity:0; }
+    .aiappsx-ol1 { animation: aiappsx-ol1 4.8s ease-in-out infinite; }
+    .aiappsx-ol2 { animation: aiappsx-ol2 4.8s ease-in-out infinite; }
+    .aiappsx-ol3 { animation: aiappsx-ol3 4.8s ease-in-out infinite; }
+    .aiappsx-ol4 { animation: aiappsx-ol4 4.8s ease-in-out infinite; }
+    @keyframes aiappsx-ol1 { 0%,16%{opacity:0;transform:translateX(-5px)}24%,90%{opacity:1;transform:translateX(0)}100%{opacity:0} }
+    @keyframes aiappsx-ol2 { 0%,28%{opacity:0;transform:translateX(-5px)}36%,90%{opacity:1;transform:translateX(0)}100%{opacity:0} }
+    @keyframes aiappsx-ol3 { 0%,40%{opacity:0;transform:translateX(-5px)}48%,90%{opacity:1;transform:translateX(0)}100%{opacity:0} }
+    @keyframes aiappsx-ol4 { 0%,52%{opacity:0;transform:translateX(-5px)}60%,90%{opacity:1;transform:translateX(0)}100%{opacity:0} }
+    /* mini · Compare: a highlight ring visits each tool card in turn */
+    .aiappsx-ring { fill:none; stroke-width:2.5; opacity:0; }
+    .aiappsx-c1 .aiappsx-ring { animation: aiappsx-ring 7.2s ease-in-out infinite; }
+    .aiappsx-c2 .aiappsx-ring { animation: aiappsx-ring 7.2s ease-in-out infinite 1.8s; }
+    .aiappsx-c3 .aiappsx-ring { animation: aiappsx-ring 7.2s ease-in-out infinite 3.6s; }
+    .aiappsx-c4 .aiappsx-ring { animation: aiappsx-ring 7.2s ease-in-out infinite 5.4s; }
+    @keyframes aiappsx-ring { 0%{opacity:0}7%{opacity:0.95}20%{opacity:0.95}27%,100%{opacity:0} }
+    /* mini · LLM & Agents: a prompt feeds in, tokens appear one by one */
+    .aiappsx-feed { animation: aiappsx-feed 5s ease-in-out infinite; }
+    @keyframes aiappsx-feed { 0%{transform:translateX(0);opacity:0}6%{opacity:1}24%{transform:translateX(70px);opacity:1}30%{opacity:0}100%{opacity:0} }
+    .aiappsx-t1,.aiappsx-t2,.aiappsx-t3,.aiappsx-t4,.aiappsx-t5 { opacity:0; transform-box:fill-box; transform-origin:center; }
+    .aiappsx-t1 { animation: aiappsx-t1 5s ease-in-out infinite; }
+    .aiappsx-t2 { animation: aiappsx-t2 5s ease-in-out infinite; }
+    .aiappsx-t3 { animation: aiappsx-t3 5s ease-in-out infinite; }
+    .aiappsx-t4 { animation: aiappsx-t4 5s ease-in-out infinite; }
+    .aiappsx-t5 { animation: aiappsx-t5 5s ease-in-out infinite; }
+    @keyframes aiappsx-t1 { 0%,36%{opacity:0;transform:scale(.5)}44%,92%{opacity:1;transform:scale(1)}100%{opacity:0} }
+    @keyframes aiappsx-t2 { 0%,44%{opacity:0;transform:scale(.5)}52%,92%{opacity:1;transform:scale(1)}100%{opacity:0} }
+    @keyframes aiappsx-t3 { 0%,52%{opacity:0;transform:scale(.5)}60%,92%{opacity:1;transform:scale(1)}100%{opacity:0} }
+    @keyframes aiappsx-t4 { 0%,60%{opacity:0;transform:scale(.5)}68%,92%{opacity:1;transform:scale(1)}100%{opacity:0} }
+    @keyframes aiappsx-t5 { 0%,68%{opacity:0;transform:scale(.5)}76%,92%{opacity:1;transform:scale(1)}100%{opacity:0} }
+
+    /* ───────── reduced motion: freeze into a calm, readable state ───────── */
+    @media (prefers-reduced-motion: reduce) {
+      [class*="aiappsx-"] { animation: none !important; }
+      .aiappsx-p1, .aiappsx-p2, .aiappsx-r1, .aiappsx-r2, .aiappsx-r3,
+      .aiappsx-oc, .aiappsx-bu, .aiappsx-ba, .aiappsx-g1, .aiappsx-g2, .aiappsx-g3,
+      .aiappsx-scan,
+      .aiappsx-ol1, .aiappsx-ol2, .aiappsx-ol3, .aiappsx-ol4,
+      .aiappsx-feed, .aiappsx-t1, .aiappsx-t2, .aiappsx-t3, .aiappsx-t4, .aiappsx-t5 { opacity:1 !important; }
+      .aiappsx-halo, .aiappsx-gc, .aiappsx-ring { opacity:0 !important; }
+    }
   </style>
 </head>
 <body>
@@ -37,16 +205,17 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=7"></script>
 <script>renderHeader('AI Apps')</script>
 <script>renderSourceLink('AI Apps')</script>
 <main>
 
   <div class="page-header">
     <h1>AI Apps</h1>
-    <p class="subtitle">LLMs, agents &amp; AI tool quick reference</p>
+    <p class="subtitle">How AI apps actually work — prompts, models, RAG &amp; agents, explained simply.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#how-it-works">How it works</a>
       <a href="#opencode">OpenCode</a>
       <a href="#chatgpt">ChatGPT</a>
       <a href="#gemini">Gemini</a>
@@ -56,6 +225,135 @@
     </nav>
   </div>
 
+    <!-- ═══════════════════════════════════════════════════════════════
+         HOW AN AI APP WORKS — beginner animated explainer (aiappsx-)
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="how-it-works" class="ai-section">
+      <h2>How an AI app works</h2>
+      <div class="block-desc">
+        <span>Start here. An AI app takes your <strong>prompt</strong>, sends it to a <strong>large language model (LLM)</strong>, and streams back a <strong>response</strong>. <strong>RAG</strong> and <strong>agents</strong> are just two ways of giving that model more to work with.</span>
+      </div>
+
+      <div class="aiappsx-card">
+
+        <!-- 1 · THE BASIC LOOP ───────────────────────────────── -->
+        <div class="aiappsx-sub"><span class="aiappsx-num" style="background:#7aa2f7">1</span>The basic flow — prompt in, answer out</div>
+        <svg class="aiappsx-flow" viewBox="0 0 760 150" role="img"
+             aria-label="You send a prompt to the LLM, the model thinks, and a response comes back.">
+          <defs>
+            <marker id="aiappsxA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="context-stroke" />
+            </marker>
+          </defs>
+
+          <text class="aiappsx-lbl" x="242" y="72" text-anchor="middle">prompt →</text>
+          <text class="aiappsx-lbl" x="517" y="72" text-anchor="middle">answer →</text>
+
+          <rect class="aiappsx-box aiappsx-blue" x="15"  y="48" width="180" height="72" rx="12" stroke-width="2.5" />
+          <text class="aiappsx-bt" x="105" y="86"  text-anchor="middle">You</text>
+          <text class="aiappsx-bs" x="105" y="104" text-anchor="middle">your question</text>
+
+          <rect class="aiappsx-box aiappsx-llm" x="290" y="48" width="180" height="72" rx="12" />
+          <text class="aiappsx-bt" x="380" y="86"  text-anchor="middle">LLM</text>
+          <text class="aiappsx-bs" x="380" y="104" text-anchor="middle">the model</text>
+
+          <rect class="aiappsx-box aiappsx-green" x="565" y="48" width="180" height="72" rx="12" stroke-width="2.5" />
+          <text class="aiappsx-bt" x="655" y="86"  text-anchor="middle">Response</text>
+          <text class="aiappsx-bs" x="655" y="104" text-anchor="middle">the answer</text>
+
+          <path d="M195,84 L285,84" fill="none" stroke="#7aa2f7" stroke-width="2" marker-end="url(#aiappsxA)" />
+          <path d="M470,84 L560,84" fill="none" stroke="#9ece6a" stroke-width="2" marker-end="url(#aiappsxA)" />
+
+          <circle class="aiappsx-p1" cx="195" cy="84" r="5.5" fill="#7aa2f7" />
+          <circle class="aiappsx-p2" cx="470" cy="84" r="5.5" fill="#9ece6a" />
+        </svg>
+        <p class="aiappsx-caption">Your words become <strong>tokens</strong>, the model predicts the most likely next tokens, and those stream back as the answer. Everything below is a twist on this one loop.</p>
+
+        <!-- 2 · RAG ──────────────────────────────────────────── -->
+        <div class="aiappsx-sub"><span class="aiappsx-num" style="background:#e0b366">2</span>RAG — give the model the right facts first</div>
+        <svg class="aiappsx-flow" viewBox="0 0 760 150" role="img"
+             aria-label="RAG: your question retrieves relevant documents, which augment the prompt, and the LLM generates an answer.">
+          <defs>
+            <marker id="aiappsxB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="context-stroke" />
+            </marker>
+          </defs>
+
+          <rect class="aiappsx-box aiappsx-rose"   x="8"   y="42" width="150" height="64" rx="11" stroke-width="2.5" />
+          <text class="aiappsx-bt" x="83"  y="76" text-anchor="middle" style="font-size:13.5px">Question</text>
+          <text class="aiappsx-bs" x="83"  y="93" text-anchor="middle">you ask</text>
+
+          <rect class="aiappsx-box aiappsx-amber"  x="206" y="42" width="150" height="64" rx="11" stroke-width="2.5" />
+          <text class="aiappsx-bt" x="281" y="76" text-anchor="middle" style="font-size:13.5px">Retrieve</text>
+          <text class="aiappsx-bs" x="281" y="93" text-anchor="middle">find docs</text>
+
+          <rect class="aiappsx-box aiappsx-blue"   x="404" y="42" width="150" height="64" rx="11" stroke-width="2.5" />
+          <text class="aiappsx-bt" x="479" y="76" text-anchor="middle" style="font-size:13.5px">Augment</text>
+          <text class="aiappsx-bs" x="479" y="93" text-anchor="middle">+ context</text>
+
+          <rect class="aiappsx-box aiappsx-green"  x="602" y="42" width="150" height="64" rx="11" stroke-width="2.5" />
+          <text class="aiappsx-bt" x="677" y="76" text-anchor="middle" style="font-size:13.5px">Generate</text>
+          <text class="aiappsx-bs" x="677" y="93" text-anchor="middle">LLM answers</text>
+
+          <path d="M158,74 L204,74" fill="none" stroke="#e8808f" stroke-width="2" marker-end="url(#aiappsxB)" />
+          <path d="M356,74 L402,74" fill="none" stroke="#e0b366" stroke-width="2" marker-end="url(#aiappsxB)" />
+          <path d="M554,74 L600,74" fill="none" stroke="#7aa2f7" stroke-width="2" marker-end="url(#aiappsxB)" />
+
+          <circle class="aiappsx-r1" cx="158" cy="74" r="5.5" fill="#e8808f" />
+          <circle class="aiappsx-r2" cx="356" cy="74" r="5.5" fill="#e0b366" />
+          <circle class="aiappsx-r3" cx="554" cy="74" r="5.5" fill="#7aa2f7" />
+        </svg>
+        <p class="aiappsx-caption"><strong>Retrieval-Augmented Generation</strong> looks up relevant documents, pastes them into the prompt, then asks the LLM — so the answer is grounded in <em>your</em> data instead of only what the model memorised.</p>
+
+        <!-- 3 · AGENT LOOP ───────────────────────────────────── -->
+        <div class="aiappsx-split">
+          <svg class="aiappsx-loop" viewBox="0 0 300 240" role="img"
+               aria-label="An agent loops through think, act with a tool, and observe, repeating until the goal is met.">
+            <defs>
+              <marker id="aiappsxC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="context-stroke" />
+              </marker>
+            </defs>
+
+            <path class="aiappsx-arrow" d="M180,46 A80,80 0 0 1 229,131" stroke="#e0b366" marker-end="url(#aiappsxC)" />
+            <path class="aiappsx-arrow" d="M199,183 A80,80 0 0 1 101,183" stroke="#9ece6a" marker-end="url(#aiappsxC)" />
+            <path class="aiappsx-arrow" d="M71,131 A80,80 0 0 1 120,46"  stroke="#7aa2f7" marker-end="url(#aiappsxC)" />
+
+            <text class="aiappsx-lbl" x="150" y="128" text-anchor="middle" style="font-style:normal;font-weight:600;letter-spacing:1.5px;font-size:9px">AGENT LOOP</text>
+
+            <g class="aiappsx-n1">
+              <circle class="aiappsx-halo" cx="150" cy="40" r="34" fill="#7aa2f7" />
+              <circle cx="150" cy="40" r="34" fill="var(--surface-2)" stroke="#7aa2f7" stroke-width="2.4" />
+              <text class="aiappsx-bt" x="150" y="45" text-anchor="middle" style="font-size:14px">Think</text>
+            </g>
+            <g class="aiappsx-n2">
+              <circle class="aiappsx-halo" cx="219" cy="160" r="34" fill="#e0b366" />
+              <circle cx="219" cy="160" r="34" fill="var(--surface-2)" stroke="#e0b366" stroke-width="2.4" />
+              <text class="aiappsx-bt" x="219" y="165" text-anchor="middle" style="font-size:14px">Act</text>
+            </g>
+            <g class="aiappsx-n3">
+              <circle class="aiappsx-halo" cx="81" cy="160" r="34" fill="#9ece6a" />
+              <circle cx="81" cy="160" r="34" fill="var(--surface-2)" stroke="#9ece6a" stroke-width="2.4" />
+              <text class="aiappsx-bt" x="81" y="165" text-anchor="middle" style="font-size:13px">Observe</text>
+            </g>
+          </svg>
+          <div class="aiappsx-note">
+            <strong>Agents</strong> wrap the LLM in a loop:<br />
+            <strong style="color:#7aa2f7">Think</strong> — plan the next step.<br />
+            <strong style="color:#e0b366">Act</strong> — call a tool (run code, search, read a file).<br />
+            <strong style="color:#9ece6a">Observe</strong> — read the result, then loop again until the goal is met.
+          </div>
+        </div>
+
+        <div class="aiappsx-legend">
+          <span><span class="aiappsx-swatch" style="background:#7aa2f7"></span>you / input</span>
+          <span><span class="aiappsx-swatch" style="background:#bb9af7"></span>the model</span>
+          <span><span class="aiappsx-swatch" style="background:#e0b366"></span>retrieve / act</span>
+          <span><span class="aiappsx-swatch" style="background:#9ece6a"></span>answer / observe</span>
+        </div>
+      </div>
+    </section>
+
     <!-- OpenCode -->
     <section id="opencode" class="ai-section">
       <span class="badge badge-oc">OpenCode</span>
@@ -63,6 +361,28 @@
       <div class="block-desc">
         <span>Terminal-based AI coding assistant. Works with local &amp; cloud models. Executes tasks autonomously in your shell.</span>
       </div>
+
+      <figure class="aiappsx-mini">
+        <svg viewBox="0 0 600 102" role="img" aria-label="OpenCode works autonomously, looping through read, edit, and run.">
+          <defs>
+            <marker id="aiappsxOC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke" /></marker>
+          </defs>
+          <line class="aiappsx-rail" x1="105" y1="50" x2="495" y2="50" />
+          <rect class="aiappsx-box aiappsx-amber" x="40"  y="29" width="130" height="42" rx="9" stroke-width="2.4" />
+          <rect class="aiappsx-box aiappsx-blue"  x="235" y="29" width="130" height="42" rx="9" stroke-width="2.4" />
+          <rect class="aiappsx-box aiappsx-green" x="430" y="29" width="130" height="42" rx="9" stroke-width="2.4" />
+          <text class="aiappsx-mt" x="105" y="54" text-anchor="middle">Read</text>
+          <text class="aiappsx-mt" x="300" y="54" text-anchor="middle">Edit</text>
+          <text class="aiappsx-mt" x="495" y="54" text-anchor="middle">Run</text>
+          <text class="aiappsx-ms" x="105" y="90" text-anchor="middle">your files</text>
+          <text class="aiappsx-ms" x="300" y="90" text-anchor="middle">the code</text>
+          <text class="aiappsx-ms" x="495" y="90" text-anchor="middle">commands</text>
+          <path d="M170,50 L231,50" fill="none" stroke="#7aa2f7" stroke-width="1.8" marker-end="url(#aiappsxOC)" />
+          <path d="M365,50 L426,50" fill="none" stroke="#9ece6a" stroke-width="1.8" marker-end="url(#aiappsxOC)" />
+          <circle class="aiappsx-oc" cx="105" cy="50" r="6" fill="#bb9af7" />
+        </svg>
+        <figcaption>OpenCode runs <strong>autonomously</strong> — it reads your files, edits code, and runs commands, looping until the task is done.</figcaption>
+      </figure>
 
       <div class="cheat-block">
         <div class="code-panel">
@@ -122,6 +442,28 @@
         <span>General-purpose conversational AI. Supports browsing, code execution, image generation, and file uploads.</span>
       </div>
 
+      <figure class="aiappsx-mini">
+        <svg viewBox="0 0 600 118" role="img" aria-label="A chat: your message appears, then ChatGPT replies — each turn is added to the conversation.">
+          <g class="aiappsx-bu">
+            <circle cx="574" cy="31" r="11" fill="#7aa2f7" />
+            <text x="574" y="35" text-anchor="middle" style="font:700 10px 'Inter',sans-serif;fill:#1a1d2b">U</text>
+            <rect class="aiappsx-box aiappsx-blue" x="262" y="14" width="292" height="34" rx="12" stroke-width="2.2" />
+            <text class="aiappsx-ms" x="408" y="35" text-anchor="middle" style="fill:var(--text)">Summarise this CSV and plot the trend</text>
+          </g>
+          <g class="aiappsx-ba">
+            <circle cx="26" cy="83" r="11" fill="#9ece6a" />
+            <text x="26" y="87" text-anchor="middle" style="font:700 9px 'Inter',sans-serif;fill:#1a1d2b">AI</text>
+            <rect class="aiappsx-box aiappsx-green" x="46" y="64" width="330" height="38" rx="12" stroke-width="2.2" />
+            <text class="aiappsx-ms" x="60" y="80" style="fill:var(--text)">Sure — revenue is up 12% quarter on quarter.</text>
+            <rect x="60" y="86" width="44" height="11" rx="5.5" fill="#bb9af7" />
+            <text x="82" y="94.5" text-anchor="middle" style="font:600 7.5px 'Inter',sans-serif;fill:#1a1d2b">python</text>
+            <rect x="108" y="86" width="40" height="11" rx="5.5" fill="#e0b366" />
+            <text x="128" y="94.5" text-anchor="middle" style="font:600 7.5px 'Inter',sans-serif;fill:#1a1d2b">chart</text>
+          </g>
+        </svg>
+        <figcaption>A chat is the <strong>basic loop with memory</strong> — every message is appended to the conversation, and the whole history goes back to the model each turn.</figcaption>
+      </figure>
+
       <div class="cheat-block">
         <div class="code-panel">
           <div class="panel-label">Key Features</div>
@@ -160,6 +502,35 @@
         <span>Multimodal AI with massive context window. Native integration with Google ecosystem.</span>
       </div>
 
+      <figure class="aiappsx-mini">
+        <svg viewBox="0 0 600 130" role="img" aria-label="Gemini is multimodal: text, image and video inputs all feed one model, which returns a single answer.">
+          <defs>
+            <marker id="aiappsxGM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke" /></marker>
+          </defs>
+          <line class="aiappsx-rail" x1="160" y1="27"  x2="380" y2="65" />
+          <line class="aiappsx-rail" x1="160" y1="65"  x2="380" y2="65" />
+          <line class="aiappsx-rail" x1="160" y1="103" x2="380" y2="65" />
+          <rect class="aiappsx-box aiappsx-amber" x="30" y="14" width="130" height="26" rx="7" stroke-width="2.2" />
+          <rect class="aiappsx-box aiappsx-rose"  x="30" y="52" width="130" height="26" rx="7" stroke-width="2.2" />
+          <rect class="aiappsx-box aiappsx-blue"  x="30" y="90" width="130" height="26" rx="7" stroke-width="2.2" />
+          <text class="aiappsx-mt" x="95" y="31"  text-anchor="middle">Text</text>
+          <text class="aiappsx-mt" x="95" y="69"  text-anchor="middle">Image</text>
+          <text class="aiappsx-mt" x="95" y="107" text-anchor="middle">Video / audio</text>
+          <circle class="aiappsx-gc" cx="380" cy="65" r="36" fill="#bb9af7" />
+          <circle cx="380" cy="65" r="30" fill="var(--surface-2)" stroke="#bb9af7" stroke-width="2.4" />
+          <text class="aiappsx-mt" x="380" y="63" text-anchor="middle">Model</text>
+          <text class="aiappsx-ms" x="380" y="77" text-anchor="middle">multimodal</text>
+          <path d="M410,65 L466,65" fill="none" stroke="#9ece6a" stroke-width="1.8" marker-end="url(#aiappsxGM)" />
+          <rect class="aiappsx-box aiappsx-green" x="468" y="49" width="110" height="32" rx="8" stroke-width="2.2" />
+          <text class="aiappsx-mt" x="523" y="69" text-anchor="middle">Answer</text>
+          <text class="aiappsx-ms" x="523" y="100" text-anchor="middle">one reply, any input</text>
+          <circle class="aiappsx-g1" cx="160" cy="27"  r="6" fill="#e0b366" />
+          <circle class="aiappsx-g2" cx="160" cy="65"  r="6" fill="#e8808f" />
+          <circle class="aiappsx-g3" cx="160" cy="103" r="6" fill="#7aa2f7" />
+        </svg>
+        <figcaption><strong>Multimodal</strong> — text, images, audio and video all become tokens for the same model, and a <strong>1M-token</strong> window has room to hold them.</figcaption>
+      </figure>
+
       <div class="cheat-block">
         <div class="code-panel">
           <div class="panel-label">Key Features</div>
@@ -197,6 +568,35 @@
         <span>Safety-focused AI with strong coding and reasoning abilities. Excellent at long-form analysis.</span>
       </div>
 
+      <figure class="aiappsx-mini">
+        <svg viewBox="0 0 600 128" role="img" aria-label="Claude scans a long document and writes a structured analysis, line by line.">
+          <defs>
+            <marker id="aiappsxCD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke" /></marker>
+          </defs>
+          <rect class="aiappsx-box aiappsx-amber" x="30" y="10" width="180" height="92" rx="8" stroke-width="2.2" />
+          <g stroke="var(--border-strong)" stroke-width="2.5" stroke-linecap="round">
+            <line x1="46" y1="26" x2="190" y2="26" /><line x1="46" y1="38" x2="170" y2="38" />
+            <line x1="46" y1="50" x2="194" y2="50" /><line x1="46" y1="62" x2="150" y2="62" />
+            <line x1="46" y1="74" x2="186" y2="74" /><line x1="46" y1="86" x2="162" y2="86" />
+          </g>
+          <rect class="aiappsx-scan" x="40" y="21" width="160" height="4" rx="2" fill="#e8808f" />
+          <text class="aiappsx-ms" x="120" y="120" text-anchor="middle">long document (200K tokens)</text>
+          <path d="M212,56 L266,56" fill="none" stroke="#bb9af7" stroke-width="1.8" marker-end="url(#aiappsxCD)" />
+          <rect class="aiappsx-box aiappsx-violet" x="268" y="36" width="100" height="40" rx="9" stroke-width="2.2" />
+          <text class="aiappsx-mt" x="318" y="60" text-anchor="middle">Claude</text>
+          <path d="M370,56 L424,56" fill="none" stroke="#9ece6a" stroke-width="1.8" marker-end="url(#aiappsxCD)" />
+          <rect class="aiappsx-box aiappsx-green" x="426" y="10" width="150" height="92" rx="8" stroke-width="2.2" />
+          <g stroke-width="3.5" stroke-linecap="round">
+            <line class="aiappsx-ol1" x1="442" y1="30" x2="556" y2="30" stroke="#7aa2f7" />
+            <line class="aiappsx-ol2" x1="442" y1="48" x2="536" y2="48" stroke="#9ece6a" />
+            <line class="aiappsx-ol3" x1="442" y1="66" x2="552" y2="66" stroke="#e0b366" />
+            <line class="aiappsx-ol4" x1="442" y1="84" x2="516" y2="84" stroke="#e8808f" />
+          </g>
+          <text class="aiappsx-ms" x="501" y="120" text-anchor="middle">structured analysis</text>
+        </svg>
+        <figcaption>Claude reads the <strong>whole document in one pass</strong>, then writes a structured answer — long context plus careful instruction-following.</figcaption>
+      </figure>
+
       <div class="cheat-block">
         <div class="code-panel">
           <div class="panel-label">Key Features</div>
@@ -231,6 +631,40 @@
     <!-- Compare -->
     <section id="compare" class="ai-section">
       <h2>Quick Comparison</h2>
+
+      <figure class="aiappsx-mini">
+        <svg viewBox="0 0 600 104" role="img" aria-label="Four tools highlighted in turn with what each is best for: OpenCode for coding and automation, ChatGPT as an all-rounder, Gemini for huge documents, Claude for code quality.">
+          <g class="aiappsx-c1">
+            <rect class="aiappsx-ring" x="26" y="10" width="122" height="64" rx="12" stroke="#bb9af7" />
+            <rect class="aiappsx-box aiappsx-violet" x="30" y="14" width="114" height="56" rx="9" stroke-width="2.2" />
+            <text class="aiappsx-mt" x="87" y="38" text-anchor="middle">OpenCode</text>
+            <text class="aiappsx-ms" x="87" y="56" text-anchor="middle">terminal agent</text>
+            <text class="aiappsx-ms" x="87" y="92" text-anchor="middle">coding &amp; automation</text>
+          </g>
+          <g class="aiappsx-c2">
+            <rect class="aiappsx-ring" x="168" y="10" width="122" height="64" rx="12" stroke="#9ece6a" />
+            <rect class="aiappsx-box aiappsx-green" x="172" y="14" width="114" height="56" rx="9" stroke-width="2.2" />
+            <text class="aiappsx-mt" x="229" y="38" text-anchor="middle">ChatGPT</text>
+            <text class="aiappsx-ms" x="229" y="56" text-anchor="middle">chat + tools</text>
+            <text class="aiappsx-ms" x="229" y="92" text-anchor="middle">all-rounder</text>
+          </g>
+          <g class="aiappsx-c3">
+            <rect class="aiappsx-ring" x="310" y="10" width="122" height="64" rx="12" stroke="#7aa2f7" />
+            <rect class="aiappsx-box aiappsx-blue" x="314" y="14" width="114" height="56" rx="9" stroke-width="2.2" />
+            <text class="aiappsx-mt" x="371" y="38" text-anchor="middle">Gemini</text>
+            <text class="aiappsx-ms" x="371" y="56" text-anchor="middle">multimodal, 1M ctx</text>
+            <text class="aiappsx-ms" x="371" y="92" text-anchor="middle">huge docs &amp; Google</text>
+          </g>
+          <g class="aiappsx-c4">
+            <rect class="aiappsx-ring" x="452" y="10" width="122" height="64" rx="12" stroke="#e0b366" />
+            <rect class="aiappsx-box aiappsx-amber" x="456" y="14" width="114" height="56" rx="9" stroke-width="2.2" />
+            <text class="aiappsx-mt" x="513" y="38" text-anchor="middle">Claude</text>
+            <text class="aiappsx-ms" x="513" y="56" text-anchor="middle">long-form reasoning</text>
+            <text class="aiappsx-ms" x="513" y="92" text-anchor="middle">code quality</text>
+          </g>
+        </svg>
+        <figcaption>Same loop, <strong>different strengths</strong> — pick by what you need most: autonomy, breadth, context size, or code quality.</figcaption>
+      </figure>
 
       <div class="cheat-block">
         <div class="code-panel" style="overflow-x:auto;">
@@ -270,6 +704,30 @@
       <div class="block-desc">
         <span>An LLM is a next-token prediction function built on the <code>Transformer</code> architecture. An <code>Agent</code> is an LLM + autonomous loop: perceive → reason → act → observe → repeat.</span>
       </div>
+
+      <figure class="aiappsx-mini">
+        <svg viewBox="0 0 600 110" role="img" aria-label="A prompt feeds into the LLM, which emits the answer one token at a time.">
+          <defs>
+            <marker id="aiappsxLA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke" /></marker>
+          </defs>
+          <rect class="aiappsx-box aiappsx-blue" x="24" y="34" width="120" height="42" rx="9" stroke-width="2.2" />
+          <text class="aiappsx-mt" x="84" y="59" text-anchor="middle">Prompt</text>
+          <text class="aiappsx-ms" x="84" y="98" text-anchor="middle">tokens in (all at once)</text>
+          <path d="M144,55 L214,55" fill="none" stroke="#7aa2f7" stroke-width="1.8" marker-end="url(#aiappsxLA)" />
+          <circle class="aiappsx-feed" cx="144" cy="55" r="6" fill="#7aa2f7" />
+          <rect class="aiappsx-box aiappsx-violet" x="218" y="34" width="120" height="42" rx="9" stroke-width="2.2" />
+          <text class="aiappsx-mt" x="278" y="59" text-anchor="middle">LLM</text>
+          <text class="aiappsx-ms" x="278" y="98" text-anchor="middle">predicts the next token</text>
+          <path d="M338,55 L366,55" fill="none" stroke="#9ece6a" stroke-width="1.8" marker-end="url(#aiappsxLA)" />
+          <g class="aiappsx-t1"><rect class="aiappsx-box aiappsx-green"  x="372" y="41" width="38" height="28" rx="6" stroke-width="2" /><text class="aiappsx-ms" x="391" y="59" text-anchor="middle" style="fill:var(--text)">The</text></g>
+          <g class="aiappsx-t2"><rect class="aiappsx-box aiappsx-amber"  x="418" y="41" width="38" height="28" rx="6" stroke-width="2" /><text class="aiappsx-ms" x="437" y="59" text-anchor="middle" style="fill:var(--text)">cat</text></g>
+          <g class="aiappsx-t3"><rect class="aiappsx-box aiappsx-rose"   x="464" y="41" width="38" height="28" rx="6" stroke-width="2" /><text class="aiappsx-ms" x="483" y="59" text-anchor="middle" style="fill:var(--text)">sat</text></g>
+          <g class="aiappsx-t4"><rect class="aiappsx-box aiappsx-blue"   x="510" y="41" width="38" height="28" rx="6" stroke-width="2" /><text class="aiappsx-ms" x="529" y="59" text-anchor="middle" style="fill:var(--text)">on</text></g>
+          <g class="aiappsx-t5"><rect class="aiappsx-box aiappsx-violet" x="556" y="41" width="38" height="28" rx="6" stroke-width="2" /><text class="aiappsx-ms" x="575" y="59" text-anchor="middle" style="fill:var(--text)">the</text></g>
+          <text class="aiappsx-ms" x="483" y="98" text-anchor="middle">tokens out — one at a time</text>
+        </svg>
+        <figcaption>An LLM is a <strong>next-token predictor</strong>: the prompt goes in all at once, the answer comes out one token at a time — which is why output costs more.</figcaption>
+      </figure>
 
       <div class="cheat-block">
         <div class="code-panel">
@@ -543,7 +1001,7 @@ Phi-3-mini ≈ GPT-3.5 quality from synthetic data</pre>
     <p>AI Apps Cheatsheet — LLM · Agents · Tools · Local Inference</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

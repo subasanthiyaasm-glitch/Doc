@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HLD &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <style>
     .kw  { color: #bb9af7; }
     .fn  { color: #7aa2f7; }
@@ -100,16 +100,17 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=7"></script>
 <script>renderHeader('HLD')</script>
 <script>renderSourceLink('HLD')</script>
 
 <main>
   <div class="page-header">
     <h1>HLD</h1>
-    <p class="subtitle">High-Level Design — Basic to Advanced</p>
+    <p class="subtitle">System design made simple — how big apps are built from a few key building blocks.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#request-flow">Start Here</a>
       <a href="#fundamentals">Fundamentals</a>
       <a href="#scalability">Scalability</a>
       <a href="#lb">Load Balancing</a>
@@ -126,6 +127,177 @@
       <a href="#interview">Interview Blueprint</a>
     </nav>
   </div>
+
+    <!-- ═══════════════════════════════════════════ REQUEST FLOW (animated explainer) ═══ -->
+    <section id="request-flow">
+      <span class="badge b-basic">Beginner</span>
+      <h2>How a Request Travels Through a System</h2>
+      <div class="block-desc">
+        <span>Follow one request as it moves left&nbsp;→&nbsp;right through the main building blocks of a scalable web app — from your device to the database and back.</span>
+      </div>
+
+      <style>
+        /* All styles scoped with the hldx- prefix so they can't collide with shared CSS */
+        .hldx-wrap { margin: 0.4rem 0 1rem; }
+        .hldx-cap { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 0.75rem; line-height: 1.55; }
+        .hldx-cap b { color: var(--text); font-weight: 600; }
+        .hldx-key-dot {
+          display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+          background: var(--accent); box-shadow: 0 0 6px var(--accent);
+          vertical-align: middle; margin: 0 0.15rem;
+        }
+        .hldx-stage {
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: var(--radius); padding: 0.85rem; overflow-x: auto;
+        }
+        .hldx-svg { width: 100%; height: auto; min-width: 540px; display: block; }
+        .hldx-svg text { font-family: inherit; }
+        .hldx-title { font-family: var(--display), 'Inter', sans-serif; }
+
+        .hldx-base-line { stroke: var(--border-strong); stroke-width: 2; }
+        .hldx-arrow { fill: var(--text-muted); }
+
+        .hldx-box {
+          fill: var(--surface-2); stroke: var(--border); stroke-width: 1.5;
+          animation: hldx-pulse 10s linear infinite;
+        }
+        .hldx-box-back { fill: var(--surface-2); stroke: var(--border); stroke-width: 1.5; opacity: 0.6; }
+        .hldx-box-q { fill: var(--surface-2); stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 3; }
+
+        .hldx-label { fill: var(--text); font-size: 16px; font-weight: 600; text-anchor: middle; }
+        .hldx-sub   { fill: var(--text-muted); font-size: 11px; text-anchor: middle; }
+
+        .hldx-q-line {
+          stroke: var(--accent-2); stroke-width: 2; stroke-dasharray: 5 4; fill: none;
+          animation: hldx-dash 1.1s linear infinite;
+        }
+        .hldx-q-arrow { fill: var(--accent-2); }
+
+        .hldx-packet {
+          fill: var(--accent); filter: drop-shadow(0 0 7px var(--accent));
+          animation: hldx-travel 10s linear infinite;
+        }
+
+        /* staggered highlight — each box lights up as the request arrives */
+        .hldx-b0 { animation-delay: 0s; }
+        .hldx-b1 { animation-delay: 1.76s; }
+        .hldx-b2 { animation-delay: 3.52s; }
+        .hldx-b3 { animation-delay: 5.28s; }
+        .hldx-b4 { animation-delay: 7.04s; }
+        .hldx-b5 { animation-delay: 8.8s; }
+
+        @keyframes hldx-travel {
+          0%   { transform: translateX(0);     opacity: 0; }
+          2%   { opacity: 1; }
+          88%  { transform: translateX(770px); opacity: 1; }
+          93%  { transform: translateX(770px); opacity: 0; }
+          100% { transform: translateX(0);     opacity: 0; }
+        }
+        @keyframes hldx-pulse {
+          0%   { stroke: var(--border); stroke-width: 1.5; filter: none; }
+          2%   { stroke: var(--accent); stroke-width: 3;   filter: drop-shadow(0 0 6px var(--accent)); }
+          9%   { stroke: var(--border); stroke-width: 1.5; filter: none; }
+          100% { stroke: var(--border); stroke-width: 1.5; filter: none; }
+        }
+        @keyframes hldx-dash { to { stroke-dashoffset: -18; } }
+
+        .hldx-legend {
+          display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+          gap: 0.6rem; margin-top: 1rem;
+        }
+        .hldx-card {
+          background: var(--surface-2); border: 1px solid var(--border);
+          border-radius: var(--radius-sm); padding: 0.6rem 0.75rem;
+        }
+        .hldx-card .hldx-n {
+          display: inline-flex; align-items: center; justify-content: center;
+          width: 1.15rem; height: 1.15rem; border-radius: 50%;
+          background: var(--accent); color: var(--surface);
+          font-size: 0.62rem; font-weight: 800; margin-right: 0.4rem; vertical-align: middle;
+        }
+        .hldx-card strong { color: var(--text); font-size: 0.78rem; }
+        .hldx-card .hldx-q-tag { background: var(--accent-2); }
+        .hldx-card span { display: block; color: var(--text-muted); font-size: 0.73rem; line-height: 1.5; margin-top: 0.3rem; }
+
+        /* Respect users who prefer no motion: freeze everything, show the request at the start */
+        @media (prefers-reduced-motion: reduce) {
+          .hldx-packet { animation: none; opacity: 1; filter: drop-shadow(0 0 5px var(--accent)); }
+          .hldx-box    { animation: none; }
+          .hldx-q-line { animation: none; }
+        }
+      </style>
+
+      <div class="hldx-wrap">
+        <p class="hldx-cap">
+          The glowing dot <span class="hldx-key-dot"></span> is <b>one request</b>. Watch it hop through each block,
+          over and over. Each block below has a one-line, plain-English job.
+        </p>
+
+        <div class="hldx-stage">
+          <svg class="hldx-svg" viewBox="0 0 1000 300" role="img"
+               aria-label="A request travels from the client, through a CDN, load balancer, app servers, cache, to the database, with a message queue off to the side.">
+            <!-- flow baseline (shows through the gaps between boxes) -->
+            <line class="hldx-base-line" x1="36" y1="117" x2="938" y2="117" />
+
+            <!-- direction arrows in each gap -->
+            <polygon class="hldx-arrow" points="174,111 184,117 174,123" />
+            <polygon class="hldx-arrow" points="328,111 338,117 328,123" />
+            <polygon class="hldx-arrow" points="482,111 492,117 482,123" />
+            <polygon class="hldx-arrow" points="636,111 646,117 636,123" />
+            <polygon class="hldx-arrow" points="790,111 800,117 790,123" />
+
+            <!-- boxes -->
+            <!-- 1. Client -->
+            <rect class="hldx-box hldx-b0" x="36" y="78" width="132" height="78" rx="11" />
+            <text class="hldx-label hldx-title" x="102" y="123">Client</text>
+
+            <!-- 2. CDN -->
+            <rect class="hldx-box hldx-b1" x="190" y="78" width="132" height="78" rx="11" />
+            <text class="hldx-label hldx-title" x="256" y="123">CDN</text>
+
+            <!-- 3. Load Balancer -->
+            <rect class="hldx-box hldx-b2" x="344" y="78" width="132" height="78" rx="11" />
+            <text class="hldx-label hldx-title" x="410" y="112">Load</text>
+            <text class="hldx-label hldx-title" x="410" y="132">Balancer</text>
+
+            <!-- 4. App Servers (stacked to imply many) -->
+            <rect class="hldx-box-back" x="498" y="68" width="132" height="78" rx="11" />
+            <rect class="hldx-box-back" x="498" y="73" width="132" height="78" rx="11" />
+            <rect class="hldx-box hldx-b3" x="498" y="78" width="132" height="78" rx="11" />
+            <text class="hldx-label hldx-title" x="564" y="112">App</text>
+            <text class="hldx-label hldx-title" x="564" y="132">Servers</text>
+
+            <!-- 5. Cache -->
+            <rect class="hldx-box hldx-b4" x="652" y="78" width="132" height="78" rx="11" />
+            <text class="hldx-label hldx-title" x="718" y="123">Cache</text>
+
+            <!-- 6. Database -->
+            <rect class="hldx-box hldx-b5" x="806" y="78" width="132" height="78" rx="11" />
+            <text class="hldx-label hldx-title" x="872" y="123">Database</text>
+
+            <!-- Message Queue off to the side (async) -->
+            <path class="hldx-q-line" d="M564 156 L564 204" />
+            <polygon class="hldx-q-arrow" points="559,200 569,200 564,208" />
+            <rect class="hldx-box-q" x="489" y="208" width="150" height="56" rx="11" />
+            <text class="hldx-label hldx-title" x="564" y="232" style="font-size:15px;">Message Queue</text>
+            <text class="hldx-sub" x="564" y="250">handles slow jobs later</text>
+
+            <!-- the travelling request -->
+            <circle class="hldx-packet" cx="102" cy="117" r="10" />
+          </svg>
+        </div>
+
+        <div class="hldx-legend">
+          <div class="hldx-card"><strong><span class="hldx-n">1</span>Client</strong><span>Your browser or phone. It asks for a page or some data.</span></div>
+          <div class="hldx-card"><strong><span class="hldx-n">2</span>CDN</strong><span>Keeps copies of images and files near you, so they load fast.</span></div>
+          <div class="hldx-card"><strong><span class="hldx-n">3</span>Load Balancer</strong><span>Shares visitors across many servers so none gets overloaded.</span></div>
+          <div class="hldx-card"><strong><span class="hldx-n">4</span>App Servers</strong><span>The machines that run the app's logic. Add more to serve more people.</span></div>
+          <div class="hldx-card"><strong><span class="hldx-n">5</span>Cache</strong><span>A super-fast memory that remembers recent answers to skip slow work.</span></div>
+          <div class="hldx-card"><strong><span class="hldx-n">6</span>Database</strong><span>The safe, long-term home where all your data really lives.</span></div>
+          <div class="hldx-card"><strong><span class="hldx-n hldx-q-tag">+</span>Message Queue</strong><span>A to-do list for slow jobs (like sending email) so users never wait.</span></div>
+        </div>
+      </div>
+    </section>
 
     <!-- ═══════════════════════════════════════════ FUNDAMENTALS ═══ -->
     <section id="fundamentals">
@@ -1394,7 +1566,7 @@ Dependencies degrade availability.</span></pre>
     </section>
 
   </main>
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=7"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

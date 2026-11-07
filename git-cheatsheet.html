@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Git &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     /* ── Section level labels ─────────────── */
     .level-label {
@@ -140,6 +140,145 @@
       .concept-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
+
+  <style>
+    /* ══ gitx2- : compact per-section command animations ══════════════
+       Scoped with the gitx2- prefix so nothing collides with the
+       gitx- intro section. Text, rails and surfaces all pull from the
+       theme CSS variables so light AND dark read correctly; only a few
+       fixed accent hues live inside the SVG shapes (the page palette).   */
+    .gitx2-panel {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      margin: 0 0 0.55rem;
+      overflow-x: auto;
+    }
+    .gitx2-svg { width: 100%; display: block; min-width: 440px; }
+    .gitx2-cap {
+      display: block;
+      margin: 0 0.15rem 1.6rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .gitx2-cap code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      background: var(--accent-subtle);
+      border: 1px solid var(--accent-subtle-2);
+      padding: 0.03rem 0.38rem;
+      border-radius: var(--radius-xs);
+    }
+
+    /* SVG text / rails themed through the variables */
+    .gitx2-label { fill: var(--code-text); opacity: 0.66; font-family: 'Inter', -apple-system, sans-serif; }
+    .gitx2-mono  { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+    .gitx2-rail  { stroke: var(--code-text); opacity: 0.13; stroke-width: 2; stroke-linecap: round; }
+
+    /* Accent elements that follow the active theme */
+    .gitx2-filedot      { fill: var(--accent); }
+    .gitx2-filedot-halo { fill: var(--accent); opacity: 0.18; }
+    .gitx2-lens-glass   { stroke: var(--accent); stroke-width: 2; fill: var(--accent-subtle); }
+    .gitx2-lens-handle  { stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; }
+    .gitx2-drawer       { fill: var(--surface-2); stroke: var(--border); stroke-width: 1.2; }
+    .gitx2-drawer-front { fill: var(--surface);   stroke: var(--border-strong); stroke-width: 1.2; }
+    .gitx2-drawer-handle{ stroke: var(--text-muted); stroke-width: 2; stroke-linecap: round; opacity: 0.7; }
+
+    /* 1 · stage & commit — the file glides add → commit */
+    .gitx2-stage-dot { animation: gitx2-stage 8s ease-in-out infinite; }
+    @keyframes gitx2-stage {
+      0%   { transform: translateX(0);     opacity: 0; }
+      6%   { transform: translateX(0);     opacity: 1; }
+      22%  { transform: translateX(0);     opacity: 1; }
+      34%  { transform: translateX(180px); opacity: 1; }
+      52%  { transform: translateX(180px); opacity: 1; }
+      64%  { transform: translateX(360px); opacity: 1; }
+      92%  { transform: translateX(360px); opacity: 1; }
+      100% { transform: translateX(360px); opacity: 0; }
+    }
+
+    /* 2 · remote — one commit pushes out, then one pulls back */
+    .gitx2-push-dot { animation: gitx2-push 8s ease-in-out infinite; }
+    @keyframes gitx2-push {
+      0%   { transform: translateX(0);     opacity: 0; }
+      5%   { opacity: 1; }
+      42%  { transform: translateX(220px); opacity: 1; }
+      48%  { transform: translateX(220px); opacity: 0; }
+      100% { transform: translateX(220px); opacity: 0; }
+    }
+    .gitx2-pull-dot { animation: gitx2-pull 8s ease-in-out infinite; }
+    @keyframes gitx2-pull {
+      0%   { transform: translateX(0);      opacity: 0; }
+      52%  { transform: translateX(0);      opacity: 0; }
+      57%  { opacity: 1; }
+      94%  { transform: translateX(-220px); opacity: 1; }
+      99%  { transform: translateX(-220px); opacity: 0; }
+      100% { transform: translateX(-220px); opacity: 0; }
+    }
+
+    /* 3 · branch & merge — a commit forks onto a feature line, then rejoins */
+    .gitx2-branch-dot { animation: gitx2-branch 8.5s ease-in-out infinite; }
+    @keyframes gitx2-branch {
+      0%   { transform: translate(0,0);         opacity: 0; }
+      8%   { transform: translate(0,0);         opacity: 1; }
+      20%  { transform: translate(0,0);         opacity: 1; }
+      40%  { transform: translate(52px,-38px);  opacity: 1; }
+      58%  { transform: translate(150px,-38px); opacity: 1; }
+      76%  { transform: translate(206px,0);     opacity: 1; }
+      92%  { transform: translate(206px,0);     opacity: 1; }
+      100% { transform: translate(206px,0);     opacity: 0; }
+    }
+
+    /* 4 · undo — HEAD slides back a commit, the undone one dims */
+    .gitx2-head { animation: gitx2-head 8s ease-in-out infinite; }
+    @keyframes gitx2-head {
+      0%   { transform: translateX(0); }
+      24%  { transform: translateX(0); }
+      44%  { transform: translateX(-130px); }
+      84%  { transform: translateX(-130px); }
+      100% { transform: translateX(0); }
+    }
+    .gitx2-undo-c3 { animation: gitx2-undo-fade 8s ease-in-out infinite; }
+    @keyframes gitx2-undo-fade {
+      0%   { opacity: 1; }
+      24%  { opacity: 1; }
+      44%  { opacity: 0.16; }
+      84%  { opacity: 0.16; }
+      100% { opacity: 1; }
+    }
+
+    /* 5 · inspect — a magnifier glides across history, changing nothing */
+    .gitx2-lens { animation: gitx2-scan 9s ease-in-out infinite; }
+    @keyframes gitx2-scan {
+      0%   { transform: translateX(0);     opacity: 0; }
+      6%   { opacity: 1; }
+      48%  { transform: translateX(360px); opacity: 1; }
+      54%  { transform: translateX(360px); opacity: 1; }
+      94%  { transform: translateX(0);     opacity: 1; }
+      100% { transform: translateX(0);     opacity: 0; }
+    }
+
+    /* 6 · stash — WIP changes tuck into a drawer, then pop back out */
+    .gitx2-card { animation: gitx2-stash 8s ease-in-out infinite; }
+    @keyframes gitx2-stash {
+      0%   { transform: translateY(0); }
+      16%  { transform: translateY(0); }
+      36%  { transform: translateY(52px); }
+      70%  { transform: translateY(52px); }
+      90%  { transform: translateY(0); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Honour reduced-motion: park every animation in a readable state */
+    @media (prefers-reduced-motion: reduce) {
+      .gitx2-stage-dot, .gitx2-push-dot, .gitx2-pull-dot,
+      .gitx2-branch-dot, .gitx2-head, .gitx2-undo-c3,
+      .gitx2-lens, .gitx2-card { animation: none; }
+    }
+  </style>
 </head>
 <body>
 
@@ -158,7 +297,7 @@
     </div>
   </aside>
   <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-  <script src="js/header.js"></script>
+  <script src="js/header.js?v=8"></script>
   <script>renderHeader('Git')</script>
   <script>renderSourceLink('Git')</script>
 
@@ -166,10 +305,10 @@
 
     <div class="page-header">
       <h1>Git</h1>
-      <p class="subtitle">Beginner to advanced quick reference</p>
+      <p class="subtitle">Git explained in plain English — start from zero</p>
       <span id="source-link"></span>
       <nav class="toc">
-        <a href="#flow">Flow</a>
+        <a href="#overview">Start here</a>
         <a href="#concepts">Concepts</a>
         <a href="#workflow">Workflow</a>
         <a href="#setup">Setup</a>
@@ -183,137 +322,181 @@
       </nav>
     </div>
 
-    <div class="level-label beginner">🌱 Beginner</div>
+    <!-- ══ ANIMATED BEGINNER EXPLAINER (new) ═════════════════════════ -->
+    <section id="overview">
+      <style>
+        /* All styles scoped with the gitx- prefix to avoid collisions. */
+        .gitx-panel {
+          background: var(--code-bg);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 1.1rem 1.25rem;
+          margin-bottom: 1rem;
+          overflow-x: auto;
+        }
+        .gitx-svg { width: 100%; min-width: 560px; display: block; }
+        .gitx-branch-svg { min-width: 340px; max-width: 460px; margin: 0 auto; }
 
-    <!-- ══ FLOW DIAGRAM ══════════════════════════════════════════════ -->
-    <section id="flow">
-      <h2>How Git Works — Command Flow</h2>
+        /* SVG text / rail themed via CSS variables (light + dark) */
+        .gitx-note  { fill: var(--code-text); opacity: 0.68; font-family: 'Inter', sans-serif; }
+        .gitx-title { font-family: 'Inter', -apple-system, sans-serif; font-weight: 700; }
+        .gitx-cmd   { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .gitx-rail  { stroke: var(--code-text); stroke-width: 2; opacity: 0.12; stroke-linecap: round; }
+
+        /* The travelling "changed file" dot */
+        .gitx-dot {
+          animation: gitx-travel 10s ease-in-out infinite;
+          will-change: transform, opacity;
+        }
+        @keyframes gitx-travel {
+          0%   { transform: translateX(0px);   opacity: 0; }
+          5%   { transform: translateX(0px);   opacity: 1; }
+          18%  { transform: translateX(0px);   opacity: 1; }
+          28%  { transform: translateX(222px); opacity: 1; }
+          40%  { transform: translateX(222px); opacity: 1; }
+          50%  { transform: translateX(444px); opacity: 1; }
+          62%  { transform: translateX(444px); opacity: 1; }
+          72%  { transform: translateX(666px); opacity: 1; }
+          92%  { transform: translateX(666px); opacity: 1; }
+          100% { transform: translateX(666px); opacity: 0; }
+        }
+
+        /* Legend under the flow */
+        .gitx-legend {
+          display: flex; flex-wrap: wrap; align-items: center;
+          gap: 0.5rem 1.6rem;
+          font-size: 0.78rem; color: var(--text-muted);
+          margin: 0 0.15rem 1.6rem;
+          line-height: 1.5;
+        }
+        .gitx-legend-item { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .gitx-legend-dot {
+          width: 12px; height: 12px; border-radius: 50%;
+          background: #5fe0c4; box-shadow: 0 0 0 4px rgba(116,232,207,0.18);
+          flex-shrink: 0;
+        }
+        .gitx-legend code {
+          font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+          color: var(--accent); background: var(--accent-subtle);
+          border: 1px solid var(--accent-subtle-2);
+          padding: 0.04rem 0.4rem; border-radius: var(--radius-xs);
+        }
+
+        @media (max-width: 600px) {
+          .gitx-legend { font-size: 0.73rem; gap: 0.4rem 1rem; }
+        }
+        /* Respect users who prefer no motion: park the dot, keep it visible */
+        @media (prefers-reduced-motion: reduce) {
+          .gitx-dot { animation: none; opacity: 1; }
+        }
+      </style>
+
+      <h2>How Git Moves Your Work</h2>
 
       <div class="block-desc">
-        <span>The four zones every Git command touches — and which commands move changes between them.</span>
+        <span>Watch one changed file travel through Git's four stages — <code>add</code> it, <code>commit</code> it, then <code>push</code> it online.</span>
         <a class="w3-link" href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F" target="_blank">Git Book →</a>
       </div>
-      <div class="git-full-diagram">
-        <svg viewBox="0 0 680 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;min-width:520px;">
+
+      <div class="gitx-panel">
+        <svg class="gitx-svg" viewBox="0 0 860 185" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="A changed file moving left to right: Working Directory, git add to Staging Area, git commit to Local Repository, git push to Remote.">
           <defs>
-            <!-- All markers use orient="auto" so they rotate with the line direction -->
-            <marker id="g-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#9ece6a"/>
-            </marker>
-            <marker id="o-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#f7768e"/>
-            </marker>
-            <marker id="b-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#7aa2f7"/>
-            </marker>
-            <marker id="p-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#bb9af7"/>
-            </marker>
+            <marker id="gitx-arr-blue"   markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7aa2f7"/></marker>
+            <marker id="gitx-arr-green"  markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#9ece6a"/></marker>
+            <marker id="gitx-arr-purple" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#bb9af7"/></marker>
           </defs>
 
-          <!-- ── Zone Boxes ── -->
+          <!-- Conveyor rail the file glides along -->
+          <line class="gitx-rail" x1="97" y1="124" x2="763" y2="124"/>
 
-          <!-- Working Directory (top-left, orange) -->
-          <rect x="20" y="20" width="200" height="110" rx="12"
-                fill="rgba(224,175,104,0.09)" stroke="rgba(224,175,104,0.4)" stroke-width="1.5"/>
-          <text x="120" y="51" text-anchor="middle" font-size="20">📁</text>
-          <text x="120" y="70" text-anchor="middle" fill="#e0af68" font-size="11.5" font-weight="700" font-family="Inter,-apple-system,sans-serif">Working Directory</text>
-          <text x="120" y="88" text-anchor="middle" fill="#565f89" font-size="9" font-family="Inter,sans-serif">Your edited files</text>
-          <text x="120" y="115" text-anchor="middle" fill="#3a3a5a" font-size="8" font-family="JetBrains Mono,monospace">$ git status</text>
+          <!-- ── Stage 1: Working Directory (amber) ── -->
+          <rect x="22" y="38" width="150" height="104" rx="12" fill="rgba(224,175,104,0.09)" stroke="rgba(224,175,104,0.42)" stroke-width="1.5"/>
+          <text x="97" y="64" text-anchor="middle" font-size="16">📝</text>
+          <text x="97" y="84" text-anchor="middle" class="gitx-title" font-size="10" fill="#e0af68">Working Directory</text>
+          <text x="97" y="101" text-anchor="middle" class="gitx-note" font-size="8.3">Files you're editing</text>
 
-          <!-- Staging Area (top-right, blue) -->
-          <rect x="460" y="20" width="200" height="110" rx="12"
-                fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.4)" stroke-width="1.5"/>
-          <text x="560" y="51" text-anchor="middle" font-size="20">📋</text>
-          <text x="560" y="70" text-anchor="middle" fill="#7aa2f7" font-size="11.5" font-weight="700" font-family="Inter,-apple-system,sans-serif">Staging Area</text>
-          <text x="560" y="88" text-anchor="middle" fill="#565f89" font-size="9" font-family="Inter,sans-serif">Files queued to commit</text>
-          <text x="560" y="115" text-anchor="middle" fill="#3a3a5a" font-size="8" font-family="JetBrains Mono,monospace">$ git diff --staged</text>
+          <!-- ── Stage 2: Staging Area (blue) ── -->
+          <rect x="244" y="38" width="150" height="104" rx="12" fill="rgba(122,162,247,0.09)" stroke="rgba(122,162,247,0.42)" stroke-width="1.5"/>
+          <text x="319" y="64" text-anchor="middle" font-size="16">📋</text>
+          <text x="319" y="84" text-anchor="middle" class="gitx-title" font-size="10.5" fill="#7aa2f7">Staging Area</text>
+          <text x="319" y="101" text-anchor="middle" class="gitx-note" font-size="8.3">Picked to save next</text>
 
-          <!-- Local Repository (bottom-right, green) -->
-          <rect x="460" y="300" width="200" height="110" rx="12"
-                fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.4)" stroke-width="1.5"/>
-          <text x="560" y="331" text-anchor="middle" font-size="20">💾</text>
-          <text x="560" y="350" text-anchor="middle" fill="#9ece6a" font-size="11.5" font-weight="700" font-family="Inter,-apple-system,sans-serif">Local Repository</text>
-          <text x="560" y="368" text-anchor="middle" fill="#565f89" font-size="9" font-family="Inter,sans-serif">Saved snapshots (.git)</text>
-          <text x="560" y="395" text-anchor="middle" fill="#3a3a5a" font-size="8" font-family="JetBrains Mono,monospace">$ git log --oneline</text>
+          <!-- ── Stage 3: Local Repository (green) ── -->
+          <rect x="466" y="38" width="150" height="104" rx="12" fill="rgba(158,206,106,0.09)" stroke="rgba(158,206,106,0.42)" stroke-width="1.5"/>
+          <text x="541" y="64" text-anchor="middle" font-size="16">💾</text>
+          <text x="541" y="84" text-anchor="middle" class="gitx-title" font-size="10" fill="#9ece6a">Local Repository</text>
+          <text x="541" y="101" text-anchor="middle" class="gitx-note" font-size="8.3">Saved on your computer</text>
 
-          <!-- Remote / GitHub (bottom-left, purple) -->
-          <rect x="20" y="300" width="200" height="110" rx="12"
-                fill="rgba(187,154,247,0.09)" stroke="rgba(187,154,247,0.4)" stroke-width="1.5"/>
-          <text x="120" y="331" text-anchor="middle" font-size="20">☁️</text>
-          <text x="120" y="350" text-anchor="middle" fill="#bb9af7" font-size="11.5" font-weight="700" font-family="Inter,-apple-system,sans-serif">Remote (GitHub)</text>
-          <text x="120" y="368" text-anchor="middle" fill="#565f89" font-size="9" font-family="Inter,sans-serif">Shared repo online</text>
-          <text x="120" y="395" text-anchor="middle" fill="#3a3a5a" font-size="8" font-family="JetBrains Mono,monospace">$ git remote -v</text>
+          <!-- ── Stage 4: Remote (purple) ── -->
+          <rect x="688" y="38" width="150" height="104" rx="12" fill="rgba(187,154,247,0.09)" stroke="rgba(187,154,247,0.42)" stroke-width="1.5"/>
+          <text x="763" y="64" text-anchor="middle" font-size="16">☁️</text>
+          <text x="763" y="84" text-anchor="middle" class="gitx-title" font-size="10.5" fill="#bb9af7">Remote (GitHub)</text>
+          <text x="763" y="101" text-anchor="middle" class="gitx-note" font-size="8.3">Shared online for others</text>
 
+          <!-- ── Arrows between stages (coloured by destination) ── -->
+          <line x1="178" y1="124" x2="238" y2="124" stroke="#7aa2f7" stroke-width="1.6" marker-end="url(#gitx-arr-blue)"/>
+          <line x1="400" y1="124" x2="460" y2="124" stroke="#9ece6a" stroke-width="1.6" marker-end="url(#gitx-arr-green)"/>
+          <line x1="622" y1="124" x2="682" y2="124" stroke="#bb9af7" stroke-width="1.6" marker-end="url(#gitx-arr-purple)"/>
 
-          <!-- ── Horizontal arrows (top row) ── -->
+          <!-- ── Command labels under each arrow ── -->
+          <line x1="208" y1="127" x2="208" y2="153" stroke="#7aa2f7" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.4"/>
+          <rect x="179" y="154" width="58" height="18" rx="9" fill="rgba(122,162,247,0.14)"/>
+          <text x="208" y="166" text-anchor="middle" class="gitx-cmd" font-size="8.5" fill="#7aa2f7">git add</text>
 
-          <!-- git add → (Working Dir right → Staging left) -->
-          <line x1="221" y1="60" x2="459" y2="60" stroke="#9ece6a" stroke-width="1.5" marker-end="url(#g-arr)"/>
-          <rect x="290" y="45" width="100" height="20" rx="10" fill="#0c2515"/>
-          <text x="340" y="59" text-anchor="middle" fill="#9ece6a" font-size="9" font-weight="600" font-family="JetBrains Mono,monospace">git add</text>
+          <line x1="430" y1="127" x2="430" y2="153" stroke="#9ece6a" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.4"/>
+          <rect x="394" y="154" width="72" height="18" rx="9" fill="rgba(158,206,106,0.14)"/>
+          <text x="430" y="166" text-anchor="middle" class="gitx-cmd" font-size="8.5" fill="#9ece6a">git commit</text>
 
-          <!-- git restore --staged ← (Staging left → Working Dir right) -->
-          <line x1="459" y1="92" x2="221" y2="92" stroke="#f7768e" stroke-width="1.5" marker-end="url(#o-arr)"/>
-          <rect x="237" y="77" width="206" height="20" rx="10" fill="#2d0c14"/>
-          <text x="340" y="91" text-anchor="middle" fill="#f7768e" font-size="8.5" font-weight="600" font-family="JetBrains Mono,monospace">git restore --staged</text>
+          <line x1="652" y1="127" x2="652" y2="153" stroke="#bb9af7" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.4"/>
+          <rect x="621" y="154" width="62" height="18" rx="9" fill="rgba(187,154,247,0.14)"/>
+          <text x="652" y="166" text-anchor="middle" class="gitx-cmd" font-size="8.5" fill="#bb9af7">git push</text>
 
-
-          <!-- ── Vertical arrows (right column) ── -->
-
-          <!-- git commit ↓ (Staging bottom → Local top, x=578) -->
-          <line x1="578" y1="131" x2="578" y2="299" stroke="#9ece6a" stroke-width="1.5" marker-end="url(#g-arr)"/>
-
-          <!-- git reset --soft ↑ (Local top → Staging bottom, x=542) -->
-          <line x1="542" y1="299" x2="542" y2="131" stroke="#f7768e" stroke-width="1.5" marker-end="url(#o-arr)"/>
-
-          <!-- Label pills for vertical arrows, placed in center gap with dashed connectors -->
-          <!-- git commit label -->
-          <rect x="290" y="197" width="100" height="20" rx="10" fill="#0c2515"/>
-          <text x="340" y="211" text-anchor="middle" fill="#9ece6a" font-size="9" font-weight="600" font-family="JetBrains Mono,monospace">git commit</text>
-          <line x1="390" y1="207" x2="577" y2="207" stroke="#9ece6a" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.35"/>
-
-          <!-- git reset --soft label -->
-          <rect x="255" y="226" width="148" height="20" rx="10" fill="#2d0c14"/>
-          <text x="329" y="240" text-anchor="middle" fill="#f7768e" font-size="8.5" font-weight="600" font-family="JetBrains Mono,monospace">git reset --soft</text>
-          <line x1="403" y1="236" x2="541" y2="236" stroke="#f7768e" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.35"/>
-
-
-          <!-- ── Horizontal arrows (bottom row) ── -->
-
-          <!-- git push ← (Local left → Remote right) -->
-          <line x1="459" y1="320" x2="221" y2="320" stroke="#7aa2f7" stroke-width="1.5" marker-end="url(#b-arr)"/>
-          <rect x="289" y="305" width="102" height="20" rx="10" fill="#0a1428"/>
-          <text x="340" y="319" text-anchor="middle" fill="#7aa2f7" font-size="9" font-weight="600" font-family="JetBrains Mono,monospace">git push</text>
-
-          <!-- git fetch → (Remote right → Local left) -->
-          <line x1="221" y1="356" x2="459" y2="356" stroke="#bb9af7" stroke-width="1.5" marker-end="url(#p-arr)"/>
-          <rect x="283" y="341" width="114" height="20" rx="10" fill="#1c0a2d"/>
-          <text x="340" y="355" text-anchor="middle" fill="#bb9af7" font-size="9" font-weight="600" font-family="JetBrains Mono,monospace">git fetch</text>
-
-
-          <!-- ── Vertical arrow (left column) ── -->
-
-          <!-- git pull ↑ (Remote top → Working Dir bottom, x=93) -->
-          <line x1="93" y1="299" x2="93" y2="131" stroke="#bb9af7" stroke-width="1.5" marker-end="url(#p-arr)"/>
-          <rect x="14" y="197" width="74" height="20" rx="10" fill="#1c0a2d"/>
-          <text x="51" y="211" text-anchor="middle" fill="#bb9af7" font-size="9" font-weight="600" font-family="JetBrains Mono,monospace">git pull</text>
-          <line x1="88" y1="207" x2="93" y2="207" stroke="#bb9af7" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.35"/>
-
-
-          <!-- ── Center note ── -->
-          <text x="340" y="272" text-anchor="middle" fill="#2a2a40" font-size="8" font-family="Inter,sans-serif">git pull = git fetch + git merge</text>
+          <!-- ── The travelling "changed file" dot ── -->
+          <g class="gitx-dot">
+            <circle cx="97" cy="124" r="12"  fill="rgba(116,232,207,0.18)"/>
+            <circle cx="97" cy="124" r="6.5" fill="#5fe0c4"/>
+            <circle cx="95.5" cy="122" r="2" fill="#eafff9"/>
+          </g>
         </svg>
       </div>
 
-      <!-- Legend row -->
-      <div style="display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:1.5rem;font-size:0.74rem;font-family:'JetBrains Mono',monospace;">
-        <span style="color:#9ece6a;">● add / commit</span>
-        <span style="color:#7aa2f7;">● push (upload)</span>
-        <span style="color:#bb9af7;">● fetch / pull (download)</span>
-        <span style="color:#f7768e;">● restore / reset (undo)</span>
+      <div class="gitx-legend">
+        <span class="gitx-legend-item"><span class="gitx-legend-dot"></span> The glowing dot is your changed file</span>
+        <span class="gitx-legend-item">Each arrow is the command that moves it: <code>add</code> → <code>commit</code> → <code>push</code></span>
+      </div>
+
+      <div class="block-desc">
+        <span>Bonus: a <strong>branch</strong> is a safe side-copy where you try new work, then <code>git merge</code> folds it back into <code>main</code>.</span>
+        <a class="w3-link" href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell" target="_blank">Git Book →</a>
+      </div>
+
+      <div class="gitx-panel">
+        <svg class="gitx-svg gitx-branch-svg" viewBox="0 0 400 108" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="A feature branch splits off from main, gains two commits, then merges back into main.">
+          <!-- main line -->
+          <line x1="26" y1="68" x2="374" y2="68" stroke="#7aa2f7" stroke-width="2.4" stroke-linecap="round"/>
+          <!-- feature branch that forks off and merges back -->
+          <path d="M118,68 C142,68 142,34 166,34 L246,34 C272,34 272,68 298,68" fill="none" stroke="#9ece6a" stroke-width="2.4" stroke-linecap="round"/>
+          <!-- commits on main -->
+          <circle cx="60"  cy="68" r="5.5" fill="#7aa2f7"/>
+          <circle cx="118" cy="68" r="5.5" fill="#7aa2f7"/>
+          <circle cx="348" cy="68" r="5.5" fill="#7aa2f7"/>
+          <!-- commits on the feature branch -->
+          <circle cx="186" cy="34" r="5.5" fill="#9ece6a"/>
+          <circle cx="242" cy="34" r="5.5" fill="#9ece6a"/>
+          <!-- merge commit -->
+          <circle cx="298" cy="68" r="6"   fill="#bb9af7"/>
+          <!-- labels -->
+          <text x="214" y="23" text-anchor="middle" class="gitx-cmd" font-size="8.5" fill="#9ece6a">feature branch</text>
+          <text x="118" y="90" text-anchor="middle" class="gitx-note" font-size="8">git switch -c</text>
+          <text x="298" y="92" text-anchor="middle" class="gitx-cmd" font-size="8.5" fill="#bb9af7">git merge</text>
+          <text x="348" y="90" text-anchor="middle" class="gitx-cmd" font-size="8.5" fill="#7aa2f7">main</text>
+        </svg>
       </div>
     </section>
+
+    <div class="level-label beginner">🌱 Beginner</div>
 
 
     <!-- ══ KEY CONCEPTS ═══════════════════════════════════════════════ -->
@@ -513,6 +696,41 @@ git config --list</pre>
     <section id="basics">
       <h2>Stage &amp; Commit</h2>
 
+      <!-- gitx2: a changed file travels add → commit -->
+      <div class="gitx2-panel">
+        <svg class="gitx2-svg" viewBox="0 0 520 94" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="A changed file is staged with git add, then saved with git commit.">
+          <defs>
+            <marker id="gitx2-arr-b1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7aa2f7"/></marker>
+            <marker id="gitx2-arr-g1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#9ece6a"/></marker>
+          </defs>
+          <line class="gitx2-rail" x1="80" y1="48" x2="440" y2="48"/>
+
+          <rect x="18"  y="16" width="124" height="60" rx="10" fill="rgba(224,175,104,0.10)" stroke="rgba(224,175,104,0.4)" stroke-width="1.4"/>
+          <text x="80"  y="42" text-anchor="middle" font-size="15">📝</text>
+          <text x="80"  y="62" text-anchor="middle" class="gitx2-label" font-size="9.5">Working dir</text>
+
+          <rect x="198" y="16" width="124" height="60" rx="10" fill="rgba(122,162,247,0.10)" stroke="rgba(122,162,247,0.4)" stroke-width="1.4"/>
+          <text x="260" y="42" text-anchor="middle" font-size="15">📋</text>
+          <text x="260" y="62" text-anchor="middle" class="gitx2-label" font-size="9.5">Staged</text>
+
+          <rect x="378" y="16" width="124" height="60" rx="10" fill="rgba(158,206,106,0.10)" stroke="rgba(158,206,106,0.4)" stroke-width="1.4"/>
+          <text x="440" y="42" text-anchor="middle" font-size="15">💾</text>
+          <text x="440" y="62" text-anchor="middle" class="gitx2-label" font-size="9.5">Committed</text>
+
+          <line x1="146" y1="48" x2="194" y2="48" stroke="#7aa2f7" stroke-width="1.5" marker-end="url(#gitx2-arr-b1)"/>
+          <text x="170" y="90" text-anchor="middle" class="gitx2-mono" font-size="8.5" fill="#7aa2f7">git add</text>
+          <line x1="326" y1="48" x2="374" y2="48" stroke="#9ece6a" stroke-width="1.5" marker-end="url(#gitx2-arr-g1)"/>
+          <text x="350" y="90" text-anchor="middle" class="gitx2-mono" font-size="8.5" fill="#9ece6a">git commit</text>
+
+          <g class="gitx2-stage-dot">
+            <circle class="gitx2-filedot-halo" cx="80" cy="48" r="10"/>
+            <circle class="gitx2-filedot"      cx="80" cy="48" r="5.5"/>
+          </g>
+        </svg>
+      </div>
+      <p class="gitx2-cap">The glowing file moves right as you run each command: <code>git add</code> stages your edits, then <code>git commit</code> saves them as a snapshot.</p>
+
       <div class="block-desc">
         <span>The core git loop: edit → add → commit. Repeat forever.</span>
         <a class="w3-link" href="https://git-scm.com/docs/git-add" target="_blank">git-add docs →</a>
@@ -595,6 +813,35 @@ git diff --staged</pre>
     <!-- ══ REMOTE ═════════════════════════════════════════════════════ -->
     <section id="remote">
       <h2>Push &amp; Pull (Remote)</h2>
+
+      <!-- gitx2: one commit pushes out, another pulls back -->
+      <div class="gitx2-panel">
+        <svg class="gitx2-svg" viewBox="0 0 520 104" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="One commit flows from your local repository to the remote with git push; another comes back with git pull.">
+          <defs>
+            <marker id="gitx2-arr-g2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#9ece6a"/></marker>
+            <marker id="gitx2-arr-p2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#bb9af7"/></marker>
+          </defs>
+
+          <rect x="22"  y="26" width="130" height="58" rx="10" fill="rgba(122,162,247,0.10)" stroke="rgba(122,162,247,0.4)" stroke-width="1.4"/>
+          <text x="87"  y="52" text-anchor="middle" font-size="15">💻</text>
+          <text x="87"  y="73" text-anchor="middle" class="gitx2-label" font-size="9.5">Local repo</text>
+
+          <rect x="368" y="26" width="130" height="58" rx="10" fill="rgba(187,154,247,0.10)" stroke="rgba(187,154,247,0.4)" stroke-width="1.4"/>
+          <text x="433" y="52" text-anchor="middle" font-size="15">☁️</text>
+          <text x="433" y="73" text-anchor="middle" class="gitx2-label" font-size="9.5">Remote</text>
+
+          <line x1="150" y1="44" x2="372" y2="44" stroke="#9ece6a" stroke-width="1.4" marker-end="url(#gitx2-arr-g2)"/>
+          <text x="261" y="36" text-anchor="middle" class="gitx2-mono" font-size="8.5" fill="#9ece6a">git push</text>
+
+          <line x1="370" y1="72" x2="148" y2="72" stroke="#bb9af7" stroke-width="1.4" marker-end="url(#gitx2-arr-p2)"/>
+          <text x="259" y="92" text-anchor="middle" class="gitx2-mono" font-size="8.5" fill="#bb9af7">git pull</text>
+
+          <g class="gitx2-push-dot"><circle cx="150" cy="44" r="5" fill="#9ece6a"/></g>
+          <g class="gitx2-pull-dot"><circle cx="370" cy="72" r="5" fill="#bb9af7"/></g>
+        </svg>
+      </div>
+      <p class="gitx2-cap"><code>git push</code> uploads your commits to the remote; <code>git pull</code> brings others' commits down (<code>git clone</code> does the very first download).</p>
 
       <div class="block-desc">
         <span>Connect to GitHub and sync changes. The remote is usually named <code>origin</code>.</span>
@@ -746,6 +993,31 @@ git push --force-with-lease</pre>
     <section id="branching">
       <h2>Branches</h2>
 
+      <!-- gitx2: a commit forks onto a feature line, then merges back -->
+      <div class="gitx2-panel">
+        <svg class="gitx2-svg" viewBox="0 0 520 118" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="A feature branch splits off main, gains a commit, and is merged back in.">
+          <line x1="40" y1="78" x2="482" y2="78" stroke="#7aa2f7" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M150,78 C176,78 176,40 202,40 L300,40 C328,40 328,78 356,78" fill="none" stroke="#9ece6a" stroke-width="2.4" stroke-linecap="round"/>
+
+          <circle cx="90"  cy="78" r="6"   fill="#7aa2f7"/>
+          <circle cx="150" cy="78" r="6"   fill="#7aa2f7"/>
+          <circle cx="430" cy="78" r="6"   fill="#7aa2f7"/>
+          <circle cx="356" cy="78" r="6.5" fill="#bb9af7"/>
+
+          <text x="251" y="30"  text-anchor="middle" class="gitx2-mono" font-size="8.5" fill="#9ece6a">feature</text>
+          <text x="150" y="102" text-anchor="middle" class="gitx2-mono" font-size="8"   fill="#9ece6a">git switch -c</text>
+          <text x="356" y="102" text-anchor="middle" class="gitx2-mono" font-size="8"   fill="#bb9af7">git merge</text>
+          <text x="460" y="70"  text-anchor="middle" class="gitx2-mono" font-size="8.5" fill="#7aa2f7">main</text>
+
+          <g class="gitx2-branch-dot">
+            <circle cx="150" cy="78" r="9"   fill="#9ece6a" opacity="0.2"/>
+            <circle cx="150" cy="78" r="5.5" fill="#9ece6a"/>
+          </g>
+        </svg>
+      </div>
+      <p class="gitx2-cap"><code>git branch</code> / <code>git switch -c</code> forks a safe line off <code>main</code>; <code>git merge</code> folds the finished work back in.</p>
+
       <!-- Branch diagram -->
       <div class="git-diagram">
         <div class="git-line">
@@ -835,6 +1107,24 @@ git branch -D feature/login</pre>
     <section id="undo">
       <h2>Undo Things</h2>
 
+      <!-- gitx2: HEAD slides back a commit; the undone one dims -->
+      <div class="gitx2-panel">
+        <svg class="gitx2-svg" viewBox="0 0 520 88" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="HEAD moves back one commit as git reset HEAD~1 undoes the latest commit.">
+          <line x1="130" y1="66" x2="390" y2="66" stroke="#7aa2f7" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="130" cy="66" r="7" fill="#7aa2f7"/>
+          <circle cx="260" cy="66" r="7" fill="#7aa2f7"/>
+          <g class="gitx2-undo-c3"><circle cx="390" cy="66" r="7" fill="#7aa2f7"/></g>
+
+          <g class="gitx2-head">
+            <rect x="368" y="20" width="44" height="18" rx="9" fill="rgba(247,118,142,0.16)" stroke="rgba(247,118,142,0.45)" stroke-width="1"/>
+            <text x="390" y="33" text-anchor="middle" class="gitx2-mono" font-size="9" fill="#f7768e">HEAD</text>
+            <path d="M383,42 L397,42 L390,53 Z" fill="#f7768e"/>
+          </g>
+        </svg>
+      </div>
+      <p class="gitx2-cap"><code>git reset HEAD~1</code> walks <strong>HEAD</strong> back a commit; once a commit is already pushed, reach for <code>git revert</code> instead.</p>
+
       <div class="tip-box warn">
         <span class="tip-icon">⚠️</span>
         <span><strong>Never</strong> use <code>git reset --hard</code> or <code>git push --force</code> on shared branches — it rewrites history for everyone. Use <code>git revert</code> on shared branches instead.</span>
@@ -892,6 +1182,25 @@ git checkout a3f1c2d</pre>
     <section id="inspect">
       <h2>Inspect &amp; Search</h2>
 
+      <!-- gitx2: a magnifier glides across history, changing nothing -->
+      <div class="gitx2-panel">
+        <svg class="gitx2-svg" viewBox="0 0 520 96" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="A magnifier glides across the commit history; inspecting never changes anything.">
+          <line class="gitx2-rail" x1="80" y1="56" x2="440" y2="56"/>
+          <circle cx="80"  cy="56" r="6" fill="#7aa2f7"/>
+          <circle cx="170" cy="56" r="6" fill="#9ece6a"/>
+          <circle cx="260" cy="56" r="6" fill="#7aa2f7"/>
+          <circle cx="350" cy="56" r="6" fill="#9ece6a"/>
+          <circle cx="440" cy="56" r="6" fill="#7aa2f7"/>
+          <text x="260" y="24" text-anchor="middle" class="gitx2-mono gitx2-label" font-size="8.5">commit history (read-only)</text>
+          <g class="gitx2-lens">
+            <circle class="gitx2-lens-glass"  cx="80" cy="56" r="15"/>
+            <line   class="gitx2-lens-handle" x1="90.6" y1="66.6" x2="101" y2="77"/>
+          </g>
+        </svg>
+      </div>
+      <p class="gitx2-cap"><code>git log</code>, <code>git diff</code> and <code>git status</code> only read your history &mdash; the lens looks it over without editing a thing.</p>
+
       <div class="block-desc">
         <span>Find what changed, who changed it, and when — all without breaking anything.</span>
         <a class="w3-link" href="https://git-scm.com/docs/git-log" target="_blank">git-log docs →</a>
@@ -941,6 +1250,28 @@ git bisect good a3f1c2d  <span class="c"># this commit was fine</span></pre>
     <!-- ══ STASH ══════════════════════════════════════════════════════ -->
     <section id="stash">
       <h2>Stash</h2>
+
+      <!-- gitx2: WIP changes tuck into a drawer, then pop back out -->
+      <div class="gitx2-panel">
+        <svg class="gitx2-svg" viewBox="0 0 520 136" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="Uncommitted changes slide into a drawer with git stash, then return with git stash pop.">
+          <rect class="gitx2-drawer" x="178" y="62" width="164" height="58" rx="8"/>
+
+          <g class="gitx2-card">
+            <rect x="214" y="16" width="92" height="46" rx="7" fill="rgba(224,175,104,0.16)" stroke="rgba(224,175,104,0.5)" stroke-width="1.4"/>
+            <line x1="226" y1="30" x2="294" y2="30" stroke="#e0af68" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+            <line x1="226" y1="40" x2="282" y2="40" stroke="#e0af68" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+            <line x1="226" y1="50" x2="290" y2="50" stroke="#e0af68" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          </g>
+
+          <rect class="gitx2-drawer-front" x="172" y="92" width="176" height="34" rx="8"/>
+          <line class="gitx2-drawer-handle" x1="242" y1="109" x2="278" y2="109"/>
+
+          <text x="400" y="78"  class="gitx2-mono" font-size="8.5" fill="#e0af68">git stash</text>
+          <text x="400" y="114" class="gitx2-mono" font-size="8.5" fill="#9ece6a">git stash pop</text>
+        </svg>
+      </div>
+      <p class="gitx2-cap"><code>git stash</code> tucks unfinished work out of the way so you can switch tasks; <code>git stash pop</code> brings it right back.</p>
 
       <div class="block-desc">
         <span>Temporarily shelve work so you can switch context without committing unfinished changes.</span>
@@ -1038,7 +1369,7 @@ node_modules/
 
   <footer>Git cheatsheet &mdash; beginner to advanced reference &mdash; open in any browser</footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=8"></script>
   <script>
     function replayChat() {
       const flow = document.getElementById('chat-flow');

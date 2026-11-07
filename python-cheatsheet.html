@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
   <style>
     .c-kw { color:#bb9af7; }
     .c-fn { color:#7aa2f7; }
@@ -12,6 +12,110 @@
     .c-cm { color:#565f89; }
     .c-num { color:#ff9e64; }
     .c-pre { color:#e0af68; }
+  </style>
+  <style>
+    /* ===== pyx2-: per-section concept animations (multi-colour, calm) ===== */
+    .pyx2-strip{
+      --p-amber:#e0b366; --p-rose:#e8808f; --p-blue:#7aa2f7;
+      --p-green:#9ece6a; --p-violet:#bb9af7;
+      display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:0.6rem 0.95rem;
+      margin:0.3rem 0 1.15rem;
+    }
+    .pyx2-strip svg{ flex:0 0 auto; display:block; height:auto; overflow:visible; }
+    .pyx2-cap{ margin:0; color:var(--text-muted); font-size:0.82rem; line-height:1.45; max-width:40ch; }
+    .pyx2-cap b{ color:var(--text); font-weight:600; font-family:var(--display),sans-serif; }
+    .pyx2-cap code{ font-family:ui-monospace,monospace; font-size:0.9em; color:var(--accent); }
+    @media (max-width:560px){
+      .pyx2-strip{ gap:0.55rem; }
+      .pyx2-strip svg{ max-width:100%; }
+    }
+
+    /* shared svg primitives (theme-aware) */
+    .pyx2-box{ fill:var(--surface-2); stroke:var(--border); stroke-width:1.5; }
+    .pyx2-ringc{ fill:none; stroke:var(--border); stroke-width:2; }
+    .pyx2-t{ fill:var(--text); font-family:var(--display),ui-sans-serif,sans-serif; font-weight:700; }
+    .pyx2-mono{ fill:var(--text); font-family:ui-monospace,monospace; }
+    .pyx2-muted{ fill:var(--text-muted); font-family:ui-monospace,monospace; }
+    .pyx2-arrow{ stroke:var(--text-muted); stroke-width:1.5; fill:none; }
+    .pyx2-ah{ fill:var(--text-muted); }
+    .pyx2-hl{ fill:none; stroke:var(--accent); stroke-width:2; }
+    .pyx2-dotA{ fill:var(--accent); }
+
+    /* animations */
+    .pyx2-pop{ animation:pyx2-pop 3.2s ease-in-out infinite; }
+    @keyframes pyx2-pop{ 0%,18%{opacity:0;transform:translateY(4px)} 40%,80%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(4px)} }
+
+    .pyx2-sweepA{ animation:pyx2-sweepA 5.5s ease-in-out infinite; }
+    @keyframes pyx2-sweepA{
+      0%,14%{transform:translateX(0)}
+      20%,34%{transform:translateX(40px)}
+      40%,54%{transform:translateX(80px)}
+      60%,74%{transform:translateX(120px)}
+      80%,100%{transform:translateX(160px)}
+    }
+
+    .pyx2-drop{ animation:pyx2-drop 3.6s ease-in-out infinite; }
+    @keyframes pyx2-drop{ 0%{opacity:0;transform:translateY(-18px)} 25%,80%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-18px)} }
+
+    .pyx2-append{ animation:pyx2-append 3.8s ease-in-out infinite; }
+    @keyframes pyx2-append{ 0%{opacity:0;transform:translateX(30px)} 30%,85%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(30px)} }
+
+    .pyx2-branch{ animation:pyx2-branch 4.2s ease-in-out infinite; }
+    @keyframes pyx2-branch{
+      0%{opacity:0;transform:translate(0,0)}
+      12%{opacity:1}
+      45%{transform:translate(0,18px)}
+      80%{transform:translate(-56px,56px)}
+      92%{opacity:1}
+      100%{opacity:0;transform:translate(-56px,56px)}
+    }
+
+    .pyx2-orbit{ transform-box:fill-box; transform-origin:center; animation:pyx2-spin 5s linear infinite; }
+    @keyframes pyx2-spin{ to{ transform:rotate(360deg); } }
+
+    .pyx2-pipe{ fill:#7aa2f7; animation:pyx2-pipe 4s ease-in-out infinite; }
+    @keyframes pyx2-pipe{
+      0%{opacity:0;transform:translateX(0);fill:#7aa2f7}
+      12%{opacity:1}
+      48%{transform:translateX(85px);fill:#7aa2f7}
+      56%{fill:#9ece6a}
+      88%{opacity:1;transform:translateX(170px);fill:#9ece6a}
+      100%{opacity:0;transform:translateX(170px);fill:#9ece6a}
+    }
+
+    .pyx2-import{ animation:pyx2-import 3.4s ease-in-out infinite; }
+    @keyframes pyx2-import{ 0%{opacity:0;transform:translateX(0)} 15%{opacity:1} 85%{opacity:1;transform:translateX(78px)} 100%{opacity:0;transform:translateX(78px)} }
+
+    .pyx2-readline{ animation:pyx2-readline 4.6s ease-in-out infinite; }
+    @keyframes pyx2-readline{
+      0%,16%{transform:translateY(0)}
+      25%,41%{transform:translateY(12px)}
+      50%,66%{transform:translateY(24px)}
+      75%,91%{transform:translateY(36px)}
+      100%{transform:translateY(0)}
+    }
+
+    .pyx2-dash{ stroke-dasharray:4 4; stroke-width:1.8; fill:none; animation:pyx2-dash 1.6s linear infinite; }
+    @keyframes pyx2-dash{ to{ stroke-dashoffset:-16; } }
+
+    .pyx2-slidein{ animation:pyx2-slidein 3.6s ease-in-out infinite; }
+    @keyframes pyx2-slidein{ 0%{opacity:0;transform:translateX(26px)} 28%,82%{opacity:1;transform:translateX(0)} 100%{opacity:0;transform:translateX(26px)} }
+
+    .pyx2-yield{ opacity:0; animation:pyx2-yield 4.8s ease-in-out infinite; }
+    @keyframes pyx2-yield{ 0%{opacity:0;transform:translateX(0)} 8%{opacity:1} 30%{opacity:1;transform:translateX(70px)} 40%,100%{opacity:0;transform:translateX(70px)} }
+
+    @media (prefers-reduced-motion:reduce){
+      .pyx2-pop,.pyx2-drop,.pyx2-append,.pyx2-branch,.pyx2-pipe,.pyx2-import,.pyx2-slidein,
+      .pyx2-sweepA,.pyx2-readline,.pyx2-orbit,.pyx2-dash,.pyx2-yield{ animation:none !important; }
+      .pyx2-pop,.pyx2-drop,.pyx2-append,.pyx2-branch,.pyx2-pipe,.pyx2-import,.pyx2-slidein{ opacity:1 !important; transform:none !important; }
+      .pyx2-pipe{ fill:#9ece6a !important; }
+      .pyx2-yield{ opacity:0 !important; }
+      .pyx2-ykeep{ opacity:1 !important; transform:none !important; }
+    }
   </style>
 </head>
 <body>
@@ -31,15 +135,16 @@
     </div>
   </aside>
   <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-  <script src="js/header.js"></script>
+  <script src="js/header.js?v=8"></script>
   <script>renderHeader('Python')</script>
   <script>renderSourceLink('Python')</script>
   <main>
     <div class="page-header">
       <h1>Python</h1>
-      <p class="subtitle">Quick reference with live previews</p>
+      <p class="subtitle">A beginner-friendly guide to Python, with examples you can watch run.</p>
       <span id="source-link"></span>
       <nav class="toc">
+        <a href="#how-it-works">How it works</a>
         <a href="#getting-started">Start</a>
         <a href="#strings">Strings</a>
         <a href="#lists">Lists</a>
@@ -54,9 +159,182 @@
       </nav>
     </div>
 
+    <!-- How it works (animated explainer) -->
+    <section id="how-it-works">
+      <style>
+        .pyx-wrap { margin: 0.5rem 0 1rem; }
+        .pyx-lead {
+          color: var(--text-muted);
+          font-size: 0.95rem;
+          margin: 0 0 1rem;
+          max-width: 60ch;
+        }
+        .pyx-card {
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 1.1rem 1.2rem 1.3rem;
+          margin-bottom: 1rem;
+        }
+        .pyx-card h3 {
+          font-family: var(--display);
+          font-size: 1.02rem;
+          margin: 0 0 0.15rem;
+          color: var(--text);
+        }
+        .pyx-sub {
+          color: var(--text-muted);
+          font-size: 0.82rem;
+          margin: 0 0 0.9rem;
+        }
+
+        /* ---- Part 1: how Python runs (SVG pipeline) ---- */
+        .pyx-flowsvg { width: 100%; height: auto; display: block; }
+        .pyx-stage { fill: var(--surface-2); stroke: var(--border); stroke-width: 1.5; }
+        .pyx-stage--run { stroke: var(--accent-2); animation: pyx-glow 2.6s ease-in-out infinite; }
+        .pyx-stage-t { fill: var(--text); font-size: 15px; font-weight: 600; font-family: var(--display), sans-serif; }
+        .pyx-stage-s { fill: var(--text-muted); font-size: 11px; }
+        .pyx-arrow { stroke: var(--text-muted); stroke-width: 2; fill: none; }
+        .pyx-arrowhead { fill: var(--text-muted); }
+        .pyx-token { animation: pyx-flow 6s cubic-bezier(.5,0,.5,1) infinite; }
+        .pyx-token-dot { fill: var(--accent); }
+        .pyx-token-t { fill: #fff; font-size: 11px; font-weight: 700; font-family: var(--display), sans-serif; }
+        @keyframes pyx-flow {
+          0%   { transform: translateX(0px);   opacity: 0; }
+          8%   { transform: translateX(0px);   opacity: 1; }
+          34%  { transform: translateX(185px); opacity: 1; }
+          50%  { transform: translateX(185px); opacity: 1; }
+          80%  { transform: translateX(380px); opacity: 1; }
+          94%  { transform: translateX(380px); opacity: 1; }
+          100% { transform: translateX(380px); opacity: 0; }
+        }
+        @keyframes pyx-glow {
+          0%, 100% { stroke-width: 1.5; filter: none; }
+          50%      { stroke-width: 2.5; }
+        }
+
+        /* ---- Part 2: data types grid ---- */
+        .pyx-types {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.6rem;
+        }
+        @media (max-width: 560px) { .pyx-types { grid-template-columns: repeat(2, 1fr); } }
+        .pyx-type {
+          background: var(--surface-2);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-sm, 8px);
+          padding: 0.6rem 0.65rem;
+          text-align: center;
+          animation: pyx-sweep 8s ease-in-out infinite;
+        }
+        .pyx-type-name {
+          font-family: var(--display), sans-serif;
+          font-weight: 700;
+          font-size: 0.9rem;
+          color: var(--accent);
+        }
+        .pyx-type-val {
+          display: block;
+          margin-top: 0.3rem;
+          font-family: ui-monospace, monospace;
+          font-size: 0.82rem;
+          color: var(--text);
+          background: var(--code-bg);
+          color: var(--code-text);
+          border-radius: 5px;
+          padding: 0.2rem 0.35rem;
+        }
+        @keyframes pyx-sweep {
+          0%   { border-color: var(--border); background: var(--surface-2); }
+          4%   { border-color: var(--accent-2); background: var(--accent-subtle); }
+          11%  { border-color: var(--accent-2); background: var(--accent-subtle); }
+          16%  { border-color: var(--border); background: var(--surface-2); }
+          100% { border-color: var(--border); background: var(--surface-2); }
+        }
+        .pyx-note {
+          color: var(--text-muted);
+          font-size: 0.82rem;
+          margin: 0.9rem 0 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .pyx-token { animation: none; opacity: 1; transform: translateX(185px); }
+          .pyx-stage--run { animation: none; }
+          .pyx-type { animation: none; border-color: var(--accent-2); background: var(--accent-subtle); }
+        }
+      </style>
+
+      <h2>How Python Works</h2>
+      <p class="pyx-lead">New to Python? Here are the two ideas to start with: how your code turns into results, and the kinds of values Python can hold.</p>
+
+      <div class="pyx-wrap">
+        <!-- Part 1 -->
+        <div class="pyx-card">
+          <h3>1. How your code runs</h3>
+          <p class="pyx-sub">You write a file, Python reads it, and you get an answer. Watch a piece of code flow through.</p>
+          <svg class="pyx-flowsvg" viewBox="0 0 560 150" role="img" aria-label="Your code file goes into the Python interpreter and comes out as output">
+            <!-- stage 1: code file -->
+            <rect class="pyx-stage" x="8" y="45" width="150" height="60" rx="12"></rect>
+            <text class="pyx-stage-t" x="83" y="72" text-anchor="middle">your_code.py</text>
+            <text class="pyx-stage-s" x="83" y="90" text-anchor="middle">you write this</text>
+            <!-- arrow 1 -->
+            <path class="pyx-arrow" d="M163 75 H200"></path>
+            <path class="pyx-arrowhead" d="M200 70 l10 5 l-10 5 z"></path>
+            <!-- stage 2: interpreter -->
+            <rect class="pyx-stage pyx-stage--run" x="215" y="45" width="150" height="60" rx="12"></rect>
+            <text class="pyx-stage-t" x="290" y="72" text-anchor="middle">Python</text>
+            <text class="pyx-stage-s" x="290" y="90" text-anchor="middle">reads &amp; runs it</text>
+            <!-- arrow 2 -->
+            <path class="pyx-arrow" d="M370 75 H407"></path>
+            <path class="pyx-arrowhead" d="M407 70 l10 5 l-10 5 z"></path>
+            <!-- stage 3: output -->
+            <rect class="pyx-stage" x="422" y="45" width="130" height="60" rx="12"></rect>
+            <text class="pyx-stage-t" x="487" y="72" text-anchor="middle">Output</text>
+            <text class="pyx-stage-s" x="487" y="90" text-anchor="middle">you see this</text>
+            <!-- travelling token -->
+            <g class="pyx-token">
+              <circle class="pyx-token-dot" cx="83" cy="128" r="13"></circle>
+              <text class="pyx-token-t" x="83" y="132" text-anchor="middle">run</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Part 2 -->
+        <div class="pyx-card">
+          <h3>2. The common data types</h3>
+          <p class="pyx-sub">Every value in Python has a type. These are the ones you will meet first &mdash; each box lights up in turn.</p>
+          <div class="pyx-types">
+            <div class="pyx-type" style="animation-delay:0s">   <span class="pyx-type-name">int</span>  <span class="pyx-type-val">5</span></div>
+            <div class="pyx-type" style="animation-delay:-1s">  <span class="pyx-type-name">float</span><span class="pyx-type-val">3.14</span></div>
+            <div class="pyx-type" style="animation-delay:-2s">  <span class="pyx-type-name">str</span>  <span class="pyx-type-val">"hi"</span></div>
+            <div class="pyx-type" style="animation-delay:-3s">  <span class="pyx-type-name">bool</span> <span class="pyx-type-val">True</span></div>
+            <div class="pyx-type" style="animation-delay:-4s">  <span class="pyx-type-name">list</span> <span class="pyx-type-val">[1, 2]</span></div>
+            <div class="pyx-type" style="animation-delay:-5s">  <span class="pyx-type-name">tuple</span><span class="pyx-type-val">(1, 2)</span></div>
+            <div class="pyx-type" style="animation-delay:-6s">  <span class="pyx-type-name">dict</span> <span class="pyx-type-val">{"k": 1}</span></div>
+            <div class="pyx-type" style="animation-delay:-7s">  <span class="pyx-type-name">set</span>  <span class="pyx-type-val">{1, 2}</span></div>
+          </div>
+          <p class="pyx-note">Note: you rarely say the type out loud &mdash; Python figures it out from the value you write.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Getting Started -->
     <section id="getting-started">
       <h2>Getting Started</h2>
+
+      <div class="pyx2-strip">
+        <svg width="240" height="58" viewBox="0 0 240 58" role="img" aria-label="print sends a value to the output console">
+          <rect class="pyx2-box" x="4" y="12" width="104" height="34" rx="8"/>
+          <text class="pyx2-mono" x="14" y="34" font-size="13"><tspan fill="#7aa2f7">print(</tspan><tspan fill="#9ece6a">"Hi"</tspan><tspan class="pyx2-muted">)</tspan></text>
+          <path class="pyx2-arrow" d="M112 29 H134"/>
+          <path class="pyx2-ah" d="M134 25 l8 4 l-8 4 z"/>
+          <rect class="pyx2-box" x="148" y="12" width="88" height="34" rx="6"/>
+          <text class="pyx2-muted" x="156" y="34" font-size="13">&gt;</text>
+          <text class="pyx2-pop" x="170" y="34" font-size="13" fill="#9ece6a" font-family="ui-monospace,monospace">Hi</text>
+        </svg>
+        <p class="pyx2-cap"><b>print()</b> sends a value to the screen; a <code>variable</code> stores one for later use.</p>
+      </div>
 
       <div class="block-desc">
         <span>Use <code>print()</code> to output text to the console.</span>
@@ -320,6 +598,28 @@ s += <span class="c-str">" World"</span>
     <section id="strings">
       <h2>Strings</h2>
 
+      <div class="pyx2-strip">
+        <svg width="206" height="66" viewBox="0 0 206 66" role="img" aria-label="characters of a string, each at an index, highlighted in turn">
+          <rect x="6" y="10" width="34" height="30" rx="7" fill="#e8808f" fill-opacity="0.16" stroke="#e8808f" stroke-width="1.5"/>
+          <text class="pyx2-t" x="23" y="31" font-size="15" text-anchor="middle">H</text>
+          <text class="pyx2-muted" x="23" y="58" font-size="11" text-anchor="middle">0</text>
+          <rect x="46" y="10" width="34" height="30" rx="7" fill="#e0b366" fill-opacity="0.16" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="pyx2-t" x="63" y="31" font-size="15" text-anchor="middle">e</text>
+          <text class="pyx2-muted" x="63" y="58" font-size="11" text-anchor="middle">1</text>
+          <rect x="86" y="10" width="34" height="30" rx="7" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="103" y="31" font-size="15" text-anchor="middle">l</text>
+          <text class="pyx2-muted" x="103" y="58" font-size="11" text-anchor="middle">2</text>
+          <rect x="126" y="10" width="34" height="30" rx="7" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="143" y="31" font-size="15" text-anchor="middle">l</text>
+          <text class="pyx2-muted" x="143" y="58" font-size="11" text-anchor="middle">3</text>
+          <rect x="166" y="10" width="34" height="30" rx="7" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="183" y="31" font-size="15" text-anchor="middle">o</text>
+          <text class="pyx2-muted" x="183" y="58" font-size="11" text-anchor="middle">4</text>
+          <rect class="pyx2-hl pyx2-sweepA" x="6" y="8" width="34" height="34" rx="8"/>
+        </svg>
+        <p class="pyx2-cap">A <b>string</b> is a sequence of characters, each reachable by its <code>index</code>.</p>
+      </div>
+
       <div class="block-desc">
         <span>Access individual characters using index <code>string[i]</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
@@ -557,6 +857,19 @@ s = <span class="c-str">"hello.py"</span>
     <section id="fstrings">
       <h2>F-Strings <span style="font-size:0.8rem;color:#565f89;font-weight:400;">(since Python 3.6+)</span></h2>
 
+      <div class="pyx2-strip">
+        <svg width="220" height="64" viewBox="0 0 220 64" role="img" aria-label="a value drops into an f-string placeholder">
+          <text class="pyx2-mono" x="6" y="44" font-size="14" fill="#9ece6a">f"Hi, </text>
+          <rect x="78" y="26" width="64" height="28" rx="6" fill="none" stroke="#bb9af7" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text class="pyx2-mono" x="150" y="44" font-size="14" fill="#9ece6a">"</text>
+          <g class="pyx2-drop">
+            <rect x="78" y="26" width="64" height="28" rx="6" fill="#e8808f" fill-opacity="0.18" stroke="#e8808f" stroke-width="1.5"/>
+            <text class="pyx2-t" x="110" y="45" font-size="13" text-anchor="middle">Eric</text>
+          </g>
+        </svg>
+        <p class="pyx2-cap">An <b>f-string</b> drops a value straight into the text: <code>f"Hi {name}"</code>.</p>
+      </div>
+
       <div class="block-desc">
         <span>Embed variables and expressions directly in strings with <code>f"{expr}"</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/python/python_strings.asp" target="_blank">W3Schools →</a>
@@ -670,6 +983,26 @@ age = <span class="c-num">74</span>
     <!-- Lists -->
     <section id="lists">
       <h2>Lists</h2>
+
+      <div class="pyx2-strip">
+        <svg width="196" height="64" viewBox="0 0 196 64" role="img" aria-label="a new item appends to the end of a list">
+          <rect x="6" y="12" width="42" height="30" rx="7" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="27" y="33" font-size="14" text-anchor="middle">10</text>
+          <text class="pyx2-muted" x="27" y="58" font-size="11" text-anchor="middle">0</text>
+          <rect x="54" y="12" width="42" height="30" rx="7" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="75" y="33" font-size="14" text-anchor="middle">20</text>
+          <text class="pyx2-muted" x="75" y="58" font-size="11" text-anchor="middle">1</text>
+          <rect x="102" y="12" width="42" height="30" rx="7" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="123" y="33" font-size="14" text-anchor="middle">30</text>
+          <text class="pyx2-muted" x="123" y="58" font-size="11" text-anchor="middle">2</text>
+          <g class="pyx2-append">
+            <rect x="150" y="12" width="42" height="30" rx="7" fill="#e0b366" fill-opacity="0.18" stroke="#e0b366" stroke-width="1.5"/>
+            <text class="pyx2-t" x="171" y="33" font-size="14" text-anchor="middle">40</text>
+            <text class="pyx2-muted" x="171" y="58" font-size="11" text-anchor="middle">3</text>
+          </g>
+        </svg>
+        <p class="pyx2-cap">A <b>list</b> keeps items in order; <code>.append()</code> adds a new one at the end.</p>
+      </div>
 
       <div class="block-desc">
         <span>Create lists with <code>[]</code> and generate values using <code>list()</code> or comprehensions.</span>
@@ -847,6 +1180,21 @@ li2 = li * <span class="c-num">2</span>
     <section id="flow-control">
       <h2>Flow Control</h2>
 
+      <div class="pyx2-strip">
+        <svg width="220" height="84" viewBox="0 0 220 84" role="img" aria-label="a condition sends the flow down the true or false branch">
+          <path class="pyx2-arrow" d="M110 30 L54 52"/>
+          <path class="pyx2-arrow" d="M110 30 L166 52"/>
+          <polygon points="110,6 132,24 110,42 88,24" fill="#e0b366" fill-opacity="0.16" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="pyx2-t" x="110" y="28" font-size="12" text-anchor="middle">if</text>
+          <rect x="14" y="54" width="60" height="22" rx="6" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="44" y="69" font-size="12" text-anchor="middle">True</text>
+          <rect x="126" y="54" width="60" height="22" rx="6" fill="#e8808f" fill-opacity="0.16" stroke="#e8808f" stroke-width="1.5"/>
+          <text class="pyx2-t" x="156" y="69" font-size="12" text-anchor="middle">False</text>
+          <circle class="pyx2-branch pyx2-dotA" cx="110" cy="6" r="6"/>
+        </svg>
+        <p class="pyx2-cap">An <code>if / else</code> sends the flow down one branch or the other.</p>
+      </div>
+
       <div class="block-desc">
         <span>Chain multiple conditions with <code>if</code>, <code>elif</code>, and <code>else</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/python/python_conditions.asp" target="_blank">W3Schools →</a>
@@ -948,6 +1296,23 @@ max_val = a <span class="c-kw">if</span> a &gt; b <span class="c-kw">else</span>
     <!-- Loops -->
     <section id="loops">
       <h2>Loops</h2>
+
+      <div class="pyx2-strip">
+        <svg width="80" height="72" viewBox="0 0 80 72" role="img" aria-label="a dot orbits a loop, repeating for each item">
+          <circle class="pyx2-ringc" cx="40" cy="36" r="20"/>
+          <circle cx="40" cy="16" r="3.5" fill="#9ece6a"/>
+          <circle cx="57" cy="46" r="3.5" fill="#e0b366"/>
+          <circle cx="23" cy="46" r="3.5" fill="#bb9af7"/>
+          <path d="M48 12 l6 2 l-2 6" fill="none" stroke="#7aa2f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g transform="translate(40,36)">
+            <g class="pyx2-orbit">
+              <circle class="pyx2-dotA" cx="0" cy="-20" r="5"/>
+              <circle cx="0" cy="20" r="5" fill="none"/>
+            </g>
+          </g>
+        </svg>
+        <p class="pyx2-cap">A <b>loop</b> repeats the same step once for each item: <code>for i in …</code>.</p>
+      </div>
 
       <div class="block-desc">
         <span>Iterate a fixed number of times using <code>for i in range()</code>.</span>
@@ -1135,6 +1500,27 @@ ages = [<span class="c-num">25</span>, <span class="c-num">30</span>, <span clas
     <section id="comprehensions">
       <h2>Comprehensions</h2>
 
+      <div class="pyx2-strip">
+        <svg width="244" height="64" viewBox="0 0 244 64" role="img" aria-label="each input item passes through a transform to a new list">
+          <rect x="6" y="18" width="24" height="26" rx="6" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="18" y="36" font-size="12" text-anchor="middle">0</text>
+          <rect x="34" y="18" width="24" height="26" rx="6" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="46" y="36" font-size="12" text-anchor="middle">1</text>
+          <rect x="62" y="18" width="24" height="26" rx="6" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="74" y="36" font-size="12" text-anchor="middle">2</text>
+          <rect x="100" y="16" width="40" height="30" rx="8" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="120" y="36" font-size="13" text-anchor="middle">x&#178;</text>
+          <rect x="158" y="18" width="24" height="26" rx="6" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="170" y="36" font-size="12" text-anchor="middle">0</text>
+          <rect x="186" y="18" width="24" height="26" rx="6" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="198" y="36" font-size="12" text-anchor="middle">1</text>
+          <rect x="214" y="18" width="24" height="26" rx="6" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="226" y="36" font-size="12" text-anchor="middle">4</text>
+          <circle class="pyx2-pipe" cx="30" cy="31" r="6"/>
+        </svg>
+        <p class="pyx2-cap">A <b>comprehension</b> transforms every item in one line: <code>[x*x for x in …]</code>.</p>
+      </div>
+
       <div class="block-desc">
         <span>Create lists concisely with <code>[expr for item in iterable if condition]</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/python/python_lists_comprehension.asp" target="_blank">W3Schools →</a>
@@ -1184,6 +1570,26 @@ evens = [x <span class="c-kw">for</span> x <span class="c-kw">in</span> <span cl
     <!-- Functions -->
     <section id="functions">
       <h2>Functions</h2>
+
+      <div class="pyx2-strip">
+        <svg width="220" height="60" viewBox="0 0 220 60" role="img" aria-label="a function takes inputs and returns a result">
+          <rect x="6" y="16" width="24" height="28" rx="6" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="18" y="35" font-size="13" text-anchor="middle">3</text>
+          <rect x="34" y="16" width="24" height="28" rx="6" fill="#e0b366" fill-opacity="0.16" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="pyx2-t" x="46" y="35" font-size="13" text-anchor="middle">4</text>
+          <path class="pyx2-arrow" d="M60 30 H76"/>
+          <path class="pyx2-ah" d="M76 26 l7 4 l-7 4 z"/>
+          <rect x="88" y="14" width="66" height="32" rx="8" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="121" y="34" font-size="13" text-anchor="middle">add()</text>
+          <path class="pyx2-arrow" d="M156 30 H172"/>
+          <path class="pyx2-ah" d="M172 26 l7 4 l-7 4 z"/>
+          <g class="pyx2-pop">
+            <rect x="184" y="15" width="30" height="30" rx="7" fill="#9ece6a" fill-opacity="0.18" stroke="#9ece6a" stroke-width="1.5"/>
+            <text class="pyx2-t" x="199" y="35" font-size="13" text-anchor="middle">7</text>
+          </g>
+        </svg>
+        <p class="pyx2-cap">A <b>function</b> takes inputs and returns a result: <code>add(3, 4) → 7</code>.</p>
+      </div>
 
       <div class="block-desc">
         <span>Define a function with <code>def</code> and return a value with <code>return</code>.</span>
@@ -1334,6 +1740,23 @@ squared = <span class="c-fn">list</span>(<span class="c-fn">map</span>(<span cla
     <section id="modules">
       <h2>Modules</h2>
 
+      <div class="pyx2-strip">
+        <svg width="238" height="60" viewBox="0 0 238 60" role="img" aria-label="import brings a module's tools into your code">
+          <rect x="6" y="12" width="74" height="36" rx="8" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="43" y="27" font-size="12" text-anchor="middle">math</text>
+          <circle cx="26" cy="39" r="3.5" fill="#9ece6a"/>
+          <circle cx="43" cy="39" r="3.5" fill="#e0b366"/>
+          <circle cx="60" cy="39" r="3.5" fill="#7aa2f7"/>
+          <text class="pyx2-muted" x="116" y="20" font-size="10" text-anchor="middle">import</text>
+          <path class="pyx2-arrow" d="M84 32 H142"/>
+          <path class="pyx2-ah" d="M142 28 l7 4 l-7 4 z"/>
+          <rect class="pyx2-box" x="150" y="12" width="84" height="36" rx="8"/>
+          <text class="pyx2-muted" x="192" y="34" font-size="11" text-anchor="middle">your code</text>
+          <circle class="pyx2-import pyx2-dotA" cx="84" cy="32" r="5"/>
+        </svg>
+        <p class="pyx2-cap"><code>import</code> brings a module's ready-made tools into your own code.</p>
+      </div>
+
       <div class="block-desc">
         <span>Import modules with <code>import</code>, <code>from ... import</code>, or <code>import ... as</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/python/python_modules.asp" target="_blank">W3Schools →</a>
@@ -1370,6 +1793,18 @@ squared = <span class="c-fn">list</span>(<span class="c-fn">map</span>(<span cla
     <!-- File Handling -->
     <section id="file-handling">
       <h2>File Handling</h2>
+
+      <div class="pyx2-strip">
+        <svg width="140" height="74" viewBox="0 0 140 74" role="img" aria-label="a file is read line by line then closed">
+          <rect class="pyx2-box" x="8" y="8" width="120" height="58" rx="6"/>
+          <rect x="18" y="18" width="92" height="6" rx="3" fill="#9ece6a"/>
+          <rect x="18" y="30" width="100" height="6" rx="3" fill="#e0b366"/>
+          <rect x="18" y="42" width="70" height="6" rx="3" fill="#7aa2f7"/>
+          <rect x="18" y="54" width="84" height="6" rx="3" fill="#bb9af7"/>
+          <rect class="pyx2-hl pyx2-readline" x="14" y="15" width="104" height="10" rx="3"/>
+        </svg>
+        <p class="pyx2-cap"><code>with open()</code> reads a file line by line, then closes it for you.</p>
+      </div>
 
       <div class="block-desc">
         <span>Read a file line by line with <code>with open("file", "r") as f:</code>.</span>
@@ -1488,6 +1923,20 @@ os.<span class="c-fn">rmdir</span>(<span class="c-str">"folder"</span>)</pre>
     <!-- Classes & Inheritance -->
     <section id="classes">
       <h2>Classes &amp; Inheritance</h2>
+
+      <div class="pyx2-strip">
+        <svg width="206" height="80" viewBox="0 0 206 80" role="img" aria-label="subclasses inherit from a parent class">
+          <path class="pyx2-dash" stroke="#9ece6a" d="M110 30 L52 52"/>
+          <path class="pyx2-dash" stroke="#7aa2f7" d="M110 30 L168 52"/>
+          <rect x="78" y="6" width="64" height="24" rx="7" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="110" y="22" font-size="12" text-anchor="middle">Animal</text>
+          <rect x="22" y="52" width="60" height="24" rx="7" fill="#9ece6a" fill-opacity="0.16" stroke="#9ece6a" stroke-width="1.5"/>
+          <text class="pyx2-t" x="52" y="68" font-size="12" text-anchor="middle">Dog</text>
+          <rect x="138" y="52" width="60" height="24" rx="7" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="168" y="68" font-size="12" text-anchor="middle">Cat</text>
+        </svg>
+        <p class="pyx2-cap">A <b>subclass</b> inherits behaviour from its parent: <code>Dog(Animal)</code>.</p>
+      </div>
 
       <div class="block-desc">
         <span>Define a class with <code>class</code> and initialize attributes with <code>__init__</code>.</span>
@@ -1633,6 +2082,19 @@ animals = [<span class="c-fn">Dog</span>(<span class="c-str">"Rex"</span>), <spa
     <!-- Type Hints -->
     <section id="type-hints">
       <h2>Type Hints <span style="font-size:0.8rem;color:#565f89;font-weight:400;">(since Python 3.5)</span></h2>
+
+      <div class="pyx2-strip">
+        <svg width="124" height="60" viewBox="0 0 124 60" role="img" aria-label="a type tag attaches to a variable name">
+          <rect x="6" y="16" width="46" height="28" rx="7" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="29" y="35" font-size="13" text-anchor="middle">age</text>
+          <text class="pyx2-muted" x="58" y="36" font-size="15">:</text>
+          <g class="pyx2-slidein">
+            <rect x="70" y="16" width="46" height="28" rx="7" fill="#e0b366" fill-opacity="0.2" stroke="#e0b366" stroke-width="1.5"/>
+            <text class="pyx2-t" x="93" y="35" font-size="13" text-anchor="middle">int</text>
+          </g>
+        </svg>
+        <p class="pyx2-cap">A <b>type hint</b> labels the expected type: <code>age: int</code>.</p>
+      </div>
 
       <div class="block-desc">
         <span>Annotate variables and function parameters with type hints.</span>
@@ -1796,6 +2258,22 @@ T = <span class="c-fn">TypeVar</span>(<span class="c-str">"T"</span>)
     <section id="operators">
       <h2>Operators</h2>
 
+      <div class="pyx2-strip">
+        <svg width="150" height="58" viewBox="0 0 150 58" role="img" aria-label="an operator combines two values into a result">
+          <rect x="8" y="14" width="28" height="30" rx="7" fill="#7aa2f7" fill-opacity="0.16" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="22" y="34" font-size="14" text-anchor="middle">6</text>
+          <text x="48" y="36" font-size="16" text-anchor="middle" fill="#e8808f" font-family="ui-monospace,monospace" font-weight="700">+</text>
+          <rect x="60" y="14" width="28" height="30" rx="7" fill="#e0b366" fill-opacity="0.16" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="pyx2-t" x="74" y="34" font-size="14" text-anchor="middle">2</text>
+          <text class="pyx2-muted" x="100" y="36" font-size="15" text-anchor="middle">=</text>
+          <g class="pyx2-pop">
+            <rect x="118" y="14" width="28" height="30" rx="7" fill="#9ece6a" fill-opacity="0.18" stroke="#9ece6a" stroke-width="1.5"/>
+            <text class="pyx2-t" x="132" y="34" font-size="14" text-anchor="middle">8</text>
+          </g>
+        </svg>
+        <p class="pyx2-cap"><b>Operators</b> combine values into a result; <code>:=</code> can even assign inline.</p>
+      </div>
+
       <div class="block-desc">
         <span>Assign a variable within an expression using the <code>:=</code> walrus operator.</span>
         <a class="w3-link" href="https://www.w3schools.com/python/python_operators.asp" target="_blank">W3Schools →</a>
@@ -1857,6 +2335,28 @@ delta = timedelta(days=<span class="c-num">7</span>)
     <!-- Miscellaneous -->
     <section id="misc">
       <h2>Miscellaneous</h2>
+
+      <div class="pyx2-strip">
+        <svg width="200" height="64" viewBox="0 0 200 64" role="img" aria-label="a generator yields one value at a time">
+          <rect x="6" y="16" width="78" height="32" rx="8" fill="#bb9af7" fill-opacity="0.16" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="pyx2-t" x="45" y="36" font-size="11" text-anchor="middle">count_up</text>
+          <path class="pyx2-arrow" d="M86 32 H112"/>
+          <path class="pyx2-ah" d="M112 28 l7 4 l-7 4 z"/>
+          <g class="pyx2-yield pyx2-ykeep">
+            <circle cx="92" cy="32" r="9" fill="#9ece6a"/>
+            <text x="92" y="36" font-size="11" text-anchor="middle" fill="#1a1b26" font-family="ui-monospace,monospace" font-weight="700">0</text>
+          </g>
+          <g class="pyx2-yield" style="animation-delay:-1.6s">
+            <circle cx="92" cy="32" r="9" fill="#e0b366"/>
+            <text x="92" y="36" font-size="11" text-anchor="middle" fill="#1a1b26" font-family="ui-monospace,monospace" font-weight="700">1</text>
+          </g>
+          <g class="pyx2-yield" style="animation-delay:-3.2s">
+            <circle cx="92" cy="32" r="9" fill="#7aa2f7"/>
+            <text x="92" y="36" font-size="11" text-anchor="middle" fill="#1a1b26" font-family="ui-monospace,monospace" font-weight="700">2</text>
+          </g>
+        </svg>
+        <p class="pyx2-cap">A <b>generator</b> <code>yield</code>s one value at a time, only when asked.</p>
+      </div>
 
       <div class="block-desc">
         <span>Add single-line comments with <code>#</code> and multi-line docstrings with <code>"""</code>.</span>
@@ -1972,7 +2472,7 @@ gen = <span class="c-fn">count_up</span>(<span class="c-num">5</span>)
     <p>Python Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">

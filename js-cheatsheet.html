@@ -4,7 +4,99 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JS &mdash; Cheatsheet</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
+  <style>
+    /* ===== Per-concept inline animations (jsx2-) — calm, multi-colour ===== */
+    .jsx2-strip{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin:.3rem 0 1.4rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+    .jsx2-cap{flex:1 1 150px;min-width:140px;margin:0;font:500 .82rem/1.5 var(--display,sans-serif);color:var(--text-muted)}
+    .jsx2-cap b{color:var(--text);font-weight:700}
+    .jsx2-svg{flex:2 1 280px;height:66px;max-width:450px;width:100%;display:block;overflow:visible}
+    .jsx2-lbl{font:600 10px var(--display,sans-serif)}
+    .jsx2-lbls{font:600 8.5px var(--display,sans-serif)}
+    .jsx2-tx{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;font-size:12px}
+
+    /* Getting Started — console levels */
+    @keyframes jsx2-con{0%,6%{opacity:0;transform:translateX(-6px)}14%,90%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(-6px)}}
+    .jsx2-cl{animation:jsx2-con 6s ease-in-out infinite}
+    .jsx2-cl.b{animation-delay:.7s}
+    .jsx2-cl.c{animation-delay:1.4s}
+
+    /* Conditionals — token branches true */
+    @keyframes jsx2-cond{0%{transform:translate(0,0);opacity:0}10%{opacity:1}35%,46%{transform:translate(90px,0)}78%,100%{transform:translate(192px,-16px);opacity:1}}
+    .jsx2-condtok{animation:jsx2-cond 7s ease-in-out infinite}
+    @keyframes jsx2-dglow{0%,100%{opacity:.55}50%{opacity:1}}
+    .jsx2-dia{animation:jsx2-dglow 2.6s ease-in-out infinite}
+
+    /* Functions — dot transforms through f() */
+    @keyframes jsx2-fnmove{0%{transform:translateX(0)}10%{transform:translateX(6px)}100%{transform:translateX(360px)}}
+    @keyframes jsx2-fncol{0%,42%{fill:#7aa2f7}50%{fill:#e0b366}60%,100%{fill:#9ece6a}}
+    .jsx2-fng{animation:jsx2-fnmove 6s ease-in-out infinite}
+    .jsx2-fnd{animation:jsx2-fncol 6s ease-in-out infinite}
+    @keyframes jsx2-fnpulse{0%,40%,60%,100%{stroke-width:1.5}50%{stroke-width:3}}
+    .jsx2-fnbox{animation:jsx2-fnpulse 6s ease-in-out infinite}
+
+    /* Scope — inner reaches outward */
+    @keyframes jsx2-sring{0%{r:4;opacity:.7}100%{r:30;opacity:0}}
+    .jsx2-sring{animation:jsx2-sring 3.6s ease-out infinite}
+
+    /* Arrays — push / pop */
+    @keyframes jsx2-push{0%,8%{transform:translateX(46px);opacity:0}26%,66%{transform:translateX(0);opacity:1}86%,100%{transform:translateX(46px);opacity:0}}
+    .jsx2-arrnew{animation:jsx2-push 5s ease-in-out infinite}
+
+    /* Set — duplicate rejected */
+    @keyframes jsx2-reject{0%{transform:translateY(-32px);opacity:0}18%{opacity:1}38%,52%{transform:translateY(0)}76%{transform:translateY(-32px);opacity:1}100%{transform:translateY(-32px);opacity:0}}
+    .jsx2-dup{animation:jsx2-reject 5.5s ease-in-out infinite}
+    @keyframes jsx2-xshow{0%,42%{opacity:0}54%,72%{opacity:1}84%,100%{opacity:0}}
+    .jsx2-xdup{animation:jsx2-xshow 5.5s ease-in-out infinite}
+
+    /* Loops — orbit */
+    @keyframes jsx2-orbit{to{transform:rotate(360deg)}}
+    .jsx2-orbit{animation:jsx2-orbit 4.5s linear infinite;transform-origin:40px 32px;transform-box:view-box}
+
+    /* Iterators — map sweep */
+    @keyframes jsx2-sweep{0%{transform:translateX(0);opacity:0}8%{opacity:1}92%{opacity:1}100%{transform:translateX(300px);opacity:0}}
+    .jsx2-sweep{animation:jsx2-sweep 5.5s ease-in-out infinite}
+
+    /* Objects — pointer key to value */
+    @keyframes jsx2-obj{0%,6%{transform:translate(0,0);opacity:0}12%{opacity:1}26%{transform:translate(78px,0);opacity:1}40%{opacity:0;transform:translate(78px,0)}46%{transform:translate(0,22px);opacity:0}52%{opacity:1}66%{transform:translate(78px,22px);opacity:1}80%{opacity:0;transform:translate(78px,22px)}100%{opacity:0}}
+    .jsx2-objptr{animation:jsx2-obj 6.5s ease-in-out infinite}
+
+    /* Classes — instances spawn */
+    @keyframes jsx2-inst{0%{opacity:0;transform:translateY(-6px) scale(.7)}18%{opacity:1;transform:translateY(0) scale(1)}86%{opacity:1}100%{opacity:0;transform:translateY(-6px) scale(.9)}}
+    .jsx2-inst{animation:jsx2-inst 5.5s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+    .jsx2-inst.i2{animation-delay:.55s}
+    .jsx2-inst.i3{animation-delay:1.1s}
+
+    /* Modules — package export to import */
+    @keyframes jsx2-mod{0%,10%{transform:translateX(0);opacity:0}22%{opacity:1}78%{transform:translateX(224px);opacity:1}90%,100%{transform:translateX(224px);opacity:0}}
+    .jsx2-pkg{animation:jsx2-mod 5.5s ease-in-out infinite}
+
+    /* Promises — pending to settled */
+    @keyframes jsx2-spin{to{transform:rotate(360deg)}}
+    .jsx2-pspin{animation:jsx2-spin 1.3s linear infinite;transform-origin:40px 32px;transform-box:view-box}
+    @keyframes jsx2-pend{0%,42%{opacity:1}50%,100%{opacity:0}}
+    .jsx2-pend{animation:jsx2-pend 6s ease-in-out infinite}
+    @keyframes jsx2-settle{0%,46%{opacity:0}56%,92%{opacity:1}100%{opacity:0}}
+    .jsx2-settle{animation:jsx2-settle 6s ease-in-out infinite}
+
+    /* Async / Await — pause then resume */
+    @keyframes jsx2-aw{0%{transform:translateX(0)}22%,52%{transform:translateX(138px)}80%,100%{transform:translateX(300px)}}
+    @keyframes jsx2-awcol{0%,52%{fill:#7aa2f7}70%,100%{fill:#9ece6a}}
+    .jsx2-awg{animation:jsx2-aw 6s ease-in-out infinite}
+    .jsx2-awd{animation:jsx2-awcol 6s ease-in-out infinite}
+    @keyframes jsx2-awwaitk{0%,22%{opacity:0}30%,50%{opacity:1}56%,100%{opacity:0}}
+    .jsx2-awwait{animation:jsx2-awwaitk 6s ease-in-out infinite}
+
+    /* Requests — round trip */
+    @keyframes jsx2-reqgo{0%{transform:translateX(0);opacity:0}8%{opacity:1}44%{transform:translateX(232px);opacity:1}49%,100%{opacity:0}}
+    .jsx2-reqgo{animation:jsx2-reqgo 6s ease-in-out infinite}
+    @keyframes jsx2-reqback{0%,50%{opacity:0;transform:translateX(232px)}58%{opacity:1}92%{transform:translateX(0);opacity:1}97%,100%{opacity:0;transform:translateX(0)}}
+    .jsx2-reqback{animation:jsx2-reqback 6s ease-in-out infinite}
+
+    @media (prefers-reduced-motion: reduce){
+      .jsx2-strip *{animation:none !important}
+    }
+  </style>
 </head>
 <body>
 
@@ -23,15 +115,16 @@
   </div>
 </aside>
 <button class="sidebar-show-btn" id="sidebar-show-btn" title="Show sidebar">▶</button>
-<script src="js/header.js"></script>
+<script src="js/header.js?v=8"></script>
 <script>renderHeader('JS')</script>
 <script>renderSourceLink('JS')</script>
   <main>
   <div class="page-header">
     <h1>JS</h1>
-    <p class="subtitle">Quick reference with live previews</p>
+    <p class="subtitle">JavaScript basics, explained simply &mdash; with live examples you can see.</p>
     <span id="source-link"></span>
     <nav class="toc">
+      <a href="#how-js-runs">How it runs</a>
       <a href="#getting-started">Start</a>
       <a href="#conditionals">Conditionals</a>
       <a href="#functions">Functions</a>
@@ -49,10 +142,178 @@
     </nav>
   </div>
 
+    <!-- How JavaScript runs (animated explainer) -->
+    <section id="how-js-runs">
+      <style>
+        .jsx-wrap { margin: 0 0 1rem; }
+        .jsx-lead { color: var(--text-muted); margin: 0 0 1.25rem; max-width: 60ch; line-height: 1.6; }
+        .jsx-lead code { font-size: 0.9em; }
+
+        .jsx-stage {
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 1.25rem;
+        }
+        .jsx-svg { width: 100%; height: auto; display: block; }
+
+        /* Boxes */
+        .jsx-box { fill: var(--surface-2); stroke: var(--border); stroke-width: 1.5; }
+        .jsx-box-title { fill: var(--accent); font: 700 17px var(--display, sans-serif); }
+        .jsx-box-sub { fill: var(--text-muted); font: 400 11.5px var(--display, sans-serif); }
+
+        /* Flow arrows */
+        .jsx-arrow { fill: none; stroke: var(--line); stroke-width: 2; }
+        .jsx-arrow-head { fill: var(--line); }
+        .jsx-arrow-label { fill: var(--text-muted); font: 500 11px var(--display, sans-serif); }
+
+        /* Moving task token */
+        .jsx-token-dot { fill: var(--accent); }
+        .jsx-token-ring { fill: none; stroke: var(--accent-2); stroke-width: 2; opacity: 0.55; }
+        .jsx-token-text { fill: var(--bg); font: 700 12px var(--display, sans-serif); text-anchor: middle; dominant-baseline: central; }
+
+        .jsx-token { animation: jsx-travel 13s ease-in-out infinite; }
+        .jsx-token-ring { animation: jsx-pulse 2.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+
+        @keyframes jsx-travel {
+          0%,   12% { transform: translate(135px, 95px); }   /* Call Stack */
+          25%,  37% { transform: translate(465px, 95px); }   /* Web APIs */
+          50%,  62% { transform: translate(465px, 285px); }  /* Callback Queue */
+          75%,  85% { transform: translate(135px, 285px); }  /* Event Loop */
+          100%      { transform: translate(135px, 95px); }   /* back to Call Stack */
+        }
+        @keyframes jsx-pulse {
+          0%, 100% { transform: scale(1); opacity: 0.55; }
+          50%      { transform: scale(1.35); opacity: 0; }
+        }
+
+        /* Data-type chips */
+        .jsx-types-title { font: 600 0.95rem var(--display, sans-serif); color: var(--text); margin: 1.5rem 0 0.75rem; }
+        .jsx-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .jsx-chip {
+          display: inline-flex; flex-direction: column; gap: 0.15rem;
+          padding: 0.5rem 0.8rem;
+          background: var(--surface-2);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          opacity: 0;
+          animation: jsx-fade-up 0.5s ease-out forwards;
+        }
+        .jsx-chip-name { font: 700 0.85rem var(--display, sans-serif); color: var(--accent); }
+        .jsx-chip-eg { font: 0.72rem/1 monospace; color: var(--text-muted); }
+        .jsx-chip:nth-child(1) { animation-delay: 0.05s; }
+        .jsx-chip:nth-child(2) { animation-delay: 0.12s; }
+        .jsx-chip:nth-child(3) { animation-delay: 0.19s; }
+        .jsx-chip:nth-child(4) { animation-delay: 0.26s; }
+        .jsx-chip:nth-child(5) { animation-delay: 0.33s; }
+        .jsx-chip:nth-child(6) { animation-delay: 0.40s; }
+        .jsx-chip:nth-child(7) { animation-delay: 0.47s; }
+        @keyframes jsx-fade-up {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .jsx-note {
+          margin: 1.1rem 0 0; padding: 0.7rem 0.9rem;
+          background: var(--surface-2);
+          border-left: 3px solid var(--accent);
+          border-radius: var(--radius);
+          color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .jsx-token, .jsx-token-ring, .jsx-chip { animation: none; }
+          .jsx-token { transform: translate(135px, 95px); }
+          .jsx-chip { opacity: 1; }
+        }
+      </style>
+
+      <h2>How JavaScript Runs</h2>
+      <div class="jsx-wrap">
+        <p class="jsx-lead">
+          JavaScript does one thing at a time. The <strong>Call Stack</strong> runs your code line by
+          line. Slow work (like a timer or a network request) is handed to the <strong>Web APIs</strong>
+          so your page never freezes. When that work finishes, its callback waits in the
+          <strong>Callback Queue</strong>, and the <strong>Event Loop</strong> pushes it back onto the
+          stack to run. Watch one task travel the loop.
+        </p>
+
+        <div class="jsx-stage">
+          <svg class="jsx-svg" viewBox="0 0 600 380" role="img" aria-label="Diagram of a task flowing through the JavaScript event loop: Call Stack, Web APIs, Callback Queue, and Event Loop.">
+            <!-- Flow arrows (clockwise) -->
+            <path class="jsx-arrow" d="M245 95 H355" marker-end="url(#jsx-ah)" />
+            <path class="jsx-arrow" d="M475 155 V225" marker-end="url(#jsx-ah)" />
+            <path class="jsx-arrow" d="M355 285 H245" marker-end="url(#jsx-ah)" />
+            <path class="jsx-arrow" d="M125 225 V155" marker-end="url(#jsx-ah)" />
+
+            <text class="jsx-arrow-label" x="300" y="80" text-anchor="middle">hand off async work</text>
+            <text class="jsx-arrow-label" x="300" y="305" text-anchor="middle">callback waits</text>
+            <text class="jsx-arrow-label" x="300" y="360" text-anchor="middle">Event Loop pushes finished callbacks back to the Call Stack</text>
+
+            <!-- Boxes -->
+            <rect class="jsx-box" x="35"  y="35"  width="200" height="120" rx="12" />
+            <text class="jsx-box-title" x="135" y="85"  text-anchor="middle">Call Stack</text>
+            <text class="jsx-box-sub"   x="135" y="110" text-anchor="middle">runs your code</text>
+
+            <rect class="jsx-box" x="365" y="35"  width="200" height="120" rx="12" />
+            <text class="jsx-box-title" x="465" y="85"  text-anchor="middle">Web APIs</text>
+            <text class="jsx-box-sub"   x="465" y="110" text-anchor="middle">timers, fetch, events</text>
+
+            <rect class="jsx-box" x="365" y="225" width="200" height="120" rx="12" />
+            <text class="jsx-box-title" x="465" y="275" text-anchor="middle">Callback Queue</text>
+            <text class="jsx-box-sub"   x="465" y="300" text-anchor="middle">finished callbacks line up</text>
+
+            <rect class="jsx-box" x="35"  y="225" width="200" height="120" rx="12" />
+            <text class="jsx-box-title" x="135" y="275" text-anchor="middle">Event Loop</text>
+            <text class="jsx-box-sub"   x="135" y="300" text-anchor="middle">keeps the cycle going</text>
+
+            <!-- Moving task token -->
+            <g class="jsx-token">
+              <circle class="jsx-token-ring" cx="0" cy="0" r="18" />
+              <circle class="jsx-token-dot"  cx="0" cy="0" r="18" />
+              <text class="jsx-token-text" x="0" y="0">task</text>
+            </g>
+
+            <defs>
+              <marker id="jsx-ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                <path class="jsx-arrow-head" d="M0 0 L9 4.5 L0 9 z" />
+              </marker>
+            </defs>
+          </svg>
+
+          <p class="jsx-types-title">The 7 everyday data types</p>
+          <div class="jsx-chips">
+            <span class="jsx-chip"><span class="jsx-chip-name">string</span><span class="jsx-chip-eg">"hi"</span></span>
+            <span class="jsx-chip"><span class="jsx-chip-name">number</span><span class="jsx-chip-eg">42</span></span>
+            <span class="jsx-chip"><span class="jsx-chip-name">boolean</span><span class="jsx-chip-eg">true</span></span>
+            <span class="jsx-chip"><span class="jsx-chip-name">array</span><span class="jsx-chip-eg">[1, 2]</span></span>
+            <span class="jsx-chip"><span class="jsx-chip-name">object</span><span class="jsx-chip-eg">{ a: 1 }</span></span>
+            <span class="jsx-chip"><span class="jsx-chip-name">null</span><span class="jsx-chip-eg">null</span></span>
+            <span class="jsx-chip"><span class="jsx-chip-name">undefined</span><span class="jsx-chip-eg">undefined</span></span>
+          </div>
+
+          <p class="jsx-note">
+            Plain tip: one task runs at a time, and anything slow waits its turn in the queue &mdash;
+            that is how JavaScript stays responsive.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <!-- Getting Started -->
     <section id="getting-started">
       <h2>Getting Started</h2>
-      <p style="color:#666;margin-bottom:1rem;">JavaScript is a lightweight, interpreted programming language.</p>
+      <p style="color:#666;margin-bottom:1rem;">JavaScript is the language that makes web pages do things &mdash; react to clicks, update text, and more.</p>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap"><b>console</b> prints at three levels &mdash; log, warn, and error &mdash; each shown in its own colour.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A green log line, an amber warning, and a red error appear in a console.">
+          <rect x="6" y="5" width="408" height="54" rx="7" fill="var(--code-bg)" stroke="var(--border)"/>
+          <g class="jsx2-cl"><text class="jsx2-tx" x="18" y="24" fill="#9ece6a" style="font-size:11px">&gt; log('Hello world!')</text></g>
+          <g class="jsx2-cl b"><text class="jsx2-tx" x="18" y="40" fill="#e0b366" style="font-size:11px">&gt; warn('heads up')</text></g>
+          <g class="jsx2-cl c"><text class="jsx2-tx" x="18" y="56" fill="#e8808f" style="font-size:11px">&gt; error('Oops!')</text></g>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Output messages to the browser console using <code>console.log()</code>, <code>console.warn()</code>, and <code>console.error()</code>.</span>
@@ -191,6 +452,22 @@ console.log(n); <span class="c">// 120</span></pre>
     <section id="conditionals">
       <h2>Conditionals</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">A condition routes the flow one way or the other: <b>true</b> takes the green path, <b>false</b> the red.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A token reaches an if diamond and continues along the true branch.">
+          <path d="M60 32 H120" stroke="var(--line)" stroke-width="2" fill="none"/>
+          <path d="M180 26 L252 16" stroke="#9ece6a" stroke-width="2" fill="none"/>
+          <path d="M180 38 L252 52" stroke="#e8808f" stroke-width="2" fill="none"/>
+          <circle cx="256" cy="16" r="4" fill="#9ece6a"/>
+          <circle cx="256" cy="52" r="4" fill="#e8808f"/>
+          <text class="jsx2-lbls" x="266" y="20" fill="#9ece6a">true</text>
+          <text class="jsx2-lbls" x="266" y="56" fill="#e8808f">false</text>
+          <polygon class="jsx2-dia" points="150,13 181,32 150,51 119,32" fill="var(--surface-2)" stroke="#e0b366" stroke-width="2"/>
+          <text class="jsx2-tx" x="150" y="36" text-anchor="middle" fill="#e0b366" style="font-size:10px">if</text>
+          <circle class="jsx2-condtok" cx="60" cy="32" r="6" fill="#7aa2f7"/>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span>Execute different code blocks based on boolean conditions using <code>if</code>, <code>else if</code>, and <code>else</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_if_else.asp" target="_blank">W3Schools →</a>
@@ -284,6 +561,19 @@ switch (food) {
     <section id="functions">
       <h2>Functions</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">A value goes <b>in</b>, the function transforms it, and a new value comes <b>out</b>.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A dot enters a function box and leaves changed in colour.">
+          <line x1="20" y1="32" x2="178" y2="32" stroke="var(--line)" stroke-width="2"/>
+          <line x1="242" y1="32" x2="400" y2="32" stroke="var(--line)" stroke-width="2"/>
+          <text class="jsx2-lbls" x="20" y="18" fill="var(--text-muted)">in</text>
+          <text class="jsx2-lbls" x="400" y="18" text-anchor="end" fill="var(--text-muted)">out</text>
+          <rect class="jsx2-fnbox" x="180" y="14" width="60" height="36" rx="8" fill="var(--surface-2)" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="jsx2-tx" x="210" y="37" text-anchor="middle" fill="#e0b366" style="font-size:11px">f(x)</text>
+          <g class="jsx2-fng"><circle class="jsx2-fnd" cx="20" cy="32" r="6" fill="#7aa2f7"/></g>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span>Define reusable functions using declarations or store them as expressions in variables.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_functions.asp" target="_blank">W3Schools →</a>
@@ -359,6 +649,20 @@ function noReturn() { }</pre>
     <section id="scope">
       <h2>Scope</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">Inner code can read <b>outward</b> into the outer scope &mdash; but the outside can't see in.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A value inside a block reaches out into the surrounding global scope.">
+          <rect x="10" y="8" width="300" height="48" rx="9" fill="none" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="18" y="21" fill="#7aa2f7">global</text>
+          <rect x="150" y="18" width="120" height="30" rx="7" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="158" y="31" fill="#e0b366">block</text>
+          <circle class="jsx2-sring" cx="210" cy="36" r="4" fill="none" stroke="#9ece6a" stroke-width="1.5"/>
+          <circle cx="210" cy="36" r="4" fill="#9ece6a"/>
+          <text class="jsx2-lbls" x="322" y="30" fill="var(--text-muted)">reads out &#10003;</text>
+          <text class="jsx2-lbls" x="322" y="44" fill="var(--text-muted)">not back in &#10007;</text>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span><code>let</code> is block-scoped and safer than <code>var</code>, which is function-scoped and can cause bugs.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_scope.asp" target="_blank">W3Schools →</a>
@@ -406,6 +710,28 @@ if (true) {
     <!-- Arrays -->
     <section id="arrays">
       <h2>Arrays</h2>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">Items sit at numbered slots; <b>push()</b> adds to the end and <b>pop()</b> removes it again.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="Three array cells with a fourth cell pushed onto and popped off the end.">
+          <g fill="var(--surface-2)" stroke="var(--border)">
+            <rect x="20" y="20" width="52" height="30" rx="6"/>
+            <rect x="80" y="20" width="52" height="30" rx="6"/>
+            <rect x="140" y="20" width="52" height="30" rx="6"/>
+          </g>
+          <text class="jsx2-tx" x="46" y="40" text-anchor="middle" fill="#7aa2f7" style="font-size:11px">10</text>
+          <text class="jsx2-tx" x="106" y="40" text-anchor="middle" fill="#e0b366" style="font-size:11px">20</text>
+          <text class="jsx2-tx" x="166" y="40" text-anchor="middle" fill="#9ece6a" style="font-size:11px">30</text>
+          <text class="jsx2-lbls" x="46" y="14" text-anchor="middle" fill="var(--text-muted)">0</text>
+          <text class="jsx2-lbls" x="106" y="14" text-anchor="middle" fill="var(--text-muted)">1</text>
+          <text class="jsx2-lbls" x="166" y="14" text-anchor="middle" fill="var(--text-muted)">2</text>
+          <g class="jsx2-arrnew">
+            <rect x="200" y="20" width="52" height="30" rx="6" fill="none" stroke="#bb9af7" stroke-width="1.5"/>
+            <text class="jsx2-tx" x="226" y="40" text-anchor="middle" fill="#bb9af7" style="font-size:11px">40</text>
+            <text class="jsx2-lbls" x="226" y="14" text-anchor="middle" fill="#bb9af7">3</text>
+          </g>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Create ordered lists with <code>[ ]</code> and access elements by their zero-based index.</span>
@@ -481,6 +807,19 @@ const [name, age] = ['John', 8];
     <section id="set">
       <h2>Set</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">A <b>Set</b> keeps only unique values &mdash; a duplicate is turned away at the door.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="Unique values rest inside a set while a duplicate bounces back out.">
+          <rect x="30" y="34" width="250" height="26" rx="13" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text class="jsx2-lbls" x="40" y="51" fill="var(--text-muted)">Set</text>
+          <circle cx="110" cy="47" r="9" fill="#7aa2f7"/><text class="jsx2-tx" x="110" y="51" text-anchor="middle" fill="#1a1b26" style="font-size:10px">1</text>
+          <circle cx="150" cy="47" r="9" fill="#9ece6a"/><text class="jsx2-tx" x="150" y="51" text-anchor="middle" fill="#1a1b26" style="font-size:10px">a</text>
+          <circle cx="190" cy="47" r="9" fill="#e0b366"/><text class="jsx2-tx" x="190" y="51" text-anchor="middle" fill="#1a1b26" style="font-size:10px">b</text>
+          <g class="jsx2-dup"><circle cx="240" cy="47" r="9" fill="#e8808f"/><text class="jsx2-tx" x="240" y="51" text-anchor="middle" fill="#1a1b26" style="font-size:10px">1</text></g>
+          <text class="jsx2-xdup jsx2-lbls" x="240" y="18" text-anchor="middle" fill="#e8808f">&#10007; duplicate</text>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span>Store unique values of any type with <code>Set</code> and use <code>add()</code>, <code>has()</code>, <code>delete()</code>, and <code>clear()</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_sets.asp" target="_blank">W3Schools →</a>
@@ -509,6 +848,20 @@ s.clear();         <span class="c">// remove all</span></pre>
     <!-- Loops -->
     <section id="loops">
       <h2>Loops</h2>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">A loop runs the same body again and again, stepping <b>i</b> each time until the test fails.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A dot travels around a loop past coloured checkpoints.">
+          <circle cx="40" cy="32" r="22" fill="none" stroke="var(--line)" stroke-width="2"/>
+          <circle cx="40" cy="10" r="3.5" fill="#9ece6a"/>
+          <circle cx="62" cy="32" r="3.5" fill="#e0b366"/>
+          <circle cx="40" cy="54" r="3.5" fill="#bb9af7"/>
+          <circle cx="18" cy="32" r="3.5" fill="#e8808f"/>
+          <g class="jsx2-orbit"><circle cx="40" cy="10" r="5" fill="#7aa2f7"/></g>
+          <text class="jsx2-tx" x="40" y="36" text-anchor="middle" fill="var(--accent)" style="font-size:10px">i++</text>
+          <text class="jsx2-lbl" x="78" y="36" fill="var(--text-muted)">repeat until the condition is false</text>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Repeat code with <code>for</code>, <code>while</code>, or <code>do...while</code> loops, controlling flow with <code>break</code> and <code>continue</code>.</span>
@@ -569,6 +922,32 @@ for (let f of fruits) { }</pre>
     <!-- Iterators -->
     <section id="iterators">
       <h2>Iterators</h2>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap"><b>map()</b> walks the array and builds a new one, transforming every item (here, &times;2).</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="Values one two three map to two four six.">
+          <g fill="none" stroke="#7aa2f7" stroke-width="1.5">
+            <rect x="14" y="20" width="26" height="26" rx="5"/>
+            <rect x="42" y="20" width="26" height="26" rx="5"/>
+            <rect x="70" y="20" width="26" height="26" rx="5"/>
+          </g>
+          <text class="jsx2-tx" x="27" y="38" text-anchor="middle" fill="#7aa2f7" style="font-size:11px">1</text>
+          <text class="jsx2-tx" x="55" y="38" text-anchor="middle" fill="#7aa2f7" style="font-size:11px">2</text>
+          <text class="jsx2-tx" x="83" y="38" text-anchor="middle" fill="#7aa2f7" style="font-size:11px">3</text>
+          <path d="M104 33 H150" stroke="var(--line)" stroke-width="2"/>
+          <polygon points="150,29 158,33 150,37" fill="var(--line)"/>
+          <text class="jsx2-tx" x="127" y="24" text-anchor="middle" fill="#e0b366" style="font-size:10px">&times;2</text>
+          <g fill="none" stroke="#9ece6a" stroke-width="1.5">
+            <rect x="170" y="20" width="26" height="26" rx="5"/>
+            <rect x="198" y="20" width="26" height="26" rx="5"/>
+            <rect x="226" y="20" width="26" height="26" rx="5"/>
+          </g>
+          <text class="jsx2-tx" x="183" y="38" text-anchor="middle" fill="#9ece6a" style="font-size:11px">2</text>
+          <text class="jsx2-tx" x="211" y="38" text-anchor="middle" fill="#9ece6a" style="font-size:11px">4</text>
+          <text class="jsx2-tx" x="239" y="38" text-anchor="middle" fill="#9ece6a" style="font-size:11px">6</text>
+          <rect class="jsx2-sweep" x="10" y="16" width="4" height="34" rx="2" fill="#bb9af7"/>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Pass a function as an argument to another function to be called later.</span>
@@ -639,6 +1018,21 @@ printMsg(isEven, 4); <span class="c">// true</span></pre>
     <!-- Objects -->
     <section id="objects">
       <h2>Objects</h2>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">An object maps each <b>key</b> to a <b>value</b>; look one up by its name.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A pointer hops from each key to its value inside an object.">
+          <text class="jsx2-tx" x="8" y="40" fill="var(--text-muted)" style="font-size:26px">{</text>
+          <text class="jsx2-tx" x="34" y="26" fill="#e0b366" style="font-size:12px">color</text>
+          <text class="jsx2-tx" x="86" y="26" fill="var(--text-muted)" style="font-size:12px">:</text>
+          <text class="jsx2-tx" x="98" y="26" fill="#7aa2f7" style="font-size:12px">"Green"</text>
+          <text class="jsx2-tx" x="34" y="48" fill="#e0b366" style="font-size:12px">count</text>
+          <text class="jsx2-tx" x="86" y="48" fill="var(--text-muted)" style="font-size:12px">:</text>
+          <text class="jsx2-tx" x="98" y="48" fill="#9ece6a" style="font-size:12px">3</text>
+          <text class="jsx2-tx" x="160" y="40" fill="var(--text-muted)" style="font-size:26px">}</text>
+          <g class="jsx2-objptr"><circle cx="20" cy="22" r="4" fill="#bb9af7"/></g>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Store key-value pairs in objects and access properties with dot or bracket notation.</span>
@@ -737,6 +1131,20 @@ myCat.name = 'Yankee';</pre>
     <section id="classes">
       <h2>Classes</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">A <b>class</b> is a blueprint; <b>new</b> stamps out as many instances as you like.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A class blueprint produces three instances.">
+          <rect x="12" y="16" width="70" height="34" rx="8" fill="none" stroke="#bb9af7" stroke-width="1.5"/>
+          <text class="jsx2-tx" x="47" y="37" text-anchor="middle" fill="#bb9af7" style="font-size:11px">class</text>
+          <path d="M86 33 H126" stroke="var(--line)" stroke-width="2"/>
+          <polygon points="126,29 134,33 126,37" fill="var(--line)"/>
+          <text class="jsx2-lbls" x="106" y="24" text-anchor="middle" fill="var(--text-muted)">new</text>
+          <g class="jsx2-inst"><rect x="150" y="20" width="42" height="26" rx="6" fill="none" stroke="#7aa2f7" stroke-width="1.5"/><text class="jsx2-tx" x="171" y="38" text-anchor="middle" fill="#7aa2f7" style="font-size:9px">obj</text></g>
+          <g class="jsx2-inst i2"><rect x="202" y="20" width="42" height="26" rx="6" fill="none" stroke="#9ece6a" stroke-width="1.5"/><text class="jsx2-tx" x="223" y="38" text-anchor="middle" fill="#9ece6a" style="font-size:9px">obj</text></g>
+          <g class="jsx2-inst i3"><rect x="254" y="20" width="42" height="26" rx="6" fill="none" stroke="#e0b366" stroke-width="1.5"/><text class="jsx2-tx" x="275" y="38" text-anchor="middle" fill="#e0b366" style="font-size:9px">obj</text></g>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span>Create object blueprints with <code>class</code> and initialize instances with <code>constructor</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_classes.asp" target="_blank">W3Schools →</a>
@@ -816,6 +1224,20 @@ Dog.bark(); <span class="c">// static call</span></pre>
     <section id="modules">
       <h2>Modules</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">One file <b>exports</b> code; another <b>imports</b> it &mdash; the piece travels between them.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A piece of code moves from an exporting file to an importing file.">
+          <rect x="12" y="14" width="58" height="34" rx="6" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="41" y="34" text-anchor="middle" fill="#e0b366">a.js</text>
+          <text class="jsx2-lbls" x="41" y="60" text-anchor="middle" fill="var(--text-muted)">export</text>
+          <rect x="300" y="14" width="58" height="34" rx="6" fill="none" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="329" y="34" text-anchor="middle" fill="#7aa2f7">b.js</text>
+          <text class="jsx2-lbls" x="329" y="60" text-anchor="middle" fill="var(--text-muted)">import</text>
+          <path d="M72 31 H298" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 4"/>
+          <g class="jsx2-pkg"><rect x="74" y="23" width="16" height="16" rx="3" fill="#9ece6a"/></g>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span>Share code between files using <code>export</code> and <code>import</code> with ES6 module syntax.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_modules.asp" target="_blank">W3Schools →</a>
@@ -872,6 +1294,22 @@ myMath.add(6, 2); <span class="c">// 8</span></pre>
     <!-- Promises -->
     <section id="promises">
       <h2>Promises</h2>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">A promise starts <b>pending</b>, then settles &mdash; resolved to .then(), or rejected to .catch().</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A pending spinner settles into a resolved checkmark.">
+          <g class="jsx2-pend">
+            <circle cx="40" cy="32" r="15" fill="none" stroke="var(--border)" stroke-width="3"/>
+            <path class="jsx2-pspin" d="M40 17 A15 15 0 0 1 55 32" fill="none" stroke="#e0b366" stroke-width="3" stroke-linecap="round"/>
+          </g>
+          <g class="jsx2-settle">
+            <circle cx="40" cy="32" r="15" fill="none" stroke="#9ece6a" stroke-width="3"/>
+            <path d="M32 32 l6 6 l10 -13" fill="none" stroke="#9ece6a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <text class="jsx2-lbls" x="68" y="28" fill="#9ece6a">resolve &rarr; .then()</text>
+          <text class="jsx2-lbls" x="68" y="44" fill="#e8808f">reject &rarr; .catch()</text>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Handle asynchronous operations with <code>new Promise()</code> and <code>.then()</code> / <code>.catch()</code>.</span>
@@ -950,6 +1388,19 @@ Promise.all([p1, p2]).then(([r1, r2]) =&gt; {
     <section id="async-await">
       <h2>Async / Await</h2>
 
+      <div class="jsx2-strip">
+        <p class="jsx2-cap"><b>await</b> pauses the function until the promise is ready, then execution resumes.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="Execution moves along a timeline, pauses at await, then resumes.">
+          <line x1="20" y1="40" x2="340" y2="40" stroke="var(--line)" stroke-width="2"/>
+          <circle cx="160" cy="40" r="7" fill="var(--surface-2)" stroke="#e0b366" stroke-width="2"/>
+          <text class="jsx2-lbls" x="160" y="22" text-anchor="middle" fill="#e0b366">await</text>
+          <circle class="jsx2-awwait" cx="160" cy="40" r="12" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="20" y="58" fill="var(--text-muted)">call</text>
+          <text class="jsx2-lbls" x="340" y="58" text-anchor="end" fill="var(--text-muted)">resume</text>
+          <g class="jsx2-awg"><circle class="jsx2-awd" cx="20" cy="40" r="6" fill="#7aa2f7"/></g>
+        </svg>
+      </div>
+
       <div class="block-desc">
         <span>Write asynchronous code that reads like synchronous code using <code>async</code> and <code>await</code>.</span>
         <a class="w3-link" href="https://www.w3schools.com/js/js_async.asp" target="_blank">W3Schools →</a>
@@ -1007,6 +1458,22 @@ try {
     <!-- Requests -->
     <section id="requests">
       <h2>Requests</h2>
+
+      <div class="jsx2-strip">
+        <p class="jsx2-cap">The client sends a <b>request</b> to the server, and the server sends a <b>response</b> back.</p>
+        <svg class="jsx2-svg" viewBox="0 0 420 64" role="img" aria-label="A request travels to the server and a response returns to the client.">
+          <rect x="12" y="18" width="60" height="30" rx="6" fill="none" stroke="#7aa2f7" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="42" y="37" text-anchor="middle" fill="#7aa2f7">client</text>
+          <rect x="300" y="18" width="60" height="30" rx="6" fill="none" stroke="#e0b366" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="330" y="37" text-anchor="middle" fill="#e0b366">server</text>
+          <path d="M74 26 H298" stroke="var(--line)" stroke-width="1.5"/>
+          <path d="M298 42 H74" stroke="var(--line)" stroke-width="1.5"/>
+          <text class="jsx2-lbls" x="140" y="18" fill="#9ece6a">request &rarr;</text>
+          <text class="jsx2-lbls" x="210" y="62" fill="#bb9af7">&larr; response</text>
+          <g class="jsx2-reqgo"><circle cx="74" cy="26" r="5" fill="#9ece6a"/></g>
+          <g class="jsx2-reqback"><circle cx="74" cy="42" r="5" fill="#bb9af7"/></g>
+        </svg>
+      </div>
 
       <div class="block-desc">
         <span>Make HTTP requests using the modern <code>fetch()</code> API with <code>.then()</code> chaining.</span>
@@ -1108,7 +1575,7 @@ const data = await fetch('/getdata?id=65')
     <p>JS Cheatsheet</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js?v=8"></script>
 <div class="notes-overlay" id="notes-overlay"></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-panel-header">
