@@ -100,6 +100,7 @@
     const div = document.createElement('div');
     div.className = 'doc-user';
     div.innerHTML = `<span title="${escHtml(me.email)}">👤 ${escHtml(me.name || me.email)}</span>` +
+      ' <a href="account.html" title="My account">⚙️</a>' +
       (me.isAdmin ? ' <a href="stats.html">📊</a>' : '') +
       ' <a href="#" id="doc-logout">Logout</a>';
     host.appendChild(div);
@@ -112,7 +113,7 @@
 
   // ── attachments panel at the bottom of the main content ──
   function renderAttachments() {
-    if (pageFile === 'stats.html') return;
+    if (pageFile === 'stats.html' || pageFile === 'account.html') return;
     const main = document.querySelector('main') || document.querySelector('.content') || document.body;
     const box = document.createElement('section');
     box.className = 'doc-attachments';

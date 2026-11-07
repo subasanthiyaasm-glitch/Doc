@@ -99,7 +99,7 @@ app.post('/heartbeat', express.json(), async (req, res) => {
 app.get('/attachments', async (req, res) => {
   try {
     const page = String(req.query.page || '');
-    if (!PAGE_RE.test(page)) return res.status(400).json({ error: 'bad page' });
+    if (!PAGE_RE.test(page) || page.startsWith('u-')) return res.status(400).json({ error: 'bad page' });
     const rows = await query(req, `SELECT ROWID, file_name, size, uploaded_by, CREATEDTIME FROM Attachment WHERE page = '${page}' ORDER BY CREATEDTIME DESC`);
     res.json({ canUpload: req.isAdmin, items: rows.map(r => r.Attachment) });
   } catch (e) { res.status(500).json({ error: 'list failed' }); }
@@ -128,6 +128,8 @@ app.get('/attachments/:id/download', async (req, res) => {
   try {
     if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: 'bad id' });
     const row = await table(req, 'Attachment').getRow(req.params.id);
+    // personal files (u-<uid>) are visible only to their owner
+    if (String(row.page).startsWith('u-') && row.page !== myPage(req)) return res.status(404).json({ error: 'not found' });
     const signed = await req.cat.stratus().bucket(BUCKET).generatePreSignedUrl(row.object_key, 'GET', { expiryIn: 300 });
     res.json({ url: signed.signature || signed.url || signed, fileName: row.file_name });
   } catch (e) { res.status(404).json({ error: 'not found' }); }
@@ -141,6 +143,67 @@ app.delete('/attachments/:id', requireAdmin, async (req, res) => {
     await table(req, 'Attachment').deleteRow(req.params.id);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: 'delete failed' }); }
+});
+
+// ── my account: profile + daily logins + time used ───────
+app.get('/account', async (req, res) => {
+  try {
+    const u = req.user;
+    const uid = esc(u.user_id);
+    const since = fmtDate(new Date(Date.now() - 30 * 864e5));
+    const [logins, perDay, perPage, total] = await Promise.all([
+      query(req, `SELECT login_date, login_time, ip, user_agent FROM LoginLog WHERE user_id = '${uid}' ORDER BY login_time DESC LIMIT 30`),
+      query(req, `SELECT start_time, active_seconds FROM PageSession WHERE user_id = '${uid}' AND start_time >= '${since} 00:00:00' LIMIT 300`),
+      query(req, `SELECT page, SUM(active_seconds), COUNT(ROWID) FROM PageSession WHERE user_id = '${uid}' GROUP BY page`),
+      query(req, `SELECT COUNT(ROWID) FROM LoginLog WHERE user_id = '${uid}'`),
+    ]);
+    const days = {};
+    perDay.forEach(r => { const d = String(r.PageSession.start_time).slice(0, 10); days[d] = (days[d] || 0) + Number(r.PageSession.active_seconds || 0); });
+    res.json({
+      profile: {
+        user_id: u.user_id, email: u.email_id, first_name: u.first_name || '', last_name: u.last_name || '',
+        role: (u.role_details && u.role_details.role_name) || '', status: u.status || '',
+        confirmed: !!u.is_confirmed, created: u.created_time || '', org_id: u.org_id || '',
+        timezone: u.time_zone || '', locale: u.locale || '',
+      },
+      totalLoginDays: Number((total[0] && (total[0].LoginLog || {})['COUNT(ROWID)']) || 0),
+      logins: logins.map(r => r.LoginLog),
+      timePerDay: Object.entries(days).sort((a, b) => b[0].localeCompare(a[0])).map(([date, seconds]) => ({ date, seconds })),
+      timePerPage: perPage.map(r => r.PageSession),
+    });
+  } catch (e) { res.status(500).json({ error: 'account failed' }); }
+});
+
+// ── my files: private per-user uploads (any signed-in user) ──
+const myPage = req => `u-${String(req.user.user_id).replace(/[^0-9a-z]/gi, '')}`;
+app.get('/my-files', async (req, res) => {
+  try {
+    const rows = await query(req, `SELECT ROWID, file_name, size, CREATEDTIME FROM Attachment WHERE page = '${myPage(req)}' ORDER BY CREATEDTIME DESC`);
+    res.json({ items: rows.map(r => r.Attachment) });
+  } catch (e) { res.status(500).json({ error: 'list failed' }); }
+});
+app.post('/my-files', express.raw({ type: '*/*', limit: MAX_BYTES }), async (req, res) => {
+  try {
+    const fileName = decodeURIComponent(String(req.headers['x-file-name'] || '')).replace(/[^\w.\- ]/g, '_').slice(0, 200);
+    const ext = (fileName.split('.').pop() || '').toLowerCase();
+    if (!fileName || !ALLOWED_EXT.includes(ext)) return res.status(400).json({ error: `Allowed: ${ALLOWED_EXT.join(', ')}` });
+    if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ error: 'empty file' });
+    const page = myPage(req);
+    const objectKey = `users/${page}/${Date.now()}-${fileName}`;
+    await req.cat.stratus().bucket(BUCKET).putObject(objectKey, req.body);
+    const row = await table(req, 'Attachment').insertRow({ page, file_name: fileName, object_key: objectKey, size: req.body.length, uploaded_by: req.user.email_id });
+    res.json({ ok: true, id: row.ROWID });
+  } catch (e) { res.status(500).json({ error: 'upload failed' }); }
+});
+app.delete('/my-files/:id', async (req, res) => {
+  try {
+    if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: 'bad id' });
+    const row = await table(req, 'Attachment').getRow(req.params.id);
+    if (row.page !== myPage(req)) return res.status(404).json({ error: 'not found' });
+    await req.cat.stratus().bucket(BUCKET).deleteObject(row.object_key);
+    await table(req, 'Attachment').deleteRow(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(404).json({ error: 'not found' }); }
 });
 
 // ── admin stats ──────────────────────────────────────────
